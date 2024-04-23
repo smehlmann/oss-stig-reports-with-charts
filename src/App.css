@@ -1,0 +1,212 @@
+div.MyApp {
+  margin-top: 50px;
+  margin-left: 80px;
+  font-size: 18px;
+}
+
+.radio-btn-container-div {
+  margin: 30px;
+  background-color: #ffffff;
+}
+
+#full-file-name-txt {
+  width: 90%;
+  height: 20px;
+  padding: 10px;
+  margin-top: 20px;
+  border-radius: 5px;
+  font-size: 18px;
+}
+
+.submit-btn,
+.cancel-report-btn,
+.new-report-btn {
+  appearance: none;
+  backface-visibility: hidden;
+  background-color: #2f80ed;
+  border-radius: 10px;
+  border-style: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter, -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  height: 50px;
+  letter-spacing: normal;
+  line-height: 1.5;
+  outline: none;
+  overflow: hidden;
+  padding: 14px 30px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+/*.button-row {
+  display: flex;
+  height: 100%;
+}*/
+
+.submit-btn {
+  display: inline-block;
+  margin: 30px;
+}
+
+.new-report-btn {
+  display: inline-block;
+  margin: 30px;
+}
+
+.cancel-report-btn {
+  display: inline-block;
+  margin: 30px;
+}
+
+.submit-btn:hover,
+.cancel-report-btn:hover,
+.new-report-btn:hover {
+  /*background-color: #1366d6;*/
+  background-color: #add8e6 ;
+  box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: .35s;
+}
+
+
+.submit-btn:active,
+.new-report-btn:active {
+  background-color: #0047AB;
+  box-shadow: rgba(0, 0, 0, .1) 0 3px 6px 0, rgba(0, 0, 0, .1) 0 0 10px 0, rgba(0, 0, 0, .1) 0 1px 4px -1px;
+  transform: translateY(2px);
+  transition-duration: .35s;
+}
+
+.submit-btn:active:after,
+.cancel-report-btn:after,
+.new-report-btn:after {
+  opacity: 1;
+}
+
+.new-report-btn:disabled {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+.submit-btn:disabled {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+#emassDiv {
+  margin-left: 5px;
+}
+
+#emassNumsText {
+  width: 600px;
+  height: 30px;
+}
+
+#numDaysText {
+  width: 100px;
+  height: 30px;
+}
+
+@media (min-width: 768px) {
+  .submit-btn {
+    padding: 14px 22px;
+    width: 176px;
+  }
+}
+
+#save-file-btn:disabled {
+  padding: 10px 20px;
+  margin: 20px;
+}
+
+#save-file-btn:enabled {
+  background-color: aqua;
+  color: black;
+  padding: 10px 20px;
+  margin: 20px;
+}
+
+.App-header {
+  /*background-color: #282c34;*/
+  min-height: 100vh;
+  /*display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;*/
+  font-size: calc(10px + 2vmin);
+  /*color: white;*/
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+div#banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  width: 100%;
+}
+
+div#banner-content {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0px;
+  text-align: center;
+  background-color: #1E821E;
+  color: white;
+  font-size: small;
+  font-weight: bold;
+  /*border: 1px solid #000;*/
+}
+
+.title-div {
+  background-color: #ffffff;
+  margin: 30px;
+  font-size: 18px;
+}
+
+div#mySpinner{
+  width:100%;
+  margin: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+table, th, td {
+  border: 1px solid;
+}
+
+td{
+  padding: 0px 10px 0px 10px;
+}
