@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import OssStigReportsTab from "./OssStigReportsTab";
 import DashboardTab from "./DashboardTab";
-import ClipLoader from "react-spinners/ClipLoader";
 
 const Tabs = () => {
 
     const [activeTab, setActiveTab] = useState("tab1");
-    const loading = false;
 
     //  Functions to handle Tab Switching
     const handleTab1 = () => {
@@ -26,14 +24,6 @@ const Tabs = () => {
                 <div id="banner-content">
                     UNCLASSIFIED (U)
                 </div>
-            </div>
-            <div id="mySpinner">
-                <ClipLoader
-                    loading={loading}
-                    size={150}
-                    aria-label="Generating Report"
-                    data-testid="loader"
-                />
             </div>
             <div className="Tabs">
                 <ul className="nav">

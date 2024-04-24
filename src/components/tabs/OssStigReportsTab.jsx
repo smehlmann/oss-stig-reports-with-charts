@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import '../../App.css';
+//import './ReportSelection.css';
 import { CSVLink } from 'react-csv';
 import * as GenerateReport from '../../reports/GenerateReport.js';
 import ReportColumns from '../ReportColumns';
 import { getAuth } from '../../store/index.js';
 import { getReportData } from '../../store/index.js';
 import * as reportUtils from '../../reports/reportUtils.js';
+import ClipLoader from "react-spinners/ClipLoader";
 
 const OssStigReportsTab = () => {
 
@@ -98,9 +100,9 @@ const OssStigReportsTab = () => {
         setHeaders(data.headers);
         setShowData(true);
         var reportData = dispatch({ type: 'refresh-reportData', reportData: data.rows });
-        if(reportData){
+        if (reportData) {
           console.log('reportData found');
-          const myData = getReportData ();
+          const myData = getReportData();
           localStorage.setItem('ossStigReport', JSON.stringify(data.rows));
         }
       }
@@ -122,144 +124,155 @@ const OssStigReportsTab = () => {
         <div className="title-div">
           <strong className="title">Select Report</strong>
         </div>
-        <div className="radio-btn-container-div">
-          <form onSubmit={handleSubmit}>
-            <label>
-              <input
-                type="radio"
-                value="1"
-                checked={report === "1"}
-                onChange={onRadioChange}
-                disabled={isButtonDisabled}
-              />
-              <span>1. RMF SAP Report</span>
-            </label>
-            <br />
-            <label>
-              <input
-                type="radio"
-                value="5"
-                checked={report === "5"}
-                onChange={onRadioChange}
-                disabled={isButtonDisabled}
-              />
-              <span>2. Asset Collection per Primary Owner and System Admin</span>
-            </label>
-            <br />
-            <label>
-            <input
-                type="radio"
-                value="7"
-                checked={report === "7"}
-                onChange={onRadioChange}
-                disabled={isButtonDisabled}
-              />
-              <span>3. Asset Status per eMASS</span>
-            </label>
-            <br />
-            <label>
-            <input
-                type="radio"
-                value="8"
-                checked={report === "8"}
-                onChange={onRadioChange}
-                disabled={isButtonDisabled}
-              />
-              <span>4. STIG Deltas per Primary Owner and System Admin (EMASS number(s) required)</span>
-            </label>
-            <br />
-            <label>
-            <input
-                type="radio"
-                value="9"
-                checked={report === "9"}
-                onChange={onRadioChange}
-                disabled={isButtonDisabled}
-              />
-              <span>5. STIG Benchmark By Results (EMASS number(s) required)</span>
-            </label>
-            <br />
-            <label>
-            <input
-                type="radio"
-                value="11"
-                checked={report === "11"}
-                onChange={onRadioChange}
-                disabled={isButtonDisabled}
-              />
-              <span>6. Checklist Over 356 Days (EMASS number(s) required)</span>
-            </label>
-            <br />
-            <label>
-            <input
-                type="radio"
-                value="12"
-                checked={report === "12"}
-                onChange={onRadioChange}
-                disabled={isButtonDisabled}
-              />
-              <span>7. STIG Deltas for Unidentified NCCM Packages</span>
-            </label>
-            <br /><br />
-            {showEmassNum && (
-              <div id='emassDiv'>
-                <label htmlFor="emassNumsText">Optional for reports 1-5 and 8. Required for reports 6, 7 and 9.<br /> Enter EMASS Number(s) separated by commas: </label>
+
+        <div id="mySpinner">
+          <ClipLoader
+            loading={loading}
+            size={150}
+            aria-label="Generating Report"
+            data-testid="loader"
+          />
+        </div>
+        <div>
+          <div className="radio-btn-container-div">
+            <form onSubmit={handleSubmit}>
+              <label>
                 <input
-                  id='emassNumsText'
-                  type='text'
-                  value={emassNums}
-                  onChange={updateEmass}
+                  type="radio"
+                  value="1"
+                  checked={report === "1"}
+                  onChange={onRadioChange}
                   disabled={isButtonDisabled}
                 />
-              </div>
-            )}
-            <br />
-            {showNumDaysOver && (
-              <div>
-                <label htmlFor="emassNumsText">Enter number of days over: </label>
+                <span>1. RMF SAP Report</span>
+              </label>
+              <br />
+              <label>
                 <input
-                  id='numDaysText'
-                  type='number'
-                  value={numDaysOver}
-                  onChange={updateNumDaysOver}
+                  type="radio"
+                  value="5"
+                  checked={report === "5"}
+                  onChange={onRadioChange}
                   disabled={isButtonDisabled}
                 />
-              </div>
-            )}
-            <br />
-            <button className="submit-btn" type="submit" disabled={isButtonDisabled}>Run Report</button>
-            <button className="cancel-report-btn" type='reset' onClick={cancelReport} disabled={false}>Canecl Report</button>
-            <button className="new-report-btn" type='reset' onClick={newReport} disabled={disableNewReport}>New Report</button>
-            <br /><br />
-            {showNoDataFound && (
-              <div className="title-div">
-                <strong className="title">No data matching your selection found.</strong>
-              </div>
-            )}
-            {showData && (
-              <div id='tableDiv'>
-                <div id="csv-ink-div">
-                  <CSVLink
-                    data={fileData}
-                    headers={headers}
-                    onClick={() => {
-                      //window.location.reload();
-                    }}
-                  >Export report to CSV file.</CSVLink>
+                <span>2. Asset Collection per Primary Owner and System Admin</span>
+              </label>
+              <br />
+              <label>
+                <input
+                  type="radio"
+                  value="7"
+                  checked={report === "7"}
+                  onChange={onRadioChange}
+                  disabled={isButtonDisabled}
+                />
+                <span>3. Asset Status per eMASS</span>
+              </label>
+              <br />
+              <label>
+                <input
+                  type="radio"
+                  value="8"
+                  checked={report === "8"}
+                  onChange={onRadioChange}
+                  disabled={isButtonDisabled}
+                />
+                <span>4. STIG Deltas per Primary Owner and System Admin (EMASS number(s) required)</span>
+              </label>
+              <br />
+              <label>
+                <input
+                  type="radio"
+                  value="9"
+                  checked={report === "9"}
+                  onChange={onRadioChange}
+                  disabled={isButtonDisabled}
+                />
+                <span>5. STIG Benchmark By Results (EMASS number(s) required)</span>
+              </label>
+              <br />
+              <label>
+                <input
+                  type="radio"
+                  value="11"
+                  checked={report === "11"}
+                  onChange={onRadioChange}
+                  disabled={isButtonDisabled}
+                />
+                <span>6. Checklist Over 356 Days (EMASS number(s) required)</span>
+              </label>
+              <br />
+              <label>
+                <input
+                  type="radio"
+                  value="12"
+                  checked={report === "12"}
+                  onChange={onRadioChange}
+                  disabled={isButtonDisabled}
+                />
+                <span>7. STIG Deltas for Unidentified NCCM Packages</span>
+              </label>
+              <br /><br />
+              {showEmassNum && (
+                <div id='emassDiv'>
+                  <label htmlFor="emassNumsText">Optional for reports 1-5 and 8. Required for reports 6, 7 and 9.<br /> Enter EMASS Number(s) separated by commas: </label>
+                  <input
+                    id='emassNumsText'
+                    type='text'
+                    value={emassNums}
+                    onChange={updateEmass}
+                    disabled={isButtonDisabled}
+                  />
                 </div>
-                <br /><br />
+              )}
+              <br />
+              {showNumDaysOver && (
                 <div>
-                  <table>
-                    <tbody>
-                      {apiResponse.map((item, index) => (
-                        <ReportColumns index={index} item={item} selectedReport={report} />
-                      ))}
-                    </tbody>
-                  </table>
+                  <label htmlFor="emassNumsText">Enter number of days over: </label>
+                  <input
+                    id='numDaysText'
+                    type='number'
+                    value={numDaysOver}
+                    onChange={updateNumDaysOver}
+                    disabled={isButtonDisabled}
+                  />
                 </div>
-              </div>
-            )}
-          </form>
+              )}
+              <br />
+              <button className="submit-btn" type="submit" disabled={isButtonDisabled}>Run Report</button>
+              <button className="cancel-report-btn" type='reset' onClick={cancelReport} disabled={false}>Canecl Report</button>
+              <button className="new-report-btn" type='reset' onClick={newReport} disabled={disableNewReport}>New Report</button>
+              <br /><br />
+              {showNoDataFound && (
+                <div className="title-div">
+                  <strong className="title">No data matching your selection found.</strong>
+                </div>
+              )}
+              {showData && (
+                <div id='tableDiv'>
+                  <div id="csv-ink-div">
+                    <CSVLink
+                      data={fileData}
+                      headers={headers}
+                      onClick={() => {
+                        //window.location.reload();
+                      }}
+                    >Export report to CSV file.</CSVLink>
+                  </div>
+                  <br /><br />
+                  <div>
+                    <table>
+                      <tbody>
+                        {apiResponse.map((item, index) => (
+                          <ReportColumns index={index} item={item} selectedReport={report} />
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </form>
+          </div>
         </div>
       </div >
     );
