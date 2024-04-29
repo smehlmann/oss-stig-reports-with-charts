@@ -2,15 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from 'oidc-react';
 import { useDispatch } from 'react-redux';
 import './App.css';
-import { CSVLink } from 'react-csv';
-import ClipLoader from "react-spinners/ClipLoader";
 import * as GenerateReport from './reports/GenerateReport.js';
-import ReportColumns from './components/ReportColumns';
-//import $ from 'jquery';
 import { getAuth } from './store/index.js';
-import { getReportData } from './store/index.js';
 import axios from 'axios';
-import * as reportUtils from './reports/reportUtils.js';
 import './Tabs.css';
 import Tabs from './components/tabs/Tabs.jsx';
 
@@ -112,37 +106,6 @@ async function extendSession() {
     // Referrer Policy: strict-origin-when-cross-origin
     var accessToken = storedAuth.userData?.access_token;
     var myUrl = 'https://npc2ismsdev01.nren.navy.mil/stigmanossreports/logo192.png';
-    /*
-        var resp = await axios
-          .head(myUrl, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
-          });
-    
-        return resp;
-    */
-
-    /*
-        const headers = { 'Authorization': `Bearer ${accessToken}` }
-    
-        await fetch(myUrl,
-          {
-            method: "HEAD",
-            mode: 'cors',
-            Authorization: `Bearer ${accessToken}`
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              console.log('success');
-            } else {
-              console.log('error');
-            }
-          })
-          .catch((error) => {
-            console.log('network error: ' + error);
-          });    
-    */
 
     var resp = await axios.get(myUrl, {
       responseType: 'blob',
@@ -157,44 +120,11 @@ async function extendSession() {
     //alert('returning resp')
     return resp;
 
-    // got a 404 return status
-    /*await $.ajax({
-      type: 'HEAD',
-      url: 'https://npc2ismsdev01.nren.navy.mil/stigmanossreports/logo192.png',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: function () {
-        console.log('File exists');
-      },
-      error: function () {
-        console.log('File does not exist');
-      }
-    });*/
-
   }
   catch (e) {
     console.log(e.message);
     console.log(e);
   }
-
-  /*await $.ajax({
-    type: 'HEAD',
-    url: 'https://npc2ismsdev01.nren.navy.mil/stigmanossreports/logo192.png',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    },
-    success: function () {
-      console.log('File exists');
-    },
-    error: function () {
-      console.log('File does not exist');
-    }
-  });
-}
-catch (e) {
-  console.log(e.message);
-}*/
 
 }
 
