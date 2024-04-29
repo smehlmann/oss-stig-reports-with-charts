@@ -33,7 +33,7 @@ function ExpandableTableExample() {
           accumulator[currentValue.shortName].push({
             asset: currentValue.asset,
             sysAdmin: currentValue.sysAdmin,
-            primaryOwner: currentValue.primaryOwner
+            primOwner: currentValue.primOwner
           });
 
           //return accumulator when items in csvData have been seen
@@ -61,8 +61,7 @@ function ExpandableTableExample() {
   const renderChildRow = (parentRow) => {
     // Filter childRows based on your condition
     const filteredChildRows = parentRow.childRows.filter(
-      // (childRow) => childRow.sysAdmin !== null || childRow.primaryOwner !== null || childRow.sysAdmin !== "" || childRow.primaryOwner !== "" || childRow.sysAdmin !== " " || childRow.primaryOwner !== " " 
-      (childRow) => childRow.sysAdmin !== null && childRow.primaryOwner !== null && childRow.sysAdmin !== "" && childRow.primaryOwner !== ""
+      (childRow) => childRow.sysAdmin !== null && childRow.primOwner !== null && childRow.sysAdmin !== "" && childRow.primOwner !== ""
     );
 
     // Check if there are any filtered childRows to render
@@ -85,7 +84,7 @@ function ExpandableTableExample() {
               <TableRow key={childRow.index} className="child-row">
                 <TableCell >{childRow.asset}</TableCell>
                 <TableCell >{childRow.sysAdmin}</TableCell>
-                <TableCell >{childRow.primaryOwner}</TableCell>
+                <TableCell >{childRow.primOwner}</TableCell>
               </TableRow>
             ))}
           </TableBody>
