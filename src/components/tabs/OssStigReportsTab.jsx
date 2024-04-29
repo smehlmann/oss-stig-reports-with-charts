@@ -102,7 +102,6 @@ const OssStigReportsTab = () => {
         var reportData = dispatch({ type: 'refresh-reportData', reportData: data.rows });
         if (reportData) {
           console.log('reportData found');
-          const myData = getReportData();
           localStorage.setItem('ossStigReport', JSON.stringify(data.rows));
         }
       }
@@ -121,10 +120,6 @@ const OssStigReportsTab = () => {
   if (auth && auth.userData) {
     return (
       <div>
-        <div className="title-div">
-          <strong className="title">Select Report</strong>
-        </div>
-
         <div id="mySpinner">
           <ClipLoader
             loading={loading}
@@ -132,6 +127,9 @@ const OssStigReportsTab = () => {
             aria-label="Generating Report"
             data-testid="loader"
           />
+        </div>
+        <div className="title-div">
+          <strong className="title">Select Report</strong>
         </div>
         <div>
           <div className="radio-btn-container-div">
