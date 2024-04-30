@@ -6,7 +6,7 @@ import { CSVLink } from 'react-csv';
 import * as GenerateReport from '../../reports/GenerateReport.js';
 import ReportColumns from '../ReportColumns';
 import { getAuth } from '../../store/index.js';
-import { getReportData } from '../../store/index.js';
+//import { getReportData } from '../../store/index.js';
 import * as reportUtils from '../../reports/reportUtils.js';
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -103,6 +103,7 @@ const OssStigReportsTab = () => {
         if (reportData) {
           console.log('reportData found');
           localStorage.setItem('ossStigReport', JSON.stringify(data.rows));
+          localStorage.setItem('selectedReport', report);
         }
       }
       else {
