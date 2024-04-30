@@ -58,6 +58,7 @@ export const fetchData = async () => {
 
     const storedData = localStorage.getItem('ossStigReport');
     const parsedData = JSON.parse(storedData);
+    const selectedReport = localStorage.getItem('selectedReport');
 
     parsedData.forEach(entry => {
       // Split datePulled string into parts and construct a Date object
