@@ -10,7 +10,7 @@ import { getAuth } from '../../store/index.js';
 import * as reportUtils from '../../reports/reportUtils.js';
 import ClipLoader from "react-spinners/ClipLoader";
 
-const OssStigReportsTab = () => {
+const OssStigReportsTab = (props) => {
 
   const [apiResponse, setApiResponse] = useState([]);
   const [fileData, setFileData] = useState('');
@@ -92,18 +92,27 @@ const OssStigReportsTab = () => {
 
     await callAPI(auth, report, emassNums, numDaysOver).then((data) => {
 
-      if (data && data.rows.length > 0) {
-        var mergedData = reportUtils.mergeHeadersAndData(data);
-        //setApiResponse(data.rows);
-        setApiResponse(mergedData);
-        setFileData(data.rows);
-        setHeaders(data.headers);
-        setShowData(true);
-        var reportData = dispatch({ type: 'refresh-reportData', reportData: data.rows });
-        if (reportData) {
-          console.log('reportData found');
-          localStorage.setItem('ossStigReport', JSON.stringify(data.rows));
-          localStorage.setItem('selectedReport', report);
+      if (data) {
+        if (data.rows && data.rows.length > 0) {
+          var mergedData = reportUtils.mergeHeadersAndData(data);
+          //setApiResponse(data.rows);
+          setApiResponse(mergedData);
+          setFileData(data.rows);
+          setHeaders(data.headers);
+          setShowData(true);
+          var reportData = dispatch({ type: 'refresh-reportData', reportData: data.rows });
+          if (reportData) {
+            console.log('reportData found');
+            localStorage.setItem('ossStigReport', JSON.stringify(data.rows));
+            localStorage.setItem('selectedReport', report);
+            if (report === '5' || report === '7' || report === '8') {
+              props.setDashboardEnabled(true);
+            }
+            setShowNoDataFound(false);
+          }
+        }
+        else{
+          setShowNoDataFound(true);
         }
       }
       else {

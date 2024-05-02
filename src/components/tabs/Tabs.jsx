@@ -5,18 +5,21 @@ import DashboardTab from "./DashboardTab";
 const Tabs = () => {
 
     const [activeTab, setActiveTab] = useState("tab1");
+    const [isDashboardEnabled, setDashboardEnabled] = useState(false);
 
     //  Functions to handle Tab Switching
     const handleTab1 = () => {
         // update the state to tab1
         setActiveTab("tab1");
+        setDashboardEnabled(false);
     };
 
     const handleTab2 = () => {
-        // update the state to tab2
-        setActiveTab("tab2");
+        if (isDashboardEnabled) {
+            // update the state to tab2
+            setActiveTab("tab2");
+        }
     };
-
 
     return (
         <div id='banner'>
@@ -44,7 +47,7 @@ const Tabs = () => {
                 </ul>
 
                 <div className="outlet">
-                    {activeTab === "tab1" ? <OssStigReportsTab /> : <DashboardTab />}
+                    {activeTab === "tab1" ? <OssStigReportsTab setDashboardEnabled={setDashboardEnabled}/> : <DashboardTab />}
                 </div>
             </div>
         </div>
