@@ -60,25 +60,27 @@ export const fetchData = async () => {
     const parsedData = JSON.parse(storedData);
     const selectedReport = localStorage.getItem('selectedReport');
 
-    parsedData.forEach(entry => {
-      // Split datePulled string into parts and construct a Date object
-      //  const [year, month, day] = entry.datePulled.split('-');
-      //  entry.datePulled = new Date(year, month - 1, day);
-      //  entry.datePulled = stringToDate(entry.datePulled);
-      // console.log(entry.datePulled, typeof entry.datePulled);
+    if (selectedReport === '5') {
+      parsedData.forEach(entry => {
+        // Split datePulled string into parts and construct a Date object
+        //  const [year, month, day] = entry.datePulled.split('-');
+        //  entry.datePulled = new Date(year, month - 1, day);
+        //  entry.datePulled = stringToDate(entry.datePulled);
+        // console.log(entry.datePulled, typeof entry.datePulled);
 
-      //convert assessed, submitted, rejected, and accepted to decimals
-      entry.assessed = formatPercentage(entry.assessed);
-      entry.submitted = formatPercentage(entry.submitted);
-      entry.accepted = formatPercentage(entry.accepted);
-      entry.rejected = formatPercentage(entry.rejected);
+        //convert assessed, submitted, rejected, and accepted to decimals
+        entry.assessed = formatPercentage(entry.assessed);
+        entry.submitted = formatPercentage(entry.submitted);
+        entry.accepted = formatPercentage(entry.accepted);
+        entry.rejected = formatPercentage(entry.rejected);
 
-      //convert objects to strings
-      entry.sysAdmin = objectToString(entry.sysAdmin).replace('_$', '');
-      entry.primOwner = objectToString(entry.primOwner);
-      entry.deviveType = objectToString(entry.deviveType);
+        //convert objects to strings
+        entry.sysAdmin = objectToString(entry.sysAdmin).replace('_$', '');
+        entry.primOwner = objectToString(entry.primOwner);
+        entry.deviveType = objectToString(entry.deviveType);
 
-    });
+      });
+    }
 
     return parsedData;
 
@@ -87,3 +89,4 @@ export const fetchData = async () => {
     return [];
   }
 };
+
