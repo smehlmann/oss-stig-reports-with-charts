@@ -9,6 +9,8 @@ import { getAuth } from '../../store/index.js';
 //import { getReportData } from '../../store/index.js';
 import * as reportUtils from '../../reports/reportUtils.js';
 import ClipLoader from "react-spinners/ClipLoader";
+import { Link, useNavigate } from 'react-router-dom';
+import { redirect } from "react-router-dom";
 
 const OssStigReportsTab = (props) => {
 
@@ -24,7 +26,12 @@ const OssStigReportsTab = (props) => {
   const [showNoDataFound, setShowNoDataFound] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isButtonDisabled, setButtonDisabled] = useState(false);
-  const [disableNewReport, setDisableNewReport] = useState(false);
+  const [disableNewReport, setDisableNewReport] = useState(true);
+  const [disableDashboard, setDisableDashboard] = useState(true);
+  const [disableCancel, setDisableCancel] = useState(true);
+  const [disableRuReport, setDisableRunReport] = useState(true);
+
+  const navigate = useNavigate();
 
   //var jsonData = null;
   var auth = getAuth();
@@ -32,6 +39,10 @@ const OssStigReportsTab = (props) => {
 
   // this function will be called when a radio button is checked
   const onRadioChange = (e) => {
+
+    setDisableRunReport(false);
+    setButtonDisabled(false);
+    setDisableNewReport(true);
     setReport(e.target.value);
     //setShowEmassNums(true);
     if (e.target.value !== '12') {
@@ -60,7 +71,17 @@ const OssStigReportsTab = (props) => {
   const cancelReport = (e) => {
 
     window.location.reload();
-  }
+  };
+
+  const dashboard = (e) => {
+
+    //alert('Dashborad button clicked');
+    //window.open("./DashboardTab", "_blank");
+    // navigate('/dashboard', '_blank');
+    //redirect('/dashboard');
+    //navigate('/dashboard', { replace: false }, { target: '_blank' });
+    window.open("./dashboard", "_blank");
+  };
 
   const handleSubmit = async (e) => {
 
@@ -88,7 +109,10 @@ const OssStigReportsTab = (props) => {
 
     setLoading(true);
     setButtonDisabled(true);
+    setDisableRunReport(true);
     setDisableNewReport(true);
+    setDisableDashboard(true);
+    setDisableCancel(false);
 
     await callAPI(auth, report, emassNums, numDaysOver).then((data) => {
 
@@ -106,23 +130,26 @@ const OssStigReportsTab = (props) => {
             localStorage.setItem('ossStigReport', JSON.stringify(data.rows));
             localStorage.setItem('selectedReport', report);
             if (report === '5' || report === '7' || report === '8') {
-              props.setDashboardEnabled(true);
+              //props.setDashboardEnabled(true);
+              setDisableDashboard(false);
             }
             setShowNoDataFound(false);
           }
         }
-        else{
+        else {
           setShowNoDataFound(true);
         }
       }
       else {
         setShowNoDataFound(true);
+        setDisableCancel(true);
       }
     });
 
     setLoading(false);
     setButtonDisabled(true);
     setDisableNewReport(false);
+    setDisableCancel(true);
 
   }
 
@@ -247,9 +274,10 @@ const OssStigReportsTab = (props) => {
                 </div>
               )}
               <br />
-              <button className="submit-btn" type="submit" disabled={isButtonDisabled}>Run Report</button>
-              <button className="cancel-report-btn" type='reset' onClick={cancelReport} disabled={false}>Canecl Report</button>
+              <button className="submit-btn" type="submit" disabled={disableRuReport}>Run Report</button>
+              <button className="cancel-report-btn" type='reset' onClick={cancelReport} disabled={disableCancel}>Canecl Report</button>
               <button className="new-report-btn" type='reset' onClick={newReport} disabled={disableNewReport}>New Report</button>
+              <button className="dashboard-btn" type='reset' onClick={dashboard} disabled={disableDashboard}>Go to Dashboard</button>
               <br /><br />
               {showNoDataFound && (
                 <div className="title-div">
