@@ -5,7 +5,6 @@ import classes from './Root.module.css';
 function RootLayout() {
     return (
         <>
-            <MainNavigation />
             <main>
                 <Outlet />
             </main >
