@@ -4,6 +4,21 @@ import { AuthProvider } from 'oidc-react';
 import OssStigReports from './OssStigReports';
 import { Provider } from 'react-redux';
 import store from './store/index.js';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import DashboardTab from './components/tabs/DashboardTab.js';
+import { RootLayout } from './components/tabs/Root.js';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <RootLayout />,
+    children: [
+      { path: '/', element: <OssStigReports /> },
+      { path: '/dashboard', element: <DashboardTab /> }
+    ]
+
+  }
+]);
 
 function App() {
   return (
@@ -18,7 +33,7 @@ function App() {
         automaticSilentRenew={true}
       >
         <Provider store={store}>
-        <OssStigReports />
+          <RouterProvider router={router} />
         </Provider>
       </AuthProvider>
     </div>

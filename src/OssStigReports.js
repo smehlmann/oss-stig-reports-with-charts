@@ -5,9 +5,9 @@ import './App.css';
 import * as GenerateReport from './reports/GenerateReport.js';
 import { getAuth } from './store/index.js';
 import axios from 'axios';
-import './Tabs.css';
-import Tabs from './components/tabs/Tabs.jsx';
-
+//import './Tabs.css';
+//import Tabs from './components/tabs/Tabs.jsx';
+import OssStigReportsTab from "./components/tabs/OssStigReportsTab.jsx";
 
 
 function OssStigReports() {
@@ -79,7 +79,7 @@ function OssStigReports() {
   if (auth && auth.userData) {
     return (
 
-      <Tabs />
+      <OssStigReportsTab />
     )
   }
 }
