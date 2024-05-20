@@ -20,8 +20,7 @@ div.MyApp {
 
 .submit-btn,
 .cancel-report-btn,
-.new-report-btn,
-.dashboard-btn {
+.new-report-btn {
   appearance: none;
   backface-visibility: hidden;
   background-color: #2f80ed;
@@ -73,15 +72,9 @@ div.MyApp {
   margin: 30px;
 }
 
-.dashboard-btn {
-  display: inline-block;
-  margin: 30px;
-}
-
 .submit-btn:hover,
 .cancel-report-btn:hover,
-.new-report-btn:hover,
-.dashboard-btn:hover {
+.new-report-btn:hover {
   /*background-color: #1366d6;*/
   background-color: #add8e6 ;
   box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
@@ -92,9 +85,7 @@ div.MyApp {
 
 
 .submit-btn:active,
-.new-report-btn:active, 
-.new-report-btn:active,
-.cancel-report-btn:active {
+.new-report-btn:active {
   background-color: #0047AB;
   box-shadow: rgba(0, 0, 0, .1) 0 3px 6px 0, rgba(0, 0, 0, .1) 0 0 10px 0, rgba(0, 0, 0, .1) 0 1px 4px -1px;
   transform: translateY(2px);
@@ -103,8 +94,7 @@ div.MyApp {
 
 .submit-btn:active:after,
 .cancel-report-btn:after,
-.new-report-btn:after,
-.dashboard-btn:hover {
+.new-report-btn:after {
   opacity: 1;
 }
 
@@ -116,20 +106,6 @@ div.MyApp {
 }
 
 .submit-btn:disabled {
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
-  cursor: not-allowed;
-}
-
-.dashboard-btn:disabled {
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
-  cursor: not-allowed;
-}
-
-.cancel-report-btn:disabled {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;

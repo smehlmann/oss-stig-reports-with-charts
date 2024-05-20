@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useAuth } from 'oidc-react';
-import { useDispatch } from 'react-redux';
-import './App.css';
-import * as GenerateReport from './reports/GenerateReport.js';
-import { getAuth } from './store/index.js';
-import axios from 'axios';
-//import './Tabs.css';
+import React, { useEffect, useState } from "react";
+import { useAuth } from "oidc-react";
+import { useDispatch } from "react-redux";
+import "./App.css";
+import * as GenerateReport from "./reports/GenerateReport.js";
+import { getAuth } from "./store/index.js";
+import axios from "axios";
+import "./Tabs.css";
 //import Tabs from './components/tabs/Tabs.jsx';
-import OssStigReportsTab from "./components/tabs/OssStigReportsTab.jsx";
-
+import TabsComponent from './components/tabs/TabsComponent.jsx';
+//import MyTabs from "./components/tabs/TabsComponent.jsx";
 
 function OssStigReports() {
-
   var auth = useAuth();
   const idToken = auth.userData?.id_token;
   // console.log(idToken);
@@ -21,46 +20,45 @@ function OssStigReports() {
   /*===============================================================*/
   const dispatch = useDispatch();
   // set the new auth value in the data store
-  dispatch({ type: 'refresh', auth: auth });
+  dispatch({ type: "refresh", auth: auth });
 
-  const expiresIn = auth.userData?.expires_in
+  const expiresIn = auth.userData?.expires_in;
   // calculate the expiration date/time
   const expDate = auth.userData?.expires_at
     ? new Date(auth.userData.expires_at * 1000)
-    : null
+    : null;
 
   // setting remaining time
-  const [remainingTime, setRemainingTime] = useState(expiresIn)
+  const [remainingTime, setRemainingTime] = useState(expiresIn);
 
   // reducing remaining time by 1 second every second
   useEffect(() => {
     // Set initial value
-    setRemainingTime(expiresIn)
+    setRemainingTime(expiresIn);
 
     // Update every second
     const intervalId = setInterval(() => {
-      setRemainingTime(prev => (prev > 0 ? prev - 1 : 0)); // Prevent negative values
-    }, 1000)
+      setRemainingTime((prev) => (prev > 0 ? prev - 1 : 0)); // Prevent negative values
+    }, 1000);
 
     // Clear interval when component unmounts
-    return () => clearInterval(intervalId)
-  }, [expiresIn])
+    return () => clearInterval(intervalId);
+  }, [expiresIn]);
 
-  // event handler for token expiring
-  const handleTokenExpiring = () => {
-    console.log('Access token expiring event fired');
-    console.log(auth.userData);
-
-    // set the new auth value in the data store
-    dispatch({ type: 'refresh', auth: auth });
-
-    extendSession();
-    //setAccessTokenId(auth.userData?.access_token);
-  };
-
-  // adding event listener for token expiring from oidc-react 
+  // adding event listener for token expiring from oidc-react
   useEffect(() => {
     const userManager = auth.userManager;
+    // event handler for token expiring
+    const handleTokenExpiring = () => {
+      console.log("Access token expiring event fired");
+      console.log(auth.userData);
+
+      // set the new auth value in the data store
+      dispatch({ type: "refresh", auth: auth });
+
+      extendSession();
+      //setAccessTokenId(auth.userData?.access_token);
+    };
 
     if (userManager) {
       userManager.events.addAccessTokenExpiring(handleTokenExpiring);
@@ -70,62 +68,58 @@ function OssStigReports() {
         userManager.events.removeAccessTokenExpiring(handleTokenExpiring);
       };
     }
-  }, [auth, handleTokenExpiring]);
-
+  }, [auth, dispatch]);
 
   /*===============================================================*/
 
   // error handling for if auth is null/undefined or userData doesn't exist
   if (auth && auth.userData) {
-    return (
-
-      <OssStigReportsTab />
-    )
+    return <TabsComponent />;
   }
 }
 
 async function callAPI(auth, report, emassNums, numDaysOver) {
-
   //alert('callAPI report: ' + report);
 
-  var rows = await GenerateReport.GenerateReport(auth, report, emassNums, numDaysOver);
+  var rows = await GenerateReport.GenerateReport(
+    auth,
+    report,
+    emassNums,
+    numDaysOver
+  );
   //alert('calApi number of rows retruned: ' + rows.length);
 
   return rows;
 }
 
 async function extendSession() {
-
   try {
-
     var storedAuth = getAuth();
 
-    // got error Access to XMLHttpRequest at 'https://npc2ismsdev01.nren.navy.mil/stigmanossreports/logo192.png' from origin 
-    // 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: 
+    // got error Access to XMLHttpRequest at 'https://npc2ismsdev01.nren.navy.mil/stigmanossreports/logo192.png' from origin
+    // 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check:
     // No 'Access-Control-Allow-Origin' header is present on the requested resource.
     // Referrer Policy: strict-origin-when-cross-origin
     var accessToken = storedAuth.userData?.access_token;
-    var myUrl = 'https://npc2ismsdev01.nren.navy.mil/stigmanossreports/logo192.png';
+    var myUrl =
+      "https://npc2ismsdev01.nren.navy.mil/stigmanossreports/logo192.png";
 
     var resp = await axios.get(myUrl, {
-      responseType: 'blob',
+      responseType: "blob",
       headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-        Authorization: `Bearer ${accessToken}`
-      }
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        Expires: "0",
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
     //alert('returning resp')
     return resp;
-
-  }
-  catch (e) {
+  } catch (e) {
     console.log(e.message);
     console.log(e);
   }
-
 }
 
 export default OssStigReports;
