@@ -8,7 +8,7 @@ import {
   ArcElement,
   Legend,
 } from 'chart.js/auto';
-import { fetchData } from './DataExtractor';
+import { fetchData } from './DataExtractor'; 
 
 Chart.register(
   Title,
@@ -31,23 +31,22 @@ const ChartBuilder = () => {
 
   const [dataFetched, setDataFetched] = useState(false);
 
+
   //This useEffect runs once component mounts
   useEffect(() => {
-
+    
     //Uses fetchData to retrieve data from file
     const fetchDataAndBuildChart = async () => {
 
-      const parsedData = await fetchData();
-      setDataFetched(true);
-      console.log(parsedData);
-      setData(parsedData);
+        const parsedData = await fetchData();
+        setDataFetched(true);
+        console.log(parsedData);
+        setData(parsedData);
     };
 
     //function call
     fetchDataAndBuildChart();
   }, [dataFetched]);
-
-  const selectedReport = localStorage.getItem('selectedReport');
 
   //Render chart when 'data' state changes
 
