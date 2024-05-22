@@ -1,25 +1,13 @@
-import { useEffect, useState, useRef } from 'react';
-import { palette } from './palette';
+import { useEffect, useState, useRef } from "react";
+import { palette } from "./palette";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import {
-  Chart,
-  Title,
-  Tooltip,
-  ArcElement,
-  Legend,
-} from 'chart.js/auto';
-import { fetchData } from './DataExtractor'; 
+import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
+import { fetchData } from "./DataExtractor";
+import useLocalStorageListener from "../components/useLocalStorageListener.js";
 
-Chart.register(
-  Title,
-  Tooltip,
-  ArcElement,
-  Legend, ChartDataLabels
-);
-
+Chart.register(Title, Tooltip, ArcElement, Legend, ChartDataLabels);
 
 const ChartBuilder = () => {
-
   //Returns the data and function to set the data
   const [data, setData] = useState([]);
 
@@ -30,18 +18,39 @@ const ChartBuilder = () => {
   const chartInstanceRef = useRef(null);
 
   const [dataFetched, setDataFetched] = useState(false);
+  const [reportData, setReportDsata] = useState(undefined);
 
+  useLocalStorageListener((event) => {
+    if (event.type === "storage") {
+      setDataFetched(true);
+    }
+  });
+
+  useEffect(() => {
+    console.log("BarChartBuilder from useEffect");
+    if (localStorage.getItem("ossStigReport")) {
+      setDataFetched(true);
+      window.addEventListener("storage", storageEventHandler, false);
+    }
+  }, []);
+
+  function storageEventHandler() {
+    console.log("hi from storageEventHandler");
+    if (localStorage.getItem("ossStigReport")) {
+      setDataFetched(true);
+    }
+  }
 
   //This useEffect runs once component mounts
   useEffect(() => {
-    
     //Uses fetchData to retrieve data from file
     const fetchDataAndBuildChart = async () => {
-
-        const parsedData = await fetchData();
+      const parsedData = await fetchData();
+      if (parsedData) {
         setDataFetched(true);
         console.log(parsedData);
         setData(parsedData);
+      }
     };
 
     //function call
@@ -55,7 +64,7 @@ const ChartBuilder = () => {
     //Check for available data
     if (data.length > 0) {
       //Get canvas context
-      const ctx = chartRef.current?.getContext('2d');
+      const ctx = chartRef.current?.getContext("2d");
       if (ctx) {
         //coutMap = (codeNum: count of code)
         const countMap = getCountMap(data);
@@ -69,7 +78,7 @@ const ChartBuilder = () => {
           labels: columnLabels,
           datasets: [
             {
-              label: 'code',
+              label: "code",
               data: columnValues,
               backgroundColor: palette,
               // backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -78,23 +87,23 @@ const ChartBuilder = () => {
             },
           ],
         };
-        console.log(columnValues)
+        console.log(columnValues);
 
         const chartOptions = {
           scales: {
             x: {
-              type: 'category', // Use 'category' scale for labels
+              type: "category", // Use 'category' scale for labels
               labels: columnLabels,
             },
             y: {
-              type: 'logarithmic', // Use 'linear' scale for values
+              type: "logarithmic", // Use 'linear' scale for values
               beginAtZero: true,
               values: columnValues,
             },
           },
           plugins: {
             datalabels: {
-              color: 'white', // Set data label color to white
+              color: "white", // Set data label color to white
             },
           },
         };
@@ -105,7 +114,7 @@ const ChartBuilder = () => {
         }
         //New bar chart instance created
         const newChartInstance = new Chart(ctx, {
-          type: 'bar',
+          type: "bar",
           data: chartData,
           options: chartOptions,
         });

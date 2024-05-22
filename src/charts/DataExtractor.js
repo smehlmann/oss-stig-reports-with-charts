@@ -57,6 +57,9 @@ export const fetchData = async () => {
   try {
 
     const storedData = localStorage.getItem('ossStigReport');
+    if(!storedData){
+      return storedData;
+    }
     const parsedData = JSON.parse(storedData);
     const selectedReport = localStorage.getItem('selectedReport');
 
