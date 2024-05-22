@@ -76,7 +76,7 @@ div.MyApp {
 .cancel-report-btn:hover,
 .new-report-btn:hover {
   /*background-color: #1366d6;*/
-  background-color: #add8e6 ;
+  background-color: #add8e6;
   box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
   opacity: 1;
   transform: translateY(0);
@@ -99,6 +99,13 @@ div.MyApp {
 }
 
 .new-report-btn:disabled {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+.cancel-report-btn:disabled {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
@@ -196,17 +203,19 @@ div#banner-content {
   font-size: 18px;
 }
 
-div#mySpinner{
-  width:100%;
+div#mySpinner {
+  width: 100%;
   margin: 50px;
   display: flex;
   justify-content: center;
 }
 
-table, th, td {
+table,
+th,
+td {
   border: 1px solid;
 }
 
-td{
+td {
   padding: 0px 10px 0px 10px;
 }
