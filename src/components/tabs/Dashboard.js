@@ -1,5 +1,7 @@
 import '../../Charts.css';
 import './DashboardTab.css';
+import useLocalStorageListener from '../useLocalStorageListener';
+
 import BarChartBuilder from '../../charts/BarChartBuilder';
 import PieChartBuilder from '../../charts/PieChartBuilder';
 import LineChartBuilder from '../../charts/LineChartBuilder';
@@ -17,9 +19,19 @@ function DashboardTab() {
   const [currentPage, setCurrentPage] = useState('chart');
   // const [dataFetched, setDataFetched] = useState(false); // Track if data has been fetched
 
-  const handlePageChange = (page) => {
+  const [reportData, setReportData] = useState(() => {
+    return localStorage.getItem('ossStigReport') || '';
+  });
+
+  useLocalStorageListener((event) => {
+    if (event.key === 'ossStigReport') {
+      setReportData(event.newValue);
+    }
+  });
+  
+  /*const handlePageChange = (page) => {
     setCurrentPage(page);
-  };
+  };*/
 
   return (
     <div className="Charts">

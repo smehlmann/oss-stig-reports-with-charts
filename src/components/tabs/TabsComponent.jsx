@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import OssStigReportsTab from "./OssStigReportsTab";
 import DashboardTab from "./DashboardTab";
+import './TabComponentStyles.css'
 
 import * as Tabs from "@radix-ui/react-tabs";
 
@@ -24,10 +25,10 @@ const TabsComponent = () => {
   };
 
   return (
-    <Tabs.Root defaultValue="tab1" onValueChange={handleTabChange}>
-      <Tabs.List aria-label="Tabs">
-        <Tabs.Trigger value="tab1">Report Generator</Tabs.Trigger>
-        <Tabs.Trigger value="tab2">Report Dashboard</Tabs.Trigger>
+    <Tabs.Root defaultValue="tab1" className='tabs-root' onValueChange={handleTabChange}>
+      <Tabs.List aria-label="Tabs" className='tabs-list'>
+        <Tabs.Trigger className='tabs-trigger' value="tab1">Report Generator</Tabs.Trigger>
+        <Tabs.Trigger className='tabs-trigger' value="tab2">Report Dashboard</Tabs.Trigger>
       </Tabs.List>
       <div>
         <div style={{ display: activeTab === "tab1" ? "block" : "none" }}>
