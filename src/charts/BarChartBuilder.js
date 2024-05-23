@@ -18,9 +18,13 @@ const ChartBuilder = () => {
   const chartInstanceRef = useRef(null);
 
   const [dataFetched, setDataFetched] = useState(false);
-  const [reportData, setReportDsata] = useState(undefined);
+  //const [reportData, setReportDsata] = useState(undefined);
+
+  const selectedReport = localStorage.getItem('selectedReport');
+  console.log('selectedReport: ' + selectedReport);
 
   useLocalStorageListener((event) => {
+    console.log('hi from useLocalStorageListener')
     if (event.type === "storage") {
       setDataFetched(true);
     }
@@ -48,7 +52,7 @@ const ChartBuilder = () => {
       const parsedData = await fetchData();
       if (parsedData) {
         setDataFetched(true);
-        console.log(parsedData);
+        //console.log(parsedData);
         setData(parsedData);
       }
     };
