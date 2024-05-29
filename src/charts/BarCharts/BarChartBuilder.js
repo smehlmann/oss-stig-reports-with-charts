@@ -1,14 +1,11 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { palette } from "../palette";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
-import { fetchData } from "../DataExtractor.js";
-import useLocalStorageListener from "../../components/useLocalStorageListener.js";
 
 Chart.register(Title, Tooltip, ArcElement, Legend, ChartDataLabels);
 
-const BarChartBuilder = (dataLabels, dataValues) => {
-
+const BarChartBuilder = ({ dataLabels, dataValues, title, yAxisHeader, xAxisHeader }) => {
 
   //Creates a ref that will be used to reference the canvas element where chart will be rendered
   const chartRef = useRef(null);
@@ -16,99 +13,72 @@ const BarChartBuilder = (dataLabels, dataValues) => {
   //Ref will store the reference to current chart instance
   const chartInstanceRef = useRef(null);
 
-  const [dataFetched, setDataFetched] = useState(false);
-  //const [reportData, setReportDsata] = useState(undefined);
-
-  const selectedReport = localStorage.getItem('selectedReport');
-  console.log('selectedReport: ' + selectedReport);
-
-  useLocalStorageListener((event) => {
-    console.log('hi from useLocalStorageListener')
-    if (event.type === "storage") {
-      setDataFetched(true);
-    }
-  });
-
-  useEffect(() => {
-    console.log("BarChartBuilder from useEffect");
-    if (localStorage.getItem("ossStigReport")) {
-      setDataFetched(true);
-      window.addEventListener("storage", storageEventHandler, false);
-    }
-  }, []);
-
-  function storageEventHandler() {
-    console.log("hi from storageEventHandler");
-    if (localStorage.getItem("ossStigReport")) {
-      setDataFetched(true);
-    }
-  }
-
-  //This useEffect runs once component mounts
-  useEffect(() => {
-    //Uses fetchData to retrieve data from file
-    const fetchDataAndBuildChart = async () => {
-      const parsedData = await fetchData();
-      if (parsedData) {
-        setDataFetched(true);
-        //console.log(parsedData);
-        setData(parsedData);
-      }
-    };
-
-    //function call
-    fetchDataAndBuildChart();
-  }, [dataFetched]);
-
-  //Render chart when 'data' state changes
-
   //Create chart
   useEffect(() => {
-    //Check for available data
-    if (data.length > 0) {
       //Get canvas context
       const ctx = chartRef.current?.getContext("2d");
+      // if (ctx) {
       if (ctx) {
-        //coutMap = (codeNum: count of code)
-        const countMap = getCountMap(data);
-
-        //labels = code#, values = count per code
-        const columnLabels = Object.keys(countMap);
-        const columnValues = Object.values(countMap);
-
         //Configure chart data
         const chartData = {
-          labels: columnLabels,
+          labels: dataLabels,
           datasets: [
             {
-              label: "code",
-              data: columnValues,
+              label: title,
+              data: dataValues,
               backgroundColor: palette,
-              // backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              // borderColor: 'rgba(75, 192, 192, 1)',
               borderWidth: 1,
             },
           ],
         };
-        console.log(columnValues);
-
+    
+        //define chartOptions structure 
         const chartOptions = {
           scales: {
             x: {
-              type: "category", // Use 'category' scale for labels
-              labels: columnLabels,
+              type: "category", //for labels
+              labels: dataLabels,
+              title: {
+                display: true,
+                text: yAxisHeader,
+              },
             },
             y: {
-              type: "logarithmic", // Use 'linear' scale for values
+              type: "logarithmic", // for values
               beginAtZero: true,
-              values: columnValues,
+              values: dataValues,
+              title: {
+                display: true,
+                text: xAxisHeader,
+              },
+              ticks: {
+                padding: 10,
+                autoSkip: true,
+               
+              },
             },
           },
-          plugins: {
+
+  
+          plugins: 
+          {
+            title: {
+              display: true,
+              text: title,
+              font: {
+                family: 'Times',
+                size: 20,
+                style: 'normal',
+                lineHeight: 1.2
+              },
+            },
             datalabels: {
-              color: "white", // Set data label color to white
+              color: "white",
             },
           },
+
+          maintainAspectRatio: false,
+          responsive: true,
         };
 
         //If previous chart exists, destory it
@@ -124,22 +94,103 @@ const BarChartBuilder = (dataLabels, dataValues) => {
 
         chartInstanceRef.current = newChartInstance;
       }
-    }
-  }, [data]);
-
-  //coutMap = (code# -> count of code#)
-  const getCountMap = (data) => {
-    return data.reduce((countMap, row) => {
-      //Every time code# appears, increment count
-      countMap[row.code] = (countMap[row.code] || 0) + 1;
-      return countMap;
-    }, {});
-  };
+    
+  }, [dataLabels, dataValues, title, yAxisHeader, xAxisHeader]);
 
   return (
     <div>
-      <canvas ref={chartRef} id="myChart" width="600" height="600" />
+      <canvas ref={chartRef} id="myChart"  height="200"/>
     </div>
   );
 };
 export default BarChartBuilder;
+
+
+// import { useEffect, useRef } from "react";
+// import { palette } from "../palette";
+// import ChartDataLabels from "chartjs-plugin-datalabels";
+// import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
+
+// Chart.register(Title, Tooltip, ArcElement, Legend, ChartDataLabels);
+
+// const BarChartBuilder = ({  dataLabels, dataValues, title, yAxisHeader, xAxisHeader }) => {
+//   const chartRef = useRef(null);
+//   const chartInstanceRef = useRef(null);
+
+//   useEffect(() => {
+//     const ctx = chartRef.current?.getContext("2d");
+
+//     if (ctx) {
+//       if (!chartInstanceRef.current) {
+//         // Create a new chart instance if it doesn't exist
+//         chartInstanceRef.current = new Chart(ctx, {
+//           type: "bar",
+//           data: {
+//             labels: dataLabels,
+//             datasets: [
+//               {
+//                 label: "code",
+//                 data: dataValues,
+//                 backgroundColor: palette,
+//                 borderWidth: 1,
+//               },
+//             ],
+//           },
+//           options: {
+//             scales: {
+//               x: {
+//                 type: "category",
+//                 labels: dataLabels,
+//                 title: {
+//                   display: true,
+//                   text: xAxisHeader,
+//                 },
+//               },
+//               y: {
+//                 type: "logarithmic",
+//                 beginAtZero: true,
+//                 title: {
+//                   display: true,
+//                   text: yAxisHeader,
+//                 }
+//               },
+//             },
+//             plugins: {
+//               title: {
+//                 display: true,
+//                 text: title,
+              
+//               },
+//               datalabels: {
+//                 color: "white",
+//               },
+//             },
+//             animation: {
+//               duration: 1000, // Animation duration (in milliseconds)
+//             },
+//           },
+//         });
+//       } else {
+//         // Update the existing chart instance with new data
+//         chartInstanceRef.current.data.labels = dataLabels;
+//         chartInstanceRef.current.data.datasets[0].data = dataValues;
+//         chartInstanceRef.current.options.plugins.title.text = title;
+//         chartInstanceRef.current.options.scales.x.title.text = xAxisHeader;
+//         chartInstanceRef.current.options.scales.y.title.text = yAxisHeader;
+//         chartInstanceRef.current.update();
+//       }
+//     }
+
+//     // Cleanup function to destroy chart instance on unmount
+//     return () => {
+//       if (chartInstanceRef.current) {
+//         chartInstanceRef.current.destroy();
+//         chartInstanceRef.current = null;
+//       }
+//     };
+//   }, [dataLabels, dataValues, title, xAxisHeader, yAxisHeader]);
+
+//   return <canvas ref={chartRef} id="myChart" width="600" height="600" />;
+// };
+
+// export default BarChartBuilder;

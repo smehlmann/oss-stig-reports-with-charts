@@ -282,7 +282,7 @@ const OssStigReportsTab = () => {
                 onClick={cancelReport}
                 disabled={disableCancelReport}
               >
-                Canecl Report
+                Cancel Report
               </button>
               <button
                 className="new-report-btn"

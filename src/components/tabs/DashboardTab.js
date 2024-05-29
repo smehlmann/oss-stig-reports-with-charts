@@ -2,7 +2,6 @@ import "../../Charts.css";
 import "./DashboardTab.css";
 //import useLocalStorageListener from "../useLocalStorageListener";
 
-import BarChartBuilder from '../../charts/BarCharts/BarChartBuilder';
 import Report2ByCode from '../../charts/BarCharts/Report2ByCode';
 
 import PieChartBuilder from "../../charts/PieChartBuilder";
@@ -18,9 +17,9 @@ const DashboardTab = () => {
   const [currentPage, setCurrentPage] = useState("chart");
   // const [dataFetched, setDataFetched] = useState(false); // Track if data has been fetched
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  // const handlePageChange = (page) => {
+  //   setCurrentPage(page);
+  // };
 
   const [reportData, setReportData] = useState(() => {
     return localStorage.getItem("ossStigReport") || "";
@@ -35,31 +34,23 @@ const DashboardTab = () => {
   return (
     <div className="Charts">
       <button onClick={() => setCurrentPage("Bar")}>Code Bar</button>
-      <button onClick={() => setCurrentPage("BarEx")}>Code Bar Ex</button>
       <button onClick={() => setCurrentPage("Pie")}>Code Pie</button>
       <button onClick={() => setCurrentPage("Line")}>Line</button>
       <button onClick={() => setCurrentPage("Donut")}>Donut</button>
       <button onClick={() => setCurrentPage("ExpandableTable")}>
         Expandable Table
       </button>
-      {/* <button onClick={() => setCurrentPage("BasicTableExample")}>
-        Basic Table
-      </button> */}
+
       <button onClick={() => setCurrentPage("DataGrid")}>Data Grid</button>
 
       {/* <button onClick={() => setCurrentPage('RenderTable')}>RenderTable</button> */}
       <div className="chart-container">
-        {currentPage === "Bar" && <BarChartBuilder />}
-        {currentPage === "BarEx" && <Report2ByCode />}
+        {currentPage === "Bar" && <Report2ByCode />}
         {currentPage === "Pie" && <PieChartBuilder />}
         {currentPage === "Line" && <LineChartBuilder />}
         {currentPage === "Donut" && <DonutChartBuilder />}
         {currentPage === "ExpandableTable" && <Report2CollectionsExpanded />}
-        {/* {currentPage === "BasicTableExample" && <BasicTableExample />} */}
         {currentPage === "DataGrid" && <Report2AveragesPerCode />}
-
-        {/* {currentPage === 'RenderTable' && <RenderTable />} */}
-        {/* {(currentPage === 'ExpandableTable' || currentPage === 'BasicTableExample') && <RenderTable currentPage={currentPage} />}  */}
       </div>
     </div>
   );
