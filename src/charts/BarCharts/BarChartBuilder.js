@@ -1,15 +1,14 @@
 import { useEffect, useState, useRef } from "react";
-import { palette } from "./palette";
+import { palette } from "../palette";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
-import { fetchData } from "./DataExtractor";
-import useLocalStorageListener from "../components/useLocalStorageListener.js";
+import { fetchData } from "../DataExtractor.js";
+import useLocalStorageListener from "../../components/useLocalStorageListener.js";
 
 Chart.register(Title, Tooltip, ArcElement, Legend, ChartDataLabels);
 
-const ChartBuilder = () => {
-  //Returns the data and function to set the data
-  const [data, setData] = useState([]);
+const BarChartBuilder = (dataLabels, dataValues) => {
+
 
   //Creates a ref that will be used to reference the canvas element where chart will be rendered
   const chartRef = useRef(null);
@@ -143,4 +142,4 @@ const ChartBuilder = () => {
     </div>
   );
 };
-export default ChartBuilder;
+export default BarChartBuilder;

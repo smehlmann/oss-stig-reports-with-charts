@@ -51,7 +51,7 @@ function Row({ parentRow, columns, renderChildRow, getChildRows }) {
 }
 
 // Function to create the table with collapsible rows
-export const CreateExpandableTable = ({ rows, columns, renderChildRow, getChildRows }) => (
+export const ExpandableTableBuilder = ({ rows, columns, renderChildRow, getChildRows }) => (
   <TableContainer component={Paper}>
     <Table aria-label="collapsible table">
       <TableHead>
@@ -80,4 +80,4 @@ export const CreateExpandableTable = ({ rows, columns, renderChildRow, getChildR
     </Table>
   </TableContainer>
 );
-export default CreateExpandableTable;
+export default ExpandableTableBuilder;

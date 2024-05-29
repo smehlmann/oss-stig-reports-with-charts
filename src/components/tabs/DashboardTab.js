@@ -2,13 +2,14 @@ import "../../Charts.css";
 import "./DashboardTab.css";
 //import useLocalStorageListener from "../useLocalStorageListener";
 
-import BarChartBuilder from "../../charts/BarChartBuilder";
+import BarChartBuilder from '../../charts/BarCharts/BarChartBuilder';
+import Report2ByCode from '../../charts/BarCharts/Report2ByCode';
+
 import PieChartBuilder from "../../charts/PieChartBuilder";
 import LineChartBuilder from "../../charts/LineChartBuilder";
 import DonutChartBuilder from "../../charts/DonutChartBuilder";
-import ExpandableTableExample from "../../charts/TableUsingMUI/ExpandableTableExample";
-import BasicTableExample from "../../charts/TableUsingMUI/BasicTableExample";
-import DataGridExample from "../../charts/DataGridMUI/DataGridExample";
+import Report2CollectionsExpanded from "../../charts/TableUsingMUI/Report2CollectionsExpanded";
+import Report2AveragesPerCode from "../../charts/DataGridMUI/Report2AveragesPerCode";
 
 import React, { useState } from "react";
 
@@ -34,26 +35,28 @@ const DashboardTab = () => {
   return (
     <div className="Charts">
       <button onClick={() => setCurrentPage("Bar")}>Code Bar</button>
+      <button onClick={() => setCurrentPage("BarEx")}>Code Bar Ex</button>
       <button onClick={() => setCurrentPage("Pie")}>Code Pie</button>
       <button onClick={() => setCurrentPage("Line")}>Line</button>
       <button onClick={() => setCurrentPage("Donut")}>Donut</button>
       <button onClick={() => setCurrentPage("ExpandableTable")}>
         Expandable Table
       </button>
-      <button onClick={() => setCurrentPage("BasicTableExample")}>
+      {/* <button onClick={() => setCurrentPage("BasicTableExample")}>
         Basic Table
-      </button>
+      </button> */}
       <button onClick={() => setCurrentPage("DataGrid")}>Data Grid</button>
 
       {/* <button onClick={() => setCurrentPage('RenderTable')}>RenderTable</button> */}
       <div className="chart-container">
         {currentPage === "Bar" && <BarChartBuilder />}
+        {currentPage === "BarEx" && <Report2ByCode />}
         {currentPage === "Pie" && <PieChartBuilder />}
         {currentPage === "Line" && <LineChartBuilder />}
         {currentPage === "Donut" && <DonutChartBuilder />}
-        {currentPage === "ExpandableTable" && <ExpandableTableExample />}
-        {currentPage === "BasicTableExample" && <BasicTableExample />}
-        {currentPage === "DataGrid" && <DataGridExample />}
+        {currentPage === "ExpandableTable" && <Report2CollectionsExpanded />}
+        {/* {currentPage === "BasicTableExample" && <BasicTableExample />} */}
+        {currentPage === "DataGrid" && <Report2AveragesPerCode />}
 
         {/* {currentPage === 'RenderTable' && <RenderTable />} */}
         {/* {(currentPage === 'ExpandableTable' || currentPage === 'BasicTableExample') && <RenderTable currentPage={currentPage} />}  */}

@@ -2,7 +2,7 @@ import { fetchData } from '../DataExtractor';
 import React, { useState, useEffect } from "react";
 import numeral from 'numeral';
 import Typography from '@mui/material/Typography';
-import CreateDataGrid from './CreateDataGrid'
+import DataGridBuilder from './DataGridBuilder'
 import { LinearProgress } from '@mui/material';
 
 const calculateAverage = (values) => {
@@ -23,7 +23,7 @@ const renderProgressBarCell = (params) => (
   </div>
 );
 
-function DataGridExample() {
+function Report2AveragesPerCode() {
   const [averages, setAverages] = useState([]);
   const [csvData, setCsvData] = useState([]);
 
@@ -97,8 +97,8 @@ function DataGridExample() {
     },
   ];
   return (
-    <CreateDataGrid data={averages} columns={tableColumns} />
+    <DataGridBuilder data={averages} columns={tableColumns} />
   );
 }
 
-export default DataGridExample;
+export default Report2AveragesPerCode;

@@ -1,6 +1,6 @@
 //Uses MaterialUI Table 
 import React, { useMemo, useState, useEffect } from "react";
-import CreateExpandableTable from "./CreateExpandableTable";
+import ExpandableTableBuilder from "./ExpandableTableBuilder";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
 import { fetchData } from '../DataExtractor';
 
-function ExpandableTableExample() {
+function Report2CollectionsExpanded() {
   const [csvData, setData] = useState([]);
   const [parentRows, setParentRows] = useState([]);
 
@@ -103,9 +103,9 @@ function ExpandableTableExample() {
   ];
   return (
     <div className="table-container">
-      <CreateExpandableTable rows={parentRows} columns={columnHeaders} renderChildRow={renderChildRow} />
+      <ExpandableTableBuilder rows={parentRows} columns={columnHeaders} renderChildRow={renderChildRow} />
     </div>
   );
 }
 
-export default ExpandableTableExample;
+export default Report2CollectionsExpanded;
