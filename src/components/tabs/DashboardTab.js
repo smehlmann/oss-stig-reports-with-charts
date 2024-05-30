@@ -2,8 +2,7 @@ import "../../Charts.css";
 import "./DashboardTab.css";
 //import useLocalStorageListener from "../useLocalStorageListener";
 
-import Report2ByCode from '../../charts/BarCharts/Report2ByCode';
-
+import Report2CodeBreakdown from '../../charts/BarCharts/Report2CodeBreakdown';
 import PieChartBuilder from "../../charts/PieChartBuilder";
 import LineChartBuilder from "../../charts/LineChartBuilder";
 import DonutChartBuilder from "../../charts/DonutChartBuilder";
@@ -40,12 +39,10 @@ const DashboardTab = () => {
       <button onClick={() => setCurrentPage("ExpandableTable")}>
         Expandable Table
       </button>
-
       <button onClick={() => setCurrentPage("DataGrid")}>Data Grid</button>
 
-      {/* <button onClick={() => setCurrentPage('RenderTable')}>RenderTable</button> */}
       <div className="chart-container">
-        {currentPage === "Bar" && <Report2ByCode />}
+        {currentPage === "Bar" && <Report2CodeBreakdown />}
         {currentPage === "Pie" && <PieChartBuilder />}
         {currentPage === "Line" && <LineChartBuilder />}
         {currentPage === "Donut" && <DonutChartBuilder />}

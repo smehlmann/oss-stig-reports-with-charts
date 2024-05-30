@@ -2,11 +2,11 @@ import { useEffect, useState, useCallback } from "react";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
 import { fetchData } from "../DataExtractor.js";
-import BarChartBuilder from "./BarChartBuilder";
+import BarChartBuilder from "./BarChartBuilder.js";
 import useLocalStorageListener from "../../components/useLocalStorageListener.js";
 Chart.register(Title, Tooltip, ArcElement, Legend, ChartDataLabels);
 
-/* 
+/* -
 DISCUSS: I've noticed that there are a lot of re-renders. Unfortunately, this causes the bars to keep rising repeatedly as it keeps re-rendering. Maybe make adjustments to adjustments for the following code:
 
   const selectedReport = localStorage.getItem('selectedReport');
@@ -35,9 +35,8 @@ DISCUSS: I've noticed that there are a lot of re-renders. Unfortunately, this ca
   }
 */
 
-
 //Specify the data you want to display in the bar chart
-const Report2ByCode = () => {
+const Report2CodeBreakdown = () => {
   //Returns the data and function to set the data
   const [data, setData] = useState([]);
   const [dataFetched, setDataFetched] = useState(false);
@@ -115,4 +114,4 @@ const Report2ByCode = () => {
     yAxisHeader={yAxisTitle}
   />;
 };
-export default Report2ByCode;
+export default Report2CodeBreakdown;
