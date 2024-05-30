@@ -65,9 +65,9 @@ export const fetchData = async () => {
 
     parsedData.forEach(entry => {
       // Split datePulled string into parts and construct a Date object
-      //  const [year, month, day] = entry.datePulled.split('-');
-      //  entry.datePulled = new Date(year, month - 1, day);
-      //  entry.datePulled = stringToDate(entry.datePulled);
+       const [year, month, day] = entry.datePulled.split('-');
+       entry.datePulled = new Date(year, month - 1, day);
+       entry.datePulled = stringToDate(entry.datePulled);
       // console.log(entry.datePulled, typeof entry.datePulled);
 
       //convert assessed, submitted, rejected, and accepted to decimals

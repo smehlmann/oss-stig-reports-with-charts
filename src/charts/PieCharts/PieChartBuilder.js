@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { Chart } from "chart.js/auto";
-import { palette } from "./palette";
-import { fetchData } from "./DataExtractor";
-import useLocalStorageListener from "../components/useLocalStorageListener.js";
+import { palette } from "../palette.js";
+import { fetchData } from "../DataExtractor.js";
+import useLocalStorageListener from "../../components/useLocalStorageListener.js";
 
 const ChartBuilder = () => {
   //Initialize variable 'data' and function setData. Initial value of data=empty array
@@ -144,7 +144,7 @@ const ChartBuilder = () => {
     //data = array of objects; each object = row
   }, [data]);
 
-  //coutMap = (code# -> count of code#)
+  //countMap = (code# -> count of code#)
   const getCountMap = (data) => {
     return data.reduce((countMap, row) => {
       //Every time code# appears, increment count
@@ -155,8 +155,6 @@ const ChartBuilder = () => {
 
   return (
     <div>
-      {/* Uncomment the next line if you want to visualize the parsed data */}
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
 
       {/* Render the Bar chart */}
       <canvas ref={chartRef} />

@@ -1,9 +1,10 @@
+/* eslint-disable react/jsx-pascal-case */
 import "../../Charts.css";
 import "./DashboardTab.css";
 //import useLocalStorageListener from "../useLocalStorageListener";
 
-import Report2CodeBreakdown from '../../charts/BarCharts/Report2CodeBreakdown';
-import PieChartBuilder from "../../charts/PieChartBuilder";
+import Report2_CodeBreakdown_Bar from "../../charts/BarCharts/Report2_CodeBreakdown_Bar";
+import PieChartBuilder from "../../charts/PieCharts/PieChartBuilder";
 import LineChartBuilder from "../../charts/LineChartBuilder";
 import DonutChartBuilder from "../../charts/DonutChartBuilder";
 import Report2CollectionsExpanded from "../../charts/TableUsingMUI/Report2CollectionsExpanded";
@@ -42,7 +43,16 @@ const DashboardTab = () => {
       <button onClick={() => setCurrentPage("DataGrid")}>Data Grid</button>
 
       <div className="chart-container">
-        {currentPage === "Bar" && <Report2CodeBreakdown />}
+        
+        {currentPage === "Bar" && (
+          <Report2_CodeBreakdown_Bar
+            targetColumn="code"
+            chartTitle="Code Frequency"
+            xAxisTitle="Code"
+            yAxisTitle="Frequency"
+          />
+        )}
+
         {currentPage === "Pie" && <PieChartBuilder />}
         {currentPage === "Line" && <LineChartBuilder />}
         {currentPage === "Donut" && <DonutChartBuilder />}

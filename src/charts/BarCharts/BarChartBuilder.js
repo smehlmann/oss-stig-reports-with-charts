@@ -1,3 +1,112 @@
+// import { useEffect, useRef } from "react";
+// import { palette } from "../palette";
+// import ChartDataLabels from "chartjs-plugin-datalabels";
+// import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
+
+// Chart.register(Title, Tooltip, ArcElement, Legend, ChartDataLabels);
+
+// const BarChartBuilder = ({ dataLabels, dataValues, title, yAxisHeader, xAxisHeader }) => {
+
+//   //Creates a ref that will be used to reference the canvas element where chart will be rendered
+//   const chartRef = useRef(null);
+
+//   //Ref will store the reference to current chart instance
+//   const chartInstanceRef = useRef(null);
+
+//   //Create chart
+//   useEffect(() => {
+//     //Get canvas context
+//     const ctx = chartRef.current?.getContext("2d");
+//     if (ctx) {
+//       //Configure chart data
+//       const chartData = {
+//         labels: dataLabels,
+//         datasets: [
+//           {
+//             label: title,
+//             data: dataValues,
+//             backgroundColor: palette,
+//             borderWidth: 1,
+//           },
+//         ],
+//       };
+
+//       //define chartOptions structure 
+//       const chartOptions = {
+//         scales: {
+//           x: {
+//             type: "category", //for labels
+//             labels: dataLabels,
+//             title: {
+//               display: true,
+//               text: yAxisHeader,
+//             },
+//           },
+//           y: {
+//             type: "logarithmic", // for values
+//             beginAtZero: true,
+//             values: dataValues,
+//             title: {
+//               display: true,
+//               text: xAxisHeader,
+//             },
+//             ticks: {
+//               padding: 10,
+//               autoSkip: true,
+              
+//             },
+//           },
+//         },
+//         plugins: 
+//         {
+//           title: {
+//             display: true,
+//             text: title,
+//             font: {
+//               family: 'Times',
+//               size: 20,
+//               style: 'normal',
+//               lineHeight: 1.2
+//             },
+//           },
+//           datalabels: {
+//             color: "white",
+//           },
+//         },
+      
+//         maintainAspectRatio: false,
+//         responsive: true,
+//       };
+
+//       //If previous chart exists, update its data and update it
+//       if (chartInstanceRef.current) {
+//         chartInstanceRef.current.data = chartData;
+//         chartInstanceRef.current.options = chartOptions;
+//         chartInstanceRef.current.update();
+//       } else {
+//         //New bar chart instance created
+//         const newChartInstance = new Chart(ctx, {
+//           type: "bar",
+//           data: chartData,
+//           options: chartOptions,
+//         });
+
+//         chartInstanceRef.current = newChartInstance;
+//       }
+//     }
+//   }, [dataLabels, dataValues]); // Only re-run the effect if dataLabels or dataValues changes
+
+//   return (
+//     <div>
+//       <canvas ref={chartRef} id="myChart"  height="200"/>
+//     </div>
+//   );
+// };
+// export default BarChartBuilder;
+
+
+
+
 import { useEffect, useRef } from "react";
 import { palette } from "../palette";
 import ChartDataLabels from "chartjs-plugin-datalabels";
@@ -103,6 +212,8 @@ const BarChartBuilder = ({ dataLabels, dataValues, title, yAxisHeader, xAxisHead
     </div>
   );
 };
+
+
 export default BarChartBuilder;
 
 
