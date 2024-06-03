@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { fetchData } from './DataExtractor';
+import { fetchData } from '../DataExtractor';
 import 'chartjs-adapter-date-fns';
 
 import {
@@ -34,9 +34,8 @@ const LineChartBuilder = () => {
   const chartInstanceRef = useRef(null);
   const [dataFetched, setDataFetched] = useState(false);
 
-  //This useEffect runs once component mounts
+  
   useEffect(() => {
-
     //Uses fetchData to retrieve data from file
     const fetchDataAndBuildChart = async () => {
 
