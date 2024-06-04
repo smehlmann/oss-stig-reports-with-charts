@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
-import { palette, hoverPalette} from "../palette";
+import { useEffect, useRef, useState } from "react";
+import { palette, hoverPalette} from "../../palette";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
+import CreateCustomTooltip from '../../CreateCustomTooltip'; 
 Chart.register(Title, Tooltip, ArcElement,  ChartDataLabels, Legend);
 
 //Build standard barchart
@@ -12,6 +13,9 @@ const BarChartBuilder = ({ dataLabels, dataValues, title, yAxisHeader, xAxisHead
 
   //Ref will store the reference to current chart instance
   const chartInstanceRef = useRef(null);
+
+  //set tooltip
+  const [tooltipModel, setTooltipModel] = useState(null);
 
   //Create chart
   useEffect(() => {
@@ -40,10 +44,10 @@ const BarChartBuilder = ({ dataLabels, dataValues, title, yAxisHeader, xAxisHead
           scales: {
             x: {
               type: "category", //for labels
-              labels: dataLabels,
+              // labels: dataLabels,
               title: {
                 display: true,
-                text: yAxisHeader,
+                text: xAxisHeader,
                 font: {
                   size: 18,
                   style: 'normal',
@@ -53,10 +57,10 @@ const BarChartBuilder = ({ dataLabels, dataValues, title, yAxisHeader, xAxisHead
             y: {
               type: "logarithmic", // for values
               beginAtZero: true,
-              values: dataValues,
+              // values: dataValues,
               title: {
                 display: true,
-                text: xAxisHeader,
+                text: yAxisHeader,
                 font: {
                   size: 18,
                   style: 'normal',
@@ -85,6 +89,32 @@ const BarChartBuilder = ({ dataLabels, dataValues, title, yAxisHeader, xAxisHead
             legend: {
               display: false,
             },
+            tooltip: {
+              enabled: true,
+              callbacks: {
+                title: (tooltipItems) => {
+                  const title = chartData.labels[tooltipItems[0].dataIndex];
+                  return title;
+                },
+                label: (tooltipItem) => {
+                  const value = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.dataIndex];
+                  return `Value: ${value}`;
+                },
+                afterLabel: (tooltipItem) => {
+                  const dataset = chartData.datasets[tooltipItem.datasetIndex];
+                  const total = dataset.data.reduce((acc, val) => acc + val, 0);
+                  const percent = Math.round((dataset.data[tooltipItem.dataIndex] / total) * 100);
+                  return `(${percent}%)`;
+                }
+              },
+              backgroundColor: '#0066ff',
+              titleFontSize: 16,
+              titleFontColor: '#0066ff',
+              bodyFontColor: '#000',
+              bodyFontSize: 14,
+              displayColors: false
+            },
+   
           },
 
           maintainAspectRatio: false,
@@ -95,6 +125,7 @@ const BarChartBuilder = ({ dataLabels, dataValues, title, yAxisHeader, xAxisHead
         if (chartInstanceRef.current) {
           chartInstanceRef.current.destroy();
         }
+        
         //New bar chart instance created
         const newChartInstance = new Chart(ctx, {
           type: "bar",
@@ -110,6 +141,7 @@ const BarChartBuilder = ({ dataLabels, dataValues, title, yAxisHeader, xAxisHead
   return (
     <div>
       <canvas ref={chartRef} id="simpleBarChart"  height="200"/>
+      <CreateCustomTooltip tooltipModel={tooltipModel} />
     </div>
   );
 };

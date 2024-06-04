@@ -1,16 +1,14 @@
 import { useEffect, useState, useMemo } from "react";
-import { Chart } from "chart.js/auto";
-import { palette, hoverPalette } from "../palette.js";
-import { fetchData } from "../DataExtractor.js";
-import useLocalStorageListener from "../../components/useLocalStorageListener.js";
-import ValueCountMap from "../ValueCountMap.js";
-import PieChartBuilder from "./PieChartBuilder.js";
-// import ApexPieChartBuilder from "../ApexSamples/ApexPieChartBuilder.js";
+// import { Chart } from "chart.js/auto";
+// import { palette} from "../../palette.js";
+import { fetchData } from "../../DataExtractor.js";
+import useLocalStorageListener from "../../../components/useLocalStorageListener.js";
+import ValueCountMap from "../../ValueCountMap.js";
+// import PieChartBuilder from "./PieChartBuilder.js";
+import ApexDonutChartBuilder from "./ApexDonutChartBuilder.js";
 
-/**
-See this https://codesandbox.io/p/sandbox/9jk6742xko?file=%2Fsrc%2Fcomponents%2FChart.js%3A52%2C38
- */
-const SimplePieChart = ({ targetColumn, chartTitle, legendName }) => {
+
+const ApexDonutChart = ({ targetColumn, chartTitle, legendName }) => {
   //Initialize variable 'data' and function setData. Initial value of data=empty array
   const [data, setData] = useState([]);
 
@@ -18,7 +16,7 @@ const SimplePieChart = ({ targetColumn, chartTitle, legendName }) => {
   const [dataFetched, setDataFetched] = useState(false);
 
   // which report was selected by the user
-  const selectedReport = localStorage.getItem("selectedReport");
+  // const selectedReport = localStorage.getItem("selectedReport");
  // console.log("selectedReport: " + selectedReport);
 
   useLocalStorageListener((event) => {
@@ -48,7 +46,6 @@ const SimplePieChart = ({ targetColumn, chartTitle, legendName }) => {
       const parsedData = await fetchData();
       if (parsedData) {
         setDataFetched(true);
-      console.log(parsedData);
         setData(parsedData);
       }
     };
@@ -56,13 +53,14 @@ const SimplePieChart = ({ targetColumn, chartTitle, legendName }) => {
     fetchDataAndBuildChart();
   }, [dataFetched]);
 
+  //barLabels = value, barValues = number of occurrences of value
   const countMap = useMemo(() => ValueCountMap(data, targetColumn), [data, targetColumn]);
   
   const pieLabels = useMemo(() => Object.keys(countMap), [countMap]);
   const pieValues = useMemo(() => Object.values(countMap), [countMap]);
-
+  
   return (
-    <PieChartBuilder
+    <ApexDonutChartBuilder
       dataLabels={pieLabels}
       dataValues={pieValues}
       title={chartTitle}
@@ -71,4 +69,4 @@ const SimplePieChart = ({ targetColumn, chartTitle, legendName }) => {
   );
 };
 
-export default SimplePieChart;
+export default ApexDonutChart;

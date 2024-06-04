@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { fetchData } from '../DataExtractor';
+import { fetchData } from '../../DataExtractor';
 import 'chartjs-adapter-date-fns';
 
 import {

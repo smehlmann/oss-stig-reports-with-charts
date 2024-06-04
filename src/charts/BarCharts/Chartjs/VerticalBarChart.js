@@ -1,11 +1,12 @@
-// eslint-disable-next-line no-unused-vars
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
-import { fetchData } from "../DataExtractor.js";
+import { fetchData } from "../../DataExtractor.js";
 import BarChartBuilder from "./BarChartBuilder.js";
-import ValueCountMap from "../ValueCountMap.js";
-import useLocalStorageListener from "../../components/useLocalStorageListener.js";
+// import CreateCustomTooltip from '../../CreateCustomTooltip.js'; 
+
+import ValueCountMap from "../../ValueCountMap.js";
+import useLocalStorageListener from "../../../components/useLocalStorageListener.js";
 Chart.register(Title, Tooltip, ArcElement, Legend, ChartDataLabels);
 
 
@@ -20,8 +21,8 @@ const VerticalBarChart = ({targetColumn, chartTitle, xAxisTitle, yAxisTitle}) =>
   const [dataFetched, setDataFetched] = useState(false);
   //const [reportData, setReportDsata] = useState(undefined);
 
-  const selectedReport = localStorage.getItem("selectedReport");
-  console.log("selectedReport: " + selectedReport);
+  // const selectedReport = localStorage.getItem("selectedReport");
+  // console.log("selectedReport: " + selectedReport);
 
   useLocalStorageListener((event) => {
     // console.log('hi from useLocalStorageListener')
@@ -60,12 +61,12 @@ const VerticalBarChart = ({targetColumn, chartTitle, xAxisTitle, yAxisTitle}) =>
 
 
   //barLabels = value, barValues = number of occurrences of value
-  const countMap = useMemo(() => ValueCountMap(data, {targetColumn}), [data, targetColumn]);
-  
+ 
+  const countMap = useMemo(() => ValueCountMap(data, targetColumn), [data, targetColumn]);
   const barLabels = useMemo(() => Object.keys(countMap), [countMap]);
   const barValues = useMemo(() => Object.values(countMap), [countMap]);
 
-  //pass as props
+
   return (
     <BarChartBuilder
       dataLabels={barLabels}
@@ -76,4 +77,5 @@ const VerticalBarChart = ({targetColumn, chartTitle, xAxisTitle, yAxisTitle}) =>
     />
   );
 };
+
 export default VerticalBarChart;

@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import { circularChartFill, palette } from "../palette.js";
-import { fetchData } from "../DataExtractor.js";
+import { circularChartFill, palette } from "../../palette.js";
+import { fetchData } from "../../DataExtractor.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import useLocalStorageListener from "../../components/useLocalStorageListener.js";
+import useLocalStorageListener from "../../../components/useLocalStorageListener.js";
+import CreateCustomTooltip from '../../CreateCustomTooltip.js'; 
+
 import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
 Chart.register(Title, Tooltip, ArcElement,  ChartDataLabels, Legend);
 
@@ -13,6 +15,9 @@ const PieChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
 
   //Ref will store the reference to current chart instance
   const chartInstanceRef = useRef(null);
+
+  const [tooltipModel, setTooltipModel] = useState(null);
+
 
   useEffect(() => {
     //ctx = rendering context of the chart canvas
@@ -82,7 +87,19 @@ const PieChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
               style: 'normal',
               lineHeight: 1.2
             },
-          }
+          },
+          tooltip: {
+            enabled: false,
+            external: (context) => {
+              const tooltip = context.tooltip;
+              if (tooltip.opacity === 0) {
+                setTooltipModel(null);
+                return;
+              }
+              setTooltipModel(tooltip);
+            },
+          },
+          
         },
       };
 
@@ -109,6 +126,7 @@ const PieChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
 
       {/* Render the Bar chart */}
       <canvas ref={chartRef} id="simplePieChart" height = "200" />
+      <CreateCustomTooltip tooltipModel={tooltipModel} />
     </div>
   );
 };

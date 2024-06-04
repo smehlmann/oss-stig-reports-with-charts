@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { fetchData } from './DataExtractor';
-import { palette } from './palette';
+import { fetchData } from '../../DataExtractor';
+import { palette } from '../../palette';
 import {
   Chart,
   Title,

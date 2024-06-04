@@ -28,8 +28,22 @@
     
   }
   
+  /* .apexcharts-toolbar {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: relative !important;
+    top: 0 !important;
+    right: 0 !important;
+    opacity: 1 !important;
+  } */
+
   
+ .apexcharts-toolbar {
+    display: block !important;
+  } 
   
+
   .table-container {
     flex: 1;
     margin: 10px;
@@ -75,11 +89,11 @@
   }
   
   
-  
   .chart-container {
     /* max-width: 800px;  */
     /* height: 80vh; */
     width: 80vw;
+    height: auto;
     margin: 0 auto;  
     padding: 20px;    
     border: 1px solid #ddd; 
@@ -87,8 +101,15 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
   }
   
-  /* Add additional styling for your charts if needed */
   .chart-container canvas {
+    width: 80% !important; /*chart canvas takes full width within the container */
+    height: auto !important; /* adjust its height proportionally */
+    margin-left: auto;
+    margin-right: auto;
+    /* background-color: #323447; */
+    
+  }
+  .chart-container .apex-chart{
     width: 80% !important; /*chart canvas takes full width within the container */
     height: auto !important; /* adjust its height proportionally */
     margin-left: auto;
@@ -103,7 +124,81 @@
     padding: 3%;
     background-color: #323447;
   }
+
+  .apexcharts-xaxis-title, .apexcharts-yaxis-title {
+    display: block !important;
+  }
+
+  /* #chartjs-tooltip {
+    position: absolute;
+    pointer-events: none;
+    transition: all .1s ease;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+  } */
+  #chartjs-tooltip {
+    position: absolute;
+    margin: 0;
+    pointer-events: none;
+    color: #333;
+    font-family: Arial, sans-serif;
+    border-radius: 5px;
+    /* padding: 10px; */
+    /* z-index: 1000; Ensure tooltip is above other elements */
+    transition: all .1s ease;
+
+  }
+    
+  .tooltip-header {
+    font-weight: bold;
+    background-color: #ECEFF1;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+  }
   
+  .tooltip-separator {
+    border: none;
+    border-top: 1px solid; /*thickness*/
+    margin: 0;
+    border-color: '#DDDDDD'
+  }
+  
+  .tooltip-body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+  }
+  
+  .tooltip-color {
+    display: inline-block;
+    color: #000;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    border-radius: 50%;
+    
+  }
+  
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .main-header {
+    font-weight: bold;
+  }
+  
+  .subsection-header {
+    font-weight: bold;
+    background-color: #E3EEEF;
+  }
+  
+  .child-row {
+    background-color: #f9f9f9;
+  }
+
   
   .App-logo {
     height: 40vmin;

@@ -1,17 +1,18 @@
-import { useEffect, useState, useRef } from "react";
-import { circularChartFill, palette } from "../palette.js";
+import { useEffect, useState } from "react";
+import { palette } from "../../palette.js";
 
 import Chart from 'react-apexcharts';
 
 
 const ApexPieChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
-  console.log('Rendering PieChartBuilder');
   const [series, setSeries] = useState(dataValues);
   const [options, setOptions] = useState({
 
     
   chart: {
     type: 'pie',
+    height: '100%',
+    width: '100%',
     events: {
       animationEnd: function (ctx) {
         ctx.toggleDataPointSelection(0);
@@ -19,6 +20,15 @@ const ApexPieChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
     },
     toolbar: {
       show: true,
+      tools: {
+        download: true,
+        selection: true,
+        zoom: true,
+        zoomin: true,
+        zoomout: true,
+        pan: true,
+        reset: true
+      },
     }
   },
   labels: dataLabels,
@@ -42,7 +52,7 @@ const ApexPieChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
   // },
   legend: {
     show: true,
-    position: 'right',
+    position: 'bottom',
     labels: {
       colors: '#000',
       useSeriesColors: false,
@@ -54,17 +64,17 @@ const ApexPieChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
   },
   dataLabels: {
     enabled: true,
-    enabledOnSeries: [0, 1, 2]
+    enabledOnSeries: [0]
   },
   responsive: [{
-    breakpoint: 480,
+    breakpoint: 1000,
     options: {
       chart: {
-        width: 200
+        height: 200,
       },
-      // legend: {
-      //   position: 'bottom',
-      // }
+      legend: {
+        position: 'bottom',
+      }
     }
   }]
 });
@@ -80,7 +90,7 @@ const ApexPieChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
   }, [dataLabels, dataValues]);
 
   return (
-    <div>
+    <div className = "apex-chart">
       <Chart options={options} series={series} type="pie" />
     </div>
   );
