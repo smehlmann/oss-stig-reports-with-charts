@@ -3,18 +3,16 @@ import "../../Charts.css";
 import "./DashboardTab.css";
 //import useLocalStorageListener from "../useLocalStorageListener";
 
-import VerticalBarChart from "../../charts/BarCharts/Chartjs/VerticalBarChart";
-import SimplePieChart from "../../charts/PieCharts/Chartjs/SimplePieChart";
+
 import LineChartBuilder from "../../charts/LineCharts/Chartjs/LineChartBuilder";
-import DonutChartBuilder from "../../charts/DonutCharts/Chartjs/DonutChartBuilder";
 import Report2CollectionsExpanded from "../../charts/TableUsingMUI/Report2CollectionsExpanded";
 import Report2AveragesPerCode from "../../charts/DataGridMUI/Report2AveragesPerCode";
 
 //apex
 import ApexSimplePieChart from "../../charts/PieCharts/ApexCharts/ApexSimplePieChart";
 import ApexVerticalBarChart from "../../charts/BarCharts/ApexCharts/ApexVerticalBarChart";
-import ApexDonutChart from "../../charts/DonutCharts/ApexCharts/ApexDonutChart";
-
+import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
+import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart";
 
 import React, { useState } from "react";
 
@@ -39,17 +37,14 @@ const DashboardTab = () => {
 
   return (
     <div className="Charts">
-      <button onClick={() => setCurrentPage("VertBar")}>Code Vert Bar</button>
-      <button onClick={() => setCurrentPage("Pie")}>Simple Pie</button>
+
 
       <button className="apexButton" onClick={() => setCurrentPage("ApexPie")}>Apex Pie</button>
       <button className="apexButton" onClick={() => setCurrentPage("ApexBar")}>Apex Bar</button>
-      <button className="apexButton" onClick={() => setCurrentPage("ApexDonut")}>Apex Donut</button>
+      <button className="apexButton" onClick={() => setCurrentPage("ApexDonutCount")}>Apex Count Donut</button>
+      <button className="apexButton" onClick={() => setCurrentPage("DonutAvg")}>Apex Avg Donut</button>
 
       <button onClick={() => setCurrentPage("Line")}>Line</button>
-      <button onClick={() => setCurrentPage("Donut")}>Donut</button>
-
-
       <button onClick={() => setCurrentPage("ExpandableTable")}>
         Expandable Table
       </button>
@@ -58,23 +53,6 @@ const DashboardTab = () => {
 
 
       <div className="chart-container">
-        
-        {currentPage === "VertBar" && (
-          <VerticalBarChart
-            targetColumn="code"
-            chartTitle="Code Frequency"
-            yAxisTitle="Code"
-            xAxisTitle="Frequency"
-          />
-        )}
-
-        {currentPage === "Pie" && (
-          <SimplePieChart
-            targetColumn="shortName"
-            chartTitle = "Collections"
-            legendName = "Name of collection"
-          />
-        )}
         {currentPage === "ApexPie" && (
           <ApexSimplePieChart
             targetColumn="shortName"
@@ -82,6 +60,7 @@ const DashboardTab = () => {
             legendName = "Name of collection"
           />
         )}
+
         {currentPage === "ApexBar" && (
           <ApexVerticalBarChart
             targetColumn="code"
@@ -91,20 +70,27 @@ const DashboardTab = () => {
           />
         )}
 
-      {currentPage === "ApexDonut" && (
-        <ApexDonutChart
+        {currentPage === "ApexDonutCount" && (
+          <ApexDonutCountChart
             targetColumn="shortName"
             chartTitle = "Collections"
             legendName = "Name of collection"
           />
-      )}
+        )}
 
+
+        {currentPage === "DonutAvg" && (
+          <DonutAvgChart
+            targetColumns={["assessed", "submitted", "accepted", "rejected"]}
+            chartTitle = "Averages"
+            legendName = "Amounts"
+          />
+        )}
 
         {currentPage === "Line" && <LineChartBuilder />}
-        {currentPage === "Donut" && <DonutChartBuilder />}
         {currentPage === "ExpandableTable" && <Report2CollectionsExpanded />}
 
-        
+  
         {currentPage === "DataGrid" && <Report2AveragesPerCode />}
       </div>
     </div>

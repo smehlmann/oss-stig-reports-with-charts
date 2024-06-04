@@ -43,8 +43,8 @@ function Report2AveragesPerCode() {
         }, {});
 
         // Calculate averages for each code
-        const codeAverages = Object.entries(dataGroupedByCode).map(([code, data]) => {
-          const assessedValues = data.map((item) => item.assessed);
+        const codeAverages = Object.entries(dataGroupedByCode).map(([code, data]) => { //converts dataGroupedByCode obj into array of key-value pairs (key=code, values=data)
+          const assessedValues = data.map((item) => item.assessed); //array of "assessed" values
           const submittedValues = data.map((item) => item.submitted);
           const acceptedValues = data.map((item) => item.accepted);
           const rejectedValues = data.map((item) => item.rejected);

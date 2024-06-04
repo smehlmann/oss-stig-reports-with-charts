@@ -70,7 +70,7 @@ const ApexPieChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
     breakpoint: 1000,
     options: {
       chart: {
-        height: 200,
+        // height: 200,
       },
       legend: {
         position: 'bottom',

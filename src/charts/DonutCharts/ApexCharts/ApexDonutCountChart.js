@@ -4,12 +4,12 @@ import { useEffect, useState, useMemo } from "react";
 import { fetchData } from "../../DataExtractor.js";
 import useLocalStorageListener from "../../../components/useLocalStorageListener.js";
 import ValueCountMap from "../../ValueCountMap.js";
-
 // import PieChartBuilder from "./PieChartBuilder.js";
 import ApexDonutChartBuilder from "./ApexDonutChartBuilder.js";
 
+//"data" is an array of objects. 
 
-const ApexDonutChart = ({ targetColumn, chartTitle, legendName }) => {
+const ApexDonutCountChart = ({ targetColumn, chartTitle, legendName }) => {
   //Initialize variable 'data' and function setData. Initial value of data=empty array
   const [data, setData] = useState([]);
 
@@ -54,20 +54,30 @@ const ApexDonutChart = ({ targetColumn, chartTitle, legendName }) => {
     fetchDataAndBuildChart();
   }, [dataFetched]);
 
+  //prints out properties of each item 
+  // data.forEach((item, index) => {
+  //   console.log(`Keys of item at index ${index}:`, Object.keys(item));
+  // });
+
+
   //barLabels = value, barValues = number of occurrences of value
   const countMap = useMemo(() => ValueCountMap(data, targetColumn), [data, targetColumn]);
   
-  const pieLabels = useMemo(() => Object.keys(countMap), [countMap]);
-  const pieValues = useMemo(() => Object.values(countMap), [countMap]);
+  const donutLabels = useMemo(() => Object.keys(countMap), [countMap]);
+  const donutValues = useMemo(() => Object.values(countMap), [countMap]);
   
   return (
     <ApexDonutChartBuilder
-      dataLabels={pieLabels}
-      dataValues={pieValues}
+      dataLabels={donutLabels}
+      dataValues={donutValues}
       title={chartTitle}
       lengendTitle={legendName}
     />
   );
 };
 
-export default ApexDonutChart;
+export default ApexDonutCountChart;
+
+/*
+So I have the following functional component that takes in a target column, counts the values present in the target column, and then passes these to another function to build the chart. However, what I want to do is to create a 
+*/

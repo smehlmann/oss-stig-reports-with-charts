@@ -1,16 +1,16 @@
 
-export const palette = [
-  "#22577A",
-  "#2D7D90",
-  "#38A3A5",
-  "#48B89F",
-  "#57CC99",
-  "#6CDD99",
-  "#80ED99",
-  "#A4F3B3",
-  "#C7F9CC",
-  "#E3FCE6",
-];
+// export const palette = [
+//   "#22577A",
+//   "#2D7D90",
+//   "#38A3A5",
+//   "#48B89F",
+//   "#57CC99",
+//   "#6CDD99",
+//   "#80ED99",
+//   "#A4F3B3",
+//   "#C7F9CC",
+//   "#E3FCE6",
+// ];
 
 export const hoverPalette = [
   "#112959",
@@ -39,8 +39,8 @@ export const circularChartFill =[
 ]
 
 
-/*
-From NUWC logo
+
+// From NUWC logo
 export const palette = [
   '#0000F0',
   '#183090',
@@ -62,4 +62,4 @@ export const palette = [
 //maybe title or something depending on bg: #000090,   
 //maybe title or something depending on bg: #181860 
 
-*/
+

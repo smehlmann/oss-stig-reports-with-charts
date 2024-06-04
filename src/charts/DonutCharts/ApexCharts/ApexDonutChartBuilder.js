@@ -1,5 +1,6 @@
 import { useEffect, useState,} from "react";
 import { palette } from "../../palette.js";
+import numeral from "numeral";
 
 import Chart from 'react-apexcharts';
 
@@ -66,17 +67,30 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => 
     enabled: true,
     enabledOnSeries: [0]
   },
+  tooltip: {
+    y: {
+      formatter: function(value) {
+        // Check if the value is less than 1 (interpreted as a percentage)
+        if (value < 1) {
+          return numeral(value * 100).format('0.00') + '%';
+        }
+        // Otherwise, return the value as is
+        return value;
+      }
+    }
+  },
   responsive: [{
     breakpoint: 1000,
     options: {
       chart: {
-        height: 200,
+        // height: 200,
       },
       legend: {
         position: 'bottom',
       }
     }
-  }]
+  }],
+  
 });
 
   useEffect(() => {
