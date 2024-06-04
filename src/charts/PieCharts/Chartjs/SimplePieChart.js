@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { palette, hoverPalette } from "../../palette.js";
+// import { palette, hoverPalette } from "../palette.js";
 import { fetchData } from "../../DataExtractor.js";
 import useLocalStorageListener from "../../../components/useLocalStorageListener.js";
 import ValueCountMap from "../../ValueCountMap.js";

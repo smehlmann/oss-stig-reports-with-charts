@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { circularChartFill, palette } from "../../palette.js";
-import { fetchData } from "../../DataExtractor.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import useLocalStorageListener from "../../../components/useLocalStorageListener.js";
 import CreateCustomTooltip from '../../CreateCustomTooltip.js'; 

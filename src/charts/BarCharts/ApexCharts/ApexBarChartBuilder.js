@@ -1,9 +1,7 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
-import { palette} from "../../palette";
+import { palette} from "../../palette.js";
 import "../../../Charts.css"
-
-
 
 
 const ApexBarChartBuilder = ({ dataLabels, dataValues, title, xAxisHeader, yAxisHeader }) => {

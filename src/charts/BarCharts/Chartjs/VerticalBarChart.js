@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { useEffect, useState, useMemo } from "react";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
@@ -21,7 +22,7 @@ const VerticalBarChart = ({targetColumn, chartTitle, xAxisTitle, yAxisTitle}) =>
   const [dataFetched, setDataFetched] = useState(false);
   //const [reportData, setReportDsata] = useState(undefined);
 
-  // const selectedReport = localStorage.getItem("selectedReport");
+  const selectedReport = localStorage.getItem("selectedReport");
   // console.log("selectedReport: " + selectedReport);
 
   useLocalStorageListener((event) => {

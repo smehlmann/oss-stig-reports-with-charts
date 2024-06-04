@@ -1,6 +1,6 @@
 // VerticalBarChart.js
 import React, { useEffect, useState, useMemo } from "react";
-import ApexBarChartBuilder from "./ApexBarChartBuilder";
+import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import { fetchData } from "../../DataExtractor.js";
 import ValueCountMap from "../../ValueCountMap.js";
 import useLocalStorageListener from "../../../components/useLocalStorageListener.js";
@@ -8,6 +8,8 @@ import useLocalStorageListener from "../../../components/useLocalStorageListener
 const ApexVerticalBarChart = ({ targetColumn, chartTitle, xAxisTitle, yAxisTitle }) => {
   const [data, setData] = useState([]);
   const [dataFetched, setDataFetched] = useState(false);
+
+  const selectedReport = localStorage.getItem("selectedReport");
 
   useLocalStorageListener((event) => {
     if (event.type === "storage") {
