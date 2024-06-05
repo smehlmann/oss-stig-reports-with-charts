@@ -15,7 +15,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import TextField from '@mui/material/TextField';
 
-
 function Row({ parentRow, columns, renderChildRow }) {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
@@ -60,7 +59,7 @@ function Row({ parentRow, columns, renderChildRow }) {
                   variant="outlined"
                   value={searchText}
                   onChange={handleSearchChange}
-                  style={{ marginBottom: '20px' }}
+                  sx={{ marginBottom: '20px', borderRadius: '20px', '& .MuiOutlinedInput-root': { borderRadius: '20px' } }} // Increase border radius
                 />
                 {renderChildRow ? (
                   <>
@@ -94,7 +93,7 @@ export const ExpandableTableBuilder = ({ rows, columns, renderChildRow }) => (
   <TableContainer component={Paper}>
     <Table aria-label="collapsible table">
       <TableHead>
-        <TableRow>
+        <TableRow sx={{ '& th': { border: 0 } }}> {/* Remove outside border */}
           {columns.map((header, index) => (
             <React.Fragment key={header.id}>
               {index === 0 && (
@@ -121,6 +120,7 @@ export const ExpandableTableBuilder = ({ rows, columns, renderChildRow }) => (
 );
 
 export default ExpandableTableBuilder;
+
 
 
 // import React, { useState, useEffect } from "react";

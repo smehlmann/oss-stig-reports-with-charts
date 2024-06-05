@@ -88,7 +88,7 @@ function Report2CollectionsExpanded() {
   };
 
   const columnHeaders = [
-    { id: 'shortName', label: 'Short Name' }
+    { id: 'shortName', label: 'Collections' }
   ];
 
   return (
