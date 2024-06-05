@@ -1,11 +1,10 @@
-// VerticalBarChart.js
 import React, { useEffect, useState, useMemo } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import { fetchData } from "../../DataExtractor.js";
 import ValueCountMap from "../../ValueCountMap.js";
 import useLocalStorageListener from "../../../components/useLocalStorageListener.js";
 
-const ApexVerticalBarChart = ({ targetColumn, chartTitle, xAxisTitle, yAxisTitle }) => {
+const ApexStandardBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle }) => {
   const [data, setData] = useState([]);
   const [dataFetched, setDataFetched] = useState(false);
 
@@ -50,10 +49,11 @@ const ApexVerticalBarChart = ({ targetColumn, chartTitle, xAxisTitle, yAxisTitle
       dataLabels={barLabels}
       dataValues={barValues}
       title={chartTitle}
+      isHorizontal = {isHorizontal}
       xAxisHeader={xAxisTitle}
       yAxisHeader={yAxisTitle}
     />
   );
 };
 
-export default ApexVerticalBarChart;
+export default ApexStandardBarChart;

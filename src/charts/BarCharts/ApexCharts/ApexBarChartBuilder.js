@@ -1,10 +1,10 @@
+
 import React from "react";
 import ReactApexChart from "react-apexcharts";
-import { palette} from "../../palette.js";
+import { palette } from "../../palette.js";
 import "../../../Charts.css"
 
-
-const ApexBarChartBuilder = ({ dataLabels, dataValues, title, xAxisHeader, yAxisHeader }) => {
+const ApexBarChartBuilder = ({ dataLabels, dataValues, title, isHorizontal, xAxisHeader, yAxisHeader }) => {
   const series = [{
     name: xAxisHeader,
     data: dataValues
@@ -77,7 +77,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, title, xAxisHeader, yAxis
       style: {
         fontSize: '30px',
         fontFamily: 'Segoe UI',
-        fontWeight: 'normal',
+        fontWeight: 'bold',
       }
     },
     tooltip: {
@@ -97,7 +97,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, title, xAxisHeader, yAxis
     plotOptions: {
       bar: {
         borderRadius: 4,
-        horizontal: false,
+        horizontal: isHorizontal,
       }
     },
     legend: {
@@ -109,7 +109,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, title, xAxisHeader, yAxis
         options: {
           plotOptions: {
             bar: {
-              horizontal: false
+              horizontal: isHorizontal
             }
           },
           legend: {
@@ -121,8 +121,8 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, title, xAxisHeader, yAxis
   };
 
   return (
-    <div className="apex-chart" >
-      <ReactApexChart options={options} series={series} type="bar"  id="ApexBarChart" />
+    <div className="apex-chart" style={{ height: '100%', width: '100%' }}>
+      <ReactApexChart options={options} series={series} type="bar" height="100%" width="100%" />
     </div>
   );
 };

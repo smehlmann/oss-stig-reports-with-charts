@@ -6,44 +6,34 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
-import { fetchData } from '../DataExtractor';
 import TextField from '@mui/material/TextField';
 
 
 
-function Report2CollectionsExpanded() {
-  const [csvData, setData] = useState([]);
+function Report2CollectionsExpanded({ data }) {
   const [parentRows, setParentRows] = useState([]);
 
   useEffect(() => {
-    const fetchCsvData = async () => {
-      try {
-        const csvData = await fetchData();
-        setData(csvData);
+    if (data && data.length > 0) {
+      const dataGroupedByShortName = data.reduce((accumulator, currentValue) => {
+        if (!accumulator[currentValue.shortName]) {
+          accumulator[currentValue.shortName] = [];
+        }
+        accumulator[currentValue.shortName].push({
+          asset: currentValue.asset,
+          sysAdmin: currentValue.sysAdmin,
+          primOwner: currentValue.primOwner
+        });
+        return accumulator;
+      }, {});
 
-        const dataGroupedByShortName = csvData.reduce((accumulator, currentValue) => {
-          if (!accumulator[currentValue.shortName]) {
-            accumulator[currentValue.shortName] = [];
-          }
-          accumulator[currentValue.shortName].push({
-            asset: currentValue.asset,
-            sysAdmin: currentValue.sysAdmin,
-            primOwner: currentValue.primOwner
-          });
-          return accumulator;
-        }, {});
-
-        const parentRows = Object.entries(dataGroupedByShortName).map(([shortName, childRows]) => ({
-          shortName,
-          childRows
-        }));
-        setParentRows(parentRows);
-      } catch (error) {
-        console.error('Error fetching CSV data:', error);
-      }
-    };
-    fetchCsvData();
-  }, []);
+      const parentRows = Object.entries(dataGroupedByShortName).map(([shortName, childRows]) => ({
+        shortName,
+        childRows
+      }));
+      setParentRows(parentRows);
+    }
+  }, [data]);
 
   const renderChildRow = (parentRow, page, rowsPerPage, searchText) => {
     const filteredChildRows = parentRow.childRows.filter(
@@ -92,13 +82,12 @@ function Report2CollectionsExpanded() {
   ];
 
   return (
-    <div className="table-container">
-      <ExpandableTableBuilder rows={parentRows} columns={columnHeaders} renderChildRow={renderChildRow} />
-    </div>
+    <ExpandableTableBuilder rows={parentRows} columns={columnHeaders} renderChildRow={renderChildRow} />
   );
 }
 
 export default Report2CollectionsExpanded;
+
 
 // import React, { useState, useEffect } from "react";
 // import ExpandableTableBuilder from "./ExpandableTableBuilder";
