@@ -1,15 +1,20 @@
 import "../../Charts.css";
 import "./DashboardTab.css";
+// import useLocalStorageListener from "../useLocalStorageListener";
+
+// import { styled } from "@mui/system";
 import { Grid } from "@mui/material";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+
+// import LineChartBuilder from "../../charts/LineCharts/Chartjs/LineChartBuilder";
 import Report2CollectionsExpanded from "../../charts/TableUsingMUI/Report2CollectionsExpanded";
 import Report2AveragesPerCode from "../../charts/DataGridMUI/Report2AveragesPerCode";
-// apex
+//apex
 import ApexSimplePieChart from "../../charts/PieCharts/ApexCharts/ApexSimplePieChart";
 import ApexVerticalBarChart from "../../charts/BarCharts/ApexCharts/ApexVerticalBarChart";
 import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
 import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const theme = createTheme({
   palette: {
@@ -20,58 +25,26 @@ const theme = createTheme({
       primary: "#333333",
     },
   },
-  spacing: 8,
 });
 
 const Root = styled('div')(({ theme }) => ({
-  padding: theme.spacing(4),
-  backgroundColor: theme.palette.background.default,
+  padding: theme.spacing(8),
+  // backgroundColor: theme.palette.background.default,
   color: theme.palette.text.primary
 }));
 
 const DashboardTab = () => {
-  const [reportData, setReportData] = useState(null);
+  // const [dataFetched, setDataFetched] = useState(false); // Track if data has been fetched
 
-  useEffect(() => {
-    const fetchData = () => {
-      const data = localStorage.getItem("ossStigReport");
-      if (data) {
-        try {
-          setReportData(JSON.parse(data));
-        } catch (error) {
-          console.error("Failed to parse data from localStorage:", error);
-          setReportData(null);
-        }
-      } else {
-        setReportData(null);
-      }
-    };
+  const [reportData, setReportData] = useState(() => {
+    return localStorage.getItem("ossStigReport") || "";
+  });
 
-    fetchData();
-
-    const handleStorageChange = (event) => {
-      if (event.key === "ossStigReport") {
-        try {
-          setReportData(event.newValue ? JSON.parse(event.newValue) : null);
-        } catch (error) {
-          console.error("Failed to parse data from localStorage:", error);
-          setReportData(null);
-        }
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
-
-  if (reportData === null) {
-    return <div>Loading...</div>; // Handle loading state
-  }
-
-  console.log("Fetched data:", reportData); // Debugging: Check the fetched data
+  // useLocalStorageListener((event) => {
+  //   if (event.type === "storage") {
+  //     setReportData(event.newValue);
+  //   }
+  // });
 
   return (
     <ThemeProvider theme={theme}>
@@ -110,6 +83,10 @@ const DashboardTab = () => {
               data={reportData} // Pass the data to your chart component
             />
           </Grid>
+          {/* Uncomment this section if you want to include the LineChartBuilder */}
+          {/* <Grid item xs={12} md={8} lg={9}>
+            <LineChartBuilder data={reportData} /> 
+          </Grid> */}
           <Grid item xs={12} sm={6} md={4} lg={3}>
             <Report2CollectionsExpanded data={reportData} /> {/* Pass the data to your table component */}
           </Grid>
@@ -123,7 +100,6 @@ const DashboardTab = () => {
 };
 
 export default DashboardTab;
-
 
 /*
 import "../../Charts.css";
