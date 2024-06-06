@@ -1,8 +1,7 @@
 export default function ReportColumns({ index, item, selectedReport }) {
 
-    console.log('index: ' + index + ' selectedReport: ' + selectedReport);
-    console.log(' item: ' + item);
-
+    // console.log('index: ' + index + ' selectedReport: ' + selectedReport);
+    // console.log(' item: ' + item);
 
     switch (selectedReport) {
         case '1':

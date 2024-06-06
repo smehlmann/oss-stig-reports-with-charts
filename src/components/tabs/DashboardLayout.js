@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Card, CardHeader, CardContent, createTheme, ThemeProvider, styled } from "@mui/material";
+import { Grid, createTheme, ThemeProvider, styled } from "@mui/material";
 import ApexSimplePieChart from "../../charts/PieCharts/ApexCharts/ApexSimplePieChart";
 import ApexStandardBarChart from "../../charts/BarCharts/ApexCharts/ApexStandardBarChart";
 import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
@@ -27,6 +27,7 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 const DashboardLayout = ({ data }) => {
+  console.log('DashboardLayout Data:', typeof(data));
   return (
     <ThemeProvider theme={theme}>
       <Root>

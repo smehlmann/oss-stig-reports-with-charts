@@ -6,15 +6,16 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-
-
 
 function Report2CollectionsExpanded({ data }) {
   const [parentRows, setParentRows] = useState([]);
+  
 
+  // console.log("Type of data in Expanded Table:", typeof data);
+  // console.log("Is data an array?", Array.isArray(data));
   useEffect(() => {
-    if (data && data.length > 0) {
+    try {
+      if (Array.isArray(data) && data.length > 0) {
       const dataGroupedByShortName = data.reduce((accumulator, currentValue) => {
         if (!accumulator[currentValue.shortName]) {
           accumulator[currentValue.shortName] = [];
@@ -32,16 +33,19 @@ function Report2CollectionsExpanded({ data }) {
         childRows
       }));
       setParentRows(parentRows);
+      } else { console.error("Data is not array or empty: ", data)}
+    }catch (error) {
+      console.error("error occurred in Expanded Report: ", error);
     }
   }, [data]);
 
-  const renderChildRow = (parentRow, page, rowsPerPage, searchText) => {
+  const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
     const filteredChildRows = parentRow.childRows.filter(
       (childRow) => 
-        childRow.sysAdmin !== null && 
-        childRow.primOwner !== null && 
-        childRow.sysAdmin !== "" && 
-        childRow.primOwner !== "" &&
+        // childRow.sysAdmin !== null && 
+        // childRow.primOwner !== null && 
+        // childRow.sysAdmin !== "" && 
+        // childRow.primOwner !== "" &&
         (childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
         childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
         childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()))

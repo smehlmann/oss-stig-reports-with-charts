@@ -2,55 +2,103 @@ import React, { useState, useEffect } from "react";
 import DashboardLayout from "./DashboardLayout";
 import useLocalStorageListener from "../useLocalStorageListener";
 
-const DashboardTab = () => {
-  const [reportData, setReportData] = useState(null);
 
-  useEffect(() => {
-    const fetchData = () => {
-      const data = localStorage.getItem("ossStigReport");
-      if (data) {
-        try {
-          setReportData(JSON.parse(data));
-        } catch (error) {
-          console.error("Failed to parse data from localStorage:", error);
-          setReportData(null);
-        }
-      } else {
-        setReportData(null);
-      }
-    };
+const formatPercentage = (percentageString) => {
+  if (!percentageString) {
+    return 0; // Return 0 for null or empty values
+  }
+  const percentageValue = parseFloat(percentageString.replace('%', ''));
+  return percentageValue / 100; // Convert to decimal
+};
 
-    fetchData();
+const objectToString = (object) => {
+  if (!object) {
+    return ''; // or handle empty values as needed
+  }
+  //split the value by colon and take second part
+  // const sysAdminValue = object.split(':')[1].trim();
+  const jsonString = JSON.stringify(object);
+  return jsonString
+};
 
-    //This run this after code has been initially been loaded.
-    const handleStorageChange = (event) => {
-      if (event.key === "ossStigReport") {
-        try {
-          setReportData(event.newValue ? JSON.parse(event.newValue) : null);
-        } catch (error) {
-          console.error("Failed to parse data from localStorage:", error);
-          setReportData(null);
-        }
-      }
-    };
+const stringToDate = (dateString) => {
+  if (!dateString) {
+    return null; // Return null for null or empty strings
+  }
 
-    window.addEventListener("storage", handleStorageChange);
+  // Try parsing the date using the known formats
+  let date;
+  // Attempt to parse using the format YYYY-MM-DD
+  date = new Date(dateString);
+  if (!isNaN(date.getTime())) {
+    return date; // Return if successful
+  }
 
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
+  // Attempt to parse using the format M/DD/YYYY
+  const parts = dateString.split('/');
+  if (parts.length === 3) {
+    date = new Date(`${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`);
+    if (!isNaN(date.getTime())) {
+      return date; // Return if successful
+    }
+  }
+  // If parsing fails, return null
+  return null;
+};
 
-  // if (!reportData) {
-  //   return <div>Loading...</div>; // Handle loading state
-  // }
+const formatData = (parsedData) => {
+  if (!Array.isArray(parsedData)) {
+    console.error("parsedData is not an array:", parsedData);
+    return [];
+  }
 
-  return <DashboardLayout data={reportData} />;
+  return parsedData.map(entry => {
+    // Convert datePulled to a Date object
+   // Split datePulled string into parts and construct a Date object
+   const [year, month, day] = entry.datePulled.split('-');
+   entry.datePulled = new Date(year, month - 1, day);
+   entry.datePulled = stringToDate(entry.datePulled);
+
+    // Convert percentage strings to decimals
+    entry.assessed = formatPercentage(entry.assessed);
+    entry.submitted = formatPercentage(entry.submitted);
+    entry.accepted = formatPercentage(entry.accepted);
+    entry.rejected = formatPercentage(entry.rejected);
+
+    // Convert objects to strings and remove "_$" from sysAdmin
+    entry.sysAdmin = objectToString(entry.sysAdmin).replace(/_\$$/, ''); // Use regex to ensure it only replaces the ending '_$'
+    entry.primOwner = objectToString(entry.primOwner);
+    entry.deviceType = objectToString(entry.deviceType);
+
+    return entry;
+  });
+};
+
+const DashboardTab = ({reportData}) => {
+  
+  //parse data from string to array
+  let parsedData = typeof reportData == 'string' ? JSON.parse(reportData): reportData;
+  // console.log('reportData: ' + parsedData);
+
+  const formattedData = formatData(parsedData); 
+
+  return <DashboardLayout data={formattedData} />;
 };
 
 export default DashboardTab;
 
+/*
+const DashboardTab = ({reportData}) => {
+  
+  //parse data from string to array
+  let parsedData = typeof reportData == 'string' ? JSON.parse(reportData): reportData;
+  console.log('reportData: ' + parsedData);
 
+  return <DashboardLayout data={parsedData} />;
+};
+
+export default DashboardTab;
+*/
 
 
 // import "../../Charts.css";
