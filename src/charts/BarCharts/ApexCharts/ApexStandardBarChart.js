@@ -1,46 +1,68 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
-import { fetchData } from "../../DataExtractor.js";
 import ValueCountMap from "../../ValueCountMap.js";
-import useLocalStorageListener from "../../../components/useLocalStorageListener.js";
+import { useFilter } from "../../../FilterContext.js";
 
-const ApexStandardBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle }) => {
-  const [data, setData] = useState([]);
-  const [dataFetched, setDataFetched] = useState(false);
+const ApexStandardBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
+  const { filter, updateFilter } = useFilter();
 
-  const selectedReport = localStorage.getItem("selectedReport");
-
-  useLocalStorageListener((event) => {
-    if (event.type === "storage") {
-      setDataFetched(true);
+  const filteredData = useMemo(() => {
+    if (Object.keys(filter).length > 0) {
+      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
+      console.log("Filtered Data (Bar):", filtered); // Debugging statement
+      return filtered;
     }
-  });
+    return data;
+  }, [filter, data]);
 
-  useEffect(() => {
-    if (localStorage.getItem("ossStigReport")) {
-      setDataFetched(true);
-      window.addEventListener("storage", storageEventHandler, false);
-    }
-  }, []);
+  const countMap = useMemo(() => ValueCountMap(filteredData, targetColumn), [filteredData, targetColumn]);
+  const barLabels = useMemo(() => Object.keys(countMap), [countMap]);
+  const barValues = useMemo(() => Object.values(countMap), [countMap]);
 
-  function storageEventHandler() {
-    if (localStorage.getItem("ossStigReport")) {
-      setDataFetched(true);
-    }
-  }
+  const handleBarClick = (event, chartContext, config) => {
+    const categoryLabels = config.w.globals.labels || config.w.globals.categories;
+    const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;
 
-  useEffect(() => {
-    const fetchDataAndBuildChart = async () => {
-      const parsedData = await fetchData();
-      if (parsedData) {
-        setDataFetched(true);
-        setData(parsedData);
+      if (selectedValue) {
+      // Check if the selected value is already in the filter
+      if (filter[targetColumn] === selectedValue) {
+        // Remove the filter
+        updateFilter({ [targetColumn]: undefined });
+      } else {
+        // Add the filter
+        updateFilter({ [targetColumn]: selectedValue });
       }
-    };
-    fetchDataAndBuildChart();
-  }, [dataFetched]);
+    }
+  };
 
-  const countMap = useMemo(() => ValueCountMap(data, targetColumn), [data, targetColumn]);
+  return (
+    <ApexBarChartBuilder
+      dataLabels={barLabels}
+      dataValues={barValues}
+      title={chartTitle}
+      isHorizontal={isHorizontal}
+      xAxisHeader={xAxisTitle}
+      yAxisHeader={yAxisTitle}
+      onClick={handleBarClick}
+    />
+  );
+};
+
+export default ApexStandardBarChart;
+
+
+/*
+const ApexStandardBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
+  const { filter } = useFilter();
+  
+  const filteredData = useMemo(() => {
+    if (Object.keys(filter).length > 0) {
+      return data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
+    }
+    return data;
+  }, [filter, data]);
+
+  const countMap = useMemo(() => ValueCountMap(filteredData, targetColumn), [filteredData, targetColumn]);
   const barLabels = useMemo(() => Object.keys(countMap), [countMap]);
   const barValues = useMemo(() => Object.values(countMap), [countMap]);
 
@@ -49,11 +71,13 @@ const ApexStandardBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTit
       dataLabels={barLabels}
       dataValues={barValues}
       title={chartTitle}
-      isHorizontal = {isHorizontal}
+      isHorizontal={isHorizontal}
       xAxisHeader={xAxisTitle}
       yAxisHeader={yAxisTitle}
+      rawData={filteredData} // Pass the raw filtered data
     />
   );
 };
 
 export default ApexStandardBarChart;
+*/

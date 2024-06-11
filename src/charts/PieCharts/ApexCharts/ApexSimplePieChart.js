@@ -1,71 +1,74 @@
-import { useEffect, useState, useMemo } from "react";
-// import { Chart } from "chart.js/auto";
-// import { palette, hoverPalette } from "../../palette.js";
-import { fetchData } from "../../DataExtractor.js";
-import useLocalStorageListener from "../../../components/useLocalStorageListener.js";
+import React, { useMemo } from "react";
 import ValueCountMap from "../../ValueCountMap.js";
 import ApexPieChartBuilder from "./ApexPieChartBuilder.js";
+import { useFilter } from "../../../FilterContext.js";
 
+const ApexSimplePieChart = ({ targetColumn, chartTitle, legendName, data }) => {
+  const { filter, updateFilter } = useFilter();
 
-const ApexSimplePieChart = ({ targetColumn, chartTitle, legendName }) => {
-  //Initialize variable 'data' and function setData. Initial value of data=empty array
-  const [data, setData] = useState([]);
-
-  // flag to indicate that report data has been fetched
-  const [dataFetched, setDataFetched] = useState(false);
-
-  // which report was selected by the user
-  const selectedReport = localStorage.getItem("selectedReport");
- // console.log("selectedReport: " + selectedReport);
-
-  useLocalStorageListener((event) => {
-    if (event.type === "storage") {
-      setDataFetched(true);
+  const filteredData = useMemo(() => {
+    // if (Object.keys(filter).length > 0 && filter[targetColumn]) {
+    if (Object.keys(filter).length > 0) {
+      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
+      return filtered;
     }
-  });
+    return data;
+  }, [filter, data]);
 
-  //Retrieve data from report
-  useEffect(() => {
-    // console.log("BarChartBuilder from useEffect");
-    if (localStorage.getItem("ossStigReport")) {
-      setDataFetched(true);
-      window.addEventListener("storage", storageEventHandler, false);
-    }
-  }, []);
-
-  function storageEventHandler() {
-    // console.log("hi from storageEventHandler");
-    if (localStorage.getItem("ossStigReport")) {
-      setDataFetched(true);
-    }
-  }
-  useEffect(() => {
-    //fetchDataAndBuildChart asynchronously fetches data from the specified csv file
-    const fetchDataAndBuildChart = async () => {
-      const parsedData = await fetchData();
-      if (parsedData) {
-        setDataFetched(true);
-        setData(parsedData);
-      }
-    };
-
-    fetchDataAndBuildChart();
-  }, [dataFetched]);
-
-  //barLabels = value, barValues = number of occurrences of value
-  const countMap = useMemo(() => ValueCountMap(data, targetColumn), [data, targetColumn]);
-  
+  const countMap = useMemo(() => ValueCountMap(filteredData, targetColumn), [filteredData, targetColumn]);
   const pieLabels = useMemo(() => Object.keys(countMap), [countMap]);
   const pieValues = useMemo(() => Object.values(countMap), [countMap]);
-  
+
+  const handlePieClick = (event, chartContext, config) => {
+    const selectedValue = config.w.config.labels[config.dataPointIndex];
+    updateFilter({ [targetColumn]: selectedValue });
+  };
+
   return (
     <ApexPieChartBuilder
       dataLabels={pieLabels}
       dataValues={pieValues}
       title={chartTitle}
-      lengendTitle={legendName}
+      legendTitle={legendName}
+      onClick={handlePieClick}
     />
   );
 };
 
 export default ApexSimplePieChart;
+
+
+
+// const ApexSimplePieChart = ({ targetColumn, chartTitle, legendName, data}) => {
+//   const { filter, updateFilter } = useFilter();
+
+//   const filteredData = useMemo(() => {
+//     if (Object.keys(filter).length > 0) {
+//       return data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
+//     }
+//     return data;
+//   }, [filter, data]);
+
+//   //pieLabels = value, pieValues = number of occurrences of value
+//   const countMap = useMemo(() => ValueCountMap(data, targetColumn), [data, targetColumn]);
+  
+//   const pieLabels = useMemo(() => Object.keys(countMap), [countMap]);
+//   const pieValues = useMemo(() => Object.values(countMap), [countMap]);
+
+//   const handlePieClick = (event, chartContext, config) => {
+//     const selectedValue = config.w.config.labels[config.dataPointIndex];
+//     updateFilter({ [targetColumn]: selectedValue }); // Dynamically set filter based on targetColumn
+//   };
+
+//   return (
+//     <ApexPieChartBuilder
+//       dataLabels={pieLabels}
+//       dataValues={pieValues}
+//       title={chartTitle}
+//       lengendTitle={legendName}
+//       onClick={handlePieClick}
+//     />
+//   );
+// };
+
+// export default ApexSimplePieChart;

@@ -53,13 +53,13 @@ function Row({ parentRow, columns, renderChildRow }) {
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={columns.length + 1}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
+              <Box sx={{ margin: 1, maxHeight: '300px', overflow: 'hidden'}}>
                 <TextField
                   label="Search"
                   variant="outlined"
                   value={searchText}
                   onChange={handleSearchChange}
-                  sx={{ marginBottom: '20px', borderRadius: '20px', '& .MuiOutlinedInput-root': { borderRadius: '20px' } }} // Increase border radius
+                  sx={{ marginBottom: '10px', borderRadius: '20px', '& .MuiOutlinedInput-root': { borderRadius: '20px' } }} // Increase border radius
                 />
                 {renderChildRow ? (
                   <>
@@ -90,7 +90,7 @@ function Row({ parentRow, columns, renderChildRow }) {
 
 // Function to create the table with collapsible rows
 export const ExpandableTableBuilder = ({ rows, columns, renderChildRow }) => (
-  <TableContainer component={Paper}>
+  <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
     <Table aria-label="collapsible table">
       <TableHead>
         <TableRow sx={{ '& th': { border: 0 } }}> 

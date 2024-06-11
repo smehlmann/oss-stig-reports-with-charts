@@ -38,7 +38,7 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => 
     text: title,
     align: 'center',
     style: {
-      fontSize: '30px',
+      fontSize: '25px',
       fontFamily: 'Segoe UI'
     },
   },
@@ -66,6 +66,7 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => 
   dataLabels: {
     enabled: true,
     enabledOnSeries: [0]
+    
   },
   tooltip: {
     y: {
@@ -104,7 +105,7 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => 
   }, [dataLabels, dataValues]);
 
   return (
-    <div className = "apex-chart">
+    <div className = "apex-chart" style={{ height: '100%', width: '100%' }}>
       <Chart options={options} series={series} type="donut" />
     </div>
   );

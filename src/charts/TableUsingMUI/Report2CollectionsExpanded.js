@@ -7,10 +7,17 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
 
+//format sysAdmin and primOwner to remove quotation marks
+const formatString = (value) => {
+  if (typeof value === 'string') {
+    return value.replace(/^"|"$/g, ''); // Remove leading and trailing quotes
+  }
+  return value;
+};
+
 function Report2CollectionsExpanded({ data }) {
   const [parentRows, setParentRows] = useState([]);
   
-
   // console.log("Type of data in Expanded Table:", typeof data);
   // console.log("Is data an array?", Array.isArray(data));
   useEffect(() => {
@@ -22,8 +29,8 @@ function Report2CollectionsExpanded({ data }) {
         }
         accumulator[currentValue.shortName].push({
           asset: currentValue.asset,
-          sysAdmin: currentValue.sysAdmin,
-          primOwner: currentValue.primOwner
+          sysAdmin: formatString(currentValue.sysAdmin),
+          primOwner: formatString(currentValue.primOwner)
         });
         return accumulator;
       }, {});

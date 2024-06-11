@@ -1,5 +1,5 @@
 /*
-This function is used to count the number of times a value appears in the data
+This function is used to count the number of times a value appears in the data.
 */
 const ValueCountMap = (data, targetProperty) => {
   return data.reduce((countMap, row) => {
