@@ -101,6 +101,7 @@
     font-weight: bold;
     font-size: 1.2rem;
     text-align: left;
+    
   }
   
   /* Style for the subsection headers */
@@ -114,9 +115,9 @@
   .table-container td {
     padding: 8px;
     text-align: left;
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     /* word-wrap: break-word; */
-    overflow: visible;
+    overflow: auto;
     white-space: normal; 
     max-width: 33%;
     word-break: break-all; /* Force long words to break and wrap */

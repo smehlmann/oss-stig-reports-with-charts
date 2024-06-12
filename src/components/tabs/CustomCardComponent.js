@@ -8,14 +8,15 @@ const StyledCard = styled(Card)(({ theme }) => ({
   flexDirection: 'column',
   boxShadow: theme.shadows[3],
   borderRadius: 10,
+  overflow: 'hidden',
 }));
 
 const CustomCardContent = styled(CardContent)(({ theme }) => ({
-  padding: theme.spacing(1),
+  // padding: theme.spacing(1),
   flexGrow: 1,
   display: 'flex',
   flexDirection: 'column',
-  overflow: 'hidden', // Ensure content does not overflow
+  // overflow: 'hidden', // Ensure content does not overflow
 }));
 
 const CustomCardComponent = ({ title, children }) => {

@@ -68,10 +68,10 @@ function Report2CollectionsExpanded({ data }) {
       <Box sx={{ margin: 1 }}>
         <Table size="small" aria-label="child table">
           <TableHead>
-            <TableRow>
-              <TableCell className="subsection-header">Asset</TableCell>
-              <TableCell className="subsection-header">Sys Admin</TableCell>
-              <TableCell className="subsection-header">Primary Owner</TableCell>
+            <TableRow sx={{ width: '34%'}}>
+              <TableCell >Asset</TableCell>
+              <TableCell >Sys Admin</TableCell>
+              <TableCell >Primary Owner</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

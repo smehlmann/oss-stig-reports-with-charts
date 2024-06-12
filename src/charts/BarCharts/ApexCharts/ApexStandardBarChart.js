@@ -9,7 +9,6 @@ const ApexStandardBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTit
   const filteredData = useMemo(() => {
     if (Object.keys(filter).length > 0) {
       const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-      console.log("Filtered Data (Bar):", filtered); // Debugging statement
       return filtered;
     }
     return data;
@@ -19,6 +18,7 @@ const ApexStandardBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTit
   const barLabels = useMemo(() => Object.keys(countMap), [countMap]);
   const barValues = useMemo(() => Object.values(countMap), [countMap]);
 
+  //updates the filter criteria based on user's click
   const handleBarClick = (event, chartContext, config) => {
     const categoryLabels = config.w.globals.labels || config.w.globals.categories;
     const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;

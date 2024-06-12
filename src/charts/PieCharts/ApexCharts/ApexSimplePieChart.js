@@ -3,11 +3,12 @@ import ValueCountMap from "../../ValueCountMap.js";
 import ApexPieChartBuilder from "./ApexPieChartBuilder.js";
 import { useFilter } from "../../../FilterContext.js";
 
-const ApexSimplePieChart = ({ targetColumn, chartTitle, legendName, data }) => {
-  const { filter, updateFilter } = useFilter();
 
+const ApexSimplePieChart = ({ targetColumn, chartTitle, legendName, data }) => {
+  
+  const { filter, updateFilter } = useFilter();
+  //stores the data filter has been applied
   const filteredData = useMemo(() => {
-    // if (Object.keys(filter).length > 0 && filter[targetColumn]) {
     if (Object.keys(filter).length > 0) {
       const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
       return filtered;
@@ -15,6 +16,7 @@ const ApexSimplePieChart = ({ targetColumn, chartTitle, legendName, data }) => {
     return data;
   }, [filter, data]);
 
+  
   const countMap = useMemo(() => ValueCountMap(filteredData, targetColumn), [filteredData, targetColumn]);
   const pieLabels = useMemo(() => Object.keys(countMap), [countMap]);
   const pieValues = useMemo(() => Object.values(countMap), [countMap]);

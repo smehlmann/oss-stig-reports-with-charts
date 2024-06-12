@@ -1,23 +1,20 @@
 import { useEffect, useState,} from "react";
-import { palette } from "../../palette.js";
+import { palette } from "../../../theme";
 import numeral from "numeral";
-
 import Chart from 'react-apexcharts';
 
 
-const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
+const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle, onClick}) => {
   const [series, setSeries] = useState(dataValues);
   const [options, setOptions] = useState({
 
-    
   chart: {
     type: 'donut',
     height: '100%',
     width: '100%',
+    //detects when data point is clicked
     events: {
-      animationEnd: function (ctx) {
-        ctx.toggleDataPointSelection(0);
-      },
+      dataPointSelection: onClick,
     },
     toolbar: {
       show: true,
@@ -42,15 +39,16 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => 
       fontFamily: 'Segoe UI'
     },
   },
-  // plotOptions: {
-  //   pie: {
-  //     expandOnClick: true,
-  //     dataLabels: {
-  //       offset: 0,
-  //       minAngleToShowLabel: 10
-  //     }
-  //   }
-  // },
+  plotOptions: {
+    pie: {
+      expandOnClick: true,
+      dataLabels: {
+        offset: 0,
+        minAngleToShowLabel: 10
+        
+      }
+    }
+  },
   legend: {
     show: true,
     position: 'bottom',
@@ -65,8 +63,33 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => 
   },
   dataLabels: {
     enabled: true,
-    enabledOnSeries: [0]
-    
+    style: {
+      fontSize: '12px',
+      fontFamily: 'Segoe UI',
+      fontWeight: 'bold',
+      colors: ['#283249'], //background color 
+    },
+    background: {
+      enabled: true,
+      foreColor: '#ffffff',
+      padding: 4,
+      borderRadius: 4,
+      borderWidth: 0,
+      borderColor: '#283249',
+      opacity: 0.85,
+    },
+    //  color: '#50068b',
+    dropShadow: {
+      enabled: true,
+      top: 1,
+      left: 1,
+      blur: 1,
+      opacity: 0.5,
+    },
+    formatter: function (val, { seriesIndex, w }) {
+      const label = w.globals.labels[seriesIndex];
+      return label;
+    },
   },
   tooltip: {
     y: {

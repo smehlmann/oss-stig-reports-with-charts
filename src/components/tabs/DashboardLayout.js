@@ -1,33 +1,27 @@
 import React, { useMemo } from "react";
-import { Grid, createTheme, ThemeProvider, styled } from "@mui/material";
+import { Grid, ThemeProvider, styled } from "@mui/material";
 import ApexSimplePieChart from "../../charts/PieCharts/ApexCharts/ApexSimplePieChart";
 import ApexStandardBarChart from "../../charts/BarCharts/ApexCharts/ApexStandardBarChart";
 import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
 import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart";
 import ValueCountMap from "../../charts/ValueCountMap";
-
 import LineChartBuilder from "../../charts/LineCharts/Chartjs/LineChartBuilder";
 import Report2CollectionsExpanded from "../../charts/TableUsingMUI/Report2CollectionsExpanded";
 import Report2AveragesPerCode from "../../charts/DataGridMUI/Report2AveragesPerCode";
 import CustomCardComponent from "./CustomCardComponent";
+import TableGridCardComponent from "./TableGridCardComponent";
 import { FilterProvider } from "../../FilterContext";
+import theme from "../../theme"
 
-const theme = createTheme({
-  palette: {
-    background: {
-      default: "#f4f6f8",
-    },
-    text: {
-      primary: "#333333",
-    },
-  },
-  spacing: 8,
-});
+
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(4),
   backgroundColor: theme.palette.background.default,
-  color: theme.palette.text.primary
+  color: theme.palette.text.primary,
+  height: "100%",
+  // position: 'inherit',
+
 }));
 
 const AssetCountCard = ({ data }) => {
@@ -46,13 +40,30 @@ const AssetCountCard = ({ data }) => {
   );
 };
 
+/*
+Grid spacing is split into 12 parts:
+  For evenly spaced cards:
+  {3} = 4 cards in row (each is 1/4 of section)
+  {4} = 3 cards in row (each is 1/3 of section)
+  {6} = 2 cards in row (each is 1/2 of section)
+  {12} = 1 card in row (takes up whole section)
+*/
+
+const gridHeaders = [
+  { field: 'code', headerName: 'Code', flex: 1 },
+  { field: 'avgAssessed', headerName: 'Avg of Assessed', flex: 1 },
+  { field: 'avgSubmitted', headerName: 'Avg of Submitted', flex: 1 },
+  { field: 'avgAccepted', headerName: 'Avg of Accepted', flex: 1 },
+  { field: 'avgRejected', headerName: 'Avg of Rejected', flex: 1 },
+];
+
 const DashboardLayout = ({ data }) => {
   return (
     <ThemeProvider theme={theme}>
       <FilterProvider>
         <Root>
           <Grid container spacing={4}>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
               <CustomCardComponent>
                 <ApexSimplePieChart
                   targetColumn="shortName"
@@ -62,7 +73,15 @@ const DashboardLayout = ({ data }) => {
                 />
               </CustomCardComponent>
             </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
+            <Grid item lg={8} sm={6} xl={8} xs={12}>
+              <TableGridCardComponent>
+                <Report2AveragesPerCode data={data} 
+                  targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
+                  columnHeaders = {gridHeaders} 
+                />
+              </TableGridCardComponent>
+            </Grid>
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
               <CustomCardComponent>
                 <ApexStandardBarChart
                   targetColumn="code"
@@ -74,7 +93,7 @@ const DashboardLayout = ({ data }) => {
                 />
               </CustomCardComponent>
             </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
               <CustomCardComponent>
                 <ApexDonutCountChart
                   targetColumn="shortName"
@@ -84,7 +103,7 @@ const DashboardLayout = ({ data }) => {
                 />
               </CustomCardComponent>
             </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
               <CustomCardComponent>
                 <DonutAvgChart
                   targetColumns={["assessed", "submitted", "accepted", "rejected"]}
@@ -94,15 +113,10 @@ const DashboardLayout = ({ data }) => {
                 />
               </CustomCardComponent>
             </Grid>
-            <Grid item lg={4} md={6} xl={3} xs={12}>
-              <CustomCardComponent>
-                <Report2CollectionsExpanded data={data} />
-              </CustomCardComponent>
-            </Grid>
-            <Grid item lg={4} md={6} xl={3} xs={12}>
-              <CustomCardComponent>
-                <Report2AveragesPerCode data={data} />
-              </CustomCardComponent>
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
+              <TableGridCardComponent>
+                <Report2CollectionsExpanded data={data}/>
+              </TableGridCardComponent>
             </Grid>
           </Grid>
         </Root>

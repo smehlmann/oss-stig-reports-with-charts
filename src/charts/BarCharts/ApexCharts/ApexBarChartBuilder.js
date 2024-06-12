@@ -1,7 +1,7 @@
 import React, {useMemo, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { palette } from "../../palette.js";
-import '../../../Charts.css';
+// import '../../../Charts.css';
 
 const ApexBarChartBuilder = ({ dataLabels, dataValues, title, isHorizontal, xAxisHeader, yAxisHeader, onClick }) => {
   const [series, setSeries] = useState([{ name: xAxisHeader, data: dataValues }]);
@@ -38,6 +38,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, title, isHorizontal, xAxi
     dataLabels: {
       enabled: false,
     },
+    
     xaxis: {
       categories: dataLabels,
       title: {
@@ -65,7 +66,12 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, title, isHorizontal, xAxi
       shared: false,
       intersect: true,
       x: {
-        formatter: (val, opts) => dataLabels[opts.dataPointIndex]
+        formatter: function (val, opts) {
+          const dataLabelsArray = opts.w.globals.initialConfig.xaxis.categories;
+          const dataLabel = dataLabelsArray[opts.dataPointIndex];
+          console.log("Tooltip Formatter: ", { val, opts, dataLabel, dataLabels: dataLabelsArray }); // Debugging statement
+          return dataLabel !== undefined ? dataLabel : '';
+        },
       },
       y: {
         formatter: (value) => `${value}`,
@@ -78,6 +84,8 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, title, isHorizontal, xAxi
       bar: {
         borderRadius: 4,
         horizontal: isHorizontal,
+        columnWidth: "35%",
+        endingShape: "rounded",
       },
     },
     legend: {
