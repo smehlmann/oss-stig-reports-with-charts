@@ -20,13 +20,13 @@ const theme = createTheme({
       // light: '#757de8',
       // dark: '#002984',
       main: '#3048FF',
-      light: '#a3a8ff',
+      light: '#6476FF',
       dark: '#0000cb',
       contrastText: '#fff',
     },
     secondary: {
       main: '#6060a8',
-      light: '#9fa1cc',
+      light: '#bcbbf4',  // #9fa1cc
       dark: '#322a79',
       contrastText: '#fff',
     },
@@ -35,9 +35,13 @@ const theme = createTheme({
       paper: '#ffffff',
     },
     text: {
-      primary: '#333333',
+      // primary: '#333333',
+      primary: '#2A2A2A',
       secondary: '#666666',
     },
+    // action: {
+    //   selected: '#caf0f8',
+    // }
   },
   typography: {
     fontFamily: 'Segoe UI, Arial, sans-serif',

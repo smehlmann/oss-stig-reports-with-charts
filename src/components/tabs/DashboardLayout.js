@@ -49,13 +49,6 @@ Grid spacing is split into 12 parts:
   {12} = 1 card in row (takes up whole section)
 */
 
-const gridHeaders = [
-  { field: 'code', headerName: 'Code', flex: 1 },
-  { field: 'avgAssessed', headerName: 'Avg of Assessed', flex: 1 },
-  { field: 'avgSubmitted', headerName: 'Avg of Submitted', flex: 1 },
-  { field: 'avgAccepted', headerName: 'Avg of Accepted', flex: 1 },
-  { field: 'avgRejected', headerName: 'Avg of Rejected', flex: 1 },
-];
 
 const DashboardLayout = ({ data }) => {
   return (
@@ -63,9 +56,9 @@ const DashboardLayout = ({ data }) => {
       <FilterProvider>
         <Root>
           <Grid container spacing={4}>
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
+          <Grid item lg={4} sm={6} xl={4} xs={12}>
               <CustomCardComponent>
-                <ApexSimplePieChart
+                <ApexDonutCountChart
                   targetColumn="shortName"
                   chartTitle="Collections"
                   legendName="Name of collection"
@@ -77,7 +70,6 @@ const DashboardLayout = ({ data }) => {
               <TableGridCardComponent>
                 <Report2AveragesPerCode data={data} 
                   targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
-                  columnHeaders = {gridHeaders} 
                 />
               </TableGridCardComponent>
             </Grid>
@@ -93,16 +85,7 @@ const DashboardLayout = ({ data }) => {
                 />
               </CustomCardComponent>
             </Grid>
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <CustomCardComponent>
-                <ApexDonutCountChart
-                  targetColumn="shortName"
-                  chartTitle="Collections"
-                  legendName="Name of collection"
-                  data={data}
-                />
-              </CustomCardComponent>
-            </Grid>
+            
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <CustomCardComponent>
                 <DonutAvgChart
@@ -114,6 +97,16 @@ const DashboardLayout = ({ data }) => {
               </CustomCardComponent>
             </Grid>
             <Grid item lg={4} sm={6} xl={4} xs={12}>
+              <CustomCardComponent>
+                <ApexSimplePieChart
+                  targetColumn="shortName"
+                  chartTitle="Collections"
+                  legendName="Name of collection"
+                  data={data}
+                />
+              </CustomCardComponent>
+            </Grid>
+            <Grid item lg={12} sm={12} xl={12} xs={12}>
               <TableGridCardComponent>
                 <Report2CollectionsExpanded data={data}/>
               </TableGridCardComponent>

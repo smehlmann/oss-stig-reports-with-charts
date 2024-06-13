@@ -16,6 +16,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 // import theme, {palette} from "../../theme"
+import { useTheme } from '@mui/material/styles';
 
 
 const StyledTableContainer = styled(Paper)(({ theme }) => ({
@@ -44,7 +45,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
   // borderLeft: "20px solid #f5f5f5",
-  backgroundColor: "#f4f6f8",
+  // backgroundColor: '#bcbbf4',
+  backgroundColor: theme.palette.secondary.light,
   // border: 'none',
   display: 'flex',
   height: "55px",
@@ -77,17 +79,18 @@ const StyledTable = styled(Table)(({ theme }) => ({
   border: 'none',
 }));
 
-
-
 const ExpandedContentCell = styled(TableCell)(({ theme }) => ({
+  "&:hover": {
+    backgroundColor: theme.palette.action.selected,
+  },
   // padding: '8px',
   textAlign: 'left',
   border: `1px solid ${theme.palette.divider}`,
   overflow: 'hidden',
   whiteSpace: 'normal',
-  maxWidth: '33%',
+  
+  // maxWidth: '33%',
   flex: '1',
-  // backgroundColor: '', 
 }));
 
 
@@ -133,54 +136,61 @@ function Row({ parentRow, columns, renderChildRow }) {
         <StyledTableRow>
           {/* Contains Expanded content*/}
           <ExpandedContentCell  
-            style={{ paddingBottom: 0, paddingTop: 0 }}
+            style={{ paddingBottom: 0, paddingTop: 0, }}
             // colSpan={columns.length + 1}
           >
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ marginTop: 1, marginLeft: 0,  overflow: "hidden" }}>
-                <TextField
-                  label="Search"
-                  variant="outlined"
-                  value={searchText}
-                  onChange={handleSearchChange}
-                  sx={{
-                    marginTop: "8px",
-                    marginBottom: "8px",
-                    "& .MuiOutlinedInput-root": {
-                      borderRadius: "30px",
-                      height: "5%",
-                    },
-                    "& .MuiOutlinedInput-input": {
-                      padding: "12px",
-                    },
-                    "& .MuiInputLabel-outlined": {
-                      transform: "translate(14px, 14px) scale(1)",
-                    },
-                    "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
-                      transform: "translate(14px, -6px) scale(0.75)",
-                    },
+              <Box sx={{ margin: 1,  marginLeft: 0,  overflow: "hidden" }}>
+                <Box sx={{display: 'flex', flexDirection: 'column',
                   }}
-                />
-                {/* RENDERS THE mini-table within expanded row if not ull*/}
-                {renderChildRow ? (
-                  // This part calls the renderChildRow function and passes parentRow, page, rowsPerPage, and searchText as arguments. This function should return the JSX for the mini-table.
-                  <>
-                    {renderChildRow(parentRow, page, rowsPerPage, searchText)}
-                    <TablePagination
-                      rowsPerPageOptions={[7, 14, 28]}
-                      component="div"
-                      count={parentRow.childRows.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </>
-                ) : (
-                  <Typography variant="h6" gutterBottom component="div">
-                    No child row renderer provided
-                  </Typography>
-                )}
+                >
+                  <TextField
+                    label="Search"
+                    variant="outlined"
+                    value={searchText}
+                    onChange={handleSearchChange}
+                    sx={{
+                      marginTop: "8px",
+                      marginBottom: "8px",
+                      marginLeft: 1,
+                      marginRight: 1,
+                      padding: 'auto',
+                     "& .MuiOutlinedInput-root": {
+                        borderRadius: "15px",
+                        height: "5%",
+                      },
+                      "& .MuiOutlinedInput-input": {
+                        padding: "12px",
+                      },
+                      "& .MuiInputLabel-outlined": {
+                        transform: "translate(14px, 14px) scale(1)",
+                      },
+                      "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
+                        transform: "translate(14px, -6px) scale(0.75)",
+                      },
+                    }}
+                  />
+                  {/* RENDERS THE mini-table within expanded row if not ull*/}
+                  {renderChildRow ? (
+                    // This part calls the renderChildRow function and passes parentRow, page, rowsPerPage, and searchText as arguments. This function should return the JSX for the mini-table.
+                    <>
+                      {renderChildRow(parentRow, page, rowsPerPage, searchText)}
+                      <TablePagination
+                        rowsPerPageOptions={[7, 14, 28]}
+                        component="div"
+                        count={parentRow.childRows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                      />
+                    </>
+                  ) : (
+                    <Typography variant="h6" gutterBottom component="div">
+                      No child row renderer provided
+                    </Typography>
+                  )}
+                </Box>
               </Box>
             </Collapse>
           </ExpandedContentCell>

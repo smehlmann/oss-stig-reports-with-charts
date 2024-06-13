@@ -64,7 +64,7 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle, onCl
   dataLabels: {
     enabled: true,
     style: {
-      fontSize: '12px',
+      fontSize: '13px',
       fontFamily: 'Segoe UI',
       fontWeight: 'bold',
       colors: ['#283249'], //background color 
@@ -76,7 +76,7 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle, onCl
       borderRadius: 4,
       borderWidth: 0,
       borderColor: '#283249',
-      opacity: 0.85,
+      opacity: 0.9,
     },
     //  color: '#50068b',
     dropShadow: {
@@ -84,7 +84,7 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle, onCl
       top: 1,
       left: 1,
       blur: 1,
-      opacity: 0.5,
+      opacity: 0.7,
     },
     formatter: function (val, { seriesIndex, w }) {
       const label = w.globals.labels[seriesIndex];

@@ -12,6 +12,18 @@ const ApexPieChartBuilder = ({ dataLabels, dataValues, title, legendTitle, onCli
         dataPointSelection: onClick,
       },
     },
+    toolbar: {
+      show: true,
+      tools: {
+        download: true,
+        selection: true,
+        zoom: true,
+        zoomin: true,
+        zoomout: true,
+        pan: true,
+        reset: true
+      },
+    },
     labels: dataLabels,
     colors: palette,
     title: {
@@ -31,7 +43,7 @@ const ApexPieChartBuilder = ({ dataLabels, dataValues, title, legendTitle, onCli
     dataLabels: {
       enabled: true,
       style: {
-        fontSize: '12px',
+        fontSize: '13px',
         fontFamily: 'Segoe UI',
         fontWeight: 'bold',
         colors: ['#283249'], //background color 
@@ -43,7 +55,7 @@ const ApexPieChartBuilder = ({ dataLabels, dataValues, title, legendTitle, onCli
         borderRadius: 4,
         borderWidth: 0,
         borderColor: '#283249',
-        opacity: 0.85,
+        opacity: 0.9,
       },
       //  color: '#50068b',
       dropShadow: {
@@ -51,7 +63,7 @@ const ApexPieChartBuilder = ({ dataLabels, dataValues, title, legendTitle, onCli
         top: 1,
         left: 1,
         blur: 1,
-        opacity: 0.5,
+        opacity: 0.7,
       },
       formatter: function (val, { seriesIndex, w }) {
         const label = w.globals.labels[seriesIndex];

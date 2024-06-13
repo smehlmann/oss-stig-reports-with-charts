@@ -3,10 +3,9 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Box, styled } from "@mui/system";
 import TableCell from '@mui/material/TableCell';
 import { useTheme } from '@mui/material/styles';
-import numeral from "numeral";
 
 const BoldHeader = styled('div')(({ theme }) => ({
-  // fontSize: '18px', // Default font size
+  fontSize: '18px', // Default font size
   fontFamily: 'Segoe UI',
   fontWeight: '700',
   textWrap: 'wrap',
@@ -26,80 +25,57 @@ const CenterAlignedCell = styled(TableCell)({
   textAlign: 'center',
 });
 
+//created styled data grid:
+const StyledDataGrid = styled(DataGrid) (({theme}) => ({
+  "& .MuiDataGrid-root": {
+    // width: "100%",
+    // height: "100%",
+    // flex: '1',
+    // border: "1px solid #e0e0e0",
+    // marginTop: 0,
+    // marginBottom: 0,
+    
+  },
+  "& .MuiDataGrid-cell": {
+    borderBottom: "none",
+    // color: "#00b4d8"
+  },
+  "& .name-column--cell": {
+    color: theme.palette.primary.main,
+  },
+
+  "& .MuiDataGrid-columnHeader": {
+    backgroundColor: theme.palette.secondary.light,
+    // borderBottom: 'none',
+    
+  },
+  "& .MuiDataGrid-virtualScroller": {
+    backgroundColor: theme.palette.background.paper,
+  },
+  "& .MuiDataGrid-footerContainer": {
+    borderTop: "none",
+    backgroundColor: theme.palette.secondary.light,
+  },
+  "& .MuiCheckbox-root": {
+    color: `${theme.palette.secondary.main} !important`,
+  },
+  "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+    color: `${theme.palette.text.primary} !important`,
+  },
+}));
+
 function DataGridBuilder({ data, columns, onRowClick}) {
-  const theme = useTheme();
 
   return (
     <Box sx={{
-      // height: '100%',
       width: '100%',
-      "& .MuiDataGrid-root": {
-        // width: "100%",
-        // height: "100%",
-        // flex: '1',
-        // border: "1px solid #e0e0e0",
-        // margin: "0 auto",
-        overflowX: "auto",
-      },
-      "& .MuiDataGrid-cell": {
-        borderBottom: "none",
-      },
-      "& .name-column--cell": {
-        color: theme.palette.primary.main,
-        backgroundColor: '#c678f3',
-      },
-      "& .MuiDataGrid-columnHeaders": {
-        backgroundColor: "#f4f6f8",
-        borderBottom: "none",
-        // fontSize: '12px',
-        // fontFamily: 'Segoe UI',
-        // fontWeight: '900',
-      },
-      "& .MuiDataGrid-virtualScroller": {
-        backgroundColor: theme.palette.background.paper,
-      },
-      "& .MuiDataGrid-footerContainer": {
-        borderTop: "none",
-        backgroundColor: '#bcbbf4',
-      },
-      "& .MuiCheckbox-root": {
-        color: `${theme.palette.secondary.main} !important`,
-      },
-      "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-        color: `${theme.palette.text.primary} !important`,
-      },
 
       //for the box
-      // height: '400px', // Set a fixed height for the container
       maxHeight: '100%', // Ensure it doesn't grow beyond this height
       overflowY: 'auto', // Enable vertical scrolling
     }}>
-      {/* <DataGrid
-        rows={data}
-        columns={columns.map((column) => ({
-          ...column,
-          
-          headerAlign: 'center',
-          align: 'center',
-          renderHeader: (params) => (
-            <BoldHeader>{params.colDef.headerName}</BoldHeader>
-          ),
-        }))}
-        pageSize={5}  // Set the page size to 5
-        components={{
-          Cell: CenterAlignedCell,
-        }}
-        slots={{
-          Toolbar: GridToolbar,  // Include the toolbar component
-        }}
-        rowsPerPageOptions={[5, 10,]}
-        checkboxSelection
-        disableSelectionOnClick
-        onRowClick={onRowClick}  
-      /> */}
-
-
-      <DataGrid
+      
+      <StyledDataGrid
         rows={data}
         columns={columns.map((column) => ({
           ...column,
@@ -121,7 +97,7 @@ function DataGridBuilder({ data, columns, onRowClick}) {
         disableSelectionOnClick
         onRowClick = {onRowClick}
       />
-    </Box>
+   </Box>
   );
 }
 
@@ -251,7 +227,3 @@ export default DataGridBuilder;
 // export default DataGridBuilder;
 
 
-// import React from 'react';
-// import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-// import { Box } from "@mui/material";
-// import { useTheme } from '@mui/material/styles';

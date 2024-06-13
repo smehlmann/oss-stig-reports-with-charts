@@ -23,7 +23,7 @@ const renderProgressBarCell = (params) => (
   </div>
 );
 
-function Report2AveragesPerCode({ data, targetColumns, columnHeaders }) {
+function Report2AveragesPerCode({ data, targetColumns }) {
   //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
   //stores the data filter has been applied
@@ -67,7 +67,6 @@ function Report2AveragesPerCode({ data, targetColumns, columnHeaders }) {
   }, [data, targetColumns, filteredData]);
 
 
-
   const handleRowClick = (params) => {
     console.log('Row clicked:', params.row);
     const selectedValue = params.row.code; 
@@ -75,7 +74,39 @@ function Report2AveragesPerCode({ data, targetColumns, columnHeaders }) {
     console.log('Filter updated:', { code: selectedValue });
   };
 
-  
+  //headers for columns
+  const tableColumns = [
+    { field: 'code', 
+      headerName: 'Code', 
+      flex: 1 
+    },
+    {
+      field: 'avgAssessed',
+      headerName: 'Avg of Assessed',
+      wrap: true,
+      flex: 1,
+      // renderCell: renderProgressBarCell,
+    },
+    {
+      field: 'avgSubmitted',
+      headerName: 'Avg of Submitted',
+      flex: 1,
+      // renderCell: renderProgressBarCell,
+    },
+    {
+      field: 'avgAccepted',
+      headerName: 'Avg of Accepted',
+      flex: 1,
+      // renderCell: renderProgressBarCell,
+    },
+    {
+      field: 'avgRejected',
+      headerName: 'Avg of Rejected',
+      flex: 1,
+      // renderCell: renderProgressBarCell,
+    },
+  ];
+
 
 
 
@@ -83,7 +114,7 @@ function Report2AveragesPerCode({ data, targetColumns, columnHeaders }) {
     <DataGridBuilder 
       data={averages} 
       // columns={columnHeaders} 
-      columns={columnHeaders}
+      columns={tableColumns}
       onRowClick={handleRowClick}
       
     />
