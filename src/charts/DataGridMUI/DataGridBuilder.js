@@ -3,6 +3,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Box, styled } from "@mui/system";
 import TableCell from '@mui/material/TableCell';
 import { useTheme } from '@mui/material/styles';
+import numeral from "numeral";
 
 const BoldHeader = styled('div')(({ theme }) => ({
   // fontSize: '18px', // Default font size
@@ -38,7 +39,7 @@ function DataGridBuilder({ data, columns, onRowClick}) {
         // flex: '1',
         // border: "1px solid #e0e0e0",
         // margin: "0 auto",
-        // overflowX: "inherit",
+        overflowX: "auto",
       },
       "& .MuiDataGrid-cell": {
         borderBottom: "none",
@@ -73,10 +74,11 @@ function DataGridBuilder({ data, columns, onRowClick}) {
       maxHeight: '100%', // Ensure it doesn't grow beyond this height
       overflowY: 'auto', // Enable vertical scrolling
     }}>
-      <DataGrid
+      {/* <DataGrid
         rows={data}
         columns={columns.map((column) => ({
           ...column,
+          
           headerAlign: 'center',
           align: 'center',
           renderHeader: (params) => (
@@ -94,6 +96,30 @@ function DataGridBuilder({ data, columns, onRowClick}) {
         checkboxSelection
         disableSelectionOnClick
         onRowClick={onRowClick}  
+      /> */}
+
+
+      <DataGrid
+        rows={data}
+        columns={columns.map((column) => ({
+          ...column,
+          headerAlign: 'center',
+          align: 'center',
+          renderHeader: (params) => (
+            <BoldHeader>{params.colDef.headerName}</BoldHeader>
+          ),
+        }))}
+        pageSize={5}
+        components={{
+          Cell: CenterAlignedCell,
+        }}
+        slots={{
+          Toolbar: GridToolbar,
+        }}
+        rowsPerPageOptions={[5, 10]}
+        // checkboxSelection
+        disableSelectionOnClick
+        onRowClick = {onRowClick}
       />
     </Box>
   );

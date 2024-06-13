@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useEffect } from "react";
+
+import React, { useState, useMemo,  useEffect } from "react";
 import numeral from 'numeral';
 import Typography from '@mui/material/Typography';
 import { LinearProgress } from '@mui/material';
@@ -23,186 +24,73 @@ const renderProgressBarCell = (params) => (
 );
 
 function Report2AveragesPerCode({ data, targetColumns, columnHeaders }) {
+  //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
-  const [averages, setAverages] = useState([]);
+  //stores the data filter has been applied
+  const filteredData = useMemo(() => {
+    if (Object.keys(filter).length > 0) {
+      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
+      return filtered;
+    }
+    return data;
+  }, [filter, data]);
 
+  const [averages, setAverages] = useState([]);
   useEffect(() => {
-    if (Array.isArray(data) && data.length > 0) {
+    if (Array.isArray(filteredData) && filteredData) {
       // Group data by "code" values
-      const dataGroupedByCode = data.reduce((accumulator, currentValue) => {
+      const dataGroupedByCode = filteredData.reduce((accumulator, currentValue) => {
         if (!accumulator[currentValue.code]) {
           accumulator[currentValue.code] = [];
         }
         accumulator[currentValue.code].push(currentValue);
         return accumulator;
       }, {});
-  
-      // Calculate averages for each code
-      const codeAverages = Object.entries(dataGroupedByCode).map(([code, values]) => {
+      
+      //calculate averages for each code
+      const codeAverages = Object.entries(dataGroupedByCode).map(([code, filteredData]) => {
         const averages = targetColumns.reduce((acc, columnName) => {
-          const columnValues = values.map((item) => item[columnName]);
-          acc[`avg${columnName.charAt(0).toUpperCase() + columnName.slice(1)}`] = calculateAverage(columnValues);
+          const values = filteredData.map((item) => item[columnName]);
+          acc[`avg${columnName.charAt(0).toUpperCase() + columnName.slice(1)}`] = calculateAverage(values);
           return acc;
         }, { id: code, code });
+
+        for (const [key, value] of Object.entries(averages)) {
+          if (key.startsWith('avg')) {
+            averages[key] = numeral(value * 100).format('0.00') + '%';
+          }
+        }
         return averages;
       });
       setAverages(codeAverages);
     }
-  }, [data, targetColumns]);
+  }, [data, targetColumns, filteredData]);
 
 
-  const handleRowClick = (event, row) => {
-    updateFilter({ code: row.code });
+
+  const handleRowClick = (params) => {
+    console.log('Row clicked:', params.row);
+    const selectedValue = params.row.code; 
+    updateFilter({ code: selectedValue });
+    console.log('Filter updated:', { code: selectedValue });
   };
+
+  
+
+
 
   return (
     <DataGridBuilder 
       data={averages} 
-      columns={columnHeaders} 
-      onRowClick={handleRowClick} 
+      // columns={columnHeaders} 
+      columns={columnHeaders}
+      onRowClick={handleRowClick}
+      
     />
   );
 }
 
 export default Report2AveragesPerCode;
-
-
-
-// import React, { useState, useMemo,  useEffect } from "react";
-// import numeral from 'numeral';
-// import Typography from '@mui/material/Typography';
-// import { LinearProgress } from '@mui/material';
-// import { useFilter } from '../../FilterContext';
-// import DataGridBuilder from './DataGridBuilder';
-
-// const calculateAverage = (values) => {
-//   const sum = values.reduce((total, value) => total + value, 0);
-//   return values.length > 0 ? sum / values.length : 0;
-// };
-
-// const renderProgressBarCell = (params) => (
-//   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
-//     <LinearProgress variant="determinate" value={params.value * 100} 
-//      color="primary"
-//      style={{ height: '10px', borderRadius: '5px' }}
-//     />
-//     <Typography variant="body2" align="center">
-//       {numeral(params.value * 100).format('0.00')}%
-//     </Typography>
-//   </div>
-// );
-
-// function Report2AveragesPerCode({ data, targetColumns, columnHeaders }) {
-//   //useFilter contains 'filter' state and when it's updated
-//   const { filter, updateFilter } = useFilter();
-//   //stores the data filter has been applied
-//   const filteredData = useMemo(() => {
-//     if (Object.keys(filter).length > 0) {
-//       const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-//       return filtered;
-//     }
-//     return data;
-//   }, [filter, data]);
-
-//   const [averages, setAverages] = useState([]);
-
-//   useEffect(() => {
-//     if (Array.isArray(filteredData) && data) {
-//       // Group data by "code" values
-//       const dataGroupedByCode = filteredData.reduce((accumulator, currentValue) => {
-//         if (!accumulator[currentValue.code]) {
-//           accumulator[currentValue.code] = [];
-//         }
-//         accumulator[currentValue.code].push(currentValue);
-//         return accumulator;
-//       }, {});
-      
-//       // Calculate averages for each code
-//       // const codeAverages = Object.entries(dataGroupedByCode).map(([code, data]) => { 
-//       //   const assessedValues = data.map((item) => item.assessed); // array of "assessed" values
-//       //   const submittedValues = data.map((item) => item.submitted);
-//       //   const acceptedValues = data.map((item) => item.accepted);
-//       //   const rejectedValues = data.map((item) => item.rejected);
-//       //   return {
-//       //     id: code,
-//       //     code,
-//       //     avgAssessed: calculateAverage(assessedValues),
-//       //     avgSubmitted: calculateAverage(submittedValues),
-//       //     avgAccepted: calculateAverage(acceptedValues),
-//       //     avgRejected: calculateAverage(rejectedValues),
-//       //   };
-//       // });
-//       // setAverages(codeAverages);
-
-
-//       //calculate averages for each code
-//       const codeAverages = Object.entries(dataGroupedByCode).map(([code, data]) => {
-//         const averages = targetColumns.reduce((acc, columnName) => {
-//           const values = data.map((item) => item[columnName]);
-//         acc[`avg${columnName.charAt(0).toUpperCase() + columnName.slice(1)}`] = calculateAverage(values);
-//           return acc;
-//         }, { id: code, code });
-//         return averages;
-//       });
-//       setAverages(codeAverages);
-//     }
-//   }, [data, targetColumns]);
-
-
-//   // updates the filter criteria based on user's click
-//   // const handleRowClick= (event, dataGridContext, config) => {
-//   //   const selectedValue = config.w.config.labels[config.dataPointIndex];
-//   //   updateFilter({ [targetColumns]: selectedValue });
-//   // };
-  
-//   const handleRowClick = (event, row) => {
-//     const selectedValue = row.code; // Assuming 'code' is the unique identifier for your rows
-//     updateFilter({ code: selectedValue });
-//   };
-
-//   // const tableColumns = [
-//   //   { field: 'code', 
-//   //     headerName: 'Code', 
-//   //     flex: 1 
-//   //   },
-//   //   {
-//   //     field: 'avgAssessed',
-//   //     headerName: 'Avg of Assessed',
-//   //     wrap: true,
-//   //     flex: 1,
-//   //     renderCell: renderProgressBarCell,
-//   //   },
-//   //   {
-//   //     field: 'avgSubmitted',
-//   //     headerName: 'Avg of Submitted',
-//   //     flex: 1,
-//   //     renderCell: renderProgressBarCell,
-//   //   },
-//   //   {
-//   //     field: 'avgAccepted',
-//   //     headerName: 'Avg of Accepted',
-//   //     flex: 1,
-//   //     renderCell: renderProgressBarCell,
-//   //   },
-//   //   {
-//   //     field: 'avgRejected',
-//   //     headerName: 'Avg of Rejected',
-//   //     flex: 1,
-//   //     renderCell: renderProgressBarCell,
-//   //   },
-//   // ];
-
-//   return (
-//     <DataGridBuilder 
-//       data={averages} 
-//       columns={columnHeaders} 
-//       onRowClick={handleRowClick} 
-      
-//     />
-//   );
-// }
-
-// export default Report2AveragesPerCode;
 
 
 
