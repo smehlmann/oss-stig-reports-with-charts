@@ -6,50 +6,6 @@ import { getAuth } from '../store/index.js';
 
 const apiBase = 'https://stigman.nren.navy.mil/np/api';
 
-async function useNewAuth(myUrl) {
-
-  const myAuth = useAuth();
-
-  var accessToken = myAuth.userData?.access_token;
-
-  try {
-    var resp = await axios.get(myUrl, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
-
-    //alert('returning resp')
-    return resp;
-  }
-  catch (e) {
-    console.log(e.message);
-  }
-
-}
-
-
-async function getNewToken(refreshToken) {
-  try {
-    console.log('Requesting token');
-    alert('Requesting token');
-    const response = await axios.post('https://stigman.nren.navy.mil/auth/realms/np-stigman/protocol/openid-connect/token', {
-      form: {
-        grant_type: 'refresh_token',
-        refresh_token: refreshToken,
-        client_id: 'np-stig-manager'
-      }
-    }).json();
-
-    //setMyTokens(response);
-    return response
-  }
-  catch (e) {
-    console.log(e.message)
-    return {}
-  }
-}
-
 async function getMetricsData(auth, myUrl) {
 
   var storedAuth = getAuth();
@@ -110,8 +66,8 @@ async function getXMLMetricsData(auth, myUrl) {
       }
     });
 
-    var jsonResp;
-    var xmlResp = response.body;
+    //var jsonResp;
+    //var xmlResp = response.body;
     //console.log(xmlResp);
     //parser.parseString(xmlResp, function (err, result) {
     //console.log(result);
@@ -214,6 +170,15 @@ async function getAssetMetricsSummary(auth, collectionId) {
   var myUrl = apiBase + '/collections/' + collectionId + '/metrics/summary/asset?format=json'
   var assets = getMetricsData(auth, myUrl)
   return assets
+}
+
+//Return meta-metrics aggregated by STIG
+async function getMetaMetricsSummary(auth, collectionId, benchmarkId) {
+  //console.log('getMetaMetricsSummary')
+  //http://localhost:64/collections/meta/metrics/summary/stig?collectionId=1&benchmarkId=V5R3&format=json
+  var myUrl = apiBase + '/collections/meta/metrics/summary/stig?collectionId=' + collectionId + '&benchmarkId=' + benchmarkId + '&format=json';
+  var metaData = getMetricsData(auth, myUrl)
+  return metaData;
 }
 
 async function getAssetMetricsSummaryByAssetId(auth, collectionId, assetId) {
@@ -362,10 +327,25 @@ async function getCollectionMerticsdByStig(auth, collectionId) {
 
 }
 
+async function getMerticsSummarydByBenchmark(auth, collectionId, benchmarkId, assetId) {
+
+  //http://localhost:64001/api/collections/1/metrics/summary/stig?benchmarkId=v2r1&assetId=1234&format=json
+  //var myUrl = apiBase + '/collections/' + collectionId + '/metrics/summary/stig?benchmarkId=' + benchmarkId + '&assetId=' + assetId + 'format=json';
+  var myUrl = apiBase + '/collections/' + collectionId + '/metrics/summary/stig?benchmarkId=' + benchmarkId + '&format=json';
+  console.log(myUrl);
+  var metricsSummary = await getMetricsData(auth, myUrl);
+  return metricsSummary;
+
+}
+
+//Return metrics for the specified Collection aggregated by STIG
+
+
 async function getCollectionMerticsSummary(auth, collectionId) {
 
   //var myUrl = apiBase + '/collections/' + collectionId + '/metrics/summary/collection?format=json';
   var myUrl = apiBase + '/collections/' + collectionId + '/metrics/summary?format=json';
+  console.log(myUrl);
   var metrics = getMetricsData(auth, myUrl);
   return metrics;
 
@@ -885,5 +865,7 @@ export {
   getSubmittedReviewsByCollectionAndAsset,
   getAssetsById,
   getAssetEmassMap,
-  getAssetMetadata
+  getAssetMetadata,
+  getMetaMetricsSummary,
+  getMerticsSummarydByBenchmark
 };
