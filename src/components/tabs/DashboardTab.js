@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import DashboardLayout from "./DashboardLayout";
 import useLocalStorageListener from "../useLocalStorageListener";
 
+/* Include statement to handle how data is parsed based on the report selected*/
 
 const formatPercentage = (percentageString) => {
   if (!percentageString) {
@@ -53,11 +54,12 @@ const formatData = (parsedData) => {
   }
 
   return parsedData.map(entry => {
-    // Convert datePulled to a Date object
-   // Split datePulled string into parts and construct a Date object
-   const [year, month, day] = entry.datePulled.split('-');
-   entry.datePulled = new Date(year, month - 1, day);
-   entry.datePulled = stringToDate(entry.datePulled);
+   // Convert datePulled to a Date object
+    // Split datePulled string into parts and construct a Date object
+    if (entry.datePulled) {
+      const [year, month, day] = entry.datePulled.split("-");
+      entry.datePulled = new Date(year, month - 1, day);
+      entry.datePulled = stringToDate(entry.datePulled);
 
     // Convert percentage strings to decimals
     entry.assessed = formatPercentage(entry.assessed);
@@ -66,10 +68,11 @@ const formatData = (parsedData) => {
     entry.rejected = formatPercentage(entry.rejected);
 
     // Convert objects to strings and remove "_$" from sysAdmin
-    entry.sysAdmin = objectToString(entry.sysAdmin).replace('_$', '');
-    entry.primOwner = objectToString(entry.primOwner);
-    entry.deviceType = objectToString(entry.deviceType);
-
+     // Convert objects to strings and remove "_$" from sysAdmin
+     entry.sysAdmin = objectToString(entry.sysAdmin).replace("_$", "");
+     entry.primOwner = objectToString(entry.primOwner);
+     entry.deviceType = objectToString(entry.deviceType);
+    }
     return entry;
   });
 };

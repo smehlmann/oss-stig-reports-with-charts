@@ -8,7 +8,7 @@ import { useFilter } from "../../../FilterContext.js";
 
 const DonutAvgChart = ({ targetColumns, chartTitle, legendName, data }) => {
   
-  /*
+  
   //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
   //stores the data filter has been applied
@@ -19,7 +19,7 @@ const DonutAvgChart = ({ targetColumns, chartTitle, legendName, data }) => {
     }
     return data;
   }, [filter, data]);
-*/
+
   //keeps track of averages for each column 
   // const averageMap = useMemo(() => PropertyAvgMap(filteredData, targetColumns), [filteredData, targetColumns]);
   const averageMap = useMemo(() => PropertyAvgMap(data, targetColumns), [data, targetColumns]);
@@ -29,13 +29,13 @@ const DonutAvgChart = ({ targetColumns, chartTitle, legendName, data }) => {
   //set to average
   const donutValues = useMemo(() => Object.values(averageMap), [averageMap]);
 
-/*
+
   //updates the filter criteria based on user's click
   const handleDonutClick = (event, chartContext, config) => {
     const selectedValue = config.w.config.labels[config.dataPointIndex];
     updateFilter({ [targetColumns]: selectedValue });
   };
-*/
+
 
   return (
     <ApexDonutChartBuilder
@@ -43,7 +43,7 @@ const DonutAvgChart = ({ targetColumns, chartTitle, legendName, data }) => {
       dataValues={donutValues}
       title={chartTitle}
       lengendTitle={legendName}
-//      onClick = {handleDonutClick}
+     onClick = {handleDonutClick}
       
     />
   );

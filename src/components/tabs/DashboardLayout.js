@@ -56,7 +56,8 @@ const DashboardLayout = ({ data }) => {
       <FilterProvider>
         <Root>
           <Grid container spacing={4}>
-          <Grid item lg={4} sm={6} xl={4} xs={12}>
+
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
               <CustomCardComponent>
                 <ApexDonutCountChart
                   targetColumn="shortName"
@@ -78,7 +79,7 @@ const DashboardLayout = ({ data }) => {
                 <ApexStandardBarChart
                   targetColumn="code"
                   isHorizontal={false}
-                  chartTitle="Code by Frequency"
+                  chartTitle="Number of Assets"
                   xAxisTitle="Code"
                   yAxisTitle="Frequency"
                   data={data}
@@ -106,12 +107,13 @@ const DashboardLayout = ({ data }) => {
                 />
               </CustomCardComponent>
             </Grid>
+
             <Grid item lg={12} sm={12} xl={12} xs={12}>
               <TableGridCardComponent>
                 <Report2CollectionsExpanded data={data}/>
               </TableGridCardComponent>
             </Grid>
-          </Grid>
+          </Grid> 
         </Root>
       </FilterProvider>
     </ThemeProvider>

@@ -39,9 +39,11 @@ const theme = createTheme({
       primary: '#2A2A2A',
       secondary: '#666666',
     },
-    // action: {
-    //   selected: '#caf0f8',
-    // }
+    action: {
+      selected: '#d9d9d9',
+      hoverExpandedSection: '#f9f9f9',
+      
+    }
   },
   typography: {
     fontFamily: 'Segoe UI, Arial, sans-serif',
