@@ -84,7 +84,7 @@ const OssStigReportsTab = () => {
     }
 
     if (
-      (report === "11" || report === "8" || report === "9") &&
+      (report === "11" || report === "8" || report === "9" || report === "13") &&
       emassNums === ""
     ) {
       alert("You must enter EMASS number(s)");
@@ -236,12 +236,22 @@ const OssStigReportsTab = () => {
                 <span>7. STIG Deltas for Unidentified NCCM Packages</span>
               </label>
               <br />
+              <label>
+                <input
+                  type="radio"
+                  value="13"
+                  checked={report === "13"}
+                  onChange={onRadioChange}
+                  disabled={isButtonDisabled}
+                />
+                <span>8. Pinned Report (EMASS number(s) required)</span>
+              </label>
+              <br />
               <br />
               {showEmassNum && (
                 <div id="emassDiv">
                   <label htmlFor="emassNumsText">
-                    Optional for reports 1-5 and 8. Required for reports 6, 7
-                    and 9.
+                    Required for reports 4, 5, 9. Optional for all others.
                     <br /> Enter EMASS Number(s) separated by commas:{" "}
                   </label>
                   <input

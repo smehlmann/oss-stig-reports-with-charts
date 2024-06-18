@@ -446,6 +446,71 @@ export default function ReportColumns({ index, item, selectedReport }) {
                     </td>
                 </tr>
             );
+            case '13':
+                return (
+                    <tr key={index}>
+                        <td>
+                            {item.collectionName}
+                        </td>
+                        <td>
+                            {item.asset}
+                        </td>
+                        <td>
+                            {item.primOwner}
+                        </td>
+                        <td>
+                            {item.sysAdmin}
+                        </td>
+                        <td>
+                            {item.rmfAction}
+                        </td>
+                        <td>
+                            {item.isso}
+                        </td>
+                        <td>
+                            {item.ccbSAActions}
+                        </td>
+                        <td>
+                            {item.other}
+                        </td>
+                        <td>
+                            {item.benchmarks}
+                        </td>
+                        <td>
+                            {item.pinnedRev}
+                        </td>
+                        <td>
+                            {item.latestRev}
+                        </td>
+                        <td>
+                            {item.prevRev}
+                        </td>
+                        <td>
+                            {item.quarterVer}
+                        </td>
+                        <td>
+                            {item.assessed}
+                        </td>
+                        <td>
+                            {item.submitted}
+                        </td>
+                        <td>
+                            {item.accepted}
+                        </td>
+                        <td>
+                            {item.rejected}
+                        </td>
+                        <td>
+                            {item.cat3}
+                        </td>
+                        <td>
+                            {item.cat2}
+                        </td>
+                        <td>
+                            {item.cat1}
+                        </td>
+                    </tr>
+                );
         default:
             return null;
     }
