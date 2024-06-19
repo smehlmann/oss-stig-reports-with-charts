@@ -83,7 +83,7 @@ const DashboardLayout = ({ data }) => {
                   targetColumn="shortName"
                   isHorizontal={false}
                   xAxisTitle="Collection Name"
-                  yAxisTitle= "Number of Assets"
+                  yAxisTitle= "Number of Aqssets"
                   data={data}
                 />
               </CustomCardComponent>
