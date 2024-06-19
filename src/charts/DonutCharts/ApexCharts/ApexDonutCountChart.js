@@ -7,7 +7,7 @@ import ApexDonutChartBuilder from "./ApexDonutChartBuilder.js";
 import { useFilter } from "../../../FilterContext.js";
 //"data" is an array of objects. 
 
-const ApexDonutCountChart = ({ targetColumn, chartTitle, legendName, data }) => {
+const ApexDonutCountChart = ({ targetColumn, legendName, data }) => {
 
   //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
@@ -38,7 +38,6 @@ const ApexDonutCountChart = ({ targetColumn, chartTitle, legendName, data }) => 
     <ApexDonutChartBuilder
       dataLabels={donutLabels}
       dataValues={donutValues}
-      title={chartTitle}
       lengendTitle={legendName}
       onClick = {handleDonutClick}
     />

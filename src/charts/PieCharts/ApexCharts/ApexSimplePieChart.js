@@ -4,7 +4,7 @@ import ApexPieChartBuilder from "./ApexPieChartBuilder.js";
 import { useFilter } from "../../../FilterContext.js";
 
 
-const ApexSimplePieChart = ({ targetColumn, chartTitle, legendName, data }) => {
+const ApexSimplePieChart = ({ targetColumn, legendName, data }) => {
   
   const { filter, updateFilter } = useFilter();
   //stores the data filter has been applied
@@ -30,7 +30,6 @@ const ApexSimplePieChart = ({ targetColumn, chartTitle, legendName, data }) => {
     <ApexPieChartBuilder
       dataLabels={pieLabels}
       dataValues={pieValues}
-      title={chartTitle}
       legendTitle={legendName}
       onClick={handlePieClick}
     />

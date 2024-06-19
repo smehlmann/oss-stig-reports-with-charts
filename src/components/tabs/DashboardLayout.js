@@ -1,9 +1,11 @@
 import React, { useMemo } from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
-import ApexSimplePieChart from "../../charts/PieCharts/ApexCharts/ApexSimplePieChart";
 import ApexStandardBarChart from "../../charts/BarCharts/ApexCharts/ApexStandardBarChart";
-import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
+import BubbleCountChart from "../../charts/BubbleCharts/BubbleCountChart";
 import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart";
+import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
+import ApexBarAvgChart from "../../charts/BarCharts/ApexCharts/ApexBarAvgChart";
+
 import ValueCountMap from "../../charts/ValueCountMap";
 import LineChartBuilder from "../../charts/LineCharts/Chartjs/LineChartBuilder";
 import Report2CollectionsExpanded from "../../charts/TableUsingMUI/Report2CollectionsExpanded";
@@ -58,11 +60,12 @@ const DashboardLayout = ({ data }) => {
           <Grid container spacing={4}>
 
             <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <CustomCardComponent>
-                <ApexDonutCountChart
-                  targetColumn="shortName"
-                  chartTitle="Collections"
-                  legendName="Name of collection"
+              <CustomCardComponent title = 'Assets by Code'>
+                <ApexStandardBarChart
+                  targetColumn="code"
+                  isHorizontal={true}
+                  xAxisTitle="Number of Assets"
+                  yAxisTitle= "Code"
                   data={data}
                 />
               </CustomCardComponent>
@@ -75,34 +78,35 @@ const DashboardLayout = ({ data }) => {
               </TableGridCardComponent>
             </Grid>
             <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <CustomCardComponent>
-                <ApexStandardBarChart
-                  targetColumn="code"
-                  isHorizontal={false}
-                  chartTitle="Number of Assets"
-                  xAxisTitle="Code"
-                  yAxisTitle="Frequency"
-                  data={data}
-                />
-              </CustomCardComponent>
-            </Grid>
-            
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <CustomCardComponent>
-                <DonutAvgChart
-                  targetColumns={["assessed", "submitted", "accepted", "rejected"]}
-                  chartTitle="Averages"
-                  legendName="Amounts"
-                  data={data}
-                />
-              </CustomCardComponent>
-            </Grid>
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <CustomCardComponent>
-                <ApexSimplePieChart
+              <CustomCardComponent title = "Assets by Collection">
+              <ApexStandardBarChart
                   targetColumn="shortName"
-                  chartTitle="Collections"
-                  legendName="Name of collection"
+                  isHorizontal={false}
+                  xAxisTitle="Collection Name"
+                  yAxisTitle= "Number of Assets"
+                  data={data}
+                />
+              </CustomCardComponent>
+            </Grid>
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
+              <CustomCardComponent title = "Averages">
+                <ApexBarAvgChart
+                  targetColumns={["assessed", "submitted", "accepted", "rejected"]}
+                  isHorizontal = {false}
+                  xAxisTitle= "Packages"
+                  yAxisTitle= "Number of Assets"
+                  disableFilterUpdate={true}
+                  data={data}
+                />
+              </CustomCardComponent>
+            </Grid>
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
+              <CustomCardComponent title = "Assets by Package">
+                <BubbleCountChart
+                  targetColumn="shortName"
+                  isHorizontal={false}
+                  xAxisTitle = "Package Name"
+                  yAxisTitle="Number of Assets"
                   data={data}
                 />
               </CustomCardComponent>

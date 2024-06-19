@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ExpandableTableBuilder from "./ExpandableTableBuilder";
 import TableBody from '@mui/material/TableBody';
 import { useFilter } from '../../FilterContext';
+import {getPercentageFormatterObject} from "../getPercentageFormatterObject.js";
 
 // import { useTheme } from '@mui/material/styles';
 import {
@@ -24,10 +25,13 @@ const formatString = (value) => {
 };
 
 
+
 function Report2CollectionsExpanded({ data }) {
   const { filter, updateFilter, clearFilter} = useFilter();
   const [searchText, setSearchText] = useState("");
   const [filteredChildRows, setFilteredChildRows] = useState({}); // State to hold filtered data
+
+  const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
 
 
   const [parentRows, setParentRows] = useState([]);
@@ -38,11 +42,12 @@ function Report2CollectionsExpanded({ data }) {
       const dataGroupedByShortName = data.reduce((accumulator, currentValue) => {
         if (!accumulator[currentValue.shortName]) {
           accumulator[currentValue.shortName] = [];
-        }
+        }        
         accumulator[currentValue.shortName].push({
           asset: currentValue.asset,
           sysAdmin: formatString(currentValue.sysAdmin),
-          primOwner: formatString(currentValue.primOwner)
+          primOwner: formatString(currentValue.primOwner),
+          accepted: currentValue.accepted,
         });
         return accumulator;
       }, {});
@@ -90,15 +95,13 @@ function Report2CollectionsExpanded({ data }) {
   const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
     const filteredChildRows = parentRow.childRows.filter(
       (childRow) => 
-    //     // childRow.sysAdmin !== null && 
-    //     // childRow.primOwner !== null && 
-    //     // childRow.sysAdmin !== "" && 
-    //     // childRow.primOwner !== "" &&
-        
+
       //set to lowercase for searchability 
       (childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
       childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
-      childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()))
+      childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
+      childRow.accepted.toString().includes(searchText)
+      )
     );
 
     if (filteredChildRows.length === 0) {
@@ -117,6 +120,7 @@ function Report2CollectionsExpanded({ data }) {
               <ExpandedHeaderCell>Asset</ExpandedHeaderCell>
               <ExpandedHeaderCell >Sys Admin</ExpandedHeaderCell>
               <ExpandedHeaderCell >Primary Owner</ExpandedHeaderCell>
+              <ExpandedHeaderCell >Accepted %</ExpandedHeaderCell>
             </StyledTableRow>
           </ExpandedTableHead>
           <TableBody>
@@ -125,6 +129,9 @@ function Report2CollectionsExpanded({ data }) {
                 <ExpandedTableCell>{childRow.asset}</ExpandedTableCell>
                 <ExpandedTableCell>{childRow.sysAdmin}</ExpandedTableCell>
                 <ExpandedTableCell>{childRow.primOwner}</ExpandedTableCell>
+                <ExpandedTableCell>
+                  {percentageFormatterObject.formatter(childRow.accepted)}
+                </ExpandedTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
@@ -199,11 +206,8 @@ export default Report2CollectionsExpanded;
 //     }
 //   }, [data]);
 
-
   
-
-
-//   //code responsible forcreating childRows in expanded section
+//   //code responsible for creating childRows in expanded section
 //   const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
 //     const filteredChildRows = parentRow.childRows.filter(
 //       (childRow) => 
@@ -223,8 +227,6 @@ export default Report2CollectionsExpanded;
 //     }
 
 //     const displayedRows = filteredChildRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
-
 
 //     return (
 //       <StyledChildTableContainer sx={{ margin: 1 }}>

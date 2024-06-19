@@ -6,7 +6,7 @@ import { useFilter } from "../../../FilterContext.js";
 
 //"data" is an array of objects. 
 
-const DonutAvgChart = ({ targetColumns, chartTitle, legendName, data }) => {
+const DonutAvgChart = ({ targetColumns, legendName, data }) => {
   
   
   //useFilter contains 'filter' state and when it's updated
@@ -41,7 +41,6 @@ const DonutAvgChart = ({ targetColumns, chartTitle, legendName, data }) => {
     <ApexDonutChartBuilder
       dataLabels={donutLabels}
       dataValues={donutValues}
-      title={chartTitle}
       lengendTitle={legendName}
      onClick = {handleDonutClick}
       

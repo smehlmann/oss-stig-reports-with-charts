@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { palette } from "../../../theme";
 
-const ApexPieChartBuilder = ({ dataLabels, dataValues, title, legendTitle, onClick }) => {
+const ApexPieChartBuilder = ({ dataLabels, dataValues, legendTitle, onClick }) => {
   const [series, setSeries] = useState(dataValues);
 
   const [options, setOptions] = useState({
@@ -26,14 +26,6 @@ const ApexPieChartBuilder = ({ dataLabels, dataValues, title, legendTitle, onCli
     },
     labels: dataLabels,
     colors: palette,
-    title: {
-      text: title,
-      align: 'center',
-      style: {
-        fontSize: '25px',
-        fontFamily: 'Segoe UI'
-      },
-    },
     legend: {
       position: 'bottom',
       title: {

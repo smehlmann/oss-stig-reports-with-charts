@@ -5,11 +5,14 @@ import Typography from '@mui/material/Typography';
 import { LinearProgress } from '@mui/material';
 import { useFilter } from '../../FilterContext';
 import DataGridBuilder from './DataGridBuilder';
+import {getPercentageFormatterObject} from "../getPercentageFormatterObject.js";
+
 
 const calculateAverage = (values) => {
   const sum = values.reduce((total, value) => total + value, 0);
   return values.length > 0 ? sum / values.length : 0;
 };
+
 
 const renderProgressBarCell = (params) => (
   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
@@ -36,6 +39,9 @@ function Report2AveragesPerCode({ data, targetColumns }) {
   }, [filter, data]);
 
   const [averages, setAverages] = useState([]);
+
+  //format the averages
+  const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
   
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
@@ -58,11 +64,7 @@ function Report2AveragesPerCode({ data, targetColumns }) {
           return acc;
         }, { id: code, code });
 
-        for (const [key, value] of Object.entries(averages)) {
-          if (key.startsWith('avg')) {
-            averages[key] = numeral(value * 100).format('0.00') + '%';
-          }
-        }
+        console.log('avg value: ', typeof averages);
         return averages;
       });
       setAverages(codeAverages);
@@ -71,10 +73,8 @@ function Report2AveragesPerCode({ data, targetColumns }) {
 
 
   const handleRowClick = (params) => {
-    console.log('Row clicked:', params.row);
     const selectedValue = params.row.code; 
     updateFilter({ code: selectedValue });
-    console.log('Filter updated:', { code: selectedValue });
   };
 
   // const handleSelectionModelChange = (newSelection) => {
@@ -87,7 +87,8 @@ function Report2AveragesPerCode({ data, targetColumns }) {
   //     }
   //   }
   // };
-  
+
+
   //headers for columns
   const tableColumns = [
     { field: 'code', 
@@ -99,32 +100,51 @@ function Report2AveragesPerCode({ data, targetColumns }) {
       headerName: 'Avg of Assessed',
       wrap: true,
       flex: 1,
+      renderCell: (params) => (
+        <div>
+          {numeral(params.value * 100).format('0.00')}%
+        </div>
+      ),
       // renderCell: renderProgressBarCell,
     },
     {
       field: 'avgSubmitted',
       headerName: 'Avg of Submitted',
       flex: 1,
+      valueFormatter: (params) => {
+        const formattedValue = numeral(params.value * 100).format('0.00');
+        return `${formattedValue}%`;
+      },
       // renderCell: renderProgressBarCell,
     },
     {
       field: 'avgAccepted',
       headerName: 'Avg of Accepted',
       flex: 1,
+      type: 'number', // Set the type to 'number' for proper filtering
+      valueFormatter: (params) => {
+        const formattedValue = numeral(params.value * 100).format('0.00');
+        return `${formattedValue}%`;
+      },
       // renderCell: renderProgressBarCell,
     },
     {
       field: 'avgRejected',
       headerName: 'Avg of Rejected',
       flex: 1,
+      renderCell: (params) => (
+        <div>
+          {numeral(params.value * 100).format('0.00')}%
+        </div>
+      ),
       // renderCell: renderProgressBarCell,
+      
     },
   ];
 
   return (
     <DataGridBuilder 
       data={averages} 
-      // columns={columnHeaders} 
       columns={tableColumns}
       onRowClick={handleRowClick}
 

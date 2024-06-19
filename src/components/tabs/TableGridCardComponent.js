@@ -4,7 +4,6 @@ import { Card, CardContent, styled, CardHeader as MuiCardHeader  } from '@mui/ma
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
   display: 'flex',
-  flexGrow: 1,
   flexDirection: 'column',
   boxShadow: theme.shadows[3],
   borderRadius: 10,

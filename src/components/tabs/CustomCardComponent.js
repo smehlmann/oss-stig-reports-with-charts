@@ -8,21 +8,32 @@ const StyledCard = styled(Card)(({ theme }) => ({
   flexDirection: 'column',
   boxShadow: theme.shadows[3],
   borderRadius: 10,
+  flex: 1,
   overflow: 'hidden',
 }));
 
+const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
+  '& .MuiCardHeader-title': {
+    textAlign: 'center',
+    fontSize: '24px',
+    fontFamily: 'Segoe UI',
+    fontWeight: '900'
+
+  },
+}));
 const CustomCardContent = styled(CardContent)(({ theme }) => ({
   // padding: theme.spacing(1),
   flexGrow: 1,
   display: 'flex',
   flexDirection: 'column',
+  overflow: 'hidden',
   // overflow: 'hidden', // Ensure content does not overflow
 }));
 
 const CustomCardComponent = ({ title, children }) => {
   return (
     <StyledCard>
-      {/* <CardHeader title={title} /> */}
+      <CustomCardHeader title={title} />
       <CustomCardContent>
         {children}
       </CustomCardContent>

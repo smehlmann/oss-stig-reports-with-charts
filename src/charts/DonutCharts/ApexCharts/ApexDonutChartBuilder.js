@@ -4,7 +4,7 @@ import numeral from "numeral";
 import Chart from 'react-apexcharts';
 
 
-const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle, onClick}) => {
+const ApexDonutChartBuilder = ({dataLabels, dataValues, legendTitle, onClick}) => {
   const [series, setSeries] = useState(dataValues);
   const [options, setOptions] = useState({
 
@@ -31,14 +31,7 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, title, legendTitle, onCl
   },
   labels: dataLabels,
   colors: palette,
-  title: {
-    text: title,
-    align: 'center',
-    style: {
-      fontSize: '25px',
-      fontFamily: 'Segoe UI'
-    },
-  },
+
   plotOptions: {
     pie: {
       expandOnClick: true,

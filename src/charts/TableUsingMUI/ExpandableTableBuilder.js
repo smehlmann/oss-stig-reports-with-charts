@@ -67,7 +67,8 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
         (childRow) =>
           childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
           childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
-          childRow.primOwner.toLowerCase().includes(searchText.toLowerCase())
+          childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
+          childRow.accepted.toString().includes(searchText)
       );
 
       //merge new criteria to filter with old
@@ -151,7 +152,8 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
                         count={parentRow.childRows.filter(childRow => (
                           childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
                           childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
-                          childRow.primOwner.toLowerCase().includes(searchText.toLowerCase())
+                          childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
+                          childRow.accepted.toString().includes(searchText)
                         )).length}
                         rowsPerPage={rowsPerPage}
                         page={page}
