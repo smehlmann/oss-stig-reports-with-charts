@@ -9,8 +9,6 @@ import { palette, useTheme } from "../../../theme.js"
 const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader, yAxisHeader, onClick, formatLabelToPercentage }) => {
   const [series, setSeries] = useState([{ name: xAxisHeader, data: dataValues }]);
 
-  console.log("dataLabels at start: ", dataLabels);
-
   // Default axis title style
   const axisTitleStyle = useMemo(() => ({
     fontSize: '15px',
@@ -59,8 +57,8 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
       enabled: false,
     },
     xaxis: {
-      tickPlacement: 'on',
-      // type: 'category',
+      // tickPlacement: 'on',
+      type: 'category',
       categories: dataLabels,
       title: {
         text: xAxisHeader,
@@ -101,6 +99,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
             }
             return value;
           },
+          
         },
         title: {
           formatter: () => ""
@@ -111,7 +110,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
       bar: {
         borderRadius: 4,
         horizontal: isHorizontal,
-        columnWidth: "36%",
+        columnWidth: "34%",
       },
       enableToolbar: true,
     },
@@ -120,13 +119,13 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
     },
     responsive: [
       {
-        breakpoint: 1000,
+        breakpoint: 1300,
         options: {
           enableToolbar: true,
           xaxis: {
             labels: {
               style: {
-                fontSize: '12px',
+                fontSize: '11px',
               },
             },
             title: {
@@ -144,7 +143,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
                 return value;
               },
               style: {
-                fontSize: '10px',
+                fontSize: '11px',
               },
             },
             title: {

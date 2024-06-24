@@ -26,7 +26,7 @@ const TabsComponent = () => {
   //var storedData;
 
   useEffect(() => {
-    console.log("BarChartBuilder from useEffect");
+    // console.log("BarChartBuilder from useEffect");
     if (localStorage.getItem("ossStigReport")) {
       setDisableDashboard(false);
     }
@@ -67,6 +67,7 @@ const TabsComponent = () => {
   const handleTabChange = (value) => {
     setActiveTab(value);
   };
+  const selectedReport = localStorage.getItem("selectedReport");
 
   return (
     <Tabs.Root
@@ -90,7 +91,7 @@ const TabsComponent = () => {
         </div>
 
         <div style={{ display: activeTab === "tab2" ? "block" : "none" }}>
-          <DashboardTab reportData={storedData}/>
+          <DashboardTab reportData={storedData} selectedReportNum={selectedReport} />
         </div>
       </div>
     </Tabs.Root>

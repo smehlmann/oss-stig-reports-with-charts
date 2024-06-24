@@ -1,19 +1,19 @@
 import React, { useMemo } from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
-import ApexStandardBarChart from "../../charts/BarCharts/ApexCharts/ApexStandardBarChart";
-import BubbleCountChart from "../../charts/BubbleCharts/BubbleCountChart";
-import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart";
-import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
-import ApexBarAvgChart from "../../charts/BarCharts/ApexCharts/ApexBarAvgChart";
+import ApexStandardBarChart from "../../../charts/BarCharts/ApexCharts/ApexStandardBarChart";
+import BubbleCountChart from "../../../charts/BubbleCharts/BubbleCountChart";
+import DonutAvgChart from "../../../charts/DonutCharts/ApexCharts/DonutAvgChart";
+import ApexDonutCountChart from "../../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
+import ApexBarAvgChart from "../../../charts/BarCharts/ApexCharts/ApexBarAvgChart";
 
-import ValueCountMap from "../../charts/ValueCountMap";
-import LineChartBuilder from "../../charts/LineCharts/Chartjs/LineChartBuilder";
-import Report2CollectionsExpanded from "../../charts/TableUsingMUI/Report2CollectionsExpanded";
-import Report2AveragesPerCode from "../../charts/DataGridMUI/Report2AveragesPerCode";
-import ChartCardComponent from "./ChartCardComponent";
-import TableGridCardComponent from "./TableGridCardComponent";
-import { FilterProvider } from "../../FilterContext";
-import theme from "../../theme"
+import ValueCountMap from "../../../charts/ValueCountMap";
+import LineChartBuilder from "../../../charts/LineCharts/Chartjs/LineChartBuilder";
+import Report2CollectionsExpanded from "../../../charts/TableUsingMUI/Report2CollectionsExpanded";
+import AveragesGroupedByColumn from "../../../charts/DataGridMUI/AveragesGroupedByColumn";
+import ChartCardComponent from "../ChartCardComponent";
+import TableGridCardComponent from "../TableGridCardComponent";
+import { FilterProvider } from "../../../FilterContext";
+import theme from "../../../theme"
 
 
 
@@ -52,7 +52,7 @@ Grid spacing is split into 12 parts:
 */
 
 
-const DashboardLayout = ({ data }) => {
+const DashboardSelectedReport5 = ({ data }) => {
   return (
     <ThemeProvider theme={theme}>
       <FilterProvider>
@@ -72,7 +72,9 @@ const DashboardLayout = ({ data }) => {
             </Grid>
             <Grid item lg={8} sm={6} xl={8} xs={12}>
               <TableGridCardComponent>
-                <Report2AveragesPerCode data={data} 
+                <AveragesGroupedByColumn 
+                  groupingColumn = 'code'
+                  data={data} 
                   targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
                 />
               </TableGridCardComponent>
@@ -124,4 +126,4 @@ const DashboardLayout = ({ data }) => {
   );
 };
 
-export default DashboardLayout;
+export default DashboardSelectedReport5;

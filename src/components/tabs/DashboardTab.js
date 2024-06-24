@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import DashboardLayout from "./DashboardLayout";
+import DashboardLayout from "./DashboardLayouts/DashboardSelectedReport5";
 import useLocalStorageListener from "../useLocalStorageListener";
+import DashboardSelectedReport5 from "./DashboardLayouts/DashboardSelectedReport5";
+import DashboardSelectedReport7 from "./DashboardLayouts/DashboardSelectedReport7";
 
 /* Include statement to handle how data is parsed based on the report selected*/
 
@@ -54,40 +56,79 @@ const formatData = (parsedData) => {
   }
 
   return parsedData.map(entry => {
-   // Convert datePulled to a Date object
-    // Split datePulled string into parts and construct a Date object
-    if (entry.datePulled) {
+    // Convert datePulled to a Date object
+    if (entry.datePulled !== undefined) {
       const [year, month, day] = entry.datePulled.split("-");
       entry.datePulled = new Date(year, month - 1, day);
       entry.datePulled = stringToDate(entry.datePulled);
+    }
 
     // Convert percentage strings to decimals
-    entry.assessed = formatPercentage(entry.assessed);
-    entry.submitted = formatPercentage(entry.submitted);
-    entry.accepted = formatPercentage(entry.accepted);
-    entry.rejected = formatPercentage(entry.rejected);
-
-
+    if (entry.assessed !== undefined) {
+      entry.assessed = formatPercentage(entry.assessed);
+    }
+    if (entry.submitted !== undefined) {
+      entry.submitted = formatPercentage(entry.submitted);
+    }
+    if (entry.accepted !== undefined) {
+      entry.accepted = formatPercentage(entry.accepted);
+    }
+    if (entry.rejected !== undefined) {
+      entry.rejected = formatPercentage(entry.rejected);
+    }
 
     // Convert objects to strings and remove "_$" from sysAdmin
-     // Convert objects to strings and remove "_$" from sysAdmin
-     entry.sysAdmin = objectToString(entry.sysAdmin).replace("_$", "");
-     entry.primOwner = objectToString(entry.primOwner);
-     entry.deviceType = objectToString(entry.deviceType);
+    if (entry.sysAdmin !== undefined) {
+      entry.sysAdmin = objectToString(entry.sysAdmin).replace("_$", "");
+    } 
+    if (entry.primOwner !== undefined) {
+      entry.primOwner = objectToString(entry.primOwner);
     }
+    if (entry.deviceType !== undefined) {
+      entry.deviceType = objectToString(entry.deviceType);
+    }
+    console.log("type for asset: ", typeof entry.asset);
+
     return entry;
   });
 };
 
-const DashboardTab = ({reportData}) => {
-  
+const DashboardTab = ({reportData, selectedReportNum}) => {
   //parse data from string to array
   let parsedData = typeof reportData == 'string' ? JSON.parse(reportData): reportData;
   // console.log('reportData: ' + parsedData);
 
   const formattedData = formatData(parsedData); 
 
-  return <DashboardLayout data={formattedData} />;
+  console.log("formattedData: ", formattedData);
+
+  //keeps track of the selectedReport state
+  const [selectedReport, setSelectedReport] = useState(null);
+ 
+  const handleClick = (reportNum) => 
+    {
+      setSelectedReport(reportNum);
+    }
+
+ // decide which grid layout to display based on report
+  switch (selectedReportNum) {
+    case '5':
+      return <DashboardSelectedReport5 data={formattedData} handleClick={handleClick} />
+    case '7':
+      return <DashboardSelectedReport7 data={formattedData} handleClick={handleClick} />
+  
+    default:
+      return null
+  }
+  
+
+  
+
+  
+
+  // return <DashboardLayout data={formattedData} />;
+  
+
 };
 
 export default DashboardTab;

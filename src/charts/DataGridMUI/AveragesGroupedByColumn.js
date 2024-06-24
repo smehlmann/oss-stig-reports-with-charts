@@ -26,7 +26,7 @@ const renderProgressBarCell = (params) => (
   </div>
 );
 
-function Report2AveragesPerCode({ data, targetColumns }) {
+function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
   //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
   //stores the data filter has been applied
@@ -47,32 +47,32 @@ function Report2AveragesPerCode({ data, targetColumns }) {
 
   useEffect(() => {
     if (Array.isArray(filteredData) && filteredData) {
-      // Group data by "code" values
-      const dataGroupedByCode = filteredData.reduce((accumulator, currentValue) => {
-        if (!accumulator[currentValue.code]) {
-          accumulator[currentValue.code] = [];
+      const dataGrouped = filteredData.reduce((accumulator, currentValue) => {
+        const groupingValue = currentValue[groupingColumn];
+        if (!accumulator[groupingValue]) {
+          accumulator[groupingValue] = [];
         }
-        accumulator[currentValue.code].push(currentValue);
+        accumulator[groupingValue].push(currentValue);
         return accumulator;
       }, {});
       
-      //calculate averages for each code
-      const codeAverages = Object.entries(dataGroupedByCode).map(([code, filteredData]) => {
+      //calculate averages for each of the rows in the data grid 
+      const groupedAverages = Object.entries(dataGrouped).map(([groupingValue, groupData]) => {
         const averages = targetColumns.reduce((acc, columnName) => {
-          const values = filteredData.map((item) => item[columnName]);
+          const values = groupData.map((item) => item[columnName]).filter(val => val !== undefined);
           acc[`avg${columnName.charAt(0).toUpperCase() + columnName.slice(1)}`] = calculateAverage(values);
           return acc;
-        }, { id: code, code });
+        }, { id: groupingValue, [groupingColumn]: groupingValue });
         return averages;
       });
-      setAverages(codeAverages);
+      setAverages(groupedAverages);
     }
-  }, [ targetColumns, filteredData]);
+  }, [targetColumns, filteredData, groupingColumn]);
 
 
   const handleRowClick = (params) => {
-    const selectedValue = params.row.code; 
-    updateFilter({ code: selectedValue });
+    const selectedValue = params.row[groupingColumn]; 
+    updateFilter({ [groupingColumn]: selectedValue });
   };
 
   // const handleSelectionModelChange = (newSelection) => {
@@ -89,8 +89,8 @@ function Report2AveragesPerCode({ data, targetColumns }) {
 
   //headers for columns
   const tableColumns = [
-    { field: 'code', 
-      headerName: 'Code', 
+    { field: groupingColumn , 
+      headerName: groupingColumn , 
       flex: 1 
     },
     {
@@ -116,10 +116,7 @@ function Report2AveragesPerCode({ data, targetColumns }) {
           {numeral(params.value * 100).format('0.00')}%
         </div>
       ),
-      // valueFormatter: (params) => {
-      //   const formattedValue = numeral(params.value * 100).format('0.00');
-      //   return `${formattedValue}%`;
-      // },
+
       // renderCell: renderProgressBarCell,
     },
     {
@@ -132,10 +129,7 @@ function Report2AveragesPerCode({ data, targetColumns }) {
           {numeral(params.value * 100).format('0.00')}%
         </div>
       ),
-      // valueFormatter: (params) => {
-      //   const formattedValue = numeral(params.value * 100).format('0.00');
-      //   return `${formattedValue}%`;
-      // },
+    
       // renderCell: renderProgressBarCell,
     },
     {
@@ -162,7 +156,7 @@ function Report2AveragesPerCode({ data, targetColumns }) {
     />
   );
 }
-export default Report2AveragesPerCode;
+export default AveragesGroupedByColumn;
 
 
 
