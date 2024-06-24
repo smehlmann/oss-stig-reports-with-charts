@@ -63,8 +63,6 @@ function Report2AveragesPerCode({ data, targetColumns }) {
           acc[`avg${columnName.charAt(0).toUpperCase() + columnName.slice(1)}`] = calculateAverage(values);
           return acc;
         }, { id: code, code });
-
-        console.log('avg value: ', typeof averages);
         return averages;
       });
       setAverages(codeAverages);
@@ -100,6 +98,7 @@ function Report2AveragesPerCode({ data, targetColumns }) {
       headerName: 'Avg of Assessed',
       wrap: true,
       flex: 1,
+      type: 'number',
       renderCell: (params) => (
         <div>
           {numeral(params.value * 100).format('0.00')}%
@@ -111,10 +110,16 @@ function Report2AveragesPerCode({ data, targetColumns }) {
       field: 'avgSubmitted',
       headerName: 'Avg of Submitted',
       flex: 1,
-      valueFormatter: (params) => {
-        const formattedValue = numeral(params.value * 100).format('0.00');
-        return `${formattedValue}%`;
-      },
+      type: 'number',
+      renderCell: (params) => (
+        <div>
+          {numeral(params.value * 100).format('0.00')}%
+        </div>
+      ),
+      // valueFormatter: (params) => {
+      //   const formattedValue = numeral(params.value * 100).format('0.00');
+      //   return `${formattedValue}%`;
+      // },
       // renderCell: renderProgressBarCell,
     },
     {
@@ -122,10 +127,15 @@ function Report2AveragesPerCode({ data, targetColumns }) {
       headerName: 'Avg of Accepted',
       flex: 1,
       type: 'number', // Set the type to 'number' for proper filtering
-      valueFormatter: (params) => {
-        const formattedValue = numeral(params.value * 100).format('0.00');
-        return `${formattedValue}%`;
-      },
+      renderCell: (params) => (
+        <div>
+          {numeral(params.value * 100).format('0.00')}%
+        </div>
+      ),
+      // valueFormatter: (params) => {
+      //   const formattedValue = numeral(params.value * 100).format('0.00');
+      //   return `${formattedValue}%`;
+      // },
       // renderCell: renderProgressBarCell,
     },
     {

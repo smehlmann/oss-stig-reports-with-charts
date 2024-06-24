@@ -22,15 +22,14 @@ const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
   },
 }));
 const CustomCardContent = styled(CardContent)(({ theme }) => ({
-  // padding: theme.spacing(1),
-  flexGrow: 1,
+  height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  overflow: 'hidden',
+  overflow: 'auto',
   // overflow: 'hidden', // Ensure content does not overflow
 }));
 
-const CustomCardComponent = ({ title, children }) => {
+const ChartCardComponent = ({ title, children }) => {
   return (
     <StyledCard>
       <CustomCardHeader title={title} />
@@ -41,7 +40,7 @@ const CustomCardComponent = ({ title, children }) => {
   );
 };
 
-export default CustomCardComponent;
+export default ChartCardComponent;
 
 
 

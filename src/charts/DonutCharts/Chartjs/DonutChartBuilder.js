@@ -142,10 +142,10 @@ const DonutChartBuilder = () => {
           data: chartData,
           options: chartOptions,
         });
-        console.log("assessed avg: ", assessedAvg);
-        console.log("submitted avg: ", submittedAvg);
-        console.log("accepted avg: ", acceptedAvg);
-        console.log("rejected avg: ", rejectedAvg);
+        // console.log("assessed avg: ", assessedAvg);
+        // console.log("submitted avg: ", submittedAvg);
+        // console.log("accepted avg: ", acceptedAvg);
+        // console.log("rejected avg: ", rejectedAvg);
         chartInstanceRef.current = newChartInstance;
       }
     }

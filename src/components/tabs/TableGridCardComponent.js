@@ -8,6 +8,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   boxShadow: theme.shadows[3],
   borderRadius: 10,
   padding: 0,
+  flexGrow: 1,
   // overflowX: 'auto',
   // backgroundColor: '#fcb8cb',
 }));

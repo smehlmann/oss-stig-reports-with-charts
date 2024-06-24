@@ -10,7 +10,7 @@ import ValueCountMap from "../../charts/ValueCountMap";
 import LineChartBuilder from "../../charts/LineCharts/Chartjs/LineChartBuilder";
 import Report2CollectionsExpanded from "../../charts/TableUsingMUI/Report2CollectionsExpanded";
 import Report2AveragesPerCode from "../../charts/DataGridMUI/Report2AveragesPerCode";
-import CustomCardComponent from "./CustomCardComponent";
+import ChartCardComponent from "./ChartCardComponent";
 import TableGridCardComponent from "./TableGridCardComponent";
 import { FilterProvider } from "../../FilterContext";
 import theme from "../../theme"
@@ -33,12 +33,12 @@ const AssetCountCard = ({ data }) => {
   }, [data]);
 
   return (
-    <CustomCardComponent title="Asset Count">
+    <ChartCardComponent title="Asset Count">
       <div style={{ textAlign: 'center' }}>
         <div style={{ fontSize: '24px' }}>{assetCount}</div>
         <div style={{ fontSize: '18px', color: '#666', marginTop: '10px' }}>Asset</div>
       </div>
-    </CustomCardComponent>
+    </ChartCardComponent>
   );
 };
 
@@ -60,7 +60,7 @@ const DashboardLayout = ({ data }) => {
           <Grid container spacing={4}>
 
             <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <CustomCardComponent title = 'Assets by Code'>
+              <ChartCardComponent title = 'Assets by Code'>
                 <ApexStandardBarChart
                   targetColumn="code"
                   isHorizontal={true}
@@ -68,7 +68,7 @@ const DashboardLayout = ({ data }) => {
                   yAxisTitle= "Code"
                   data={data}
                 />
-              </CustomCardComponent>
+              </ChartCardComponent>
             </Grid>
             <Grid item lg={8} sm={6} xl={8} xs={12}>
               <TableGridCardComponent>
@@ -78,18 +78,18 @@ const DashboardLayout = ({ data }) => {
               </TableGridCardComponent>
             </Grid>
             <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <CustomCardComponent title = "Assets by Collection">
+              <ChartCardComponent title = "Assets by Collection">
               <ApexStandardBarChart
                   targetColumn="shortName"
                   isHorizontal={false}
                   xAxisTitle="Collection Name"
-                  yAxisTitle= "Number of Aqssets"
+                  yAxisTitle= "Number of Assets"
                   data={data}
                 />
-              </CustomCardComponent>
+              </ChartCardComponent>
             </Grid>
             <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <CustomCardComponent title = "Averages">
+              <ChartCardComponent title = "Averages">
                 <ApexBarAvgChart
                   targetColumns={["assessed", "submitted", "accepted", "rejected"]}
                   isHorizontal = {false}
@@ -98,10 +98,10 @@ const DashboardLayout = ({ data }) => {
                   disableFilterUpdate={true}
                   data={data}
                 />
-              </CustomCardComponent>
+              </ChartCardComponent>
             </Grid>
             <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <CustomCardComponent title = "Assets by Package">
+              <ChartCardComponent title = "Assets by Package">
                 <BubbleCountChart
                   targetColumn="shortName"
                   isHorizontal={false}
@@ -109,7 +109,7 @@ const DashboardLayout = ({ data }) => {
                   yAxisTitle="Number of Assets"
                   data={data}
                 />
-              </CustomCardComponent>
+              </ChartCardComponent>
             </Grid>
 
             <Grid item lg={12} sm={12} xl={12} xs={12}>

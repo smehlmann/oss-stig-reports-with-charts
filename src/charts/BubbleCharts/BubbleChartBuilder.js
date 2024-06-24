@@ -1,17 +1,24 @@
 import React, {useMemo, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import { palette } from "../../theme.js";
+import { palette, useTheme } from "../../theme.js";
 // import '../../../Charts.css';
 
 
 const BubbleChartBuilder = ({ dataLabels, dataValues, xAxisHeader, yAxisHeader, onClick }) => {
   const [series, setSeries] = useState([{ name: xAxisHeader, data: [] }]);
 
+  const theme = useTheme();
+
   const axisTitleStyle = useMemo(() => ({
-    fontSize: '13px',
+    fontSize: '15px',
     fontFamily: 'Segoe UI',
     fontWeight: '500',
-  }), []);
+    textAlign: 'center',
+
+    // fontFamily: theme.typography.fontFamily,
+    // fontSize: theme.typography.h6.fontSize,
+    // fontWeight: theme.typography.h6.fontWeight,
+  }), [theme]);
 
   const [options, setOptions] = useState({
     chart: {

@@ -67,10 +67,7 @@ const formatData = (parsedData) => {
     entry.accepted = formatPercentage(entry.accepted);
     entry.rejected = formatPercentage(entry.rejected);
 
-    console.log('accessed val: ', entry.asssed);
-    console.log('submitted val: ', entry.submitted);
-    console.log('accepted val: ', entry.accepted);
-    console.log('rejected val: ', entry.rejected);
+
 
     // Convert objects to strings and remove "_$" from sysAdmin
      // Convert objects to strings and remove "_$" from sysAdmin

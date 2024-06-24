@@ -10,13 +10,13 @@
   const FilterContext = createContext();
   
   /*
-  The FilterProvider component wraps its children with the FilterContext.Provider and manages the 'filter' state using the 'useState' hook. It also provides the updateFilter function to update the filter state.
+  The FilterProvider component wraps its children with the FilterContext.Provider and manages the 'filter' state using the 'useState' hook. It also provides the updateFilter function to update the filter state, and clear the filter state.
   */
   export const FilterProvider = ({ children }) => {
     //initializes filter as empty object
     const [filter, setFilters] = useState({});
   
-    /* Merges new filter with the previous filters so they can be applied at the same time. Does not remove any keys*/
+    /* Merges new criteria with the previous filters so they can be applied at the same time. Does not remove any keys*/
     const updateFilter = (newFilter) => {
       setFilters(prevFilters => {
         const key = Object.keys(newFilter)[0];
@@ -24,6 +24,7 @@
   
         if (prevFilters[key] === value) {
           // If the new value is the same as the current value for the key, remove the key from the filter.
+          // helps ensure double click will remove criteria from filter. 
           const { [key]: removed, ...rest } = prevFilters;
           return rest;
         } else {

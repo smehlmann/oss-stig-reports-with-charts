@@ -1,6 +1,6 @@
-import {  createTheme } from "@mui/material";
+import {  createTheme, useTheme } from "@mui/material";
 
-export const palette = [
+const palette = [
   '#0000F0',
   '#183090',
   '#4860FF',
@@ -42,48 +42,47 @@ const theme = createTheme({
     action: {
       selected: '#d9d9d9',
       hoverExpandedSection: '#f9f9f9',
-      
     }
   },
   typography: {
     fontFamily: 'Segoe UI, Arial, sans-serif',
-    h1: {
-      fontSize: '2.5rem',
+    h1: { 
+      fontSize: '2.5rem', // about 40 px
       fontWeight: 300,
       letterSpacing: '-0.01562em',
     },
-    h2: {
-      fontSize: '2rem',
+    h2: { 
+      fontSize: '2rem', //about 32 px
       fontWeight: 300,
       letterSpacing: '-0.00833em',
     },
-    h3: {
-      fontSize: '1.75rem',
+    h3: { 
+      fontSize: '1.75rem', //about 28px
       fontWeight: 400,
       letterSpacing: '0em',
     },
-    h4: {
-      fontSize: '1.5rem',
+    h4: { 
+      fontSize: '1.5rem', //about 24px
       fontWeight: 400,
       letterSpacing: '0.00735em',
     },
-    h5: {
-      fontSize: '1.25rem',
+    h5: { 
+      fontSize: '1.25rem', //roughly 20px
       fontWeight: 400,
       letterSpacing: '0em',
     },
-    h6: {
-      fontSize: '1rem',
+    h6: { 
+      fontSize: '1rem', //about 16px
       fontWeight: 500,
       letterSpacing: '0.0075em',
     },
-    body1: {
-      fontSize: '1rem',
+    body1: { 
+      fontSize: '1rem', //about 16px
       fontWeight: 400,
       letterSpacing: '0.00938em',
     },
-    body2: {
-      fontSize: '0.875rem',
+    body2: { 
+      fontSize: '0.875rem', //about 14px
       fontWeight: 400,
       letterSpacing: '0.01071em',
     },
@@ -104,7 +103,7 @@ const theme = createTheme({
       letterSpacing: '0.08333em',
       textTransform: 'uppercase',
     },
-    spacing: 8,
+    spacing: 4,  // was 8
   },
   components: {
     MuiButton: {
@@ -136,16 +135,20 @@ const theme = createTheme({
 
 export default theme;
 
+//export hook 
+export { useTheme, palette };
 
-export const hoverPalette = [
-  "#112959",
-  "#153f67",
-  "#1a5674",
-  "#207480",
-  "#28837b",
-  "#318e77",
-  "#3a9871",
-  "#4c9e7b",
-  "#5fa180",
-  "#6fa18c",
-];
+// const hoverPalette = [
+//   "#112959",
+//   "#153f67",
+//   "#1a5674",
+//   "#207480",
+//   "#28837b",
+//   "#318e77",
+//   "#3a9871",
+//   "#4c9e7b",
+//   "#5fa180",
+//   "#6fa18c",
+// ];
+
+

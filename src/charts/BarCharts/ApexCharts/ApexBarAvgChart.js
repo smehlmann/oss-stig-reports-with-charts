@@ -35,6 +35,13 @@ const ApexBarAvgChart = ({ targetColumns, isHorizontal, xAxisTitle, yAxisTitle, 
   //object holds the formatter function that will be applied to labels 
   const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
 
+  const handleBarClick = (event, chartContext, config) => {
+    if (disableFilterUpdate) {
+      return; // Do nothing if filter update is disabled
+    }
+  }
+  
+
   return (
     <ApexBarChartBuilder
       dataLabels={barLabels}
@@ -42,8 +49,8 @@ const ApexBarAvgChart = ({ targetColumns, isHorizontal, xAxisTitle, yAxisTitle, 
       isHorizontal = {isHorizontal}
       xAxisHeader = {xAxisTitle}
       yAxisHeader = {yAxisTitle}
+      onClick={handleBarClick}
       formatLabelToPercentage = {percentageFormatterObject}
-      
     />
   );
 };

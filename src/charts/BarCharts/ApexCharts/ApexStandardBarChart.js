@@ -23,6 +23,8 @@ const ApexStandardBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTit
     const categoryLabels = config.w.globals.labels || config.w.globals.categories;
     const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;
 
+    console.log('Filter updated:', filter);
+
       if (selectedValue) {
       // Check if the selected value is already in the filter
       if (filter[targetColumn] === selectedValue) {
