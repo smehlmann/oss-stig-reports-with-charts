@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, {useMemo} from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
 import ApexStandardBarChart from "../../../charts/BarCharts/ApexCharts/ApexStandardBarChart";
 import BubbleCountChart from "../../../charts/BubbleCharts/BubbleCountChart";
@@ -11,10 +11,10 @@ import LineChartBuilder from "../../../charts/LineCharts/Chartjs/LineChartBuilde
 import Report2CollectionsExpanded from "../../../charts/TableUsingMUI/Report2CollectionsExpanded";
 import AveragesGroupedByColumn from "../../../charts/DataGridMUI/AveragesGroupedByColumn";
 import ChartCardComponent from "../ChartCardComponent";
+import StatisticsCardComponent from "../StatisticsCardComponent"
 import TableGridCardComponent from "../TableGridCardComponent";
 import { FilterProvider } from "../../../FilterContext";
-import theme from "../../../theme"
-
+import theme from "../../../theme";
 
 
 const Root = styled('div')(({ theme }) => ({
@@ -22,25 +22,14 @@ const Root = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   color: theme.palette.text.primary,
   height: "100%",
-  // position: 'inherit',
+  display: 'flex',
+  flexDirection: 'column',
 
+  // position: 'inherit',
 }));
 
-const AssetCountCard = ({ data }) => {
-  const assetCount = useMemo(() => {
-    const countMap = ValueCountMap(data, 'asset');
-    return Object.keys(countMap).length;
-  }, [data]);
 
-  return (
-    <ChartCardComponent title="Asset Count">
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '24px' }}>{assetCount}</div>
-        <div style={{ fontSize: '18px', color: '#666', marginTop: '10px' }}>Asset</div>
-      </div>
-    </ChartCardComponent>
-  );
-};
+
 
 /*
 Grid spacing is split into 12 parts:
@@ -53,12 +42,55 @@ Grid spacing is split into 12 parts:
 
 
 const DashboardSelectedReport7 = ({ data }) => {
+  //get sum of Cat1
+  const cat1Sum = useMemo(() => {
+    return data.reduce((sum, item) => sum + (item.cat1 || 0), 0);
+  }, [data]);
+
+  //sum of Cat2
+  const cat2Sum = useMemo(() => {
+    return data.reduce((sum, item) => sum + (item.cat2 || 0), 0);
+  }, [data]);
+
+  //sum of cat3
+  const cat3Sum = useMemo(() => {
+    return data.reduce((sum, item) => sum + (item.cat3 || 0), 0);
+  }, [data]);
+
   return (
     <ThemeProvider theme={theme}>
       <FilterProvider>
         <Root>
           <Grid container spacing={4}>
 
+          <Grid item lg={4} sm={4} xl={4} xs={12}>
+              <StatisticsCardComponent 
+                metricValue={cat1Sum}
+                metricDisplayedName = "CAT1"
+                measurement="Total"
+              >
+                
+              </StatisticsCardComponent>
+          </Grid>
+          <Grid item lg={4} sm={4} xl={4} xs={12}>
+              <StatisticsCardComponent 
+                metricValue={cat2Sum}
+                metricDisplayedName = "CAT2"
+                measurement="Total"
+              >
+      
+              </StatisticsCardComponent>
+          </Grid>
+          <Grid item lg={4} sm={4} xl={4} xs={12}>
+              <StatisticsCardComponent 
+                metricValue={cat3Sum}
+                metricDisplayedName = "CAT3"
+                measurement="Total"
+              >
+                
+              </StatisticsCardComponent>
+          </Grid>
+            
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = 'Assets by Code'>
                 <ApexStandardBarChart
@@ -70,7 +102,7 @@ const DashboardSelectedReport7 = ({ data }) => {
                 />
               </ChartCardComponent>
             </Grid>
-            <Grid item lg={8} sm={6} xl={8} xs={12}>
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
               <TableGridCardComponent>
                 <AveragesGroupedByColumn 
                   groupingColumn = 'emass'

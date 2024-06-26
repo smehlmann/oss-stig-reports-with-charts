@@ -6,20 +6,28 @@ import { useFilter } from '../../FilterContext';
 
 
 const BoldHeader = styled('div')(({ theme }) => ({
-  fontSize: '18px', 
+  // fontSize: '18px', 
   fontFamily: 'Segoe UI',
   fontWeight: '700',
   textWrap: 'wrap',
   textAlign: 'center',
-  [theme.breakpoints.down('lg')]: {
-    fontSize: '14px', // Font size for large screens and down
-  },
-  [theme.breakpoints.down('md')]: {
-    fontSize: '12px', // Font size for medium screens and down
-  },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '10px', // Font size for small screens and down
-  },
+  overflowX: 'visible',
+  // [theme.breakpoints.down('lg')]: {
+  //  fontSize: 'calc(10px + 1vmin)', // Font size for large screens and down
+  // },
+  // [theme.breakpoints.down('extendedLg')]: { //1381px
+  //   fontSize: 'calc(9.5px + 1vmin)', 
+  // },
+  // [theme.breakpoints.down('extendedMd')]: { //1047.2px
+  //   fontSize: 'calc(10px + 1vmin)'
+  // },
+
+  // [theme.breakpoints.down('md')]: {
+  //   fontSize: 'calc(11px + 1vmin)'
+  // },
+  // [theme.breakpoints.down('sm')]: {
+  //   fontSize: 'calc(13px + 1vmin)' // Font size for small screens and down
+  // },
 }));
 
 const CenterAlignedCell = styled(TableCell)({
@@ -32,9 +40,20 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     display: 'flex',
     
   },
+  //Text in table cells
   "& .MuiDataGrid-cell": {
     borderBottom: "none",
-    // color: "#00b4d8"
+    whiteSpace: 'normal', // Allow text wrapping
+    wordBreak: 'break-word',
+    // [theme.breakpoints.down('lg')]: {
+    //   fontSize: '14px', // Font size for large screens and down
+    // },
+    // [theme.breakpoints.down('md')]: {
+    //   fontSize: '12px', // Font size for medium screens and down
+    // },
+    // [theme.breakpoints.down('sm')]: {
+    //   fontSize: '10px', // Font size for small screens and down
+    // },
   },
   "& .name-column--cell": {
     color: theme.palette.primary.main,

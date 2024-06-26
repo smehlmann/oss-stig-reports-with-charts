@@ -87,7 +87,6 @@ const formatData = (parsedData) => {
     if (entry.deviceType !== undefined) {
       entry.deviceType = objectToString(entry.deviceType);
     }
-    console.log("type for asset: ", typeof entry.asset);
 
     return entry;
   });
@@ -99,8 +98,6 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
   // console.log('reportData: ' + parsedData);
 
   const formattedData = formatData(parsedData); 
-
-  console.log("formattedData: ", formattedData);
 
   //keeps track of the selectedReport state
   const [selectedReport, setSelectedReport] = useState(null);
@@ -119,15 +116,7 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
   
     default:
       return null
-  }
-  
-
-  
-
-  
-
-  // return <DashboardLayout data={formattedData} />;
-  
+  }    
 
 };
 

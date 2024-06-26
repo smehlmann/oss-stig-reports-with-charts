@@ -13,19 +13,25 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
+  paddingBottom: 0,
   '& .MuiCardHeader-title': {
     textAlign: 'center',
     fontSize: '24px',
     fontFamily: 'Segoe UI',
     fontWeight: '900'
-
+  },
+  '& .MuiCardHeader-content': {
+    paddingBottom: 0, // Remove padding from the content element if needed
   },
 }));
+
+
 const CustomCardContent = styled(CardContent)(({ theme }) => ({
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
   overflow: 'auto',
+  // justify: "space-between"
   // overflow: 'hidden', // Ensure content does not overflow
 }));
 

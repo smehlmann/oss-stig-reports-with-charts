@@ -1,5 +1,7 @@
 import {  createTheme, useTheme } from "@mui/material";
 
+
+
 const palette = [
   '#0000F0',
   '#183090',
@@ -12,6 +14,7 @@ const palette = [
   '#4860D9',
   '#6060A8',
 ];
+
 
 const theme = createTheme({
   palette: {
@@ -42,7 +45,26 @@ const theme = createTheme({
     action: {
       selected: '#d9d9d9',
       hoverExpandedSection: '#f9f9f9',
-    }
+    },
+    assessed: '#cdd2ea',
+    submitted: '#c3deab',
+    accepted: '#81dfaa',
+    rejected:'#eba693',
+    cat3: '#cdd2ea',
+    cat2: '#ffd68f',
+    cat1: '#eba794',
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      extendedMd: 1047.2,
+      lg: 1280,
+      extendedLg: 1381,
+      xl: 1920,
+      
+    },
   },
   typography: {
     fontFamily: 'Segoe UI, Arial, sans-serif',
