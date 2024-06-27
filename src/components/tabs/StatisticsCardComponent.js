@@ -1,47 +1,47 @@
 import React, { useMemo } from "react";
 import { Grid, styled } from "@mui/material";
-import { Card, Box, CardContent, Typography, Avatar } from "@mui/material";
+import { Card, Box, CardContent, Typography, Avatar, Divider  } from "@mui/material";
+// import ValueCountMap from './ValueCountMap'; // Assuming this is a utility function you've defined
 
 // import CardActions from "@mui/material/CardActions";
 // import Button from "@mui/material/Button";
-
+import WebAssetIcon from '@mui/icons-material/WebAsset';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
-// import ValueCountMap from './ValueCountMap'; // Assuming this is a utility function you've defined
-
-
-const Difference = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-  display: 'flex',
-  alignItems: 'center',
-}));
+import CategoryIcon from '@mui/icons-material/Category';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import CloseIcon from '@mui/icons-material/Close';
 
 const StatCardContent = styled(CardContent)(({ theme }) => ({
-  height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  overflow: 'auto',
+  justifyContent: 'space-between',
+  padding: theme.spacing(2),
+  '&:last-child': {
+    paddingBottom: theme.spacing(2),
+  },
 }));
 
-//style background of card based on the metric name
+// Style background of card based on the metric name
 const getCardBackgroundColor = (metricName) => {
-  // console.log("metricName: ", metricName);
   switch (metricName) {
-    case 'Accessed':
+    case 'Assessed':
     case 'CAT3':
       return '#cdd2ea';
-    case 'submitted':
+    case 'Submitted':
       return '#c3deab';
-    case 'accepted':
+    case 'Accepted':
       return '#81dfaa';
-    case 'rejected':
+    case 'Rejected':
       return '#eba693';
     case 'CAT2':
       return '#ffd68f';
     case 'CAT1':
       return '#eba794';
-
-      default:
-        return '#ffffff'; // Default background color if none match
+    case 'Assets':
+      return '#ead7cd';
+    default:
+      return '#ffffff'; // Default background color if none match
   }
 };
 
@@ -51,59 +51,88 @@ const StyledCard = styled(Card)(({ theme, metricName }) => ({
   flexDirection: 'column',
   boxShadow: theme.shadows[3],
   borderRadius: 10,
-  flex: 1,
-  overflow: 'hidden',
   backgroundColor: getCardBackgroundColor(metricName),
 }));
 
-const MainMetricValue = styled(Typography)(({ theme }) => ({
-  fontSize: theme.typography.h3.fontSize,
-  // marginRight: theme.spacing(4),
+const CustomGridContainer = styled(Grid)(({ theme }) => ({
   alignItems: 'center',
-  display: 'flex',
-  justifyContent: 'center', // Center-align the content
-  width: '100%',
+  justifyContent: 'space-between',
 }));
 
+const MainMetricValue = styled(Typography)(({ theme }) => ({
+  fontSize: theme.typography.h2.fontSize,
+  fontWeight: 700,
+  alignItems: 'left',
+}));
 
 const Title = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
+  color: theme.palette.text.secondary,
 }));
 
 const StyledIconContainer = styled(Avatar)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.dark,
-  height: 56,
-  width: 56,
-  
+  height: 70,
+  width: 70,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 }));
 
-const Icon = styled(InsertChartOutlinedIcon)(({ theme }) => ({
-  height: 32,
-  width: 32,
-}));
+// Get specific icon based on name of metric
+const getIcon = (metricName) => {
+  switch (metricName) {
+    case 'Assets':
+      return <WebAssetIcon style={{ height: 50, width: 50 }} />;
+    case 'Assessed':
+      return <AssessmentIcon style={{ height: 40, width: 40 }} />;
+    case 'Submitted':
+      return <CategoryIcon style={{ height: 40, width: 40 }} />;
+    case 'Accepted':
+      return <CheckCircleIcon style={{ height: 40, width: 40 }} />;
+    case 'Rejected':
+      return <CloseIcon style={{ height: 40, width: 40 }} />;
+    case 'CAT1':
+    case 'CAT2':
+    case 'CAT3':
+      return <InsertChartOutlinedIcon style={{ height: 40, width: 40 }} />;
+    default:
+      return <InsertChartOutlinedIcon style={{ height: 40, width: 40 }} />;
+  }
+};
 
+const CaptionText = styled(Typography)(({ theme }) => ({
+  fontWeight: 600,
+  color: theme.palette.text.secondary,
+  display: 'flex',
+  alignItems: 'center',
+}));
 
 const StatisticsCardComponent = ({ data, metricValue, metricDisplayedName, measurement }) => {
   return (
-    <StyledCard metricName = {metricDisplayedName}>
+    <StyledCard metricName={metricDisplayedName}>
       <StatCardContent>
-        <Grid container alignItems="center" spacing={2}>
+        <CustomGridContainer container spacing={2}>
           <Grid item>
             <StyledIconContainer>
-              <Icon />
+              {getIcon(metricDisplayedName)}
             </StyledIconContainer>
           </Grid>
-          <Grid item>
-            <Title color="textPrimary" gutterBottom variant="body2">
+          <Grid item xs container direction="column" alignItems="flex-end">
+            <Title variant="h6">
               {metricDisplayedName}
             </Title>
-            <MainMetricValue>
+            <MainMetricValue variant="h3">
               {metricValue}
             </MainMetricValue>
           </Grid>
-        </Grid>
-        {/* <Difference> */}
-        {/* </Difference> */}
+        </CustomGridContainer>
+        <Divider style={{ margin: '10px 0', color: '#3E3E3E'}} />
+        <Box display="flex" justifyContent="flex-start">
+          <CaptionText variant="body2">
+            {measurement}
+          </CaptionText>
+        </Box>
       </StatCardContent>
     </StyledCard>
   );
@@ -111,49 +140,17 @@ const StatisticsCardComponent = ({ data, metricValue, metricDisplayedName, measu
 
 export default StatisticsCardComponent;
 
-
-
-// const Root = styled('div')(({ theme }) => ({
-//   padding: theme.spacing(4),
-//   backgroundColor: theme.palette.background.default,
-//   color: theme.palette.text.primary,
-//   height: "100%",
-//   display: 'flex',
-//   flexDirection: 'column',
-
-//   // position: 'inherit',
-// }));
-
-// const StyledCard = styled(Card)(({ theme }) => ({
+// const StyledCard = styled(Card)(({ theme, metricName }) => ({
 //   height: '100%',
 //   display: 'flex',
 //   flexDirection: 'column',
 //   boxShadow: theme.shadows[3],
 //   borderRadius: 10,
-//   flex: 1,
 //   overflow: 'hidden',
+//   paddingTop: 0,
+//   paddingBottom: 0,
+//   backgroundColor: getCardBackgroundColor(metricName),
 // }));
-
-
-// const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
-//   '& .MuiCardHeader-title': {
-//     margin: 0,
-//     fontWeight: 400,
-//     color: theme.palette.text.secondary,
-//     fontSize: theme.typography.h5.fontSize,
-//   },
-// }));
-
-
-// const CustomCardContent = styled(CardContent)(({ theme }) => ({
-//   height: '100%',
-//   display: 'flex',
-//   flexDirection: 'column',
-//   overflow: 'auto',
-//   // justify: "space-between"
-//   // overflow: 'hidden', // Ensure content does not overflow
-// }));
-
 
 // const Difference = styled(Box)(({ theme }) => ({
 //   marginTop: theme.spacing(2),
@@ -165,46 +162,151 @@ export default StatisticsCardComponent;
 //   height: '100%',
 //   display: 'flex',
 //   flexDirection: 'column',
-//   overflow: 'auto',
-//   // justify: "space-between"
-//   // overflow: 'hidden', // Ensure content does not overflow
+//   // overflow: 'auto',
+//   justifyContent: 'space-between',
 // }));
 
-// const DifferenceValue = styled(Typography)(({ theme }) => ({
-//   color: theme.palette.error.dark,
-//   marginRight: theme.spacing(1),
+// //style background of card based on the metric name
+// const getCardBackgroundColor = (metricName) => {
+//   // console.log("metricName: ", metricName);
+//   switch (metricName) {
+//     case 'Accessed':
+//     case 'CAT3':
+//       return '#cdd2ea';
+//     case 'submitted':
+//       return '#c3deab';
+//     case 'accepted':
+//       return '#81dfaa';
+//     case 'rejected':
+//       return '#eba693';
+//     case 'CAT2':
+//       return '#ffd68f';
+//     case 'CAT1':
+//       return '#eba794';
+//     case 'Assets':
+//       return '#ead7cd';
+
+//       default:
+//         return '#ffffff'; // Default background color if none match
+//   }
+// };
+
+// const CustomGridContainer = styled(Grid)(({ theme }) => ({
+//   alignItems: 'center',
+//   spacing: 2,
+//   display: 'flex',
 // }));
 
-// // const StatisticsCardComponent = ({ data }) => {
-// //   const cat1Sum = useMemo(() => {
-// //     return data.reduce((sum, item) => sum + (item.cat1 || 0), 0);
-// //   }, [data]);
+// const MainMetricValue = styled(Typography)(({ theme }) => ({
+//   fontSize: theme.typography.h3.fontSize,
+//   marginRight: theme.spacing(4),
+//   alignItems: 'center',
+//   display: 'flex',
+//   justifyContent: 'center', // Center-align the content
+//   width: '100%',
+// }));
 
+// const Title = styled(Typography)(({ theme }) => ({
+//   //initially had: gutterBottom variant="body1"
+//   fontSize: theme.typography.h6.fontSize,
+//   fontWeight: 700,
+//   marginRight: theme.spacing(4),
+//   alignItems: 'center',
+//   display: 'flex',
+//   justifyContent: 'center', // Center-align the content
+//   width: '100%',
+//   marginBottom: theme.spacing(0.5),
+// }));
 
-// const StatisticsCardComponent = ({ title, children }) => {
-//   // const cat1Sum = useMemo(() => {
-//   //   return data.reduce((sum, item) => sum + (item.cat1 || 0), 0);
-//   // }, [data]);
+// const StyledIconContainer = styled(Avatar)(({ theme }) => ({
+//   backgroundColor: theme.palette.secondary.dark,
+//   display: 'flex',
+//   justifyContent: 'center',
+//   alignItems: 'center',
+//   height: 70,
+//   width: 70,
+  
+// }));
 
+// const Icon = styled('div')(({ theme }) => ({
+//   height: 40,
+//   width: 40,
+//   // display: "contents",
+// }));
+
+// //get specific icon based on name of metric
+// const getIcon = (metricName) => {
+//   switch (metricName) {
+//     case 'Assets':
+//       return <WebAssetIcon style={{ height: 40, width: 40 }} />;
+//     case 'Assessed':
+//       return <AssessmentIcon style={{ height: 40, width: 40 }} />;
+//     case 'Submitted':
+//       return <CategoryIcon style={{ height: 40, width: 40 }} />;
+//     case 'Accepted':
+//       return <CheckCircleIcon style={{ height: 40, width: 40 }} />
+//     case 'Rejected':
+//       return <CloseIcon style={{ height: 40, width: 40 }} />;
+//     case 'CAT1':
+//     case 'CAT2':
+//     case 'CAT3':
+//       return <InsertChartOutlinedIcon style={{ height: 40, width: 40 }} />;
+      
+//     default:
+//       return <InsertChartOutlinedIcon style={{ height: 40, width: 40 }} />;
+//   }
+// };
+
+// const CaptionText = styled(Typography) (({ theme }) => ({
+//   // fontSize: theme.typography.h3.fontSize,
+//   marginRight: theme.spacing(4),
+//   fontWeight: 600,
+//   alignItems: 'center',
+//   display: 'flex',
+//   justifyContent: 'center', // Center-align the content
+//   width: '100%',
+//   marginTop: theme.spacing(0.5),
+// }));
+
+// const StatisticsCardComponent = ({ data, metricValue, metricDisplayedName, measurement }) => {
 //   return (
-//     <StyledCard>
-//       <CustomCardHeader title={title} />
+//     <StyledCard metricName = {metricDisplayedName}>
 //       <StatCardContent>
-//         <Grid container justifyContent="space-between">
-//           <Grid item>
-//             <Typography variant="h3">New Card</Typography>
+//         <CustomGridContainer container>
+//           <Grid item xs={4} display="flex" justifyContent="center" alignItems="center">
+//             <StyledIconContainer>
+//               <Icon>{getIcon(metricDisplayedName)}</Icon>
+//             </StyledIconContainer>
 //           </Grid>
-//           <Grid item>
-
+//           <Grid item >
+//             <Title color="textPrimary">  
+//               {metricDisplayedName}
+//             </Title>
+//             <MainMetricValue>
+//               {metricValue}
+//             </MainMetricValue>
+//             <CaptionText fontSize='caption'>
+//               {measurement}
+//             </CaptionText>
 //           </Grid>
-//         </Grid>
-//         <Difference>
-//           <DifferenceValue variant="body2">12%</DifferenceValue>
-//           <Typography variant="caption">Since last month</Typography>
-//         </Difference>
+          
+//         </CustomGridContainer>
+//         {/* <Difference> */}
+//         {/* </Difference> */}
 //       </StatCardContent>
 //     </StyledCard>
 //   );
 // };
 
 // export default StatisticsCardComponent;
+
+// const Root = styled('div')(({ theme }) => ({
+//   padding: theme.spacing(4),
+//   backgroundColor: theme.palette.background.default,
+//   color: theme.palette.text.primary,
+//   height: "100%",
+//   display: 'flex',
+//   flexDirection: 'column',
+
+//   // position: 'inherit',
+// }));

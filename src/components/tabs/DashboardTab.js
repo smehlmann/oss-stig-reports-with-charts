@@ -95,13 +95,15 @@ const formatData = (parsedData) => {
 const DashboardTab = ({reportData, selectedReportNum}) => {
   //parse data from string to array
   let parsedData = typeof reportData == 'string' ? JSON.parse(reportData): reportData;
-  // console.log('reportData: ' + parsedData);
-
+  
   const formattedData = formatData(parsedData); 
-
+  
+  
   //keeps track of the selectedReport state
   const [selectedReport, setSelectedReport] = useState(null);
  
+  console.log("formattedData: ", formattedData);
+
   const handleClick = (reportNum) => 
     {
       setSelectedReport(reportNum);

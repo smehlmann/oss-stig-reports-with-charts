@@ -40,7 +40,7 @@ const theme = createTheme({
     text: {
       // primary: '#333333',
       primary: '#2A2A2A',
-      secondary: '#666666',
+      secondary: '#3E3E3E',
     },
     action: {
       selected: '#d9d9d9',

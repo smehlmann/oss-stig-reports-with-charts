@@ -1,14 +1,9 @@
 import React, {useMemo} from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
 import ApexStandardBarChart from "../../../charts/BarCharts/ApexCharts/ApexStandardBarChart";
-import BubbleCountChart from "../../../charts/BubbleCharts/BubbleCountChart";
-import DonutAvgChart from "../../../charts/DonutCharts/ApexCharts/DonutAvgChart";
-import ApexDonutCountChart from "../../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
 import ApexBarAvgChart from "../../../charts/BarCharts/ApexCharts/ApexBarAvgChart";
 
 import ValueCountMap from "../../../charts/ValueCountMap";
-import LineChartBuilder from "../../../charts/LineCharts/Chartjs/LineChartBuilder";
-import Report2CollectionsExpanded from "../../../charts/TableUsingMUI/Report2CollectionsExpanded";
 import AveragesGroupedByColumn from "../../../charts/DataGridMUI/AveragesGroupedByColumn";
 import ChartCardComponent from "../ChartCardComponent";
 import StatisticsCardComponent from "../StatisticsCardComponent"
@@ -40,7 +35,6 @@ Grid spacing is split into 12 parts:
   {12} = 1 card in row (takes up whole section)
 */
 
-
 const DashboardSelectedReport7 = ({ data }) => {
   //get sum of Cat1
   const cat1Sum = useMemo(() => {
@@ -57,22 +51,26 @@ const DashboardSelectedReport7 = ({ data }) => {
     return data.reduce((sum, item) => sum + (item.cat3 || 0), 0);
   }, [data]);
 
+  //number of assets
+  const assetCount = useMemo(() => {
+    const countMap = ValueCountMap(data, 'asset');
+    return Object.keys(countMap).length;
+  }, [data]);
+
   return (
     <ThemeProvider theme={theme}>
       <FilterProvider>
         <Root>
           <Grid container spacing={4}>
-
-          <Grid item lg={4} sm={4} xl={4} xs={12}>
+          <Grid item lg={3} sm={6} xl={3} xs={12}>
               <StatisticsCardComponent 
                 metricValue={cat1Sum}
                 metricDisplayedName = "CAT1"
                 measurement="Total"
               >
-                
               </StatisticsCardComponent>
           </Grid>
-          <Grid item lg={4} sm={4} xl={4} xs={12}>
+          <Grid item lg={3} sm={6} xl={3} xs={12}>
               <StatisticsCardComponent 
                 metricValue={cat2Sum}
                 metricDisplayedName = "CAT2"
@@ -81,59 +79,66 @@ const DashboardSelectedReport7 = ({ data }) => {
       
               </StatisticsCardComponent>
           </Grid>
-          <Grid item lg={4} sm={4} xl={4} xs={12}>
+          <Grid item lg={3} sm={6} xl={3} xs={12}>
               <StatisticsCardComponent 
                 metricValue={cat3Sum}
                 metricDisplayedName = "CAT3"
                 measurement="Total"
               >
-                
               </StatisticsCardComponent>
           </Grid>
-            
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <ChartCardComponent title = 'Assets by Code'>
-                <ApexStandardBarChart
-                  targetColumn="emass"
-                  isHorizontal={true}
-                  xAxisTitle="Number of Assets"
-                  yAxisTitle= "eMass Number"
-                  data={data}
-                />
-              </ChartCardComponent>
-            </Grid>
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <TableGridCardComponent>
-                <AveragesGroupedByColumn 
-                  groupingColumn = 'emass'
-                  data={data} 
-                  targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
-                />
-              </TableGridCardComponent>
-            </Grid>
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <ChartCardComponent title = "Assets by eMass">
+          <Grid item lg={3} sm={6} xl={3} xs={12}>
+              <StatisticsCardComponent 
+                metricValue={assetCount}
+                metricDisplayedName = "Assets"
+                measurement="Total"
+              >
+              </StatisticsCardComponent>
+          </Grid>
+        
+          <Grid item lg={4} sm={6} xl={4} xs={12}>
+            <ChartCardComponent title = 'Assets by Code'>
               <ApexStandardBarChart
-                  targetColumn="acronym"
-                  isHorizontal={false}
-                  xAxisTitle="Acronym"
-                  yAxisTitle= "Number of Assets"
-                  data={data}
-                />
-              </ChartCardComponent>
-            </Grid>
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <ChartCardComponent title = "Averages">
-                <ApexBarAvgChart
-                  targetColumns={["assessed", "submitted", "accepted", "rejected"]}
-                  isHorizontal = {false}
-                  xAxisTitle= "Packages"
-                  yAxisTitle= "Number of Assets"
-                  disableFilterUpdate={true}
-                  data={data}
-                />
-              </ChartCardComponent>
-            </Grid>
+                targetColumn="emass"
+                isHorizontal={true}
+                xAxisTitle="Number of Assets"
+                yAxisTitle= "eMass Number"
+                data={data}
+              />
+            </ChartCardComponent>
+          </Grid>
+          <Grid item lg={4} sm={6} xl={4} xs={12}>
+            <TableGridCardComponent>
+              <AveragesGroupedByColumn 
+                groupingColumn = 'emass'
+                data={data} 
+                targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
+              />
+            </TableGridCardComponent>
+          </Grid>
+          <Grid item lg={4} sm={6} xl={4} xs={12}>
+            <ChartCardComponent title = "Assets by eMass">
+            <ApexStandardBarChart
+                targetColumn="acronym"
+                isHorizontal={false}
+                xAxisTitle="Acronym"
+                yAxisTitle= "Number of Assets"
+                data={data}
+              />
+            </ChartCardComponent>
+          </Grid>
+          <Grid item lg={4} sm={6} xl={4} xs={12}>
+            <ChartCardComponent title = "Averages">
+              <ApexBarAvgChart
+                targetColumns={["assessed", "submitted", "accepted", "rejected"]}
+                isHorizontal = {false}
+                xAxisTitle= "Packages"
+                yAxisTitle= "Number of Assets"
+                disableFilterUpdate={true}
+                data={data}
+              />
+            </ChartCardComponent>
+          </Grid>
 
 {/* 
             <Grid item lg={12} sm={12} xl={12} xs={12}>

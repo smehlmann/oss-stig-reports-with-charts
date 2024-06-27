@@ -13,9 +13,8 @@ import AveragesGroupedByColumn from "../../../charts/DataGridMUI/AveragesGrouped
 import ChartCardComponent from "../ChartCardComponent";
 import TableGridCardComponent from "../TableGridCardComponent";
 import { FilterProvider } from "../../../FilterContext";
-import theme from "../../../theme"
-
-
+import theme from "../../../theme";
+import StatisticsCardComponent from "../StatisticsCardComponent"
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(4),
@@ -26,22 +25,6 @@ const Root = styled('div')(({ theme }) => ({
 
 }));
 
-const AssetCountCard = ({ data }) => {
-  const assetCount = useMemo(() => {
-    const countMap = ValueCountMap(data, 'asset');
-    return Object.keys(countMap).length;
-  }, [data]);
-
-  return (
-    <ChartCardComponent title="Asset Count">
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '24px' }}>{assetCount}</div>
-        <div style={{ fontSize: '18px', color: '#666', marginTop: '10px' }}>Asset</div>
-      </div>
-    </ChartCardComponent>
-  );
-};
-
 /*
 Grid spacing is split into 12 parts:
   For evenly spaced cards:
@@ -51,14 +34,46 @@ Grid spacing is split into 12 parts:
   {12} = 1 card in row (takes up whole section)
 */
 
-
 const DashboardSelectedReport5 = ({ data }) => {
+
+  
   return (
     <ThemeProvider theme={theme}>
       <FilterProvider>
         <Root>
           <Grid container spacing={4}>
-
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+                <StatisticsCardComponent 
+                  metricValue="90%"
+                  metricDisplayedName = "Assessed"
+                  measurement="Average"
+                >
+                </StatisticsCardComponent>
+            </Grid>
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+                <StatisticsCardComponent 
+                  metricValue="80%"
+                  metricDisplayedName = "Submitted"
+                  measurement="Average"
+                >
+                </StatisticsCardComponent>
+            </Grid>
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+                <StatisticsCardComponent 
+                  metricValue="70%"
+                  metricDisplayedName = "Accepted"
+                  measurement="Average"
+                >
+                </StatisticsCardComponent>
+            </Grid>
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+                <StatisticsCardComponent 
+                  metricValue="60%"
+                  metricDisplayedName = "Rejected"
+                  measurement="Average"
+                >
+                </StatisticsCardComponent>
+            </Grid>
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = 'Assets by Code'>
                 <ApexStandardBarChart
