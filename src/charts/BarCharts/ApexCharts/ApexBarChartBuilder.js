@@ -13,7 +13,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
 
   //default axis title style
   const axisTitleStyle = useMemo(() => ({
-    fontSize: '15px',
+    fontSize: '14px',
     fontFamily: 'Segoe UI',
     fontWeight: '500',
     margin: '0',

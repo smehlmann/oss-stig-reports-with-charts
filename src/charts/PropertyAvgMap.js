@@ -1,4 +1,3 @@
-import CalculateArrayAvg from './CalculateArrayAvg';
 // Accepts an array of objects as data and column names (strings)
 const PropertyAvgMap = (data, properties) => {
   // Initialize an object to store sums and counts for each property

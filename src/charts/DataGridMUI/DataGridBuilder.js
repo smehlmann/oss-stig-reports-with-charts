@@ -45,15 +45,6 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     borderBottom: "none",
     whiteSpace: 'normal', // Allow text wrapping
     wordBreak: 'break-word',
-    // [theme.breakpoints.down('lg')]: {
-    //   fontSize: '14px', // Font size for large screens and down
-    // },
-    // [theme.breakpoints.down('md')]: {
-    //   fontSize: '12px', // Font size for medium screens and down
-    // },
-    // [theme.breakpoints.down('sm')]: {
-    //   fontSize: '10px', // Font size for small screens and down
-    // },
   },
   "& .name-column--cell": {
     color: theme.palette.primary.main,

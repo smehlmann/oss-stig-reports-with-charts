@@ -3,7 +3,7 @@ import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import ValueCountMap from "../../ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
 
-const ApexStandardBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
+const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
   const { filter, updateFilter } = useFilter();
 
   const filteredData = useMemo(() => {
@@ -50,7 +50,7 @@ const ApexStandardBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTit
   );
 };
 
-export default ApexStandardBarChart;
+export default ApexCountByValueBarChart;
 
 
 /*

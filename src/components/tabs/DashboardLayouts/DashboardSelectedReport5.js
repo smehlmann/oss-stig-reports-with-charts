@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
-import ApexStandardBarChart from "../../../charts/BarCharts/ApexCharts/ApexStandardBarChart";
+import ApexCountByValueBarChart from "../../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import BubbleCountChart from "../../../charts/BubbleCharts/BubbleCountChart";
 import DonutAvgChart from "../../../charts/DonutCharts/ApexCharts/DonutAvgChart";
 import ApexDonutCountChart from "../../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
@@ -12,12 +12,13 @@ import Report2CollectionsExpanded from "../../../charts/TableUsingMUI/Report2Col
 import AveragesGroupedByColumn from "../../../charts/DataGridMUI/AveragesGroupedByColumn";
 import ChartCardComponent from "../ChartCardComponent";
 import TableGridCardComponent from "../TableGridCardComponent";
-import { FilterProvider } from "../../../FilterContext";
+// import { FilterProvider } from "../../../FilterContext";
 import theme from "../../../theme";
 import StatisticsCardComponent from "../StatisticsCardComponent"
+import {  useFilter } from "../../../FilterContext";
 
 const Root = styled('div')(({ theme }) => ({
-  padding: theme.spacing(4),
+  padding: theme.spacing(2),
   backgroundColor: theme.palette.background.default,
   color: theme.palette.text.primary,
   height: "100%",
@@ -36,47 +37,80 @@ Grid spacing is split into 12 parts:
 
 const DashboardSelectedReport5 = ({ data }) => {
 
+  const { filter, updateFilter } = useFilter();
+  //stores the data filter has been applied
+  const filteredData = useMemo(() => {
+    if (Object.keys(filter).length > 0) {
+      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
+      return filtered;
+    }
+    return data;
+  }, [filter, data]);
+  
+
+  //get sum of Cat1
+  const cat1Sum = useMemo(() => {
+    return filteredData.reduce((sum, item) => sum + (item.cat1 || 0), 0);
+  }, [filteredData]);
+
+  //sum of Cat2
+  const cat2Sum = useMemo(() => {
+    return filteredData.reduce((sum, item) => sum + (item.cat2 || 0), 0);
+  }, [filteredData]);
+
+  //sum of cat3
+  const cat3Sum = useMemo(() => {
+    return filteredData.reduce((sum, item) => sum + (item.cat3 || 0), 0);
+  }, [filteredData]);
+
+  //number of assets
+  const assetCount = useMemo(() => {
+    const countMap = ValueCountMap(filteredData, 'asset');
+    return Object.keys(countMap).length;
+  }, [filteredData]);
   
   return (
     <ThemeProvider theme={theme}>
-      <FilterProvider>
+      {/* <FilterProvider> */}
         <Root>
-          <Grid container spacing={4}>
+          <Grid container spacing={2}>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
                 <StatisticsCardComponent 
-                  metricValue="90%"
-                  metricDisplayedName = "Assessed"
-                  measurement="Average"
+                  metricValue={assetCount}
+                  metricDisplayedName = "Assets"
+                  measurement="Total"
                 >
                 </StatisticsCardComponent>
             </Grid>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
                 <StatisticsCardComponent 
-                  metricValue="80%"
-                  metricDisplayedName = "Submitted"
-                  measurement="Average"
+                  metricValue={cat1Sum}
+                  metricDisplayedName = "CAT1"
+                  measurement="Total"
                 >
                 </StatisticsCardComponent>
             </Grid>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
                 <StatisticsCardComponent 
-                  metricValue="70%"
-                  metricDisplayedName = "Accepted"
-                  measurement="Average"
+                  metricValue={cat2Sum}
+                  metricDisplayedName = "CAT2"
+                  measurement="Total"
                 >
                 </StatisticsCardComponent>
             </Grid>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
                 <StatisticsCardComponent 
-                  metricValue="60%"
-                  metricDisplayedName = "Rejected"
-                  measurement="Average"
+                  metricValue={cat3Sum}
+                  metricDisplayedName = "CAT3"
+                  measurement="Total"
                 >
                 </StatisticsCardComponent>
             </Grid>
+            
+
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = 'Assets by Code'>
-                <ApexStandardBarChart
+                <ApexCountByValueBarChart
                   targetColumn="code"
                   isHorizontal={true}
                   xAxisTitle="Number of Assets"
@@ -85,7 +119,8 @@ const DashboardSelectedReport5 = ({ data }) => {
                 />
               </ChartCardComponent>
             </Grid>
-            <Grid item lg={8} sm={6} xl={8} xs={12}>
+            {/* data grid */}
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
               <TableGridCardComponent>
                 <AveragesGroupedByColumn 
                   groupingColumn = 'code'
@@ -96,7 +131,7 @@ const DashboardSelectedReport5 = ({ data }) => {
             </Grid>
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = "Assets by Collection">
-              <ApexStandardBarChart
+              <ApexCountByValueBarChart
                   targetColumn="shortName"
                   isHorizontal={false}
                   xAxisTitle="Collection Name"
@@ -105,29 +140,8 @@ const DashboardSelectedReport5 = ({ data }) => {
                 />
               </ChartCardComponent>
             </Grid>
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <ChartCardComponent title = "Averages">
-                <ApexBarAvgChart
-                  targetColumns={["assessed", "submitted", "accepted", "rejected"]}
-                  isHorizontal = {false}
-                  xAxisTitle= "Packages"
-                  yAxisTitle= "Number of Assets"
-                  disableFilterUpdate={true}
-                  data={data}
-                />
-              </ChartCardComponent>
-            </Grid>
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <ChartCardComponent title = "Assets by Package">
-                <BubbleCountChart
-                  targetColumn="shortName"
-                  isHorizontal={false}
-                  xAxisTitle = "Package Name"
-                  yAxisTitle="Number of Assets"
-                  data={data}
-                />
-              </ChartCardComponent>
-            </Grid>
+
+
 
             <Grid item lg={12} sm={12} xl={12} xs={12}>
               <TableGridCardComponent>
@@ -136,7 +150,7 @@ const DashboardSelectedReport5 = ({ data }) => {
             </Grid>
           </Grid> 
         </Root>
-      </FilterProvider>
+      {/* </FilterProvider> */}
     </ThemeProvider>
   );
 };

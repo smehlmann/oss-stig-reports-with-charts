@@ -125,7 +125,7 @@ const theme = createTheme({
       letterSpacing: '0.08333em',
       textTransform: 'uppercase',
     },
-    spacing: 4,  // was 8
+    spacing: 2,  // was 8
   },
   components: {
     MuiButton: {

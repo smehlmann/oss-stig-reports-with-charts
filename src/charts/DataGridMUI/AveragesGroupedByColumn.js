@@ -6,12 +6,7 @@ import { LinearProgress } from '@mui/material';
 import { useFilter } from '../../FilterContext';
 import DataGridBuilder from './DataGridBuilder';
 import {getPercentageFormatterObject} from "../getPercentageFormatterObject.js";
-
-
-const calculateAverage = (values) => {
-  const sum = values.reduce((total, value) => total + value, 0);
-  return values.length > 0 ? sum / values.length : 0;
-};
+import CalculateArrayAvg from "../CalculateArrayAvg.js";
 
 
 const renderProgressBarCell = (params) => (
@@ -60,7 +55,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
       const groupedAverages = Object.entries(dataGrouped).map(([groupingValue, groupData]) => {
         const averages = targetColumns.reduce((acc, columnName) => {
           const values = groupData.map((item) => item[columnName]).filter(val => val !== undefined);
-          acc[`avg${columnName.charAt(0).toUpperCase() + columnName.slice(1)}`] = calculateAverage(values);
+          acc[`avg${columnName.charAt(0).toUpperCase() + columnName.slice(1)}`] = CalculateArrayAvg(values);
           return acc;
         }, { id: groupingValue, [groupingColumn]: groupingValue });
         return averages;
@@ -90,7 +85,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
   //headers for columns
   const tableColumns = [
     { field: groupingColumn , 
-      headerName: groupingColumn , 
+      headerName: groupingColumn.charAt(0).toUpperCase() + groupingColumn.slice(1) , 
       flex: 1 
     },
     {

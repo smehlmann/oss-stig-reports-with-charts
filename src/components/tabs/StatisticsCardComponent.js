@@ -6,19 +6,20 @@ import { Card, Box, CardContent, Typography, Avatar, Divider  } from "@mui/mater
 // import CardActions from "@mui/material/CardActions";
 // import Button from "@mui/material/Button";
 import WebAssetIcon from '@mui/icons-material/WebAsset';
-import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
-import CategoryIcon from '@mui/icons-material/Category';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PublishIcon from '@mui/icons-material/Publish';
+import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import CloseIcon from '@mui/icons-material/Close';
+import EqualizerOutlinedIcon from '@mui/icons-material/EqualizerOutlined';
+
 
 const StatCardContent = styled(CardContent)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  padding: theme.spacing(2),
+  padding: theme.spacing(1),
   '&:last-child': {
-    paddingBottom: theme.spacing(2),
+    paddingBottom: theme.spacing(1),
   },
 }));
 
@@ -72,32 +73,34 @@ const Title = styled(Typography)(({ theme }) => ({
 
 const StyledIconContainer = styled(Avatar)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.dark,
-  height: 70,
-  width: 70,
+  height: 56,
+  width: 56,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  boxShadow: theme.shadows[2],
 }));
+
 
 // Get specific icon based on name of metric
 const getIcon = (metricName) => {
   switch (metricName) {
     case 'Assets':
-      return <WebAssetIcon style={{ height: 50, width: 50 }} />;
+      return <WebAssetIcon style={{ height: 40, width: 40 }} />;
     case 'Assessed':
       return <AssessmentIcon style={{ height: 40, width: 40 }} />;
     case 'Submitted':
-      return <CategoryIcon style={{ height: 40, width: 40 }} />;
+      return <PublishIcon style={{ height: 40, width: 40 }} />;
     case 'Accepted':
-      return <CheckCircleIcon style={{ height: 40, width: 40 }} />;
+      return <CheckBoxOutlinedIcon style={{ height: 40, width: 40 }} />;
     case 'Rejected':
       return <CloseIcon style={{ height: 40, width: 40 }} />;
     case 'CAT1':
     case 'CAT2':
     case 'CAT3':
-      return <InsertChartOutlinedIcon style={{ height: 40, width: 40 }} />;
+      return <EqualizerOutlinedIcon style={{ height: 40, width: 40 }} />;
     default:
-      return <InsertChartOutlinedIcon style={{ height: 40, width: 40 }} />;
+      return <EqualizerOutlinedIcon style={{ height: 40, width: 40 }} />;
   }
 };
 
