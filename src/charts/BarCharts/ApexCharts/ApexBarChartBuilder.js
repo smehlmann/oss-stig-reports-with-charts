@@ -5,16 +5,14 @@ import numeral from "numeral";
 import { palette, useTheme } from "../../../theme.js"
 
 
-
-//Working but no colored bars for Assessed, Submitted, Accepted, and Rejected
 const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader, yAxisHeader, onClick, formatLabelToPercentage }) => {
-  
   const theme = useTheme();
 
   //default axis title style
   const axisTitleStyle = useMemo(() => ({
-    fontSize: '14px',
+    fontSize: '0.875rem',
     fontFamily: 'Segoe UI',
+    paddingTop: '10',
     fontWeight: '500',
     margin: '0',
     textAlign: 'center',

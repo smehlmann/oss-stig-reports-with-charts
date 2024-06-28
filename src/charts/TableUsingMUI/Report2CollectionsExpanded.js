@@ -14,8 +14,6 @@ import {
   ExpandedTableCell
 } from './StyledTableComponents';
 
-
-
 //format sysAdmin and primOwner to remove quotation marks
 const formatString = (value) => {
   if (typeof value === 'string') {
@@ -24,35 +22,37 @@ const formatString = (value) => {
   return value;
 };
 
-
-
 function Report2CollectionsExpanded({ data }) {
-  const { filter, updateFilter, clearFilter} = useFilter();
+  const { updateFilter, clearFilter} = useFilter();
   const [searchText, setSearchText] = useState("");
-  const [filteredChildRows, setFilteredChildRows] = useState({}); // State to hold filtered data
+  // const [filteredChildRows, setFilteredChildRows] = useState({}); // State to hold filtered data
 
   const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
 
+  const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
 
-  const [parentRows, setParentRows] = useState([]);
-  //checks if data is array of objects. If so, groyup by 'shortName' property.
+  //checks if data is array of objects. If so, group by 'shortName' property.
+  //
   useEffect(() => {
     try {
       if (Array.isArray(data) && data.length > 0) {
       const dataGroupedByShortName = data.reduce((accumulator, currentValue) => {
+        //the accumulator is an object whose properties (or keys) the values for shorName
         if (!accumulator[currentValue.shortName]) {
-          accumulator[currentValue.shortName] = [];
-        }        
+          accumulator[currentValue.shortName] = [];  //each property is assigned empty array  
+        }  //ie. accumulator = {'B3COI': [], 'NCCM':[]...}
+        //populates the empty array associated with a given key
         accumulator[currentValue.shortName].push({
           asset: currentValue.asset,
           sysAdmin: formatString(currentValue.sysAdmin),
           primOwner: formatString(currentValue.primOwner),
           accepted: currentValue.accepted,
         });
+        //ie. accumulator:{"B3COI": [{asset: val1, sysAdmin: val2, primOwner: val3, accepted: val4}, {..}], 'NCCM'...}
         return accumulator;
       }, {});
 
-      //parentRows display 'shortName' value, and childRows are content for each 'shortName' value
+      //parentRows is an array of objects where each object has 2 properties (or keys): shortName and childRows. shortName is what everything is grouped by, and the childRows are an array of objects associated with the shortName value. 
       const parentRows = Object.entries(dataGroupedByShortName).map(([shortName, childRows]) => ({
         shortName,
         childRows
@@ -86,7 +86,6 @@ function Report2CollectionsExpanded({ data }) {
   //   // Set filtered child rows for the expandable table
   //   setFilteredChildRows(filteredData);
   // }, [searchText, parentRows, updateFilter]);
-
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);

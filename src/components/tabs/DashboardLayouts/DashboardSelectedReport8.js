@@ -1,56 +1,31 @@
-import React, {useMemo} from "react";
-import { Grid, ThemeProvider, Paper, styled, Card, CardHeader, Box} from "@mui/material";
+import React, { useMemo } from "react";
+import { Grid, ThemeProvider, styled } from "@mui/material";
 import ApexCountByValueBarChart from "../../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
+// import BubbleCountChart from "../../../charts/BubbleCharts/BubbleCountChart";
+// import DonutAvgChart from "../../../charts/DonutCharts/ApexCharts/DonutAvgChart";
+// import ApexDonutCountChart from "../../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
 import ApexBarAvgChart from "../../../charts/BarCharts/ApexCharts/ApexBarAvgChart";
 
 import ValueCountMap from "../../../charts/ValueCountMap";
-import AveragesGroupedByColumn from "../../../charts/DataGridMUI/AveragesGroupedByColumn";
+// import LineChartBuilder from "../../../charts/LineCharts/Chartjs/LineChartBuilder";
+import Report8BenchmarksExpanded from "../../../charts/TableUsingMUI/Report8BenchmarksExpanded";
+// import AveragesGroupedByColumn from "../../../charts/DataGridMUI/AveragesGroupedByColumn";
 import ChartCardComponent from "../ChartCardComponent";
-import StatisticsCardComponent from "../StatisticsCardComponent"
 import TableGridCardComponent from "../TableGridCardComponent";
-import theme from "../../../theme";
-import {  useFilter } from "../../../FilterContext";
-// import CalculateArrayAvg from "../../../charts/CalculateArrayAvg";
-// import numeral from 'numeral';
-import FromTwoPropertiesBarChart from "../../../charts/BarCharts/ApexCharts/FromTwoPropertiesBarChart";
 
+
+import theme from "../../../theme";
+import StatisticsCardComponent from "../StatisticsCardComponent"
+import {  useFilter } from "../../../FilterContext";
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(2),
   backgroundColor: theme.palette.background.default,
   color: theme.palette.text.primary,
   height: "100%",
-  display: 'flex',
-  flexDirection: 'column',
-
   // position: 'inherit',
+
 }));
-
-const MyBox = styled(Box)(({ theme }) => ({
-  box: {
-    backgroundColor: 'purple',
-    color: 'white', // Change text color to white for better visibility
-    padding: '10px',
-  },
-}));
-
-// const MyCard = () => {
-
-//   return (
-//     <Card>
-//       <CardHeader title="My Card Header" />
-//       <Grid container spacing={2}>
-//         {[1, 2, 3, 4].map((item) => (
-//           <Grid item xs={6} sm={3} key={item}>
-//             <Paper elevation={3} className={theme.box}>
-//               <p>Box {item}</p>
-//             </Paper>
-//           </Grid>
-//         ))}
-//       </Grid>
-//     </Card>
-//   );
-// };
 
 /*
 Grid spacing is split into 12 parts:
@@ -61,11 +36,8 @@ Grid spacing is split into 12 parts:
   {12} = 1 card in row (takes up whole section)
 */
 
+const DashboardSelectedReport5 = ({ data }) => {
 
-
-const DashboardSelectedReport7 = ({ data }) => {
-
-  //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
   //stores the data filter has been applied
   const filteredData = useMemo(() => {
@@ -92,27 +64,12 @@ const DashboardSelectedReport7 = ({ data }) => {
     return filteredData.reduce((sum, item) => sum + (item.cat3 || 0), 0);
   }, [filteredData]);
 
-  //sum of assets
+  //number of assets
   const assetCount = useMemo(() => {
-    return filteredData.reduce((sum, item) => sum + (item.asset || 0), 0);
+    const countMap = ValueCountMap(filteredData, 'asset');
+    return Object.keys(countMap).length;
   }, [filteredData]);
-
-  /*
-  //get avg of assessed
-  const assessedValues = useMemo(() => filteredData.map(item => item.assessed), [filteredData]); //extracts values from 'assessed' property and stores them in assessedValues.
-  const assessedAvg = CalculateArrayAvg(assessedValues); //gets avg of assessed vals
-  const formattedAssessed = numeral(assessedAvg * 100).format('0.00') + '%';
-  //get avg of submitted
-  const submittedValues =  useMemo(() => filteredData.map(item => item.submitted), [filteredData]); //extracts 'submitted' prop values
-  const submittedAvg = CalculateArrayAvg(submittedValues);
-  const formattedSubmitted = numeral(submittedAvg * 100).format('0.00') + '%';
-  const acceptedValues = useMemo(() => filteredData.map(item => item.accepted), [filteredData]);
-  const acceptedAvg = CalculateArrayAvg(acceptedValues);
-  const formattedAccepted = numeral(acceptedAvg * 100).format('0.00') + '%';
-  const rejectedValues = useMemo(() => filteredData.map(item => item.rejected), [filteredData]);
-  const rejectedAvg = CalculateArrayAvg(rejectedValues);
-  const formattedRejected = numeral(rejectedAvg * 100).format('0.00') + '%';
-*/
+  
   return (
     <ThemeProvider theme={theme}>
       {/* <FilterProvider> */}
@@ -151,29 +108,20 @@ const DashboardSelectedReport7 = ({ data }) => {
                 </StatisticsCardComponent>
             </Grid>
             
-              
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <TableGridCardComponent>
-                <AveragesGroupedByColumn 
-                  groupingColumn = 'emass'
-                  data={data} 
-                  targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
-                />
-              </TableGridCardComponent>
-            </Grid>
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <ChartCardComponent title = "Assets by eMass">
-              <FromTwoPropertiesBarChart
-                  labelColumn="acronym"
-                  valueColumn = "asset"
-                  isHorizontal={false}
-                  xAxisTitle="Acronym"
-                  yAxisTitle= "Number of Assets"
+
+            <Grid item lg={6} sm={6} xl={6} xs={12}>
+              <ChartCardComponent title = 'Assets by Benchmark'>
+                <ApexCountByValueBarChart
+                  targetColumn="benchmarks"
+                  isHorizontal={true}
+                  xAxisTitle="Number of Assets"
+                  yAxisTitle= "STIGG Benchmark"
                   data={data}
                 />
               </ChartCardComponent>
             </Grid>
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
+
+            <Grid item lg={6} sm={6} xl={6} xs={12}>
               <ChartCardComponent title = "Averages">
                 <ApexBarAvgChart
                   targetColumns={["assessed", "submitted", "accepted", "rejected"]}
@@ -184,14 +132,28 @@ const DashboardSelectedReport7 = ({ data }) => {
                   data={data}
                 />
               </ChartCardComponent>
-            </Grid>
+            </Grid> 
 
-  {/* 
-              <Grid item lg={12} sm={12} xl={12} xs={12}>
-                <TableGridCardComponent>
-                  <Report2CollectionsExpanded data={data}/>
-                </TableGridCardComponent>
-              </Grid> */}
+            <Grid item lg={12} sm={12} xl={12} xs={12}>
+              <TableGridCardComponent>
+                <Report8BenchmarksExpanded data={data}/>
+              </TableGridCardComponent>
+            </Grid>
+            {/* <Grid item lg={4} sm={6} xl={4} xs={12}>
+              <ChartCardComponent title = "Averages">
+                <ApexBarAvgChart
+                  targetColumns={["assessed", "submitted", "accepted", "rejected"]}
+                  isHorizontal = {false}
+                  xAxisTitle= "Packages"
+                  yAxisTitle= "Number of Assets"
+                  disableFilterUpdate={true}
+                  data={data}
+                />
+              </ChartCardComponent>
+            </Grid> 
+            
+            */}
+
           </Grid> 
         </Root>
       {/* </FilterProvider> */}
@@ -199,4 +161,4 @@ const DashboardSelectedReport7 = ({ data }) => {
   );
 };
 
-export default DashboardSelectedReport7;
+export default DashboardSelectedReport5;

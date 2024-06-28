@@ -12,22 +12,24 @@ const BoldHeader = styled('div')(({ theme }) => ({
   textWrap: 'wrap',
   textAlign: 'center',
   overflowX: 'visible',
-  // [theme.breakpoints.down('lg')]: {
-  //  fontSize: 'calc(10px + 1vmin)', // Font size for large screens and down
-  // },
-  // [theme.breakpoints.down('extendedLg')]: { //1381px
-  //   fontSize: 'calc(9.5px + 1vmin)', 
-  // },
-  // [theme.breakpoints.down('extendedMd')]: { //1047.2px
-  //   fontSize: 'calc(10px + 1vmin)'
-  // },
+  /*
+  [theme.breakpoints.down('lg')]: {
+   fontSize: 'calc(10px + 1vmin)', // Font size for large screens and down
+  },
+  [theme.breakpoints.down('extendedLg')]: { //1381px
+    fontSize: 'calc(9.5px + 1vmin)', 
+  },
+  [theme.breakpoints.down('extendedMd')]: { //1047.2px
+    fontSize: 'calc(10px + 1vmin)'
+  },
 
-  // [theme.breakpoints.down('md')]: {
-  //   fontSize: 'calc(11px + 1vmin)'
-  // },
-  // [theme.breakpoints.down('sm')]: {
-  //   fontSize: 'calc(13px + 1vmin)' // Font size for small screens and down
-  // },
+  [theme.breakpoints.down('md')]: {
+    fontSize: 'calc(11px + 1vmin)'
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: 'calc(13px + 1vmin)' // Font size for small screens and down
+  },
+  */
 }));
 
 const CenterAlignedCell = styled(TableCell)({
@@ -53,11 +55,10 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   "& .MuiDataGrid-columnHeader": {
     backgroundColor: theme.palette.secondary.light,
     // borderBottom: 'none',
-    
   },
-  "& .MuiDataGrid-virtualScroller": {
-    backgroundColor: theme.palette.background.paper,
-  },
+  // "& .MuiDataGrid-virtualScroller": {
+  //   backgroundColor: theme.palette.background.paper,
+  // },
   "& .MuiDataGrid-footerContainer": {
     borderTop: "none",
     backgroundColor: theme.palette.secondary.light,
@@ -68,6 +69,28 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
     color: `${theme.palette.text.primary} !important`,
   },
+  // Custom scrollbar styles
+  // "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+  //   width: '10px',
+  // },
+  // "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track": {
+  //   background: 'transparent', // Make the scrollbar track transparent
+  // },
+  // "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
+  //   backgroundColor: '#888',
+  //   borderRadius: '10px',
+  //   border: '3px solid transparent',
+  // },
+  // "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover": {
+  //   backgroundColor: '#555',
+  // },
+  // // Firefox scrollbar styles
+  // "& .MuiDataGrid-virtualScroller": {
+  //   scrollbarWidth: 'thin',
+  //   scrollbarColor: '#888 transparent',
+  // },
+
+  
 }));
 
 
@@ -125,11 +148,6 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
 }
 
 export default DataGridBuilder;
-
-
-
-
-
 
 
 

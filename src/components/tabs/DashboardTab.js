@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import DashboardLayout from "./DashboardLayouts/DashboardSelectedReport5";
 import useLocalStorageListener from "../useLocalStorageListener";
 import DashboardSelectedReport5 from "./DashboardLayouts/DashboardSelectedReport5";
 import DashboardSelectedReport7 from "./DashboardLayouts/DashboardSelectedReport7";
+import DashboardSelectedReport8 from "./DashboardLayouts/DashboardSelectedReport8";
 
 /* Include statement to handle how data is parsed based on the report selected*/
 
@@ -19,7 +19,6 @@ const objectToString = (object) => {
     return ''; // or handle empty values as needed
   }
   //split the value by colon and take second part
-  // const sysAdminValue = object.split(':')[1].trim();
   const jsonString = JSON.stringify(object);
   return jsonString
 };
@@ -49,7 +48,22 @@ const stringToDate = (dateString) => {
   return null;
 };
 
-const formatData = (parsedData) => {
+//Only for report 5 (2nd option), split string into array of strings if it contains a space
+const convertBenchmarksToArray = (initialString, selectReportNum) => {
+  if (selectReportNum === '5') {
+    //if initialString contains spaces
+    if(initialString.includes(" ")){
+      return initialString.split(" ");
+    }
+    //store in array 
+    else {
+      return [initialString];
+    }
+  }
+};
+
+
+const formatData = (parsedData, selectedReportNum) => {
   if (!Array.isArray(parsedData)) {
     console.error("parsedData is not an array:", parsedData);
     return [];
@@ -88,6 +102,11 @@ const formatData = (parsedData) => {
       entry.deviceType = objectToString(entry.deviceType);
     }
 
+    //convert benchmarks to array for report 5
+    if(entry.benchmarks !== undefined) {
+      entry.benchmarks = convertBenchmarksToArray(entry.benchmarks, selectedReportNum);
+    }
+
     return entry;
   });
 };
@@ -95,9 +114,7 @@ const formatData = (parsedData) => {
 const DashboardTab = ({reportData, selectedReportNum}) => {
   //parse data from string to array
   let parsedData = typeof reportData == 'string' ? JSON.parse(reportData): reportData;
-  
-  const formattedData = formatData(parsedData); 
-  
+  const formattedData = formatData(parsedData, selectedReportNum); 
   
   //keeps track of the selectedReport state
   const [selectedReport, setSelectedReport] = useState(null);
@@ -115,6 +132,8 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
       return <DashboardSelectedReport5 data={formattedData} handleClick={handleClick} />
     case '7':
       return <DashboardSelectedReport7 data={formattedData} handleClick={handleClick} />
+    case '8':
+      return <DashboardSelectedReport8 data={formattedData} handleClick={handleClick} />
   
     default:
       return null
@@ -138,87 +157,3 @@ export default DashboardTab;
 */
 
 
-/*
-import "../../Charts.css";
-import "./DashboardTab.css";
-//import useLocalStorageListener from "../useLocalStorageListener";
-
-import LineChartBuilder from "../../charts/LineCharts/Chartjs/LineChartBuilder";
-import Report2CollectionsExpanded from "../../charts/TableUsingMUI/Report2CollectionsExpanded";
-import Report2AveragesPerCode from "../../charts/DataGridMUI/Report2AveragesPerCode";
-
-//apex
-import ApexSimplePieChart from "../../charts/PieCharts/ApexCharts/ApexSimplePieChart";
-import ApexVerticalBarChart from "../../charts/BarCharts/ApexCharts/ApexVerticalBarChart";
-import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
-import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart";
-
-import React, { useState } from "react";
-
-const DashboardTab = () => {
-  //Switch chart type on page
-  const [currentPage, setCurrentPage] = useState("chart");
-  // const [dataFetched, setDataFetched] = useState(false); // Track if data has been fetched
-
-  const [reportData, setReportData] = useState(() => {
-    return localStorage.getItem("ossStigReport") || "";
-  });
-
-  // useLocalStorageListener((event) => {
-  //   if (event.type === 'storage') {
-  //     setReportData(event.newValue);
-  //   }
-  // });
-
-  return (
-    <div className="Charts">
-      <button className="apexButton" onClick={() => setCurrentPage("ApexPie")}>Apex Pie</button>
-      <button className="apexButton" onClick={() => setCurrentPage("ApexBar")}>Apex Bar</button>
-      <button className="apexButton" onClick={() => setCurrentPage("ApexDonutCount")}>Apex Count Donut</button>
-      <button className="apexButton" onClick={() => setCurrentPage("DonutAvg")}>Apex Avg Donut</button>
-      <button onClick={() => setCurrentPage("Line")}>Line</button>
-      <button onClick={() => setCurrentPage("ExpandableTable")}>
-        Expandable Table
-      </button>
-      <button onClick={() => setCurrentPage("DataGrid")}>Data Grid</button>
-
-      <div className="chart-container">
-        {currentPage === "ApexPie" && (
-          <ApexSimplePieChart
-            targetColumn="shortName"
-            chartTitle = "Collections"
-            legendName = "Name of collection"
-          />
-        )}
-        {currentPage === "ApexBar" && (
-          <ApexVerticalBarChart
-            targetColumn="code"
-            chartTitle="Code Frequency"
-            yAxisTitle="Code"
-            xAxisTitle="Frequency"
-          />
-        )}
-        {currentPage === "ApexDonutCount" && (
-          <ApexDonutCountChart
-            targetColumn="shortName"
-            chartTitle = "Collections"
-            legendName = "Name of collection"
-          />
-        )}
-        {currentPage === "DonutAvg" && (
-          <DonutAvgChart
-            targetColumns={["assessed", "submitted", "accepted", "rejected"]}
-            chartTitle = "Averages"
-            legendName = "Amounts"
-          />
-        )}
-        {currentPage === "Line" && <LineChartBuilder />}
-        {currentPage === "ExpandableTable" && <Report2CollectionsExpanded />}
-        {currentPage === "DataGrid" && <Report2AveragesPerCode />}
-      </div>
-    </div>
-  );
-};
-
-export default DashboardTab;
-*/

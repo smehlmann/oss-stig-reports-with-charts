@@ -127,6 +127,7 @@ const theme = createTheme({
     },
     spacing: 2,  // was 8
   },
+
   components: {
     MuiButton: {
       styleOverrides: {
