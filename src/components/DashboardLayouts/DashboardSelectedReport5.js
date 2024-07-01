@@ -1,26 +1,26 @@
 import React, { useMemo } from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
-import ApexCountByValueBarChart from "../../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
-// import BubbleCountChart from "../../../charts/BubbleCharts/BubbleCountChart";
-// import DonutAvgChart from "../../../charts/DonutCharts/ApexCharts/DonutAvgChart";
-// import ApexDonutCountChart from "../../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
-// import ApexBarAvgChart from "../../../charts/BarCharts/ApexCharts/ApexBarAvgChart";
 
-import ValueCountMap from "../../../charts/ValueCountMap";
+// import BubbleCountChart from "../../charts/BubbleCharts/BubbleCountChart";
+// import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart";
+// import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
+// import ApexBarAvgChart from "../../charts/BarCharts/ApexCharts/ApexBarAvgChart"
+
+import ValueCountMap from "../ValueCountMap";
 // import LineChartBuilder from "../../../charts/LineCharts/Chartjs/LineChartBuilder";
-import Report2CollectionsExpanded from "../../../charts/TableUsingMUI/Report2CollectionsExpanded";
-import AveragesGroupedByColumn from "../../../charts/DataGridMUI/AveragesGroupedByColumn";
-import ChartCardComponent from "../ChartCardComponent";
-import TableGridCardComponent from "../TableGridCardComponent";
+import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
+import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
+import ChartCardComponent from "../Cards/ChartCardComponent";
+import TableGridCardComponent from "../Cards/TableGridCardComponent";
 
-import theme from "../../../theme";
-import StatisticsCardComponent from "../StatisticsCardComponent"
-import {  useFilter } from "../../../FilterContext";
+import theme from "../../theme";
+import StatisticsCardComponent from "../Cards/StatisticsCardComponent"
+import {  useFilter } from "../../FilterContext";
 
-import Report2WithMultiLevelBenchmarks from "../../../charts/TableUsingMUI/Report2WithMultiLevelBenchmarks";
+import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/Report5WithMultiLevelBenchmarks";
 
 const Root = styled('div')(({ theme }) => ({
-  padding: theme.spacing(2),
+  padding: theme.spacing(3),
   backgroundColor: theme.palette.background.default,
   color: theme.palette.text.primary,
   height: "100%",
@@ -75,7 +75,7 @@ const DashboardSelectedReport5 = ({ data }) => {
     <ThemeProvider theme={theme}>
       {/* <FilterProvider> */}
         <Root>
-          <Grid container spacing={2}>
+          <Grid container spacing={3}>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
                 <StatisticsCardComponent 
                   metricValue={assetCount}
@@ -121,6 +121,7 @@ const DashboardSelectedReport5 = ({ data }) => {
                 />
               </ChartCardComponent>
             </Grid>
+
             {/* data grid */}
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <TableGridCardComponent>
@@ -145,13 +146,7 @@ const DashboardSelectedReport5 = ({ data }) => {
 
             <Grid item lg={12} sm={12} xl={12} xs={12}>
               <TableGridCardComponent>
-                <Report2CollectionsExpanded data={data}/>
-              </TableGridCardComponent>
-            </Grid>
-
-            <Grid item lg={12} sm={12} xl={12} xs={12}>
-              <TableGridCardComponent>
-                <Report2WithMultiLevelBenchmarks data={data}/>
+                <Report5WithMultiLevelBenchmarks data={data}/>
               </TableGridCardComponent>
             </Grid>
 

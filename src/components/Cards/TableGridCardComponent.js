@@ -14,23 +14,23 @@ const StyledCard = styled(Card)(({ theme }) => ({
   // backgroundColor: '#fcb8cb',
 }));
 
-const CustomCardContent = styled(CardContent)(({ theme }) => ({
-  padding: '0',
-  // height:  '100%',
-  // flexGrow: 1,
-  // display: 'flex',
-  // overflow: 'hidden', // Ensure content does not overflow
+// const CustomCardContent = styled(CardContent)(({ theme }) => ({
+//   padding: '0',
+//   // height:  '100%',
+//   // flexGrow: 1,
+//   // display: 'flex',
+//   // overflow: 'hidden', // Ensure content does not overflow
    
-}));
+// }));
 
 
 const TableGridCardComponent = ({ title, children }) => {
   return (
     <StyledCard>
       {/* <CardHeader title={title} /> */}
-      <CustomCardContent>
+      {/* <CustomCardContent> */}
         {children}
-      </CustomCardContent>
+      {/* </CustomCardContent> */}
     </StyledCard>
   );
 };

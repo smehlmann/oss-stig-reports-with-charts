@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
-import ValueCountMap from "../../ValueCountMap.js";
+import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
 
 const ValueSumMap = (data, targetColumn, valueColumn) => {

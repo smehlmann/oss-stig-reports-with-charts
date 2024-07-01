@@ -1,22 +1,21 @@
 import React, {useMemo} from "react";
 import { Grid, ThemeProvider, Paper, styled, Card, CardHeader, Box} from "@mui/material";
-import ApexCountByValueBarChart from "../../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
-import ApexBarAvgChart from "../../../charts/BarCharts/ApexCharts/ApexBarAvgChart";
+import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
+import ApexBarAvgChart from "../../charts/BarCharts/ApexCharts/ApexBarAvgChart"
 
-import ValueCountMap from "../../../charts/ValueCountMap";
-import AveragesGroupedByColumn from "../../../charts/DataGridMUI/AveragesGroupedByColumn";
-import ChartCardComponent from "../ChartCardComponent";
-import StatisticsCardComponent from "../StatisticsCardComponent"
-import TableGridCardComponent from "../TableGridCardComponent";
-import theme from "../../../theme";
-import {  useFilter } from "../../../FilterContext";
-// import CalculateArrayAvg from "../../../charts/CalculateArrayAvg";
-// import numeral from 'numeral';
-import FromTwoPropertiesBarChart from "../../../charts/BarCharts/ApexCharts/FromTwoPropertiesBarChart";
+// import ValueCountMap from "../../../charts/ValueCountMap";
+import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
+import ChartCardComponent from "../Cards/ChartCardComponent";
+import StatisticsCardComponent from "../Cards/StatisticsCardComponent"
+import TableGridCardComponent from "../Cards/TableGridCardComponent";
+import theme from "../../theme";
+import {  useFilter } from "../../FilterContext";
+
+import FromTwoPropertiesBarChart from "../../charts/BarCharts/ApexCharts/FromTwoPropertiesBarChart";
 
 
 const Root = styled('div')(({ theme }) => ({
-  padding: theme.spacing(2),
+  padding: theme.spacing(3),
   backgroundColor: theme.palette.background.default,
   color: theme.palette.text.primary,
   height: "100%",
@@ -117,7 +116,7 @@ const DashboardSelectedReport7 = ({ data }) => {
     <ThemeProvider theme={theme}>
       {/* <FilterProvider> */}
         <Root>
-          <Grid container spacing={2}>
+          <Grid container spacing={3}>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
                 <StatisticsCardComponent 
                   metricValue={assetCount}
@@ -189,7 +188,7 @@ const DashboardSelectedReport7 = ({ data }) => {
   {/* 
               <Grid item lg={12} sm={12} xl={12} xs={12}>
                 <TableGridCardComponent>
-                  <Report2CollectionsExpanded data={data}/>
+                  <Report5CollectionsExpanded data={data}/>
                 </TableGridCardComponent>
               </Grid> */}
           </Grid> 

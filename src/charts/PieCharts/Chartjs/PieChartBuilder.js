@@ -1,11 +1,38 @@
 import { useEffect, useState, useRef } from "react";
-import { circularChartFill, palette } from "../../palette.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import useLocalStorageListener from "../../../components/useLocalStorageListener.js";
 import CreateCustomTooltip from '../../CreateCustomTooltip.js'; 
 
 import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
 Chart.register(Title, Tooltip, ArcElement,  ChartDataLabels, Legend);
+
+
+export const hoverPalette = [
+  "#112959",
+  "#153f67",
+  "#1a5674",
+  "#207480",
+  "#28837b",
+  "#318e77",
+  "#3a9871",
+  "#4c9e7b",
+  "#5fa180",
+  "#6fa18c",
+];
+
+const palette = [
+  '#0000F0',
+  '#183090',
+  '#4860FF',
+  '#A8A8F0',
+  '#6078FF',
+  '#3048FF',
+  '#6078D8',
+  '#7890FF',
+  '#4860D9',
+  '#6060A8',
+];
+
 
 const PieChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
 
@@ -33,7 +60,7 @@ const PieChartBuilder = ({dataLabels, dataValues, title, legendTitle}) => {
             backgroundColor: palette,
             borderWidth: 0.5,
             borderRadius: 3,
-            hoverBackgroundColor: circularChartFill,
+            hoverBackgroundColor: hoverPalette,
             // hoverBorderColor: "#a8a8f0",
           },
         ],

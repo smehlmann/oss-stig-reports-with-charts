@@ -161,6 +161,16 @@ export default theme;
 //export hook 
 export { useTheme, palette };
 
+
+
+//maybe bg = #303060 
+//current bg = #323447
+
+//maybe (?) hover colors: #90A8FF
+//maybe hover or emphasis color: #A8C0FF
+//maybe title or something depending on bg: #000090,   
+//maybe title or something depending on bg: #181860 
+
 // const hoverPalette = [
 //   "#112959",
 //   "#153f67",

@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 
-import PropertyAvgMap from "../../PropertyAvgMap.js";
+import PropertyAvgMap from "../../../components/PropertyAvgMap.js";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import { useFilter } from "../../../FilterContext.js";
 import numeral from "numeral";
-import {getPercentageFormatterObject} from "../../getPercentageFormatterObject.js";
+import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
 
 //"data" is an array of objects. 
 

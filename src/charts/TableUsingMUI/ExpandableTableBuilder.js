@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import TablePagination from '@mui/material/TablePagination';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import TextField from '@mui/material/TextField';
 // import { styled } from '@mui/material/styles';
 import { useFilter } from '../../FilterContext';
 
@@ -20,6 +19,7 @@ import {
   StyledTableCell,
   StyledTable,
   ExpandedContentCell,
+  SearchBar
 } from './StyledTableComponents';
  
 
@@ -109,35 +109,13 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
           >
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1,  marginLeft: 0,  overflow: "hidden" }}>
-                <Box sx={{display: 'flex', flexDirection: 'column',
-                  }}
-                >
-                  <TextField
+                <Box sx={{display: 'flex', flexDirection: 'column'}}>
+                  <SearchBar
                     id = "search-bar"
                     label="Search"
                     variant="outlined"
                     value={searchText}
                     onChange={handleSearchChange}
-                    sx={{
-                      marginTop: "8px",
-                      marginBottom: "8px",
-                      marginLeft: 1,
-                      marginRight: 1,
-                      padding: 'auto',
-                     "& .MuiOutlinedInput-root": {
-                        borderRadius: "15px",
-                        height: "5%",
-                      },
-                      "& .MuiOutlinedInput-input": {
-                        padding: "12px",
-                      },
-                      "& .MuiInputLabel-outlined": {
-                        transform: "translate(14px, 14px) scale(1)",
-                      },
-                      "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
-                        transform: "translate(14px, -6px) scale(0.75)",
-                      },
-                    }}
                   />
                   {/* RENDERS THE mini-table within expanded row if not null*/}
                   {renderChildRow ? (

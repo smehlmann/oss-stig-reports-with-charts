@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import TablePagination from '@mui/material/TablePagination';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import TextField from '@mui/material/TextField';
 // import { styled } from '@mui/material/styles';
 import { useFilter } from '../../FilterContext';
 
@@ -20,6 +19,7 @@ import {
   StyledTableCell,
   StyledTable,
   ExpandedContentCell,
+  SearchBar,
 } from './StyledTableComponents';
  
 
@@ -28,9 +28,6 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(7);
-  // State for benchmarks expansion
-  const [benchmarksOpen, setBenchmarksOpen] = useState(false); 
-
   const [searchText, setSearchText] = useState("");
   const { updateFilter, clearFilter } = useFilter();
 
@@ -63,10 +60,6 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
     });
   };
 
-  const handleToggleBenchmarks = () => {
-    setBenchmarksOpen((prevOpen) => !prevOpen);
-  };
-
   useEffect(() => {
     // Update filter based on the search text in the expanded section's table
     if (open && searchText.trim() !== "") {
@@ -86,25 +79,6 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
       }
     }
   }, [open, searchText, parentRow, updateFilter, clearFilter]);
-
-  const renderBenchmarks = () => {
-    if (!benchmarksOpen) return null;
-    return (
-      // Render your benchmarks table or content here
-      <div>
-        {parentRow.childRows.map((childRow) => (
-          <div key={childRow.asset}>
-            <h3>{childRow.asset} Benchmarks:</h3>
-            <ul>
-              {childRow.benchmarks.map((benchmark, index) => (
-                <li key={index}>{benchmark}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    );
-  };
 
 
   return (
@@ -137,32 +111,13 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
                 <Box sx={{display: 'flex', flexDirection: 'column',
                   }}
                 >
-                  <TextField
+                  <SearchBar
                     id = "search-bar"
                     label="Search"
                     variant="outlined"
                     value={searchText}
                     onChange={handleSearchChange}
-                    sx={{
-                      marginTop: "8px",
-                      marginBottom: "8px",
-                      marginLeft: 1,
-                      marginRight: 1,
-                      padding: 'auto',
-                     "& .MuiOutlinedInput-root": {
-                        borderRadius: "15px",
-                        height: "5%",
-                      },
-                      "& .MuiOutlinedInput-input": {
-                        padding: "12px",
-                      },
-                      "& .MuiInputLabel-outlined": {
-                        transform: "translate(14px, 14px) scale(1)",
-                      },
-                      "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
-                        transform: "translate(14px, -6px) scale(0.75)",
-                      },
-                    }}
+                    
                   />
                   {/* RENDERS THE mini-table within expanded row if not null*/}
                   {renderChildRow ? (
@@ -170,7 +125,7 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
                     <>
                       {renderChildRow(parentRow, page, rowsPerPage, searchText)}
                       <TablePagination
-                        rowsPerPageOptions={[7, 14, 21]}
+                        rowsPerPageOptions={[5, 10, 15]}
                         component="div"
                         count={parentRow.childRows.filter(childRow => (
                           childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -189,7 +144,6 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
                       No child row renderer provided
                     </Typography>
                   )}
-
                   
                 </Box>
               </Box>
@@ -233,3 +187,4 @@ export const ThreeLevelTableBuilder = ({ rows, columns, renderChildRow, filterPr
   </StyledTableContainer>
 );
 export default ThreeLevelTableBuilder;
+

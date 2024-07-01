@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
 // import { Chart } from "chart.js/auto";
-// import { palette} from "../../palette.js";
 import ValueCountMap from "../../ValueCountMap.js";
 // import PieChartBuilder from "./PieChartBuilder.js";
 import ApexDonutChartBuilder from "./ApexDonutChartBuilder.js";

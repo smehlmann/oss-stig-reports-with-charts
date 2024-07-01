@@ -5,8 +5,8 @@ import Typography from '@mui/material/Typography';
 import { LinearProgress } from '@mui/material';
 import { useFilter } from '../../FilterContext';
 import DataGridBuilder from './DataGridBuilder';
-import {getPercentageFormatterObject} from "../getPercentageFormatterObject.js";
-import CalculateArrayAvg from "../CalculateArrayAvg.js";
+import {getPercentageFormatterObject} from "../../components/getPercentageFormatterObject.js";
+import CalculateArrayAvg from "../../components/CalculateArrayAvg.js";
 
 
 const renderProgressBarCell = (params) => (

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
-import ValueCountMap from "../../ValueCountMap.js";
+import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
 
 const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {

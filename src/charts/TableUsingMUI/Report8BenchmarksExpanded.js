@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import ExpandableTableBuilder from "./ExpandableTableBuilder";
 import TableBody from '@mui/material/TableBody';
 import { useFilter } from '../../FilterContext';
-import {getPercentageFormatterObject} from "../getPercentageFormatterObject.js";
+import {getPercentageFormatterObject} from "../../components/getPercentageFormatterObject.js";
 
 // import { useTheme } from '@mui/material/styles';
 import {

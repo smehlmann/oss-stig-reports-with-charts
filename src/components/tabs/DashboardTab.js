@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import useLocalStorageListener from "../useLocalStorageListener";
-import DashboardSelectedReport5 from "./DashboardLayouts/DashboardSelectedReport5";
-import DashboardSelectedReport7 from "./DashboardLayouts/DashboardSelectedReport7";
-import DashboardSelectedReport8 from "./DashboardLayouts/DashboardSelectedReport8";
-
+// import useLocalStorageListener from "../useLocalStorageListener";
+import DashboardSelectedReport5 from "../DashboardLayouts/DashboardSelectedReport5";
+import DashboardSelectedReport7 from "../DashboardLayouts/DashboardSelectedReport7";
+import DashboardSelectedReport8 from "../DashboardLayouts/DashboardSelectedReport8";
 /* Include statement to handle how data is parsed based on the report selected*/
 
 const formatPercentage = (percentageString) => {
@@ -59,6 +58,9 @@ const convertBenchmarksToArray = (initialString, selectReportNum) => {
     else {
       return [initialString];
     }
+  }
+  else {
+    return initialString;
   }
 };
 

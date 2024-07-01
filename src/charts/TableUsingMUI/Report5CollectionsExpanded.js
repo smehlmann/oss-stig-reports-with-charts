@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
-import ExpandableTableBuilder from "./ExpandableTableBuilder";
+import ExpandableTableBuilder from "./ExpandableTableBuilder.js";
 import TableBody from '@mui/material/TableBody';
-import { useFilter } from '../../FilterContext';
-import {getPercentageFormatterObject} from "../getPercentageFormatterObject.js";
+import { useFilter } from '../../FilterContext.js';
+import {getPercentageFormatterObject} from "../../components/getPercentageFormatterObject.js";
 
 // import { useTheme } from '@mui/material/styles';
 import {
@@ -12,7 +12,7 @@ import {
   ExpandedTableHead,
   ExpandedHeaderCell,
   ExpandedTableCell
-} from './StyledTableComponents';
+} from './StyledTableComponents.js';
 
 //format sysAdmin and primOwner to remove quotation marks
 const formatString = (value) => {
@@ -22,7 +22,7 @@ const formatString = (value) => {
   return value;
 };
 
-function Report2CollectionsExpanded({ data }) {
+function Report5CollectionsExpanded({ data }) {
   const { updateFilter, clearFilter} = useFilter();
   const [searchText, setSearchText] = useState("");
   // const [filteredChildRows, setFilteredChildRows] = useState({}); // State to hold filtered data
@@ -109,8 +109,7 @@ function Report2CollectionsExpanded({ data }) {
 
     const displayedRows = filteredChildRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-    //update state with filtered dat
-
+    //within expanded content 
     return (
       <StyledChildTableContainer sx={{ margin: 1 }}>
         <StyledTable size="small" aria-label="child table">
@@ -158,7 +157,7 @@ function Report2CollectionsExpanded({ data }) {
   );
 }
 
-export default Report2CollectionsExpanded;
+export default Report5CollectionsExpanded;
 
 
 
@@ -171,7 +170,7 @@ export default Report2CollectionsExpanded;
 // };
 
 
-// function Report2CollectionsExpanded({ data }) {
+// function Report5CollectionsExpanded({ data }) {
 //   const { filter, updateFilter, clearFilter} = useFilter();
 //   const [searchText, setSearchText] = useState("");
 //   const [filteredChildRows, setFilteredChildRows] = useState({});

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
-import MultiLevelTableBuilder from "./MultiLevelTableBuilder";
+import MultiLevelTableBuilder from "./MultiLevelTableBuilder.js";
 import TableBody from '@mui/material/TableBody';
-import { useFilter } from '../../FilterContext';
-import {getPercentageFormatterObject} from "../getPercentageFormatterObject.js";
+import { useFilter } from '../../FilterContext.js';
+import {getPercentageFormatterObject} from "../../components/getPercentageFormatterObject.js";
+import TablePagination from '@mui/material/TablePagination';
 
 // import { useTheme } from '@mui/material/styles';
 import {
@@ -11,15 +12,17 @@ import {
   StyledChildTableContainer,
   ExpandedTableHead,
   ExpandedHeaderCell,
-  ExpandedTableCell
-} from './StyledTableComponents';
+  ExpandedTableCell,
+  ExpandedContentCell,
+  ExpandedFirstLevelCell,
+  ExpandedFirstLevelRow
+} from './StyledTableComponents.js';
 
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 
 //format sysAdmin and primOwner to remove quotation marks
 const formatString = (value) => {
@@ -30,17 +33,32 @@ const formatString = (value) => {
 };
 
 
-//NestedChildRow functional component
-function NestedChildRow({ childRow }) {
+//handles rendering for 2nd-level child row
+function NestedSecondLevelChildRow({ childRow }) {
   const [open, setOpen] = useState(false);
+  const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
+  
+  //for pagination
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleToggleOpen = () => {
     setOpen(!open);
   };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const filteredBenchmarks = childRow.benchmarks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <>
-      <StyledTableRow>
+      <StyledTableRow className="first-level-child-row">
         <ExpandedTableCell>
           <IconButton onClick={handleToggleOpen}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -49,39 +67,51 @@ function NestedChildRow({ childRow }) {
         </ExpandedTableCell>
         <ExpandedTableCell>{childRow.sysAdmin}</ExpandedTableCell>
         <ExpandedTableCell>{childRow.primOwner}</ExpandedTableCell>
-        <ExpandedTableCell>{childRow.accepted}%</ExpandedTableCell>
+        <ExpandedTableCell>
+          {percentageFormatterObject.formatter(childRow.accepted)}
+        </ExpandedTableCell>
       </StyledTableRow>
 
       {open && childRow.benchmarks && (
-        <StyledTableRow>
-          <ExpandedTableCell colSpan={4}>
+        <StyledTableRow className='second-level-child-row'>
+          <ExpandedContentCell colSpan={4} sx={{ backgroundColor: '#EAEAEA' }}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
-                <StyledTable size="small" aria-label="benchmarks table">
-                  <ExpandedTableHead>
-                    <StyledTableRow>
-                      <ExpandedHeaderCell>Benchmarks</ExpandedHeaderCell>
-                      {/* <ExpandedHeaderCell>Value</ExpandedHeaderCell> */}
-                    </StyledTableRow>
-                  </ExpandedTableHead>
-                  <TableBody>
-                    {childRow.benchmarks.map((benchmark, index) => (
-                      <StyledTableRow key={index}>
-                        <ExpandedTableCell>{benchmark}</ExpandedTableCell>
+                <StyledChildTableContainer>
+                  <StyledTable size="small" aria-label="benchmarks table">
+                    <ExpandedTableHead>
+                      <StyledTableRow>
+                        <ExpandedHeaderCell>Benchmarks</ExpandedHeaderCell>
                       </StyledTableRow>
-                    ))}
-                  </TableBody>
-                </StyledTable>
+                    </ExpandedTableHead>
+                    <TableBody>
+                      {filteredBenchmarks.map((benchmark, index) => (
+                        <StyledTableRow key={index}>
+                          <ExpandedTableCell>{benchmark}</ExpandedTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </StyledTable>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 15]}
+                    component="div"
+                    count={childRow.benchmarks.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </StyledChildTableContainer>
               </Box>
             </Collapse>
-          </ExpandedTableCell>
+          </ExpandedContentCell>
         </StyledTableRow>
       )}
     </>
   );
 }
 
-function Report2WithMultiLevelBenchmarks({ data }) {
+function Report5WithMultiLevelBenchmarks({ data }) {
   const { updateFilter, clearFilter} = useFilter();
   const [searchText, setSearchText] = useState("");
   // const [filteredChildRows, setFilteredChildRows] = useState({}); // State to hold filtered data
@@ -177,7 +207,7 @@ function Report2WithMultiLevelBenchmarks({ data }) {
         
           <TableBody>
             {displayedRows.map((childRow, index) => (
-                <NestedChildRow key={index} childRow={childRow} />
+                <NestedSecondLevelChildRow key={index} childRow={childRow} />
               ))}
           </TableBody>
         </StyledTable>
@@ -205,7 +235,7 @@ function Report2WithMultiLevelBenchmarks({ data }) {
   );
 }
 
-export default Report2WithMultiLevelBenchmarks;
+export default Report5WithMultiLevelBenchmarks;
 
 
 //  //code responsible for creating childRows in expanded section
