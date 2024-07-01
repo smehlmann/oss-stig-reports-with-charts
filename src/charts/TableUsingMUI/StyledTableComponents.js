@@ -149,24 +149,6 @@ export const ExpandedTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 
-export const ExpandedFirstLevelRow = styled(TableRow)(({ theme }) => ({
-  "&:hover": {
-    backgroundColor: theme.palette.action.selected,
-  },
-  "&:first-of-type": {
-    border: 'none', 
-  },
-  "&.first-level-child-row": {
-    border: 'none', 
-  },
-  "&.second-level-child-row": {
-    border: 'none', 
-
-  }
-  
-}));
-
-
 //In expanded section, row of first level 
 export const ExpandedFirstLevelCell = styled(TableRow)(({ theme }) => ({
   // "&:hover": {

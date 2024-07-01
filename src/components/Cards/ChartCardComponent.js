@@ -2,15 +2,15 @@
 import React from 'react';
 import { Card, CardHeader, CardContent, styled, CardHeader as MuiCardHeader  } from '@mui/material';
 
+
 const StyledCard = styled(Card)(({ theme }) => ({
- // height: '100%', --> changed the height
-  height: '500px',
+  // height: '100%', 
+  height: '450px',
   display: 'flex',
   flexDirection: 'column',
   boxShadow: theme.shadows[3],
   borderRadius: 10,
-  flex: 1,
-  overflow: 'hidden',
+  overflow: 'clip',
 }));
 
 const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
@@ -28,11 +28,64 @@ const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
 
 
 const CustomCardContent = styled(CardContent)(({ theme }) => ({
-  padding: '0',
+  padding: 0,
+  margin: 0,
+  // height: '100vh',
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'row',
+  flex: 1,
+  justifyContent: "center",
+  alignContent: 'center',
+  alignItems: 'center',
+  overflow: 'hidden', // Ensure content does not overflow
+}));
+
+const ChartCardComponent = ({ title, children }) => {
+  return (
+    <StyledCard>
+      <CustomCardHeader title={title} />
+      <CustomCardContent>
+        {children}
+      </CustomCardContent>
+    </StyledCard>
+  );
+};
+
+export default ChartCardComponent;
+
+/*
+const StyledCard = styled(Card)(({ theme }) => ({
+  // height: '100%', 
+  height: '450px',
+  display: 'flex',
+  flexDirection: 'column',
+  boxShadow: theme.shadows[3],
+  borderRadius: 10,
+  // overflow: 'hidden',
+}));
+
+const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
+  paddingBottom: '0',
+  '& .MuiCardHeader-title': {
+    textAlign: 'center',
+    fontSize: '1.5rem',
+    fontFamily: 'Segoe UI',
+    fontWeight: '900',
+  },
+  '& .MuiCardHeader-content': {
+    paddingBottom: '0', // Remove padding from the content element if needed
+  },
+}));
+
+
+const CustomCardContent = styled(CardContent)(({ theme }) => ({
+  padding: theme.spacing(0),
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  overflow: 'auto',
+  overflow: 'clip',
+  flex: 1,
   // justify: "space-between"
   // overflow: 'hidden', // Ensure content does not overflow
 }));
@@ -49,46 +102,9 @@ const ChartCardComponent = ({ title, children }) => {
 };
 
 export default ChartCardComponent;
+*/
 
 
-
-
-
-// const StyledCard = styled(Card)(({ theme }) => ({
-//   height: '100%',
-//   display: 'flex',
-//   flexDirection: 'column',
-//   boxShadow: theme.shadows[3],
-//   borderRadius: 10,
-// }));
-
-// const CustomCardContent = styled(CardContent)(({ theme }) => ({
-//   padding: theme.spacing(1),
-//   flexGrow: 1,
-//   display: 'flex',
-//   flexDirection: 'column',
-//   overflow: 'hidden', // Ensure content does not overflow
-// }));
-
-// const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
-//   '& .MuiCardHeader-title': {
-//     textAlign: 'center',
-//     fontSize: '30px',
-//     fontFamily: 'Segoe UI',
-//   },
-// }));
-// const CustomCardComponent = ({ title, children }) => {
-//   return (
-//     <StyledCard>
-//       {/* <CustomCardHeader title={title} /> */}
-//       <CustomCardContent>
-//         {children}
-//       </CustomCardContent>
-//     </StyledCard>
-//   );
-// };
-
-// export default CustomCardComponent;
 
 
 // // Custom styled Card component

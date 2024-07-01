@@ -3,22 +3,29 @@ import { Grid, ThemeProvider, styled } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 
 import ApexBarAvgChart from "../../charts/BarCharts/ApexCharts/ApexBarAvgChart";
+import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart"
 import ValueCountMap from "../ValueCountMap";
 import Report8BenchmarksExpanded from "../../charts/TableUsingMUI/Report8BenchmarksExpanded";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
+import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import theme from "../../theme";
 import StatisticsCardComponent from "../Cards/StatisticsCardComponent"
 import {  useFilter } from "../../FilterContext";
 
-const Root = styled('div')(({ theme }) => ({
-  padding: theme.spacing(3),
-  backgroundColor: theme.palette.background.default,
-  color: theme.palette.text.primary,
-  height: "100%",
-  // position: 'inherit',
-
-}));
+const Root = styled('div')(({ theme }) => {
+  return ({
+    padding: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
+    backgroundColor: theme.palette.background.default,
+    color: theme.palette.text.primary,
+    height: '100%',
+    // display: 'flex',
+    // flex: 1,
+    // flexDirection: 'column',
+    // position: 'inherit',
+  });
+});
 
 /*
 Grid spacing is split into 12 parts:
@@ -46,17 +53,14 @@ const DashboardSelectedReport5 = ({ data }) => {
   const cat1Sum = useMemo(() => {
     return filteredData.reduce((sum, item) => sum + (item.cat1 || 0), 0);
   }, [filteredData]);
-
   //sum of Cat2
   const cat2Sum = useMemo(() => {
     return filteredData.reduce((sum, item) => sum + (item.cat2 || 0), 0);
   }, [filteredData]);
-
   //sum of cat3
   const cat3Sum = useMemo(() => {
     return filteredData.reduce((sum, item) => sum + (item.cat3 || 0), 0);
   }, [filteredData]);
-
   //number of assets
   const assetCount = useMemo(() => {
     const countMap = ValueCountMap(filteredData, 'asset');
@@ -102,7 +106,7 @@ const DashboardSelectedReport5 = ({ data }) => {
             </Grid>
             
 
-            <Grid item lg={6} sm={6} xl={6} xs={12}>
+            <Grid item lg={8} sm={6} xl={8} xs={12}>
               <ChartCardComponent title = 'Assets by Benchmark'>
                 <ApexCountByValueBarChart
                   targetColumn="benchmarks"
@@ -113,12 +117,11 @@ const DashboardSelectedReport5 = ({ data }) => {
                 />
               </ChartCardComponent>
             </Grid>
-
-            <Grid item lg={6} sm={6} xl={6} xs={12}>
+            
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = "Averages">
-                <ApexBarAvgChart
+                <DonutAvgChart
                   targetColumns={["assessed", "submitted", "accepted", "rejected"]}
-                  isHorizontal = {false}
                   xAxisTitle= "Packages"
                   yAxisTitle= "Number of Assets"
                   disableFilterUpdate={true}
@@ -127,10 +130,12 @@ const DashboardSelectedReport5 = ({ data }) => {
               </ChartCardComponent>
             </Grid> 
 
+            
+
             <Grid item lg={12} sm={12} xl={12} xs={12}>
-              <TableGridCardComponent>
+              <ExpandableTableCardComponent>
                 <Report8BenchmarksExpanded data={data}/>
-              </TableGridCardComponent>
+              </ExpandableTableCardComponent>
             </Grid>
             {/* <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = "Averages">

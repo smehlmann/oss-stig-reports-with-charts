@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import DashboardSelectedReport5 from "../DashboardLayouts/DashboardSelectedReport5";
 import DashboardSelectedReport7 from "../DashboardLayouts/DashboardSelectedReport7";
 import DashboardSelectedReport8 from "../DashboardLayouts/DashboardSelectedReport8";
+import "./DashboardTab.css"
 /* Include statement to handle how data is parsed based on the report selected*/
 
 const formatPercentage = (percentageString) => {

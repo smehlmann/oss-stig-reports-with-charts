@@ -56,9 +56,9 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     backgroundColor: theme.palette.secondary.light,
     // borderBottom: 'none',
   },
-  // "& .MuiDataGrid-virtualScroller": {
-  //   backgroundColor: theme.palette.background.paper,
-  // },
+  "& .MuiDataGrid-virtualScroller": {
+    backgroundColor: theme.palette.background.paper,
+  },
   "& .MuiDataGrid-footerContainer": {
     borderTop: "none",
     backgroundColor: theme.palette.secondary.light,

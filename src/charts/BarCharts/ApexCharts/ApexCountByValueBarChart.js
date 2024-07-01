@@ -7,7 +7,7 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
   const { filter, updateFilter } = useFilter();
 
   const filteredData = useMemo(() => {
-    if (Object.keys(filter).length > 0) {
+    if (Object.keys(filter).length > 0) { 
       const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
       return filtered;
     }
@@ -22,8 +22,6 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
   const handleBarClick = (event, chartContext, config) => {
     const categoryLabels = config.w.globals.labels || config.w.globals.categories;
     const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;
-
-    console.log('Filter updated:', filter);
 
       if (selectedValue) {
       // Check if the selected value is already in the filter

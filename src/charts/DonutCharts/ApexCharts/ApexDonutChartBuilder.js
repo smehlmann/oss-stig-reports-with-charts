@@ -2,10 +2,31 @@ import { useEffect, useState,} from "react";
 import { palette } from "../../../theme";
 import numeral from "numeral";
 import Chart from 'react-apexcharts';
+import { useTheme } from "../../../theme.js"
 
 
-const ApexDonutChartBuilder = ({dataLabels, dataValues, legendTitle, onClick}) => {
+const ApexDonutChartBuilder = ({dataLabels, dataValues, legendTitle, onClick, formatLabelToPercentage}) => {
   const [series, setSeries] = useState(dataValues);
+  const theme = useTheme();
+
+  //set color of bars based on bar's label
+  const getColorForLabel = (label) => {
+    switch(label) {
+      case 'Assessed':
+        // return '#581845';
+        return theme.palette.assessed;
+      case 'Submitted':
+        return theme.palette.submitted;
+      case 'Accepted':
+        return theme.palette.accepted;
+      case 'Rejected':
+        return theme.palette.rejected;
+      default:
+        return theme.palette.primary.main;
+    }
+  };
+
+  const barColors = dataLabels.map(label => getColorForLabel(label));
   const [options, setOptions] = useState({
 
   chart: {
@@ -30,7 +51,7 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, legendTitle, onClick}) =
     }
   },
   labels: dataLabels,
-  colors: palette,
+  colors: barColors,
 
   plotOptions: {
     pie: {
@@ -48,10 +69,6 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, legendTitle, onClick}) =
     labels: {
       colors: '#000',
       useSeriesColors: false,
-    },
-    title: {
-      text: legendTitle,
-      side: 'left',
     },
   },
   dataLabels: {
@@ -86,14 +103,12 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, legendTitle, onClick}) =
   },
   tooltip: {
     y: {
-      formatter: function(value) {
-        // Check if the value is less than 1 (interpreted as a percentage)
-        if (value < 1) {
-          return numeral(value * 100).format('0.00') + '%';
+      formatter: function (value) {
+        if (formatLabelToPercentage) {
+          return formatLabelToPercentage.formatter(value);
         }
-        // Otherwise, return the value as is
         return value;
-      }
+      },
     }
   },
   responsive: [{
@@ -121,7 +136,7 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, legendTitle, onClick}) =
   }, [dataLabels, dataValues]);
 
   return (
-    <div className = "apex-chart" style={{ height: '100%', width: '100%' }}>
+    <div className = "apex-chart" style={{ height:'95%', width: '95%', justifyContent: 'center', alignSelf: 'center'}}>
       <Chart options={options} series={series} type="donut" />
     </div>
   );

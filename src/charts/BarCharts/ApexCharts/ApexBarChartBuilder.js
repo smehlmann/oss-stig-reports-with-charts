@@ -1,8 +1,7 @@
 import React, { useMemo, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 // import { palette } from "../../palette.js";
-import numeral from "numeral";
-import { palette, useTheme } from "../../../theme.js"
+import { useTheme } from "../../../theme.js"
 
 
 const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader, yAxisHeader, onClick, formatLabelToPercentage }) => {
@@ -87,6 +86,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
         text: xAxisHeader,
         style: axisTitleStyle,
       },
+      tickAmount: dataValues.length > 5 ? undefined : dataValues.length, // set tickAmount based on data length
     },
     yaxis: {
       title: {
