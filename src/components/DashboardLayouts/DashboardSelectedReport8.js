@@ -7,7 +7,6 @@ import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart"
 import ValueCountMap from "../ValueCountMap";
 import Report8BenchmarksExpanded from "../../charts/TableUsingMUI/Report8BenchmarksExpanded";
 import ChartCardComponent from "../Cards/ChartCardComponent";
-import DonutPieChartCardComponent from "../Cards/DonutPieChartCardComponent.js"
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import theme from "../../theme";
 import StatisticsCardComponent from "../Cards/StatisticsCardComponent"
