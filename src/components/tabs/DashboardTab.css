@@ -1,6 +1,39 @@
 
+/* The ::-webkit-scrollbar pseudo-element targets the scrollbar.*/
+::-webkit-scrollbar {
+  width: 10px; 
+}
+
+/* The ::-webkit-scrollbar-track pseudo-element targets the track (or progress bar) of the scrollbar. */
+ ::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+} 
+
+/* The ::-webkit-scrollbar-thumb pseudo-element targets the handle (or thumb) of the scrollbar. */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #888; 
+}
+/* Change the handle color when hovering */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+} 
 
 
+* {
+  scrollbar-width: thin;
+  /* scrollbar-color: #888 transparent; */
+  scroll-behavior: smooth;
+}  
+
+.chart-container {
+  max-width: 800px; /* Set your desired maximum width */
+  margin: 0 auto;  /* Center the container horizontally */
+  padding: 20px;    /* Add padding to the container */
+  border: 1px solid #ddd; /* Add a border for visual separation */
+  border-radius: 8px; /* Add border-radius for rounded corners */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+}
 
 /* Add additional styling for your charts if needed */
 .chart-container canvas {

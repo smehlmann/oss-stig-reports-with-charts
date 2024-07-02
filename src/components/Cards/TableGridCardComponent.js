@@ -1,22 +1,6 @@
 import React from 'react';
 import { Card, CardContent, styled, CardHeader as MuiCardHeader  } from '@mui/material';
-import { createGlobalStyle } from 'styled-components';
 
-const GlobalStyles = createGlobalStyle`
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background-color: #6230EC;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #6230EC;
-    border-radius: 10px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #6230EC;
-  }
-`;
 const StyledCard = styled(Card)(({ theme }) => ({
   // height: '100%',
   height: '450px',
@@ -43,15 +27,14 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 const TableGridCardComponent = ({ title, children }) => {
   return (
-    <>
-     <GlobalStyles />
-      <StyledCard className = 'custom-scrollbar'>
-        {/* <CardHeader title={title} /> */}
+  
+    <StyledCard className = 'custom-scrollbar'>
+      {/* <CardHeader title={title} /> */}
         {/* <CustomCardContent> */}
-          {children}
+        {children}
         {/* </CustomCardContent> */}
-      </StyledCard>
-    </>
+    </StyledCard>
+
   );
 };
 

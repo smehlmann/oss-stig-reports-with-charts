@@ -56,9 +56,12 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     backgroundColor: theme.palette.secondary.light,
     // borderBottom: 'none',
   },
-  "& .MuiDataGrid-virtualScroller": {
-    backgroundColor: theme.palette.background.paper,
+  "& .MuiDataGrid-columnHeaders": {
+    backgroundColor: theme.palette.secondary.light,
   },
+  // "& .MuiDataGrid-virtualScroller": {
+  //   backgroundColor: theme.palette.background.paper,
+  // },
   "& .MuiDataGrid-footerContainer": {
     borderTop: "none",
     backgroundColor: theme.palette.secondary.light,
@@ -69,28 +72,29 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
     color: `${theme.palette.text.primary} !important`,
   },
-  // Custom scrollbar styles
-  // "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-  //   width: '10px',
-  // },
-  // "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track": {
-  //   background: 'transparent', // Make the scrollbar track transparent
-  // },
-  // "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-  //   backgroundColor: '#888',
-  //   borderRadius: '10px',
-  //   border: '3px solid transparent',
-  // },
-  // "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover": {
-  //   backgroundColor: '#555',
-  // },
-  // // Firefox scrollbar styles
-  // "& .MuiDataGrid-virtualScroller": {
-  //   scrollbarWidth: 'thin',
-  //   scrollbarColor: '#888 transparent',
-  // },
-
   
+/*
+ ///// Custom scrollbar styles
+  "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+    width: '5px',
+  },
+  "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track": {
+    background: theme.palette.secondary.light, // Make the scrollbar track transparent
+  },
+  "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
+    backgroundColor: '#888',
+    borderRadius: '10px',
+    border: '3px solid transparent',
+  },
+  "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: '#555',
+  },
+  // Firefox scrollbar styles
+  "& .MuiDataGrid-virtualScroller": {
+    scrollbarWidth: 'thin',
+    scrollbarColor: '#888 transparent',
+  },
+*/
 }));
 
 
@@ -113,7 +117,7 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
       display: 'flex',
       height: '100%',
       // maxHeight: '100%', // Ensure it doesn't grow beyond this height
-      overflowY: 'auto', // Enable vertical scrolling
+      overflowY: 'hidden', // Enable vertical scrolling
       margin: "0 auto",
       flexDirection: 'column',
     }}>

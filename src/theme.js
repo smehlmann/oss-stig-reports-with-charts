@@ -1,7 +1,5 @@
 import {  createTheme, useTheme } from "@mui/material";
 
-
-
 const palette = [
   '#0000F0',
   '#183090',
