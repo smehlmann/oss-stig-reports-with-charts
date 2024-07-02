@@ -7,7 +7,7 @@ import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart"
 import ValueCountMap from "../ValueCountMap";
 import Report8BenchmarksExpanded from "../../charts/TableUsingMUI/Report8BenchmarksExpanded";
 import ChartCardComponent from "../Cards/ChartCardComponent";
-import TableGridCardComponent from "../Cards/TableGridCardComponent";
+import DonutPieChartCardComponent from "../Cards/DonutPieChartCardComponent.js"
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import theme from "../../theme";
 import StatisticsCardComponent from "../Cards/StatisticsCardComponent"
@@ -119,7 +119,7 @@ const DashboardSelectedReport5 = ({ data }) => {
             </Grid>
             
             <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <ChartCardComponent title = "Averages">
+              <DonutPieChartCardComponent title = "Averages">
                 <DonutAvgChart
                   targetColumns={["assessed", "submitted", "accepted", "rejected"]}
                   xAxisTitle= "Packages"
@@ -127,7 +127,7 @@ const DashboardSelectedReport5 = ({ data }) => {
                   disableFilterUpdate={true}
                   data={data}
                 />
-              </ChartCardComponent>
+              </DonutPieChartCardComponent>
             </Grid> 
 
             

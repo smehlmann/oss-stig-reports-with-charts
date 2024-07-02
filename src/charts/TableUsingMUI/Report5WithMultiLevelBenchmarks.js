@@ -4,7 +4,7 @@ import TableBody from '@mui/material/TableBody';
 import { useFilter } from '../../FilterContext.js';
 import {getPercentageFormatterObject} from "../../components/getPercentageFormatterObject.js";
 import TablePagination from '@mui/material/TablePagination';
-
+import {useTheme} from "../../theme.js"
 // import { useTheme } from '@mui/material/styles';
 import {
   StyledTable,
@@ -14,10 +14,11 @@ import {
   ExpandedHeaderCell,
   ExpandedTableCell,
   ExpandedContentCell,
-  ExpandedFirstLevelCell,
-  ExpandedFirstLevelRow
+  ExpandedFirstLevelHeaderCell,
+  Expanded2ndLevelHeaderCell,
+  // ExpandedFirstLevelCell,
+  // ExpandedFirstLevelRow
 } from './StyledTableComponents.js';
-
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -32,23 +33,21 @@ const formatString = (value) => {
   return value;
 };
 
-
 //handles rendering for 2nd-level child row
 function NestedSecondLevelChildRow({ childRow }) {
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
   const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
   
-  //for pagination
+  //handles pagination and page switching
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
   const handleToggleOpen = () => {
     setOpen(!open);
   };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -74,14 +73,14 @@ function NestedSecondLevelChildRow({ childRow }) {
 
       {open && childRow.benchmarks && (
         <StyledTableRow className='second-level-child-row'>
-          <ExpandedContentCell colSpan={4} sx={{ backgroundColor: '#EAEAEA' }}>
+          <ExpandedContentCell colSpan={4} sx={{ backgroundColor: '#EAEAEA' }}> 
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
+              <Box sx={{ margin: 0.5 }}>
                 <StyledChildTableContainer>
                   <StyledTable size="small" aria-label="benchmarks table">
-                    <ExpandedTableHead>
+                    <ExpandedTableHead sx={{ backgroundColor: theme.palette.secondary.dark}}>
                       <StyledTableRow>
-                        <ExpandedHeaderCell>Benchmarks</ExpandedHeaderCell>
+                        <Expanded2ndLevelHeaderCell>Benchmarks</Expanded2ndLevelHeaderCell>
                       </StyledTableRow>
                     </ExpandedTableHead>
                     <TableBody>
@@ -112,6 +111,7 @@ function NestedSecondLevelChildRow({ childRow }) {
 }
 
 function Report5WithMultiLevelBenchmarks({ data }) {
+  const theme = useTheme();
   const { updateFilter, clearFilter} = useFilter();
   const [searchText, setSearchText] = useState("");
   // const [filteredChildRows, setFilteredChildRows] = useState({}); // State to hold filtered data
@@ -121,7 +121,6 @@ function Report5WithMultiLevelBenchmarks({ data }) {
   const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
 
   //checks if data is array of objects. If so, group by 'shortName' property.
-  //
   useEffect(() => {
     try {
       if (Array.isArray(data) && data.length > 0) {
@@ -155,7 +154,6 @@ function Report5WithMultiLevelBenchmarks({ data }) {
     }
   }, [data]);
 
-
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
   };
@@ -184,27 +182,13 @@ function Report5WithMultiLevelBenchmarks({ data }) {
     return (
       <StyledChildTableContainer sx={{ margin: 1 }}>
         <StyledTable size="small" aria-label="child table">
-          <ExpandedTableHead sx={{ border: 'none'}}>
-            <StyledTableRow>
-              <ExpandedHeaderCell>Asset</ExpandedHeaderCell>
-              <ExpandedHeaderCell >Sys Admin</ExpandedHeaderCell>
-              <ExpandedHeaderCell >Primary Owner</ExpandedHeaderCell>
-              <ExpandedHeaderCell >Accepted %</ExpandedHeaderCell>
-            </StyledTableRow>
+          <ExpandedTableHead sx={{ border: 'none', backgroundColor: theme.palette.secondary.main}}>
+             
+            <ExpandedFirstLevelHeaderCell>Asset</ExpandedFirstLevelHeaderCell>
+            <ExpandedFirstLevelHeaderCell >Sys Admin</ExpandedFirstLevelHeaderCell>
+            <ExpandedFirstLevelHeaderCell >Primary Owner</ExpandedFirstLevelHeaderCell>
+            <ExpandedFirstLevelHeaderCell >Accepted %</ExpandedFirstLevelHeaderCell>
           </ExpandedTableHead>
-          {/* <TableBody>
-            {displayedRows.map((childRow, index) => (
-              <StyledTableRow key={index} className="child-row">
-                <ExpandedTableCell>{childRow.asset}</ExpandedTableCell>
-                <ExpandedTableCell>{childRow.sysAdmin}</ExpandedTableCell>
-                <ExpandedTableCell>{childRow.primOwner}</ExpandedTableCell>
-                <ExpandedTableCell>
-                  {percentageFormatterObject.formatter(childRow.accepted)}
-                </ExpandedTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody> */}
-        
           <TableBody>
             {displayedRows.map((childRow, index) => (
                 <NestedSecondLevelChildRow key={index} childRow={childRow} />

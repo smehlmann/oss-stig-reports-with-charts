@@ -115,7 +115,8 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, legendTitle, onClick, fo
     breakpoint: 1000,
     options: {
       chart: {
-        // height: 200,
+        height: '100%',
+        width: '100%',
       },
       legend: {
         position: 'bottom',
@@ -136,7 +137,7 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, legendTitle, onClick, fo
   }, [dataLabels, dataValues]);
 
   return (
-    <div className = "apex-chart" style={{ height:'95%', width: '95%', justifyContent: 'center', alignSelf: 'center'}}>
+    <div className = "apex-chart" style={{ height:'100%', width: '100%', justifyContent: 'center', alignSelf: 'center'}}>
       <Chart options={options} series={series} type="donut" />
     </div>
   );

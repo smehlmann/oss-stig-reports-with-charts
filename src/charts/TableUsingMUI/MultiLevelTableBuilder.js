@@ -20,8 +20,12 @@ import {
   StyledTable,
   ExpandedContentCell,
   SearchBar,
+  SearchBarContainer,
+  SearchTextField,
 } from './StyledTableComponents';
  
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
 
 //renders a row in the table; manages expanded (open) and non-expanded state,
 function Row({ parentRow, columns, renderChildRow, filterProperty }) {
@@ -114,11 +118,32 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
                   <SearchBar
                     id = "search-bar"
                     label="Search"
+                    type="search"
                     variant="outlined"
                     value={searchText}
                     onChange={handleSearchChange}
-                    
                   />
+{/* 
+                  <SearchBarContainer>
+                    <SearchTextField
+                      placeholder='Search...'
+                      inputProps={{ 'aria-label': 'search' }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchIcon />
+                          </InputAdornment>
+                        ),
+                      }}
+                      id = "search-bar"
+                      type="search"
+                      variant="outlined"
+                      value={searchText}
+                      onChange={handleSearchChange}
+                    >
+                    </SearchTextField>
+                  </SearchBarContainer> */}
+
                   {/* RENDERS THE mini-table within expanded row if not null*/}
                   {renderChildRow ? (
                     // This part calls the renderChildRow function and passes parentRow, page, rowsPerPage, and searchText as arguments. This function should return the JSX for the mini-table.
@@ -155,7 +180,7 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
   );
 }
 
-export const ThreeLevelTableBuilder = ({ rows, columns, renderChildRow, filterProperty }) => (
+export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterProperty }) => (
   <StyledTableContainer>
     <StyledTable aria-label="collapsible table">
       <StyledTableHead>
@@ -186,5 +211,5 @@ export const ThreeLevelTableBuilder = ({ rows, columns, renderChildRow, filterPr
     </StyledTable>
   </StyledTableContainer>
 );
-export default ThreeLevelTableBuilder;
+export default MultiLevelTableBuilder;
 
