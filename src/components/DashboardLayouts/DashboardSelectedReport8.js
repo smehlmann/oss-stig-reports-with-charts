@@ -119,7 +119,7 @@ const DashboardSelectedReport5 = ({ data }) => {
             </Grid>
             
             <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <DonutPieChartCardComponent title = "Averages">
+              <ChartCardComponent title = "Averages">
                 <DonutAvgChart
                   targetColumns={["assessed", "submitted", "accepted", "rejected"]}
                   xAxisTitle= "Packages"
@@ -127,7 +127,7 @@ const DashboardSelectedReport5 = ({ data }) => {
                   disableFilterUpdate={true}
                   data={data}
                 />
-              </DonutPieChartCardComponent>
+              </ChartCardComponent>
             </Grid> 
 
             
