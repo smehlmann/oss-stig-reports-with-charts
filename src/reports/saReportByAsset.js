@@ -78,8 +78,17 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
                 labelMap.clear();
                 labels.length = 0;
 
+                if(collectionName === 'NP_C10-NCCM_Zone B'){
+                    console.log(collectionName);
+                }
                 labels = await reportGetters.getLabelsByCollection(auth, collections[i].collectionId);
                 for (var x = 0; x < labels.data.length; x++) {
+                    if(labels.data[x].description === 'RMF Action'){
+                        console.log(labels.data[x].description);
+                    }
+                    if(labels.data[x].description === 'RMF ACTION'){
+                        console.log(labels.data[x].description);
+                    }
                     labelMap.set(labels.data[x].labelId, labels.data[x].description);
                 }
 
