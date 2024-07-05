@@ -3,10 +3,10 @@
 ## Generate Build for Server
 
 - Edit **_.env_** File
-  - > Change REACT_APP_REDIRECT_URI='http://localhost:3000' To #REACT_APP_REDIRECT_URI='http://localhost:3000'
+  - Change REACT_APP_REDIRECT_URI='http://localhost:3000' To #REACT_APP_REDIRECT_URI='http://localhost:3000'
 
-    - >> __#REACT_APP_REDIRECT_URI='http://localhost:3000'__
-    - >> __REACT_APP_REDIRECT_URI='https://npc2ismsdev01.nren.navy.mil/stigmanossreports/'__
+    -  __#REACT_APP_REDIRECT_URI='http://localhost:3000'__
+     - __REACT_APP_REDIRECT_URI='https://npc2ismsdev01.nren.navy.mil/stigmanossreports/'__
 
 - Run npm run build.
   - When the build completes, edit index.js in the build folder.
