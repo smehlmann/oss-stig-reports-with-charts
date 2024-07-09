@@ -365,7 +365,7 @@ function getMetadata(labelMap, metrics) {
             case 'CCB_SA_ACTIONS':
                 collectionMetadata.ccbSAActions = labels[iLabel].name;
                 break;
-            case 'RMF Action':
+            case 'RMF ACTION':
                 collectionMetadata.rmfAction = labels[iLabel].name;
                 break;
             case 'ISSO':
