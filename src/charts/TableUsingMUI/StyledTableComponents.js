@@ -11,14 +11,18 @@ import TextField from '@mui/material/TextField';
 
 ///SearchbarContainer
 export const SearchBarContainer = styled('div')(({theme}) => ({
+  marginTop: '8px',
+  marginBottom: '8px',
   position: 'relative',
-  
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover':{
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
   width: '100%',
+  borderRadius: '25px', 
+  backgroundColor: alpha(theme.palette.primary.light, 0.15), //initial bg
+  '&:hover':{
+    backgroundColor: alpha(theme.palette.primary.light, 0.35)
+  },
+
+  marginLeft: theme.spacing(1),
+  marginRight: theme.spacing(1),
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(1),
     width: 'auto',
@@ -26,20 +30,47 @@ export const SearchBarContainer = styled('div')(({theme}) => ({
 }));
 
 export const SearchTextField = styled(TextField)(({ theme }) => ({
-  borderRadius: '25px',
+  width: '100%',
   '& .MuiInputBase-input': {
+    color: '#000000', // Set the text color here
+    borderColor: 'transparent',
+    borderRadius: '25px', // Initial border radius
     padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    paddingLeft: `calc(1em + ${theme.spacing(2)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
+    '&:focus': {
+      borderRadius: '30px', // Border radius when focused
+    },
     [theme.breakpoints.up('sm')]: {
-      width: '12ch',
+      width: '80',
       '&:focus': {
         width: '20ch',
       },
     },
   },
+  //initial rendering (before hover or focus)
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'transparent', 
+      borderRadius: '25px', 
+      // backgroundColor: alpha(theme.palette.primary.light, 0.15),
+
+    },
+    // Adjust border color on hover if needed
+    '&:hover fieldset': {
+      borderColor: alpha(theme.palette.primary.light, 0.25), 
+      // backgroundColor: alpha(theme.palette.primary.light, 0.25),
+    },
+    //adjustments made when focused
+    '&.Mui-focused fieldset': {
+      borderColor: alpha(theme.palette.primary.light, 0.5), // Adjust border color when focused
+      borderWidth: '2px',
+      // backgroundColor: alpha(theme.palette.primary.light, 0.35)
+    },
+  },
 }));
+
 
 
 export const SearchBar = styled(TextField)({
@@ -191,7 +222,7 @@ export const ExpandedTableCell = styled(TableCell)(({ theme }) => ({
 
 //in MULTILEVEL: header for first table in expanded section
 export const ExpandedFirstLevelHeaderCell = styled(TableCell)(({ theme }) => ({
-  color: '#F5F4F4', //font color
+  color: '#FFF', //font color
   borderTop: 'none',
   borderLeft: 'none',
   borderRight: 'none',

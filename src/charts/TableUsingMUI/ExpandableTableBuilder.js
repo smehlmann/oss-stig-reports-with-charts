@@ -19,9 +19,12 @@ import {
   StyledTableCell,
   StyledTable,
   ExpandedContentCell,
-  SearchBar
+  // SearchBar
+  SearchBarContainer,
+  SearchTextField,
 } from './StyledTableComponents';
- 
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
 
 //renders a row in the table; manages expanded (open) and non-expanded state,
 function Row({ parentRow, columns, renderChildRow, filterProperty }) {
@@ -110,13 +113,25 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1,  marginLeft: 0,  overflow: "hidden" }}>
                 <Box sx={{display: 'flex', flexDirection: 'column'}}>
-                  <SearchBar
-                    id = "search-bar"
-                    label="Search"
-                    variant="outlined"
-                    value={searchText}
-                    onChange={handleSearchChange}
-                  />
+                  <SearchBarContainer>
+                    <SearchTextField
+                      placeholder = 'Search...'
+                      inputProps={{ 'aria-label': 'search' }}
+                      InputProps = {{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchIcon sx={{color: '#000'}}/>
+                          </InputAdornment>
+                        ),
+                      }}
+                      id = "search-bar"
+                      type = "search"
+                      // variant = "outlined"
+                      value = {searchText}
+                      onChange = {handleSearchChange}
+                    >
+                    </SearchTextField>
+                  </SearchBarContainer>
                   {/* RENDERS THE mini-table within expanded row if not null*/}
                   {renderChildRow ? (
                     // This part calls the renderChildRow function and passes parentRow, page, rowsPerPage, and searchText as arguments. This function should return the JSX for the mini-table.

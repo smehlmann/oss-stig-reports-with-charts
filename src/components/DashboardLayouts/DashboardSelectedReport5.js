@@ -148,7 +148,7 @@ const DashboardSelectedReport5 = ({ data }) => {
               <ExpandableTableCardComponent>
                 <Report5WithMultiLevelBenchmarks data={data}/>
               </ExpandableTableCardComponent>
-            </Grid>
+            </Grid> 
 
             {/* <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = "Averages">

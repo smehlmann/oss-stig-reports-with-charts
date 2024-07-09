@@ -11,7 +11,8 @@ import {
   StyledChildTableContainer,
   ExpandedTableHead,
   ExpandedHeaderCell,
-  ExpandedTableCell
+  ExpandedTableCell,
+  
 } from './StyledTableComponents';
 
 

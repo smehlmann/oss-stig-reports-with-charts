@@ -129,8 +129,6 @@ const DashboardSelectedReport5 = ({ data }) => {
               </ChartCardComponent>
             </Grid> 
 
-            
-
             <Grid item lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
                 <Report8BenchmarksExpanded data={data}/>

@@ -153,8 +153,8 @@ const DashboardSelectedReport7 = ({ data }) => {
                   labelColumn="acronym"
                   valueColumn = "asset"
                   isHorizontal={true}
-                  xAxisTitle="Acronym"
-                  yAxisTitle= "Number of Assets"
+                  xAxisTitle="Number of Assets"
+                  yAxisTitle= "Acronym"
                   data={data}
                 />
               </ChartCardComponent>

@@ -19,11 +19,10 @@ import {
   StyledTableCell,
   StyledTable,
   ExpandedContentCell,
-  SearchBar,
+  // SearchBar,
   SearchBarContainer,
   SearchTextField,
 } from './StyledTableComponents';
- 
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -34,7 +33,6 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
   const [rowsPerPage, setRowsPerPage] = useState(7);
   const [searchText, setSearchText] = useState("");
   const { updateFilter, clearFilter } = useFilter();
-
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -64,6 +62,8 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
     });
   };
 
+  //filters expanded sections' tables based on search text
+  //hook triggered when 'open', 'searchText', 'parentRow' or 'updateFilter' changes 
   useEffect(() => {
     // Update filter based on the search text in the expanded section's table
     if (open && searchText.trim() !== "") {
@@ -72,7 +72,8 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
           childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
           childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
           childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
-          childRow.accepted.toString().includes(searchText)
+          childRow.accepted.toString().includes(searchText) 
+          
       );
       //merge new criteria to filter with old
       if (filteredChildRows.length > 0) {
@@ -115,34 +116,26 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
                 <Box sx={{display: 'flex', flexDirection: 'column',
                   }}
                 >
-                  <SearchBar
-                    id = "search-bar"
-                    label="Search"
-                    type="search"
-                    variant="outlined"
-                    value={searchText}
-                    onChange={handleSearchChange}
-                  />
-{/* 
+
                   <SearchBarContainer>
                     <SearchTextField
                       placeholder='Search...'
                       inputProps={{ 'aria-label': 'search' }}
                       InputProps={{
                         startAdornment: (
-                          <InputAdornment position="start">
-                            <SearchIcon />
+                          <InputAdornment position="start" >
+                            <SearchIcon sx={{color:'#000'}}/>
                           </InputAdornment>
                         ),
                       }}
                       id = "search-bar"
                       type="search"
-                      variant="outlined"
+                      // variant="outlined"
                       value={searchText}
                       onChange={handleSearchChange}
                     >
                     </SearchTextField>
-                  </SearchBarContainer> */}
+                  </SearchBarContainer>
 
                   {/* RENDERS THE mini-table within expanded row if not null*/}
                   {renderChildRow ? (

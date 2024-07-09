@@ -22,6 +22,7 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-plugin-datalabels": "^2.2.0",
     "jquery": "^3.7.1",
+    "mui-datatables": "^4.3.0",
     "numeral": "^2.0.6",
     "oidc-react": "^3.2.2",
     "papaparse": "^5.4.1",
