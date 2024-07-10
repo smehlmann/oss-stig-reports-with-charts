@@ -35,15 +35,18 @@ const OssStigReportsTab = () => {
   const dispatch = useDispatch();
 
   // clear local storage when the window closes
-  window.onbeforeunload = function() {
+  window.onbeforeunload = function () {
     localStorage.clear();
- }
+  };
 
   // this function will be called when a radio button is checked
   const onRadioChange = (e) => {
     setReport(e.target.value);
-    //setShowEmassNums(true);
-    if (e.target.value !== "12") {
+    if (
+      e.target.value !== "12" &&
+      e.target.value !== "13" &&
+      e.target.value !== "14"
+    ) {
       setShowEmassNums(true);
     }
     if (e.target.value === "11") {
@@ -84,7 +87,10 @@ const OssStigReportsTab = () => {
     }
 
     if (
-      (report === "11" || report === "8" || report === "9" || report === "13") &&
+      (report === "11" ||
+        report === "8" ||
+        report === "9" ||
+        report === "13") &&
       emassNums === ""
     ) {
       alert("You must enter EMASS number(s)");
@@ -98,29 +104,38 @@ const OssStigReportsTab = () => {
 
     setLoading(true);
     setButtonDisabled(true);
+    setDisableRunReport(true);
     setDisableNewReport(true);
     setDisableCancelReport(false);
 
     await callAPI(auth, report, emassNums, numDaysOver).then((data) => {
-      if (data && data.rows.length > 0) {
-        var mergedData = reportUtils.mergeHeadersAndData(data);
-        //setApiResponse(data.rows);
-        setApiResponse(mergedData);
-        setFileData(data.rows);
-        setHeaders(data.headers);
-        setShowData(true);
-        var reportData = dispatch({
-          type: "refresh-reportData",
-          reportData: data.rows,
-        });
-        if (reportData) {
-          console.log("reportData found");
-          localStorage.setItem("ossStigReport", JSON.stringify(data.rows));
-          localStorage.setItem("selectedReport", report);
-          window.dispatchEvent(new Event("storage"));
+      if (report !== "14") {
+        if (data && data.rows && data.rows.length > 0) {
+          var mergedData = reportUtils.mergeHeadersAndData(data);
+          //setApiResponse(data.rows);
+          setApiResponse(mergedData);
+          setFileData(data.rows);
+          setHeaders(data.headers);
+          setShowData(true);
+          var reportData = dispatch({
+            type: "refresh-reportData",
+            reportData: data.rows,
+          });
+          if (reportData) {
+            console.log("reportData found");
+            localStorage.setItem("ossStigReport", JSON.stringify(data.rows));
+            localStorage.setItem("selectedReport", report);
+            window.dispatchEvent(new Event("storage"));
+          }
+        } else {
+          setShowNoDataFound(true);
+          setDisableCancelReport(true);
         }
       } else {
-        setShowNoDataFound(true);
+        /* logic for historical data*/
+        localStorage.setItem("selectedReport", report);
+        window.dispatchEvent(new Event("storage"));
+        setShowData(false);
         setDisableCancelReport(true);
       }
     });
@@ -128,7 +143,7 @@ const OssStigReportsTab = () => {
     setLoading(false);
     setButtonDisabled(true);
     setDisableNewReport(false);
-    setDisableNewReport(false);
+    //setDisableNewReport(false);
     setDisableCancelReport(true);
   };
 
@@ -247,6 +262,17 @@ const OssStigReportsTab = () => {
                 <span>8. Pinned Report (EMASS number(s) required)</span>
               </label>
               <br />
+              <label>
+                <input
+                  type="radio"
+                  value="14"
+                  checked={report === "14"}
+                  onChange={onRadioChange}
+                  disabled={isButtonDisabled}
+                />
+                <span>9. Display Historical Data</span>
+              </label>
+              <br />
               <br />
               {showEmassNum && (
                 <div id="emassDiv">
@@ -352,13 +378,18 @@ const OssStigReportsTab = () => {
 async function callAPI(auth, report, emassNums, numDaysOver) {
   //alert('callAPI report: ' + report);
 
-  var rows = await GenerateReport.GenerateReport(
-    auth,
-    report,
-    emassNums,
-    numDaysOver
-  );
-  //alert('calApi number of rows retruned: ' + rows.length);
+  var rows;
+
+  if (report !== "14") {
+    rows = await GenerateReport.GenerateReport(
+      auth,
+      report,
+      emassNums,
+      numDaysOver
+    );
+
+    //alert('calApi number of rows retruned: ' + rows.length);
+  }
 
   return rows;
 }

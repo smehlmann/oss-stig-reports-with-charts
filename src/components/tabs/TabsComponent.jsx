@@ -3,27 +3,14 @@ import OssStigReportsTab from "./OssStigReportsTab";
 import DashboardTab from "./DashboardTab";
 import "./TabComponentStyles.css";
 import useLocalStorageListener from "../useLocalStorageListener.js";
+import Papa from "papaparse";
 
 import * as Tabs from "@radix-ui/react-tabs";
 
 const TabsComponent = () => {
-  //const [selectedIndex, setSelectedIndex] = useState(0);
-
-  /*const handleTabChange = (index) => {
-    setSelectedIndex(index);
-    console.log('selectedIndex: ' + selectedIndex);
-  };*/
-
   const [activeTab, setActiveTab] = useState("tab1");
-
-  /*const handleTabClick = (value) => {
-    console.log("Tab clicked!", value);
-    setActiveTab(value);
-  };*/
-
   const [disableDashboard, setDisableDashboard] = useState(true);
   const [storedData, setStoredData] = useState();
-  //var storedData;
 
   useEffect(() => {
     // console.log("BarChartBuilder from useEffect");
@@ -32,41 +19,45 @@ const TabsComponent = () => {
     }
   }, []);
 
-  useLocalStorageListener((event) => {
-    console.log("hi from useLocalStorageListener");
+  //useLocalStorageListener((event) => {
+  const handleStorageEvent = async (event) => {
+    console.log("hi from handleStorageEvent");
     if (event.type === "storage") {
       console.log("hi from useLocalStorageListener");
-      /*if (localStorage.getItem("ossStigReport")) {
+      const selectedReport = localStorage.getItem("selectedReport");
+      if (selectedReport === "14") {
+        const reportData = await fetchReportData();
+        setStoredData(reportData);
         setDisableDashboard(false);
       } else {
-        setDisableDashboard(true);
-      }*/
-      if (localStorage.getItem("ossStigReport")) {
-        const selectedReport = localStorage.getItem("selectedReport");
-        //setStoredData(myData);
-        console.log('storedData: ' + storedData);
-        if (
-          selectedReport === "5" ||
-          selectedReport === "7" ||
-          selectedReport === "8"
-        ) {
-          setDisableDashboard(false);
+        if (localStorage.getItem("ossStigReport")) {
+          //setStoredData(myData);
+          console.log("storedData: " + storedData);
+          if (
+            selectedReport === "5" ||
+            selectedReport === "7" ||
+            selectedReport === "8"
+          ) {
+            setDisableDashboard(false);
+          } else {
+            setDisableDashboard(true);
+          }
         } else {
           setDisableDashboard(true);
         }
-      } else {
-        setDisableDashboard(true);
-      }
-      if(localStorage.getItem('ossStigReport')){
-        setStoredData(localStorage.getItem('ossStigReport'));
-
+        if (localStorage.getItem("ossStigReport")) {
+          setStoredData(localStorage.getItem("ossStigReport"));
+        }
       }
     }
-  });
+  };
+
+  useLocalStorageListener(handleStorageEvent);
 
   const handleTabChange = (value) => {
     setActiveTab(value);
   };
+
   const selectedReport = localStorage.getItem("selectedReport");
 
   return (
@@ -91,11 +82,38 @@ const TabsComponent = () => {
         </div>
 
         <div style={{ display: activeTab === "tab2" ? "block" : "none" }}>
-          <DashboardTab reportData={storedData} selectedReportNum={selectedReport} />
+          <DashboardTab
+            reportData={storedData}
+            selectedReportNum={selectedReport}
+          />
         </div>
       </div>
     </Tabs.Root>
   );
 };
+
+async function fetchReportData() {
+  try {
+    const filePath = process.env.PUBLIC_URL + "historicalData.csv";
+    //);
+    const response = await fetch(filePath);
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const text = await response.text();
+    const reportData = Papa.parse(text, {
+      header: true,
+      dynamicTyping: true,
+      date: true,
+    }).data;
+
+    return reportData;
+  } catch (e) {
+    throw e;
+  }
+}
 
 export default TabsComponent;
