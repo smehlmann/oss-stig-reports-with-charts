@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useMemo, useEffect, useState, useCallback } from "react";
 import ReactApexChart from "react-apexcharts";
 // import { palette } from "../../palette.js";
 import { useTheme } from "../../../theme.js"
@@ -17,21 +17,24 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
   }), []);
 
   //set color of bars based on bar's label
-  const getColorForLabel = (label) => {
-    switch(label) {
-      case 'Assessed':
-        // return '#581845';
-        return theme.palette.assessed;
-      case 'Submitted':
-        return theme.palette.submitted;
-      case 'Accepted':
-        return theme.palette.accepted;
-      case 'Rejected':
-        return theme.palette.rejected;
-      default:
-        return theme.palette.primary.main;
-    }
-  };
+  //useCallback means function only recreated when theme changes
+  const getColorForLabel = useCallback(
+    (label) => {
+      switch (label) {
+        case "Assessed":
+          return theme.palette.assessed;
+        case "Submitted":
+          return theme.palette.submitted;
+        case "Accepted":
+          return theme.palette.accepted;
+        case "Rejected":
+          return theme.palette.rejected;
+        default:
+          return theme.palette.primary.main;
+      }
+    },
+    [theme],
+  );
 
   //combine data values with their corresponding colors:
   const seriesData = dataValues.map((value, index)=> ({
@@ -239,7 +242,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
       fillColor: getColorForLabel(dataLabels[index])
     }));
     setSeries([{ name: xAxisHeader, data: updatedSeriesData }]);
-  }, [dataValues, dataLabels, xAxisHeader]);
+  }, [dataValues, dataLabels, getColorForLabel, xAxisHeader]);
 
  
   useEffect(() => {

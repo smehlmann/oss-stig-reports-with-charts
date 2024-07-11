@@ -2,7 +2,6 @@
 import { useEffect, useState, useMemo } from "react";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Chart, Title, Tooltip, ArcElement, Legend } from "chart.js/auto";
-import { fetchData } from "../../DataExtractor.js";
 import BarChartBuilder from "./BarChartBuilder.js";
 // import CreateCustomTooltip from '../../CreateCustomTooltip.js'; 
 
@@ -16,49 +15,49 @@ Chart.register(Title, Tooltip, ArcElement, Legend, ChartDataLabels);
 Need to rename js file since it no longer is specific to Code breakdown.
 */
 
-const VerticalBarChart = ({targetColumn, chartTitle, xAxisTitle, yAxisTitle}) => {
-  //Returns the data and function to set the data
-  const [data, setData] = useState([]); //data is an array of objects
-  const [dataFetched, setDataFetched] = useState(false);
-  //const [reportData, setReportDsata] = useState(undefined);
+const VerticalBarChart = ({targetColumn, chartTitle, xAxisTitle, yAxisTitle, data}) => {
+  // //Returns the data and function to set the data
+  // const [data, setData] = useState([]); //data is an array of objects
+  // const [dataFetched, setDataFetched] = useState(false);
+  // //const [reportData, setReportDsata] = useState(undefined);
 
-  const selectedReport = localStorage.getItem("selectedReport");
-  // console.log("selectedReport: " + selectedReport);
+  // const selectedReport = localStorage.getItem("selectedReport");
+  // // console.log("selectedReport: " + selectedReport);
 
-  useLocalStorageListener((event) => {
-    // console.log('hi from useLocalStorageListener')
-    if (event.type === "storage") {
-      setDataFetched(true);
-    }
-  });
+  // useLocalStorageListener((event) => {
+  //   // console.log('hi from useLocalStorageListener')
+  //   if (event.type === "storage") {
+  //     setDataFetched(true);
+  //   }
+  // });
 
-  useEffect(() => {
-    // console.log("BarChartBuilder from useEffect");
-    if (localStorage.getItem("ossStigReport")) {
-      setDataFetched(true);
-      window.addEventListener("storage", storageEventHandler, false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   // console.log("BarChartBuilder from useEffect");
+  //   if (localStorage.getItem("ossStigReport")) {
+  //     setDataFetched(true);
+  //     window.addEventListener("storage", storageEventHandler, false);
+  //   }
+  // }, []);
 
-  function storageEventHandler() {
-    if (localStorage.getItem("ossStigReport")) {
-      setDataFetched(true);
-    }
-  }
-  //This useEffect runs once component mounts
-  useEffect(() => {
-    //Uses fetchData to retrieve data from file
-    const fetchDataAndBuildChart = async () => {
-      const parsedData = await fetchData();
-      if (parsedData) {
-        setDataFetched(true);
-        //console.log(parsedData);
-        setData(parsedData);
-      }
-    };
-    //function call
-    fetchDataAndBuildChart();
-  }, [dataFetched]);
+  // function storageEventHandler() {
+  //   if (localStorage.getItem("ossStigReport")) {
+  //     setDataFetched(true);
+  //   }
+  // }
+  // //This useEffect runs once component mounts
+  // useEffect(() => {
+  //   //Uses fetchData to retrieve data from file
+  //   const fetchDataAndBuildChart = async () => {
+  //     const parsedData = await fetchData();
+  //     if (parsedData) {
+  //       setDataFetched(true);
+  //       //console.log(parsedData);
+  //       setData(parsedData);
+  //     }
+  //   };
+  //   //function call
+  //   fetchDataAndBuildChart();
+  // }, [dataFetched]);
 
 
   //barLabels = value, barValues = number of occurrences of value

@@ -40,6 +40,7 @@ const CenterAlignedCell = styled(TableCell)({
 const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   "& .MuiDataGrid-root": {
     display: 'flex',
+    border: 'none',
     
   },
   //Text in table cells

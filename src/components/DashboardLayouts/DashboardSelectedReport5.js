@@ -134,7 +134,7 @@ const DashboardSelectedReport5 = ({ data }) => {
             </Grid>
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = "Assets by Collection">
-              <ApexCountByValueBarChart
+                <ApexCountByValueBarChart
                   targetColumn="shortName"
                   isHorizontal={false}
                   xAxisTitle="Collection Name"

@@ -11,7 +11,6 @@ import {
   StyledTableRow,
   StyledChildTableContainer,
   ExpandedTableHead,
-  ExpandedHeaderCell,
   ExpandedTableCell,
   ExpandedContentCell,
   ExpandedFirstLevelHeaderCell,

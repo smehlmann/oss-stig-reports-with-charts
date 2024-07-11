@@ -9,7 +9,7 @@
      - __REACT_APP_REDIRECT_URI='https://npc2ismsdev01.nren.navy.mil/stigmanossreports/'__
 
 - Run npm run build.
-  - When the build completes, edit index.js in the build folder.
+  - When the build completes, edit index.html in the build folder.
     -   Search for all occurrences of  href="/static/…  to href="./static/… (Add a period before /static.) **(This must be adjusted for the specific server.)**
 -  Open the file explorer and map a local drive to **\\npc2ismsdev01.nren.navy.mil\wwwSTIGMANOSSREPORTS$**
    - Go to the shared drive. Remove all content except web.config.

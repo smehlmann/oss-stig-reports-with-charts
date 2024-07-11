@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { fetchData } from '../../DataExtractor';
-import 'chartjs-adapter-date-fns';
+// import 'chartjs-adapter-date-fns';
 
 import {
   Chart,
@@ -25,29 +24,11 @@ Chart.register(
 );
 
 
-const LineChartBuilder = () => {
-  //Initialize variable 'data' and function setData. Initial value of data=empty array
-  const [data, setData] = useState({});
-  //Acts as reference to the chart canvas. 
+const LineChartBuilder = ({data}) => {
+ 
   const chartRef = useRef(null);
   //Ref will store the reference to current chart instance
   const chartInstanceRef = useRef(null);
-  const [dataFetched, setDataFetched] = useState(false);
-
-  
-  useEffect(() => {
-    //Uses fetchData to retrieve data from file
-    const fetchDataAndBuildChart = async () => {
-
-      const parsedData = await fetchData();
-      setData(parsedData);
-      setDataFetched(true);
-      console.log("Data in ChartBuilder: ", parsedData);
-    };
-    //function call
-    fetchDataAndBuildChart();
-  }, [dataFetched]);
-
 
   //calculate the avg of column vals
   const calculateAverage = (values) => {

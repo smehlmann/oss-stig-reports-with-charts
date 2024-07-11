@@ -2,21 +2,37 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "firefox",
+      "name": "Launch Chrome against localhost",
+      "type": "chrome",
       "request": "launch",
-      "name": "Launch Firefox against localhost",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/src",
+      "url": "http://localhost:3000", // Make sure this URL matches your React app's development server URL
+      "webRoot": "${workspaceFolder}",
       "sourceMaps": true,
-      "pathMappings": [
-        {
-          "url": "webpack:///src/",
-          "path": "${workspaceFolder}/src"
-        }
-      ]
+      "trace": true
     }
   ]
 }
+
+
+// {
+//   "version": "0.2.0",
+//   "configurations": [
+//     {
+//       "type": "firefox",
+//       "request": "launch",
+//       "name": "Launch Firefox against localhost",
+//       "url": "http://localhost:3000",
+//       "webRoot": "${workspaceFolder}/src",
+//       // "sourceMaps": true,
+//       "pathMappings": [
+//         {
+//           "url": "webpack:///src/",
+//           "path": "${workspaceFolder}/src"
+//         }
+//       ]
+//     }
+//   ]
+// }
 
 
 // {

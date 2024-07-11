@@ -10,7 +10,8 @@ const StyledCard = styled(Card)(({ theme }) => ({
   flexDirection: 'column',
   boxShadow: theme.shadows[3],
   borderRadius: 10,
-  overflow: 'clip',
+  overflow: 'auto',
+  // overflow: 'clip',
 }));
 
 const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
@@ -38,7 +39,8 @@ const CustomCardContent = styled(CardContent)(({ theme }) => ({
   justifyContent: "center",
   alignContent: 'center',
   alignItems: 'center',
-  overflow: 'hidden', // Ensure content does not overflow
+  //overflow: 'hidden'
+  overflow: 'auto',
 }));
 
 const ChartCardComponent = ({ title, children }) => {

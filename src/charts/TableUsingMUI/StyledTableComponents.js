@@ -100,7 +100,7 @@ export const StyledTableContainer = styled(Paper)(({ theme }) => ({
   width: "100%",
   flex: '1',
   maxWidth: "100%",
-  border: "1px solid #e0e0e0",
+  // border: "1px solid #e0e0e0",
   margin: "0 auto",
   overflowX: "inherit",
   borderRadius: '8px',
