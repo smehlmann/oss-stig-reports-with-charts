@@ -28,21 +28,12 @@ function Report5WithMultiLevelBenchmarks({ data }) {
   // const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
   const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
 
-  //stores the data filter has been applied
-  const filteredData = useMemo(() => {
-    if (Object.keys(filter).length > 0) {
-      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-      return filtered;
-    }
-    return data;
-  }, [filter, data]);
-  
   
   //checks if data is array of objects. If so, group by 'shortName' property.
   useEffect(() => {
     try {
-      if (Array.isArray(filteredData) && filteredData.length > 0) {
-      const dataGroupedByShortName = filteredData.reduce((accumulator, currentValue) => {
+      if (Array.isArray(data) && data.length > 0) {
+      const dataGroupedByShortName = data.reduce((accumulator, currentValue) => {
         //the accumulator is an object whose properties (or keys) the values for shortName
         if (!accumulator[currentValue.shortName]) {
           accumulator[currentValue.shortName] = [];  //each property is assigned empty array  
@@ -74,11 +65,11 @@ function Report5WithMultiLevelBenchmarks({ data }) {
         setOpen(false);
       }
 
-      } else { console.error("Data is not array or empty: ", filteredData)}
+      } else { console.error("Data is not array or empty: ", data)}
     }catch (error) {
       console.error("error occurred in Expanded Report: ", error);
     }
-  }, [filteredData]);
+  }, [data]);
 
 
   //code responsible for creating childRows in expanded section
