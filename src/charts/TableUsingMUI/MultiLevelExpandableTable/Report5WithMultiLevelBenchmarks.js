@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import MultiLevelTableBuilder from "./MultiLevelTableBuilder.js";
 import TableBody from '@mui/material/TableBody';
 import { useFilter } from '../../../FilterContext.js';
@@ -21,67 +21,28 @@ const formatString = (value) => {
 };
 
 function Report5WithMultiLevelBenchmarks({ data }) {
+  const [open, setOpen] = useState(false);
   const theme = useTheme();
-  const { updateFilter, clearFilter} = useFilter();
+  const { filter, updateFilter, clearFilter} = useFilter();
   const [searchText, setSearchText] = useState("");
   // const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
   const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
 
-
-  useEffect(() => {
-    if (Array.isArray(data) && data.length > 0) {
-      //iterate over each entry in data (accumulator is obj holding key: [val1, val2..,])
-      const dataGroupedByShortName = data.reduce((accumulator, currentValue) => {
-  
-        //if "shortname" == "NCCM", uses "nccm" prop value instead
-        const shortName = currentValue.shortName === "NCCM" ? currentValue.nccm || "NCCM" : currentValue.shortName;
-  
-        //if "shortName" in accumulator does not already have values yet, create array to contain vals.
-        if (!accumulator[shortName]) {
-          accumulator[shortName] = [];
-        }
-  
-        //push obj into array with associated 'shortName' and its associated properties.(ie. {NCCM-W: [asset, sysAdmin,primOwner, accepted, benchmarks]} )
-        accumulator[shortName].push({
-          asset: currentValue.asset,
-          sysAdmin: formatString(currentValue.sysAdmin),
-          primOwner: formatString(currentValue.primOwner),
-          accepted: currentValue.accepted,
-          benchmarks: currentValue.benchmarks
-        });
-        
-        console.log("accumulator before parentRows: ", accumulator);
-        return accumulator;
-      }, {});
-  
-      // Transform the grouped data into parentRows
-      const parentRows = Object.entries(dataGroupedByShortName).map(([shortName, records]) => {
-        return {
-          shortName,
-          childRows: records.map(record => ({
-            asset: record.asset,
-            sysAdmin: formatString(record.sysAdmin),
-            primOwner: formatString(record.primOwner),
-            accepted: record.accepted,
-            benchmarks: record.benchmarks
-          }))
-        };
-      });
-  
-      console.log(parentRows);
-      setParentRows(parentRows);
-    } else {
-      console.error("Data is not an array or is empty: ", data);
+  //stores the data filter has been applied
+  const filteredData = useMemo(() => {
+    if (Object.keys(filter).length > 0) {
+      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
+      return filtered;
     }
-  }, [data]);
- 
- 
-  /*
+    return data;
+  }, [filter, data]);
+  
+  
   //checks if data is array of objects. If so, group by 'shortName' property.
   useEffect(() => {
     try {
-      if (Array.isArray(data) && data.length > 0) {
-      const dataGroupedByShortName = data.reduce((accumulator, currentValue) => {
+      if (Array.isArray(filteredData) && filteredData.length > 0) {
+      const dataGroupedByShortName = filteredData.reduce((accumulator, currentValue) => {
         //the accumulator is an object whose properties (or keys) the values for shortName
         if (!accumulator[currentValue.shortName]) {
           accumulator[currentValue.shortName] = [];  //each property is assigned empty array  
@@ -104,12 +65,21 @@ function Report5WithMultiLevelBenchmarks({ data }) {
         childRows
       }));
       setParentRows(parentRows);
-      } else { console.error("Data is not array or empty: ", data)}
+
+      // Check if the filter matches any parentRow and open it if so
+      const matchedParentRow = parentRows.find(row => row.shortName === filter.shortName);
+      if (matchedParentRow) {
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
+
+      } else { console.error("Data is not array or empty: ", filteredData)}
     }catch (error) {
       console.error("error occurred in Expanded Report: ", error);
     }
-  }, [data]);
-*/
+  }, [filteredData]);
+
 
   //code responsible for creating childRows in expanded section
   const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {

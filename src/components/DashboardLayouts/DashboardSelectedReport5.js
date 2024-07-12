@@ -17,7 +17,7 @@ import theme from "../../theme";
 import StatisticsCardComponent from "../Cards/StatisticsCardComponent"
 import {  useFilter } from "../../FilterContext";
 
-import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/Report5WithMultiLevelBenchmarks";
+import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/MultiLevelExpandableTable/Report5WithMultiLevelBenchmarks";
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(3),
@@ -39,7 +39,7 @@ Grid spacing is split into 12 parts:
 
 const DashboardSelectedReport5 = ({ data }) => {
 
-  const { filter, updateFilter } = useFilter();
+  const { filter } = useFilter();
   //stores the data filter has been applied
   const filteredData = useMemo(() => {
     if (Object.keys(filter).length > 0) {
@@ -110,7 +110,7 @@ const DashboardSelectedReport5 = ({ data }) => {
             </Grid>
             
 
-            {/* <Grid item lg={4} sm={6} xl={4} xs={12}>
+            <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = 'Assets by Code'>
                 <ApexCountByValueBarChart
                   targetColumn="code"
@@ -122,6 +122,7 @@ const DashboardSelectedReport5 = ({ data }) => {
               </ChartCardComponent>
             </Grid>
 
+            {/* data grid */}
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <TableGridCardComponent>
                 <AveragesGroupedByColumn 
@@ -131,7 +132,7 @@ const DashboardSelectedReport5 = ({ data }) => {
                 />
               </TableGridCardComponent>
             </Grid>
-             */}
+            
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = "Assets by Collection">
                 <ApexCountByValueBarChart

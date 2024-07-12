@@ -18,26 +18,6 @@ const ValueCountMap = (data, targetProperty) => {
     return countMap;
   }, {});
 
-
-  //if targetProperty is "shortName", replace "NCCM" vals with vals from "nccm" prop
-  if (targetProperty === "shortName") {
-    //only look at records whose shortName = "NCCM"
-    const filteredNccmData = data.filter((entry) => entry.shortName === "NCCM");
-
-    //clear "NCCM" entry in countMap if it exists bc 
-    delete countMap["NCCM"];
-    //get values of 'nccm' column and their counts
-    filteredNccmData.forEach((entry) => {
-      //extract nccm property values (e.g., "NCCM-W", "NCCM-S") from row
-      const nccmPropValue = entry['nccm'];
-      //if ccmPropValue (the key) is null/empty string, the key is changed to "NCCM"
-      const nccmKey = (nccmPropValue === null || nccmPropValue === "") ? "NCCM" : nccmPropValue;
-
-      //key-value pairs from 'nccm' column added to countMap, 'nccm' keys override duplicate keys
-      countMap[nccmKey] = (countMap[nccmKey] || 0) + 1;
-    });
-  }
-
   return countMap;
 };
 

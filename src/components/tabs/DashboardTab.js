@@ -65,7 +65,6 @@ const convertBenchmarksToArray = (initialString, selectReportNum) => {
   }
 };
 
-
 const formatData = (parsedData, selectedReportNum) => {
   if (!Array.isArray(parsedData)) {
     console.error("parsedData is not an array:", parsedData);
@@ -110,6 +109,13 @@ const formatData = (parsedData, selectedReportNum) => {
       entry.benchmarks = convertBenchmarksToArray(entry.benchmarks, selectedReportNum);
     }
 
+    // Adjust shortName for selectedReportNum === '5'
+    if (selectedReportNum === '5') {
+      if (entry.shortName === "NCCM") {
+        entry.shortName = entry.nccm || "NCCM";
+      }
+    }
+
     return entry;
   });
 };
@@ -122,7 +128,7 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
   //keeps track of the selectedReport state
   const [selectedReport, setSelectedReport] = useState(null);
  
-  // console.log("formattedData: ", formattedData);
+  console.log("formattedData: ", formattedData);
 
   const handleClick = (reportNum) => 
     {
@@ -141,7 +147,6 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
     default:
       return null
   }    
-
 };
 
 export default DashboardTab;

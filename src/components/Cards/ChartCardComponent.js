@@ -39,8 +39,8 @@ const CustomCardContent = styled(CardContent)(({ theme }) => ({
   justifyContent: "center",
   alignContent: 'center',
   alignItems: 'center',
-  //overflow: 'hidden'
-  overflow: 'auto',
+  overflow: 'hidden'
+  // overflow: 'auto',
 }));
 
 const ChartCardComponent = ({ title, children }) => {

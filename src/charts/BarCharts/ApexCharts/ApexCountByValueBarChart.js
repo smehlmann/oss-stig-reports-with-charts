@@ -63,14 +63,14 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
 
 
   return (
-    <div style={{width: '100%', height: '100%'}}>
-      {/* {barValues.map((val, index) => (
-        <div key={index}>
-          <body1>Name: {barLabels[index]} </body1><br></br>
-          <body2>Count: {val}</body2>
-          <hr />
-        </div>
-      ))} */}
+    // <div style={{width: '100%', height: '100%'}}>
+      // {barValues.map((val, index) => (
+      //   <div key={index}>
+      //     <body1>Name: {barLabels[index]} </body1><br></br>
+      //     <body2>Count: {val}</body2>
+      //     <hr />
+      //   </div>
+      // ))} 
 
       <ApexBarChartBuilder
         dataLabels={barLabels}
@@ -82,7 +82,7 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
         onClick={handleBarClick}
         getColorForLabel={getColorForLabel}
       />
-    </div>
+    // </div>
   );
 };
 
