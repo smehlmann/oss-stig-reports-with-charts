@@ -1,7 +1,9 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
+import {useTheme} from "../../../theme.js";
+
 
 const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
   const { filter, updateFilter } = useFilter();
@@ -16,30 +18,6 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
 
   //ValueCountMap -> count the number of times a value appears in the targetColumn
   const countMap = useMemo(() => ValueCountMap(filteredData, targetColumn), [filteredData, targetColumn]);
-
-  // //specific check when targetProperty is "shortName"
-  // if (targetColumn === "shortName") {
-  //   //only look at records whose shortName = NCCM
-  //   const filteredNccmData = data.filter(
-  //     (entry) => entry.shortName === "NCCM",
-  //   );
-
-  //   //use reduce to get values of 'nccm' column and their counts
-  //   const nccmMap = filteredNccmData.reduce((accumulator, row) => {
-  //     //extract a nccm property values(ie. "NCCM-W", "NCCM-S"...) from row
-  //     const nccmPropValue = row["nccm"];
-  //     //if nccmPropValue (the key) is null, the key is changed to "NCCM"
-  //     const nccmKey = nccmPropValue === null ? "NCCM" : nccmPropValue;
-  //     // Increment the count for the extracted property value
-  //     accumulator[nccmKey] = (accumulator[nccmKey] || 0) + 1;
-  //     return accumulator;
-  //   }, {});
-
-  //   //key-value pairs from nccmMap added to countMap,nccmMap keys overrides duplicate keys
-  //   Object.keys(nccmMap).forEach((key) => {
-  //     countMap[key] = nccmMap[key];
-  //   });
-  // }
 
   const barLabels = useMemo(() => Object.keys(countMap), [countMap]); //labels = array of values in targetColumn
   const barValues = useMemo(() => Object.values(countMap), [countMap]); //array of number of times a label appears
@@ -61,6 +39,29 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
     }
   };
 
+    const theme = useTheme();
+
+  //set color of bars based on bar's label
+  //useCallback means function only recreated when theme changes
+  const getColorForLabel = useCallback(
+    (label) => {
+      switch (label) {
+        case "Assessed":
+          return theme.palette.assessed;
+        case "Submitted":
+          return theme.palette.submitted;
+        case "Accepted":
+          return theme.palette.accepted;
+        case "Rejected":
+          return theme.palette.rejected;
+        default:
+          return theme.palette.primary.main;
+      }
+    },
+    [theme.palette],
+  );
+
+
   return (
     <div style={{width: '100%', height: '100%'}}>
       {/* {barValues.map((val, index) => (
@@ -79,6 +80,7 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
         xAxisHeader={xAxisTitle}
         yAxisHeader={yAxisTitle}
         onClick={handleBarClick}
+        getColorForLabel={getColorForLabel}
       />
     </div>
   );

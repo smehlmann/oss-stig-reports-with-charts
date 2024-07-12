@@ -122,7 +122,7 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
   //keeps track of the selectedReport state
   const [selectedReport, setSelectedReport] = useState(null);
  
-  console.log("formattedData: ", formattedData);
+  // console.log("formattedData: ", formattedData);
 
   const handleClick = (reportNum) => 
     {

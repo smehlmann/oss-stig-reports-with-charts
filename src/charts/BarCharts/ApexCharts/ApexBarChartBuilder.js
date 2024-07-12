@@ -4,7 +4,7 @@ import ReactApexChart from "react-apexcharts";
 import { useTheme } from "../../../theme.js"
 
 
-const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader, yAxisHeader, onClick, formatLabelToPercentage }) => {
+const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader, yAxisHeader, onClick, formatLabelToPercentage, getColorForLabel }) => {
   const theme = useTheme();
 
   //default axis title style
@@ -16,26 +16,6 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
     textAlign: 'center',
   }), []);
 
-  //set color of bars based on bar's label
-  //useCallback means function only recreated when theme changes
-  const getColorForLabel = useCallback(
-    (label) => {
-      switch (label) {
-        case "Assessed":
-          return theme.palette.assessed;
-        case "Submitted":
-          return theme.palette.submitted;
-        case "Accepted":
-          return theme.palette.accepted;
-        case "Rejected":
-          return theme.palette.rejected;
-        default:
-          return theme.palette.primary.main;
-      }
-    },
-    [theme],
-  );
-
   //combine data values with their corresponding colors:
   const seriesData = dataValues.map((value, index)=> ({
     x: dataLabels[index],
@@ -44,7 +24,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
 
   const [series, setSeries] = useState([{ name: xAxisHeader, data: seriesData }]);
   //map dataLabels to colors
-  const barColors = dataLabels.map(label => getColorForLabel(label));
+  const barColors = useMemo(() => dataLabels.map(label => getColorForLabel(label)), [dataLabels, getColorForLabel]);
   const [options, setOptions] = useState({
     chart: {
       type: 'bar',
@@ -235,6 +215,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
   //   setSeries([{ name: xAxisHeader, data: dataValues, colors: barColors}]);
   // }, [dataValues, xAxisHeader, barColors ]);
 
+  //update series data when dataValues, dataLabels, or getColorForLabel change
   useEffect(() => {
     const updatedSeriesData = dataValues.map((value, index) => ({
       x: dataLabels[index],
@@ -244,7 +225,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
     setSeries([{ name: xAxisHeader, data: updatedSeriesData }]);
   }, [dataValues, dataLabels, getColorForLabel, xAxisHeader]);
 
- 
+ //update options when dataLabels, xAxisHeader, yAxisHeader, axisTitleStyle, or barColors change
   useEffect(() => {
     setOptions((prevOptions) => ({
       ...prevOptions,

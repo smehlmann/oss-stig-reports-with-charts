@@ -110,7 +110,7 @@ const DashboardSelectedReport5 = ({ data }) => {
             </Grid>
             
 
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
+            {/* <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = 'Assets by Code'>
                 <ApexCountByValueBarChart
                   targetColumn="code"
@@ -122,7 +122,6 @@ const DashboardSelectedReport5 = ({ data }) => {
               </ChartCardComponent>
             </Grid>
 
-            {/* data grid */}
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <TableGridCardComponent>
                 <AveragesGroupedByColumn 
@@ -132,6 +131,7 @@ const DashboardSelectedReport5 = ({ data }) => {
                 />
               </TableGridCardComponent>
             </Grid>
+             */}
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = "Assets by Collection">
                 <ApexCountByValueBarChart

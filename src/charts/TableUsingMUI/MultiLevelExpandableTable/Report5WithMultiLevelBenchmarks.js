@@ -28,30 +28,54 @@ function Report5WithMultiLevelBenchmarks({ data }) {
   const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
 
 
-  
-  //process data and its parentRows
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
-      const parentRows = data.map((entry) => {
-        const shortName = entry.shortName === "NCCM" ? entry.nccm || "NCCM" : entry.shortName;
+      //iterate over each entry in data (accumulator is obj holding key: [val1, val2..,])
+      const dataGroupedByShortName = data.reduce((accumulator, currentValue) => {
+  
+        //if "shortname" == "NCCM", uses "nccm" prop value instead
+        const shortName = currentValue.shortName === "NCCM" ? currentValue.nccm || "NCCM" : currentValue.shortName;
+  
+        //if "shortName" in accumulator does not already have values yet, create array to contain vals.
+        if (!accumulator[shortName]) {
+          accumulator[shortName] = [];
+        }
+  
+        //push obj into array with associated 'shortName' and its associated properties.(ie. {NCCM-W: [asset, sysAdmin,primOwner, accepted, benchmarks]} )
+        accumulator[shortName].push({
+          asset: currentValue.asset,
+          sysAdmin: formatString(currentValue.sysAdmin),
+          primOwner: formatString(currentValue.primOwner),
+          accepted: currentValue.accepted,
+          benchmarks: currentValue.benchmarks
+        });
+        
+        console.log("accumulator before parentRows: ", accumulator);
+        return accumulator;
+      }, {});
+  
+      // Transform the grouped data into parentRows
+      const parentRows = Object.entries(dataGroupedByShortName).map(([shortName, records]) => {
         return {
           shortName,
-          
-          childRows: entry.benchmarks.map((record) => ({
+          childRows: records.map(record => ({
             asset: record.asset,
             sysAdmin: formatString(record.sysAdmin),
             primOwner: formatString(record.primOwner),
-            accepted: record.accepted
+            accepted: record.accepted,
+            benchmarks: record.benchmarks
           }))
         };
       });
+  
       console.log(parentRows);
       setParentRows(parentRows);
     } else {
       console.error("Data is not an array or is empty: ", data);
     }
   }, [data]);
-
+ 
+ 
   /*
   //checks if data is array of objects. If so, group by 'shortName' property.
   useEffect(() => {
@@ -89,8 +113,7 @@ function Report5WithMultiLevelBenchmarks({ data }) {
 
   //code responsible for creating childRows in expanded section
   const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
-
-    //filter child rows based on search text
+    //filter child rows based on text in searchbar
     const filteredChildRows = parentRow.childRows.filter((childRow) => 
       //set to lowercase for searchability 
       (childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -105,7 +128,6 @@ function Report5WithMultiLevelBenchmarks({ data }) {
     }
 
     const displayedRows = filteredChildRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
 
     return (
       <StyledChildTableContainer sx={{ margin: 1 }}>
