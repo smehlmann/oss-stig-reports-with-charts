@@ -4,7 +4,7 @@ import ReactApexChart from "react-apexcharts";
 import { useTheme } from "../../../theme.js"
 
 
-const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader, yAxisHeader, onClick, formatLabelToPercentage, getColorForLabel }) => {
+const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader, yAxisHeader, onClick, formatLabelToPercentage}) => {
   const theme = useTheme();
 
   //default axis title style
@@ -15,6 +15,26 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
     margin: '0',
     textAlign: 'center',
   }), []);
+  
+    //set color of bars based on bar's label
+  //useCallback means function only recreated when theme changes
+  const getColorForLabel = useCallback(
+    (label) => {
+      switch (label) {
+        case "Assessed":
+          return theme.palette.assessed;
+        case "Submitted":
+          return theme.palette.submitted;
+        case "Accepted":
+          return theme.palette.accepted;
+        case "Rejected":
+          return theme.palette.rejected;
+        default:
+          return theme.palette.primary.main;
+      }
+    },
+    [theme.palette],
+  );
 
   //combine data values with their corresponding colors:
   const seriesData = dataValues.map((value, index)=> ({

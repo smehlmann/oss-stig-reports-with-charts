@@ -144,7 +144,7 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
     case '8':
       return <DashboardSelectedReport8 data={formattedData} handleClick={handleClick} />
     case '14':
-      return <DashboardSelectedReport8 data={formattedData} handleClick={handleClick} />
+      return <DashboardSelectedReport7 data={formattedData} handleClick={handleClick} />
   
     default:
       return null

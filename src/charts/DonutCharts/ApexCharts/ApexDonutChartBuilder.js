@@ -1,4 +1,4 @@
-import { useEffect, useState,} from "react";
+import { useEffect, useState, useCallback, useMemo} from "react";
 import { palette } from "../../../theme";
 import numeral from "numeral";
 import Chart from 'react-apexcharts';
@@ -10,23 +10,24 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, legendTitle, onClick, fo
   const theme = useTheme();
 
   //set color of bars based on bar's label
-  const getColorForLabel = (label) => {
-    switch(label) {
-      case 'Assessed':
-        // return '#581845';
-        return theme.palette.assessed;
-      case 'Submitted':
-        return theme.palette.submitted;
-      case 'Accepted':
-        return theme.palette.accepted;
-      case 'Rejected':
-        return theme.palette.rejected;
-      default:
-        return theme.palette.primary.main;
-    }
-  };
-
-  const barColors = dataLabels.map(label => getColorForLabel(label));
+  const getColorForLabel = useCallback(
+    (label) => {
+      switch (label) {
+        case "Assessed":
+          return theme.palette.assessed;
+        case "Submitted":
+          return theme.palette.submitted;
+        case "Accepted":
+          return theme.palette.accepted;
+        case "Rejected":
+          return theme.palette.rejected;
+        default:
+          return theme.palette.primary.main;
+      }
+    },
+    [theme.palette],
+  );
+  const barColors = useMemo(() => dataLabels.map(label => getColorForLabel(label)), [dataLabels, getColorForLabel]);
   const [options, setOptions] = useState({
 
   chart: {

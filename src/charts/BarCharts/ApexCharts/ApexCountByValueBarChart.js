@@ -41,25 +41,8 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
 
     const theme = useTheme();
 
-  //set color of bars based on bar's label
-  //useCallback means function only recreated when theme changes
-  const getColorForLabel = useCallback(
-    (label) => {
-      switch (label) {
-        case "Assessed":
-          return theme.palette.assessed;
-        case "Submitted":
-          return theme.palette.submitted;
-        case "Accepted":
-          return theme.palette.accepted;
-        case "Rejected":
-          return theme.palette.rejected;
-        default:
-          return theme.palette.primary.main;
-      }
-    },
-    [theme.palette],
-  );
+    
+
 
 
   return (
@@ -80,7 +63,7 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
         xAxisHeader={xAxisTitle}
         yAxisHeader={yAxisTitle}
         onClick={handleBarClick}
-        getColorForLabel={getColorForLabel}
+        // getColorForLabel={getColorForLabel}
       />
     // </div>
   );
