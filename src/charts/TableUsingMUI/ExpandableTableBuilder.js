@@ -140,12 +140,20 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
                       <TablePagination
                         rowsPerPageOptions={[7, 14, 21]}
                         component="div"
-                        count={parentRow.childRows.filter(childRow => (
-                          childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
-                          childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
-                          childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
-                          childRow.accepted.toString().includes(searchText)
-                        )).length}
+                        count={parentRow.childRows.filter(childRow => {
+                          const searchValue = searchText.toLowerCase();
+                          const searchValueAsNumber = parseFloat(searchValue);
+  
+                          const formattedAccepted = (childRow.accepted * 100).toFixed(2);
+                          const acceptedMatches = formattedAccepted.startsWith(searchValue) || childRow.accepted.toString().includes(searchValueAsNumber.toString());
+  
+                          return (
+                            childRow.asset.toLowerCase().includes(searchValue) ||
+                            childRow.sysAdmin.toLowerCase().includes(searchValue) ||
+                            childRow.primOwner.toLowerCase().includes(searchValue) ||
+                            acceptedMatches
+                          );
+                        }).length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

@@ -23,12 +23,11 @@ const formatString = (value) => {
 function Report5WithMultiLevelBenchmarks({ data }) {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
-  const { filter, updateFilter, clearFilter} = useFilter();
+  const {filter, updateFilter, clearFilter} = useFilter();
   const [searchText, setSearchText] = useState("");
   // const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
   const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
 
-  
   //checks if data is array of objects. If so, group by 'shortName' property.
   useEffect(() => {
     try {
@@ -57,14 +56,6 @@ function Report5WithMultiLevelBenchmarks({ data }) {
       }));
       setParentRows(parentRows);
 
-      // Check if the filter matches any parentRow and open it if so
-      const matchedParentRow = parentRows.find(row => row.shortName === filter.shortName);
-      if (matchedParentRow) {
-        setOpen(true);
-      } else {
-        setOpen(false);
-      }
-
       } else { console.error("Data is not array or empty: ", data)}
     }catch (error) {
       console.error("error occurred in Expanded Report: ", error);
@@ -75,14 +66,24 @@ function Report5WithMultiLevelBenchmarks({ data }) {
   //code responsible for creating childRows in expanded section
   const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
     //filter child rows based on text in searchbar
-    const filteredChildRows = parentRow.childRows.filter((childRow) => 
+    const filteredChildRows = parentRow.childRows.filter((childRow) => {
+      //filtering specifically for accepted column
+      const searchValue = searchText.toLowerCase();
+      const searchValueAsNumber = parseFloat(searchValue);
+
+      const formattedAccepted = (childRow.accepted * 100).toFixed(2);
+      const acceptedMatches = formattedAccepted.startsWith(searchValue) || childRow.accepted.toString().includes(searchValueAsNumber.toString());
+      
+      return (
       //set to lowercase for searchability 
-      (childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
+      childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
       childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
       childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
-      childRow.accepted.toString().includes(searchText)
-      )
-    );
+      // childRow.accepted.toString().includes(searchText)
+      acceptedMatches
+      );
+    
+    });
 
     if (filteredChildRows.length === 0) {
       return null;
@@ -90,6 +91,7 @@ function Report5WithMultiLevelBenchmarks({ data }) {
 
     const displayedRows = filteredChildRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
+   
     return (
       <StyledChildTableContainer sx={{ margin: 1 }}>
         <StyledTable size="small" aria-label="child table">

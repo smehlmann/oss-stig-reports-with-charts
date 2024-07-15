@@ -25,8 +25,8 @@ import {
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 
-//renders a row in the table; manages expanded (open) and non-expanded state,
-function Row({ parentRow, columns, renderChildRow, filterProperty }) {
+// renders a row in the table; manages expanded (open) and non-expanded state,
+function Row({ parentRow, columns, renderChildRow, filterProperty}) {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(7);
@@ -117,12 +117,26 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
                       <TablePagination
                         rowsPerPageOptions={[5, 10, 15]}
                         component="div"
-                        count={parentRow.childRows.filter(childRow => (
-                          childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
-                          childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
-                          childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
-                          childRow.accepted.toString().includes(searchText)
-                        )).length}
+                        // count={parentRow.childRows.filter(childRow => (
+                        //   childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
+                        //   childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
+                        //   childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
+                        //   childRow.accepted.toString().includes(searchText)
+                        // )).length}
+                        count={parentRow.childRows.filter(childRow => {
+                          const searchValue = searchText.toLowerCase();
+                          const searchValueAsNumber = parseFloat(searchValue);
+  
+                          const formattedAccepted = (childRow.accepted * 100).toFixed(2);
+                          const acceptedMatches = formattedAccepted.startsWith(searchValue) || childRow.accepted.toString().includes(searchValueAsNumber.toString());
+  
+                          return (
+                            childRow.asset.toLowerCase().includes(searchValue) ||
+                            childRow.sysAdmin.toLowerCase().includes(searchValue) ||
+                            childRow.primOwner.toLowerCase().includes(searchValue) ||
+                            acceptedMatches
+                          );
+                        }).length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -143,35 +157,40 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
   );
 }
 
-export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterProperty }) => (
-  <StyledTableContainer>
-    <StyledTable aria-label="collapsible table">
-      <StyledTableHead>
-        <TableRow sx={{ "& th": { border: 'none'} }}>
-          {columns.map((header, index) => (
-            <React.Fragment key={header.id}>
-              {index === 0 && <StyledHeaderCell>{header.label}</StyledHeaderCell>}
-              {index !== 0 && (
-                <StyledHeaderCell key={header.id} align={header.align}>
-                  {header.label}
-                </StyledHeaderCell>
-              )}
-            </React.Fragment>
+export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterProperty, updateFilter, clearFilter, }) => {
+  
+  return (
+    <StyledTableContainer>
+      <StyledTable aria-label="collapsible table">
+        <StyledTableHead>
+          <TableRow sx={{ "& th": { border: 'none'} }}>
+            {columns.map((header, index) => (
+              <React.Fragment key={header.id}>
+                {index === 0 && <StyledHeaderCell>{header.label}</StyledHeaderCell>}
+                {index !== 0 && (
+                  <StyledHeaderCell key={header.id} align={header.align}>
+                    {header.label}
+                  </StyledHeaderCell>
+                )}
+              </React.Fragment>
+            ))}
+          </TableRow>
+        </StyledTableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <Row
+              key={row.id}
+              parentRow={row}
+              columns={columns}
+              renderChildRow={renderChildRow}
+              filterProperty={filterProperty}
+              // updateFiler= {updateFilter}
+              // clearFilter={clearFilter}
+            />
           ))}
-        </TableRow>
-      </StyledTableHead>
-      <TableBody>
-        {rows.map((row) => (
-          <Row
-            key={row.id}
-            parentRow={row}
-            columns={columns}
-            renderChildRow={renderChildRow}
-            filterProperty={filterProperty}
-          />
-        ))}
-      </TableBody>
-    </StyledTable>
-  </StyledTableContainer>
-);
+        </TableBody>
+      </StyledTable>
+    </StyledTableContainer>
+  );
+};
 export default MultiLevelTableBuilder;

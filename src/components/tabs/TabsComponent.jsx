@@ -29,6 +29,15 @@ const TabsComponent = () => {
         const reportData = await fetchReportData();
         setStoredData(reportData);
         setDisableDashboard(false);
+
+
+        console.log("reportData from tabscomponent: ", reportData);
+        return (
+          <DashboardTab
+            reportData={reportData}
+            selectedReportNum={selectedReport}
+          />
+        );
       } else {
         if (localStorage.getItem("ossStigReport")) {
           //setStoredData(myData);
@@ -104,11 +113,18 @@ async function fetchReportData() {
     }
 
     const text = await response.text();
+    console.log("just parsed data:  ", text);
     const reportData = Papa.parse(text, {
       header: true,
       dynamicTyping: true,
       date: true,
     }).data;
+
+   
+   // Ensure each item has a unique key (if not already unique)
+   reportData.forEach((item, index) => {
+    item.id = item.id || `item-${index}`; // Ensure unique `id`
+  });
 
     return reportData;
   } catch (e) {

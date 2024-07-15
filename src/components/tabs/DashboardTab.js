@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import DashboardSelectedReport5 from "../DashboardLayouts/DashboardSelectedReport5";
 import DashboardSelectedReport7 from "../DashboardLayouts/DashboardSelectedReport7";
 import DashboardSelectedReport8 from "../DashboardLayouts/DashboardSelectedReport8";
+import DashboardSelectedReport14 from "../DashboardLayouts/DashboardSelectedReport14";
+
 import "./DashboardTab.css"
 /* Include statement to handle how data is parsed based on the report selected*/
 
@@ -65,21 +67,22 @@ const convertBenchmarksToArray = (initialString, selectReportNum) => {
   }
 };
 
+
 const formatData = (parsedData, selectedReportNum) => {
   if (!Array.isArray(parsedData)) {
-    console.error("parsedData is not an array:", parsedData);
     return [];
   }
 
-  return parsedData.map(entry => {
-    // Convert datePulled to a Date object
+  return parsedData.map((entry, index) => {
+
+    //convert pulledDate to date object
     if (entry.datePulled !== undefined) {
       const [year, month, day] = entry.datePulled.split("-");
       entry.datePulled = new Date(year, month - 1, day);
       entry.datePulled = stringToDate(entry.datePulled);
     }
-
-    // Convert percentage strings to decimals
+    
+    //convert percentage strings to decimals
     if (entry.assessed !== undefined) {
       entry.assessed = formatPercentage(entry.assessed);
     }
@@ -93,10 +96,10 @@ const formatData = (parsedData, selectedReportNum) => {
       entry.rejected = formatPercentage(entry.rejected);
     }
 
-    // Convert objects to strings and remove "_$" from sysAdmin
+    //convert objs to strings
     if (entry.sysAdmin !== undefined) {
       entry.sysAdmin = objectToString(entry.sysAdmin).replace("_$", "");
-    } 
+    }
     if (entry.primOwner !== undefined) {
       entry.primOwner = objectToString(entry.primOwner);
     }
@@ -104,19 +107,16 @@ const formatData = (parsedData, selectedReportNum) => {
       entry.deviceType = objectToString(entry.deviceType);
     }
 
-    //convert benchmarks to array for report 5
-    if(entry.benchmarks !== undefined) {
+    //convert benchmarks to array for report5
+    if (entry.benchmarks !== undefined) {
       entry.benchmarks = convertBenchmarksToArray(entry.benchmarks, selectedReportNum);
     }
 
-    // Adjust shortName for selectedReportNum === '5'
-    if (selectedReportNum === '5') {
-      if (entry.shortName === "NCCM") {
-        entry.shortName = entry.nccm || "NCCM";
-      }
+    if (selectedReportNum === '5' && entry.shortName === "NCCM") {
+      entry.shortName = entry.nccm || "NCCM";
     }
 
-    return entry;
+    return { ...entry, uniqueId: index }; // Add a unique identifier
   });
 };
 
@@ -124,18 +124,17 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
   //parse data from string to array
   let parsedData = typeof reportData == 'string' ? JSON.parse(reportData): reportData;
   const formattedData = formatData(parsedData, selectedReportNum); 
-  
+
   //keeps track of the selectedReport state
   const [selectedReport, setSelectedReport] = useState(null);
- 
-  console.log("formattedData: ", formattedData);
 
-  const handleClick = (reportNum) => 
-    {
-      setSelectedReport(reportNum);
-    }
+  // console.log("formattedData: ", formattedData);
 
- // decide which grid layout to display based on report
+  const handleClick = (reportNum) =>  {
+    setSelectedReport(reportNum);
+  }
+
+  // decide which grid layout to display based on report
   switch (selectedReportNum) {
     case '5':
       return <DashboardSelectedReport5 data={formattedData} handleClick={handleClick} />
@@ -144,8 +143,8 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
     case '8':
       return <DashboardSelectedReport8 data={formattedData} handleClick={handleClick} />
     case '14':
-      return <DashboardSelectedReport7 data={formattedData} handleClick={handleClick} />
-  
+      return <DashboardSelectedReport14 data={formattedData} handleClick={handleClick} />
+
     default:
       return null
   }    

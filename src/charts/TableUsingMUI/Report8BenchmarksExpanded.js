@@ -69,23 +69,31 @@ function Report8BenchmarksExpanded({ data }) {
   };
   //code responsible for creating childRows in expanded section
   const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
-    const filteredChildRows = parentRow.childRows.filter(
-      (childRow) => 
+    //filter child rows based on text in searchbar
+    const filteredChildRows = parentRow.childRows.filter((childRow) => {
+      //filtering specifically for accepted column
+      const searchValue = searchText.toLowerCase();
+      const searchValueAsNumber = parseFloat(searchValue);
 
+      const formattedAccepted = (childRow.accepted * 100).toFixed(2);
+      const acceptedMatches = formattedAccepted.startsWith(searchValue) || childRow.accepted.toString().includes(searchValueAsNumber.toString());
+      
+      return (
       //set to lowercase for searchability 
-      (childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
+      childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
       childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
       childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
-      childRow.accepted.toString().includes(searchText)
-      )
-    );
-
+      // childRow.accepted.toString().includes(searchText)
+      acceptedMatches
+      );
+    
+    });
+    
     if (filteredChildRows.length === 0) {
       return null;
     }
 
     const displayedRows = filteredChildRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
     //update state with filtered dat
 
     return (
