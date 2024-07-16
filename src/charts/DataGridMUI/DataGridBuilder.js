@@ -43,6 +43,11 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     border: 'none',
     
   },
+  "& .MuiDataGrid-scrollbarFiller--header": {
+    backgroundColor: theme.palette.secondary.light,
+
+
+  }, 
   //Text in table cells
   "& .MuiDataGrid-cell": {
     borderBottom: "none",

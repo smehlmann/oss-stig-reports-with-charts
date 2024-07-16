@@ -4,6 +4,8 @@ import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCoun
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 
 import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart"
+import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/HistoricalDataTracker"
+
 import ValueCountMap from "../ValueCountMap";
 import Report8BenchmarksExpanded from "../../charts/TableUsingMUI/Report8BenchmarksExpanded";
 import ChartCardComponent from "../Cards/ChartCardComponent";
@@ -71,9 +73,10 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
   }, [filteredData]);
 
 
-  const listItems = data.map((item) => (
-    <li key={item.id}> </li>
+  const listItems = data.map((item, index) => (
+    <li key={index}> <pre>{JSON.stringify(item, null, 2)}</pre> </li>
   ));
+  
   // return (
   //   <ul>
   //     {listItems}
@@ -154,26 +157,25 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
             </ChartCardComponent>
           </Grid>
 
+          <Grid item lg={4} sm={6} xl={4} xs={12}>
+            <ChartCardComponent title = 'Daily Breakdown'>
+              <HistoricalDataTracker
+                xColumn="datePulled"
+                yColumn = "assets"
+                xAxisTitle="Number of Assets"
+                yAxisTitle= "Code"
+                data={data}
+              />
+            </ChartCardComponent>
+          </Grid>
+
           {/* <Grid item lg={12} sm={12} xl={12} xs={12}>
             <ExpandableTableCardComponent>
               <Report5WithMultiLevelBenchmarks data={data}/>
             </ExpandableTableCardComponent>
           </Grid>  */}
 
-          {/* <Grid item lg={4} sm={6} xl={4} xs={12}>
-            <ChartCardComponent title = "Averages">
-              <ApexBarAvgChart
-                targetColumns={["assessed", "submitted", "accepted", "rejected"]}
-                isHorizontal = {false}
-                xAxisTitle= "Packages"
-                yAxisTitle= "Number of Assets"
-                disableFilterUpdate={true}
-                data={data}
-              />
-            </ChartCardComponent>
-          </Grid> 
-          
-          */}
+
         </Grid> 
       </Root>
 

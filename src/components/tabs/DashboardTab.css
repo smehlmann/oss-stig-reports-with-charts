@@ -6,7 +6,7 @@
 
 /* The ::-webkit-scrollbar-track pseudo-element targets the track (or progress bar) of the scrollbar. */
  ::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Color of the track */
+  background: transparent;
 } 
 
 /* The ::-webkit-scrollbar-thumb pseudo-element targets the handle (or thumb) of the scrollbar. */

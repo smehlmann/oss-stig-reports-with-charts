@@ -1,8 +1,7 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
-import {useTheme} from "../../../theme.js";
 
 
 const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
@@ -38,12 +37,6 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
       }
     }
   };
-
-    const theme = useTheme();
-
-    
-
-
 
   return (
     // <div style={{width: '100%', height: '100%'}}>

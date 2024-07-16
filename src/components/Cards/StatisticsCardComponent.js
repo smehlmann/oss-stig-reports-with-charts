@@ -24,8 +24,8 @@ const StatCardContent = styled(CardContent)(({ theme }) => ({
 }));
 
 // Style background of card based on the metric name
-const getCardBackgroundColor = (metricName) => {
-  switch (metricName) {
+const getCardBackgroundColor = (metricname) => {
+  switch (metricname) {
     case 'Assessed':
     case 'CAT3':
       return '#cdd2ea';
@@ -46,13 +46,13 @@ const getCardBackgroundColor = (metricName) => {
   }
 };
 
-const StyledCard = styled(Card)(({ theme, metricName }) => ({
+const StyledCard = styled(Card)(({ theme, metricname}) => ({
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
   boxShadow: theme.shadows[3],
   borderRadius: 10,
-  backgroundColor: getCardBackgroundColor(metricName),
+  backgroundColor: getCardBackgroundColor(metricname),
 }));
 
 const CustomGridContainer = styled(Grid)(({ theme }) => ({
@@ -83,8 +83,8 @@ const StyledIconContainer = styled(Avatar)(({ theme }) => ({
 
 
 // Get specific icon based on name of metric
-const getIcon = (metricName) => {
-  switch (metricName) {
+const getIcon = (metricname) => {
+  switch (metricname) {
     case 'Assets':
       return <WebAssetIcon style={{ height: 40, width: 40 }} />;
     case 'Assessed':
@@ -113,7 +113,7 @@ const CaptionText = styled(Typography)(({ theme }) => ({
 
 const StatisticsCardComponent = ({ data, metricValue, metricDisplayedName, measurement }) => {
   return (
-    <StyledCard metricName={metricDisplayedName}>
+    <StyledCard metricname={metricDisplayedName}>
       <StatCardContent>
         <CustomGridContainer container spacing={2}>
           <Grid item>

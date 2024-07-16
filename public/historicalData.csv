@@ -1,4 +1,4 @@
-Date Pulled,Code,Short Name,Collection,eMASS,Asset,NCCM,Device-Asset,Primary Owner,Sys Admin,RMF Action,ISSO,CCB_SA_Actions,Other,Last Touched,STIGs,Benchmarks,Assessed,Submitted,Accepted,Rejected,CAT3,CAT2,CAT1
+datePulled,code,shortName,collectionName,emass,asset,nccm,deviceAsset,primOwner,sysAdmin,rmfAction,ISSO,ccbSAActions,other,lastTouched,stigs,benchmarks,assessed,submitted,accepted,rejected,cat3,cat2,cat1
 2024-07-11,10,NDNSA Site,NP_C10 NDNSA_12412_Site,12412,NUWC Newport,,,,,,,,,196 d,2,Traditional_Security_Checklist Enclave_-_Zone_D,100.00%,100.00%,100.00%,0.00%,0,2,1
 2024-07-11,10,ASI,NP_C10-ASI_1838_DBS,1838,ASI_NPRI54WEB53 ,,,MasseyB,MasseyB_$,,,,,119 d,1,Application_Security_Development_STIG,100.00%,100.00%,100.00%,0.00%,0,2,0
 2024-07-11,10,ASI,NP_C10-ASI_1838_DBS,1838,C27DATNWPT59,,,OliveiraJ,MagnerG_$,,,,,42 d,7,MS_Dot_Net_Framework VMW_vSphere_7-0_Virtual_Machine_STIG Splunk_Enterprise_7-x_for_Windows_STIG Windows_Server_2019_STIG Windows_Firewall_with_Advanced_Security MS_Defender_Antivirus IE_11_STIG,100.00%,100.00%,100.00%,0.00%,1,2,0

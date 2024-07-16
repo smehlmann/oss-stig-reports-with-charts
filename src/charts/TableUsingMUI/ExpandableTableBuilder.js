@@ -245,7 +245,6 @@ export default ExpandableTableBuilder;
 //     });
 //   };
 
-
 //   return (
 //     //renders parent row
 //     <React.Fragment>
@@ -295,7 +294,7 @@ export default ExpandableTableBuilder;
 //                       "& .MuiOutlinedInput-input": {
 //                         padding: "12px",
 //                       },
-//                       "& .MuiInputLabel-outlined": {
+//                       "& .MuInputLabel-outlined": {
 //                         transform: "translate(14px, 14px) scale(1)",
 //                       },
 //                       "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {

@@ -33,6 +33,11 @@ function Row({ parentRow, columns, renderChildRow, filterProperty}) {
   const [searchText, setSearchText] = useState("");
   const { updateFilter, clearFilter } = useFilter();
 
+
+  const listItems = columns.map((item) => (
+    <li key={item.id}> </li>
+  ));
+  
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
