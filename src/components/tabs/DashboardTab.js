@@ -4,6 +4,7 @@ import DashboardSelectedReport5 from "../DashboardLayouts/DashboardSelectedRepor
 import DashboardSelectedReport7 from "../DashboardLayouts/DashboardSelectedReport7";
 import DashboardSelectedReport8 from "../DashboardLayouts/DashboardSelectedReport8";
 import DashboardSelectedReport14 from "../DashboardLayouts/DashboardSelectedReport14";
+import { parseISO } from 'date-fns';
 
 import "./DashboardTab.css"
 /* Include statement to handle how data is parsed based on the report selected*/
@@ -28,35 +29,20 @@ const objectToString = (object) => {
     .replace(/^"|"$/g, ''); // Remove quotes at the start and end
 };
 
+
 const stringToDate = (dateString) => {
   if (!dateString) {
-    return null; // Return null for null or empty strings
-  }
-  // console.log("dateString: ", dateString);
-  // console.log("type for datePulled before: ", typeof dateString);
-
-  // dateString = String(dateString);
-  // Try parsing the date using the known formats
-  let date;
-  // Attempt to parse using the format YYYY-MM-DD
-  date = new Date(dateString);
-  if (!isNaN(date.getTime())) {
-    return date; // Return if successful
+    return null; ///return null
   }
 
-  // Attempt to parse using the format M/DD/YYYY
-  const parts = dateString.split('/');
-  if (parts.length === 3) {
-    date = new Date(`${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`);
-    if (!isNaN(date.getTime())) {
-      return date; // Return if successful
-    }
+  try {
+    const date = parseISO(dateString); //parses 8601 date string (YYYY-MM-DD) correctly
+    return date;
+  } catch (error) {
+    console.error('Error parsing date:', error);
+    return null;
   }
-  // If parsing fails, return null
-  return null;
 };
-
-
 
 //convert from string to numerical:
 const stringToNumeric = (stringNum) => {
@@ -91,17 +77,14 @@ const formatData = (parsedData, selectedReportNum) => {
 
     //convert pulledDate to date object
 
-    if (entry.datePulled !== 'undefined') {
-      if (entry.datePulled !== 'string') {
+    if (typeof entry.datePulled !== 'undefined' && entry.datePulled !== null) {
+      if (typeof entry.datePulled !== 'string') {
         entry.datePulled = objectToString(entry.datePulled);
+        
       }
-
-      // const [year, month, day] = entry.datePulled.split("-");
-      // entry.datePulled = new Date(year, month - 1, day);
       entry.datePulled = stringToDate(entry.datePulled);
-
-      console.log("datePulled after: ", entry.datePulled);
-      console.log("type for datePulled after: ", typeof entry.datePulled);
+      // console.log("datePulled after: ", entry.datePulled);
+      // console.log("type for datePulled after: ", typeof entry.datePulled);
     }
     
     //convert percentage strings to decimals

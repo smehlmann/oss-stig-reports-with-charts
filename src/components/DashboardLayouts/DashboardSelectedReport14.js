@@ -157,23 +157,19 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
             </ChartCardComponent>
           </Grid>
 
-          <Grid item lg={4} sm={6} xl={4} xs={12}>
+
+
+          {/* <Grid item lg={4} sm={6} xl={4} xs={12}>
             <ChartCardComponent title = 'Daily Breakdown'>
               <HistoricalDataTracker
-                xColumn="datePulled"
-                yColumn = "assets"
+                groupingColumn="datePulled"
+                targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
                 xAxisTitle="Number of Assets"
                 yAxisTitle= "Code"
                 data={data}
               />
             </ChartCardComponent>
-          </Grid>
-
-          {/* <Grid item lg={12} sm={12} xl={12} xs={12}>
-            <ExpandableTableCardComponent>
-              <Report5WithMultiLevelBenchmarks data={data}/>
-            </ExpandableTableCardComponent>
-          </Grid>  */}
+          </Grid> */}
 
 
         </Grid> 

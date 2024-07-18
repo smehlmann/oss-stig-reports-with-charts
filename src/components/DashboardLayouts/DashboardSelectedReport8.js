@@ -134,20 +134,7 @@ const DashboardSelectedReport5 = ({ data }) => {
                 <Report8BenchmarksExpanded data={data}/>
               </ExpandableTableCardComponent>
             </Grid>
-            {/* <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <ChartCardComponent title = "Averages">
-                <ApexBarAvgChart
-                  targetColumns={["assessed", "submitted", "accepted", "rejected"]}
-                  isHorizontal = {false}
-                  xAxisTitle= "Packages"
-                  yAxisTitle= "Number of Assets"
-                  disableFilterUpdate={true}
-                  data={data}
-                />
-              </ChartCardComponent>
-            </Grid> 
             
-            */}
 
           </Grid> 
         </Root>

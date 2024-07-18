@@ -55,3 +55,5 @@ const ApexBarAvgChart = ({ targetColumns, isHorizontal, xAxisTitle, yAxisTitle, 
 };
 
 export default ApexBarAvgChart;
+
+
