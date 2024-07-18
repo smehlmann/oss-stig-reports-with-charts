@@ -57,9 +57,6 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
                 if (!collectionName.startsWith('NP_C')) {
                     continue;
                 }
-                if (collectionName === 'NP_C10-NCCM_Zone B') {
-                    console.log('runSAReportByAsset collectionName: ' + collectionName);
-                }
 
                 //assetEmassMap = await reportGetters.getAssetEmassMap(auth, collections[i].collectionId, emassNum);
                 //get the collection assets
@@ -74,22 +71,22 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
                 }
 
 
-                //console.log(collectionName);
+                console.log(collectionName);
                 labelMap.clear();
                 labels.length = 0;
 
-                if(collectionName === 'NP_C10-NCCM_Zone B'){
-                    console.log(collectionName);
-                }
                 labels = await reportGetters.getLabelsByCollection(auth, collections[i].collectionId);
                 for (var x = 0; x < labels.data.length; x++) {
-                    if(labels.data[x].description === 'RMF Action'){
+                    /*if(labels.data[x].description === 'RMF Action'){
                         console.log(labels.data[x].description);
                     }
                     if(labels.data[x].description === 'RMF ACTION'){
                         console.log(labels.data[x].description);
-                    }
+                    }*/
                     labelMap.set(labels.data[x].labelId, labels.data[x].description);
+                    if(!labels.data[x].description){
+                        console.log('No label description fpr labelId: ' + labels.data[x].labelId);
+                    }
                 }
 
                 metrics = await reportGetters.getCollectionMerticsAggreatedByAsset(auth, collections[i].collectionId);
