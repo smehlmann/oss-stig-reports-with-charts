@@ -3,8 +3,6 @@ import OssStigReportsTab from "./OssStigReportsTab";
 import DashboardTab from "./DashboardTab";
 import "./TabComponentStyles.css";
 import useLocalStorageListener from "../useLocalStorageListener.js";
-import Papa from "papaparse";
-
 import * as Tabs from "@radix-ui/react-tabs";
 
 const TabsComponent = () => {
@@ -103,8 +101,7 @@ const TabsComponent = () => {
 
 async function fetchReportData() {
   try {
-    const filePath = process.env.PUBLIC_URL + "historicalData.csv";
-    //);
+    const filePath = process.env.PUBLIC_URL + 'historicalData.json';
     const response = await fetch(filePath);
     if (!response.ok) {
       throw new Error(
@@ -112,15 +109,11 @@ async function fetchReportData() {
       );
     }
 
-    const text = await response.text();
-    console.log("just parsed data:  ", text);
-    const reportData = Papa.parse(text, {
-      header: true,
-      dynamicTyping: true,
-      date: true,
-    }).data;
-
-   
+    //const text = await response.text();
+    const data = await response.text();
+    const reportData = JSON.parse(data);
+    console.log(reportData);
+       
    // Ensure each item has a unique key (if not already unique)
    reportData.forEach((item, index) => {
     item.id = item.id || `item-${index}`; // Ensure unique `id`
