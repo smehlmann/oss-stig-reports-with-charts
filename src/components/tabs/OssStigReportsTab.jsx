@@ -44,7 +44,6 @@ const OssStigReportsTab = () => {
     setReport(e.target.value);
     if (
       e.target.value !== "12" &&
-      e.target.value !== "13" &&
       e.target.value !== "14"
     ) {
       setShowEmassNums(true);
@@ -277,7 +276,7 @@ const OssStigReportsTab = () => {
               {showEmassNum && (
                 <div id="emassDiv">
                   <label htmlFor="emassNumsText">
-                    Required for reports 4, 5, 9. Optional for all others.
+                    Required for reports 4, 5, 6, 8. Optional for all others.
                     <br /> Enter EMASS Number(s) separated by commas:{" "}
                   </label>
                   <input
