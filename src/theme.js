@@ -1,18 +1,30 @@
 import {  createTheme, useTheme } from "@mui/material";
 
-const palette = [
-  '#0000F0',
-  '#183090',
-  '#4860FF',
-  '#A8A8F0',
-  // '#6078D8',
-  '#7890FF',
-  '#4860D9',
-  '#3048FF',
-  '#6060A8',
-  '#6078FF',
-];
+// from logo
+// const palette = [
+//   '#0000F0',
+//   '#183090',
+//   '#4860FF',
+//   '#A8A8F0',
+//   // '#6078D8',
+//   '#7890FF',
+//   '#4860D9',
+//   '#3048FF',
+//   '#6060A8',
+//   '#6078FF',
+// ];
 
+const palette = [
+  '#3048ff',
+  '#986af9',
+  '#cb95f6',
+  '#ecc5f8',
+  '#fff8ff',
+  '#dfcde5',
+  '#bba6cf',
+  '#9181bb',
+  '#6060a8',
+];
 
 const theme = createTheme({
   palette: {

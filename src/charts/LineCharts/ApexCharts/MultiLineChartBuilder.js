@@ -9,6 +9,7 @@ const MultiLineChartBuilder =({ xValues, yValues, xAxisHeader, yAxisHeader, onCl
   //   console.log("type: ", item instanceof Date);
   // })
   
+  const theme = useTheme();
 const axisTitleStyle = useMemo(() => ({
     fontSize: '14px',
     fontFamily: 'Segoe UI',
@@ -70,6 +71,7 @@ const axisTitleStyle = useMemo(() => ({
       },
       tickAmount: yValues.length > 5 ? undefined : yValues.length, // set tickAmount based on data length
     },
+    colors: palette,
     yaxis: {
       title: {
         text: yAxisHeader,
