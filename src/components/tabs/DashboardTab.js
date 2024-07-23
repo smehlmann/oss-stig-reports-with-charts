@@ -50,9 +50,15 @@ const stringToNumeric = (stringNum) => {
   return stringNum;
 };
 
+//convert num to string
+const numToString = (num) => {
+  let stringVer = String(num);
+  return stringVer;
+}
+
 //Only for report 5 (2nd option), split string into array of strings if it contains a space
 const convertBenchmarksToArray = (initialString, selectReportNum) => {
-  if (selectReportNum === '5') {
+  if (selectReportNum === '5' || selectReportNum === '14') {
     //if initialString contains spaces
     if(initialString.includes(" ")){
       return initialString.split(" ");
@@ -76,13 +82,12 @@ const formatData = (parsedData, selectedReportNum) => {
   return parsedData.map((entry, index) => {
 
     //convert pulledDate to date object
-
     if (typeof entry.datePulled !== 'undefined' && entry.datePulled !== null) {
       if (typeof entry.datePulled !== 'string') {
         entry.datePulled = objectToString(entry.datePulled);
-        
       }
       entry.datePulled = stringToDate(entry.datePulled);
+      // console.log('type: ', entry.datePulled instanceof Date)
       // console.log("datePulled after: ", entry.datePulled);
       // console.log("type for datePulled after: ", typeof entry.datePulled);
     }
@@ -148,6 +153,19 @@ const formatData = (parsedData, selectedReportNum) => {
       entry.cat3 = stringToNumeric(entry.cat3);
     }
 
+    //convert emass and code to strings 
+    if (entry.emass !== 'undefined')
+    {
+      if (entry.emass !== 'string') {
+        entry.emass = numToString(entry.emass)
+      }
+    }
+    if (entry.code !== 'undefined') {
+      if (entry.code !== 'string') {
+        entry.code = numToString(entry.code)
+      }
+    }
+
     //convert benchmarks to array for report5
     if (entry.benchmarks !== 'undefined') {
       entry.benchmarks = convertBenchmarksToArray(entry.benchmarks, selectedReportNum);
@@ -156,8 +174,6 @@ const formatData = (parsedData, selectedReportNum) => {
     if ((selectedReportNum === '5' || selectedReportNum === '14') && entry.shortName === "NCCM") {
       entry.shortName = entry.nccm || "NCCM";
     }
-
-    
 
     return { ...entry, uniqueId: index }; // Add a unique identifier
   });
@@ -170,8 +186,6 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
   let parsedData = typeof reportData == 'string' ? JSON.parse(reportData): reportData;
 
   const formattedData = formatData(parsedData, selectedReportNum); 
-
-
 
   //keeps track of the selectedReport state
   const [selectedReport, setSelectedReport] = useState(null);

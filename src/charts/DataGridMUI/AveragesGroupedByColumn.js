@@ -88,17 +88,6 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
     updateFilter({ [groupingColumn]: selectedValue });
   };
 
-  // const handleSelectionModelChange = (newSelection) => {
-  //   console.log('Selection model changed:', newSelection);
-  //   if (newSelection.length > 0) {
-  //     const selectedRows = newSelection.map((id) => averages.find((row) => row.id === id));
-  //     if (selectedRows.length > 0) {
-  //       const selectedCodes = selectedRows.map(row => row.code);
-  //       updateFilter({ code: selectedCodes[0] });
-  //     }
-  //   }
-  // };
-
 
   //headers for columns
   const tableColumns = [

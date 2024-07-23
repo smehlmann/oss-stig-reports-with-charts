@@ -25,7 +25,6 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
   const handleBarClick = (event, chartContext, config) => {
     const categoryLabels = config.w.globals.labels || config.w.globals.categories;
     const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;
-
       if (selectedValue) {
       // Check if the selected value is already in the filter
       if (filter[targetColumn] === selectedValue) {
@@ -56,7 +55,6 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
         xAxisHeader={xAxisTitle}
         yAxisHeader={yAxisTitle}
         onClick={handleBarClick}
-        // getColorForLabel={getColorForLabel}
       />
     // </div>
   );

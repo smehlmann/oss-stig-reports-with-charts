@@ -3,6 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Box, styled } from "@mui/system";
 import TableCell from '@mui/material/TableCell';
 import { useFilter } from '../../FilterContext';
+import FocusTrap from '@mui/material/Unstable_TrapFocus';
 
 
 const BoldHeader = styled('div')(({ theme }) => ({
@@ -12,24 +13,7 @@ const BoldHeader = styled('div')(({ theme }) => ({
   textWrap: 'wrap',
   textAlign: 'center',
   overflowX: 'visible',
-  /*
-  [theme.breakpoints.down('lg')]: {
-   fontSize: 'calc(10px + 1vmin)', // Font size for large screens and down
-  },
-  [theme.breakpoints.down('extendedLg')]: { //1381px
-    fontSize: 'calc(9.5px + 1vmin)', 
-  },
-  [theme.breakpoints.down('extendedMd')]: { //1047.2px
-    fontSize: 'calc(10px + 1vmin)'
-  },
 
-  [theme.breakpoints.down('md')]: {
-    fontSize: 'calc(11px + 1vmin)'
-  },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: 'calc(13px + 1vmin)' // Font size for small screens and down
-  },
-  */
 }));
 
 const CenterAlignedCell = styled(TableCell)({
@@ -44,18 +28,14 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     
   },
   "& .MuiDataGrid-scrollbarFiller--header": {
-    backgroundColor: theme.palette.secondary.light,
-
+    backgroundColor: theme.palette.secondary.light
 
   }, 
   //Text in table cells
   "& .MuiDataGrid-cell": {
-    borderBottom: "none",
+    // borderBottom: "none",
     whiteSpace: 'normal', // Allow text wrapping
     wordBreak: 'break-word',
-  },
-  "& .name-column--cell": {
-    color: theme.palette.primary.main,
   },
 
   "& .MuiDataGrid-columnHeader": {
@@ -146,7 +126,6 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
         rowCount={data.length}
         rowsPerPageOptions={[5, 10]}
         onPageSizeChange={handleChangeRowsPerPage}
-        
         // checkboxSelection
         disableSelectionOnClick
         onRowClick={onRowClick}

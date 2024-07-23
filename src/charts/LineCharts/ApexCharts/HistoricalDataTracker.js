@@ -1,13 +1,14 @@
-import React, { useMemo, useState, useEffect } from "react";
-import LineChartBuilder from "./LineChartBuilder.js";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
+import MultiLineChartBuilder from "./MultiLineChartBuilder.js";
 import CalculateArrayAvg from "../../../components/CalculateArrayAvg.js";
 import { useFilter } from "../../../FilterContext.js";
-import { parseISO } from 'date-fns';
-import Chart from 'react-apexcharts';
-
+import { getPercentageFormatterObject } from "../../../components/getPercentageFormatterObject.js";
 
 const HistoricalDataTracker = ({ groupingColumn, targetColumns, chartTitle, xAxisTitle, yAxisTitle, data }) => {
   const { filter, updateFilter } = useFilter();
+
+  // const values = data.map(item => item[groupingColumn])
+  // console.log(values instanceof Date);
 
   const filteredData = useMemo(() => {
     if (Object.keys(filter).length > 0) { 
@@ -18,8 +19,6 @@ const HistoricalDataTracker = ({ groupingColumn, targetColumns, chartTitle, xAxi
   }, [filter, data]);
 
   const [averages, setAverages] = useState([]);
-
-  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     if (Array.isArray(filteredData) && filteredData) {
@@ -55,125 +54,109 @@ const HistoricalDataTracker = ({ groupingColumn, targetColumns, chartTitle, xAxi
 
           //columnAvgAcc is object where:, for each of our targetColumns, we will have something like {id: '10', 'code':10, avgAssessed:0.978, avgSubmitted:0.922...}
           return columnAvgAcc;
-        }, { [groupingColumn]: groupingValue });
+        }, { [groupingColumn]: groupingValue});
         //basically the return the accumulator columnAvgAcc
         return averages;
       }).filter(avg => avg !== 'undefined'  !== null);
 
+      groupedAverages.sort((a, b) => new Date(a.datePulled) - new Date(b.datePulled));
+
       setAverages(groupedAverages);
-      
-      // Transforming data for the chart
-      const transformedData = filteredData
-      .filter(item => item.datePulled !== null && item.datePulled !== undefined) // Filter out null datePulled
-      .sort((a, b) => new Date(a.datePulled) - new Date(b.datePulled))
-      .map(item => ({
-        datePulled: item.datePulled,
-        avgAssessed: item.avgAssessed !== undefined ? item.avgAssessed : null,
-        avgSubmitted: item.avgSubmitted !== undefined ? item.avgSubmitted : null,
-        avgAccepted: item.avgAccepted !== undefined ? item.avgAccepted : null,
-        avgRejected: item.avgRejected !== undefined ? item.avgRejected : null
-      }));
-        
-      setChartData(transformedData);
+      // setChartData(transformedData);
     }
   }, [targetColumns, filteredData, groupingColumn]);
 
+    // console.log("averages: ", averages);
 
-  console.log("averages: ", averages);
+  const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
+
+  //format data into series and list of dates
+  const formatChartData = (averages) => {
+    //sort the dates and ensure they are of type date
+    const dates = averages.map(item => new Date(item.datePulled)).sort((a, b) => a - b);
   
+    //create series data for each line (represented by each avg)
+    //for each item in averages, map datePulled and avg of column
+    const avgAssessedData = averages.map(item => ({
+      x: item.datePulled,
+      y: item.avgAssessed || 0 
+    }));
+    const avgSubmittedData = averages.map(item => ({
+      x: item.datePulled,
+      y: item.avgSubmitted || 0 
+    }));
+    const avgAcceptedData = averages.map(item => ({
+      x: item.datePulled,
+      y: item.avgAccepted || 0 
+    }));
+    const avgRejectedData = averages.map(item => ({
+      x: item.datePulled,
+      y: item.avgRejected || 0 
+    }));
+  
+    return {
+      dates,
+      //return series: an array of objects 
+      series: [
+        { name: 'Avg Assessed', data: avgAssessedData },
+        { name: 'Avg Submitted', data: avgSubmittedData },
+        { name: 'Avg Accepted', data: avgAcceptedData },
+        { name: 'Avg Rejected', data: avgRejectedData }
+      ]
+    };
+  };
 
-  const chartOptions = {
-    chart: {
-      type: 'line',
-      zoom: {
-        enabled: false
+  const { series, dates } = useMemo(() => formatChartData(averages), [averages]);
+
+
+    
+  //updates the filter criteria based on user's click
+  const handleClick = (event, chartContext, config) => {
+    console.log("config: ", config);
+    const categoryLabels = config.w.globals.labels || config.w.globals.categories;
+    const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;
+
+    console.log('categoryLabels: ', categoryLabels);
+    console.log('selectedValue: ', selectedValue);
+
+      if (selectedValue) {
+      // Check if the selected value is already in the filter
+      if (filter[groupingColumn] === selectedValue) {
+        // Remove the filter
+        updateFilter({ [groupingColumn]: undefined });
+      } else {
+        // Add the filter
+        updateFilter({ [groupingColumn]: selectedValue });
       }
-    },
-    title: {
-      text: 'Average Metrics Over Time',
-      align: 'left'
-    },
-    xaxis: {
-      type: 'datetime',
-      categories: chartData && chartData.map(item => item.datePulled), 
-      labels: {
-        format: 'yyyy-MM-dd'
-      }
-    },
-    yaxis: {
-      max: 100,
-      labels: {
-        formatter: (val) => `${val}%`
-      }
-    },
-    series: [
-      {
-        name: 'Avg Assessed',
-        categories: chartData && chartData.map(item => item.datePulled), 
-      },
-      {
-        name: 'Avg Submitted',
-        data: chartData.map(item => item.avgSubmitted)
-      },
-      {
-        name: 'Avg Accepted',
-        data: chartData.map(item => item.avgAccepted)
-      },
-      {
-        name: 'Avg Rejected',
-        data: chartData.map(item => item.avgRejected)
-      }
-    ]
+    }
   };
 
   return (
-    <div>
+    <div className="apex-chart" style={{ height: '100%', width: '95%', margin: "0" }}>
       {/* Render averages */}
-      {/* <div>
+       {/* <div sx={{ margin: '10px' }}>
         <h2>Averages</h2>
-        {averages.map((avg, index) => (
-          <div key={index}>
-            {Object.entries(avg).map(([key, value]) => (
-              <p key={key}>{key}: {value}</p>
-            ))}
-          </div>
-        ))}
-      </div> */}
+          {averages.map((avg, index) => (
+            <div key={index}>
+              {Object.entries(avg).map(([key, value]) => (
+                <p key={key}>{key}: {value}</p>
+              ))}
+            </div>
+          ))}
+        </div>  */}
 
-      {/* Render line chart */}
-      <Chart options={chartOptions} series={chartOptions.series} type="line" height={350} />
+      <MultiLineChartBuilder
+        xValues={dates}
+        yValues={series}
+        xAxisHeader = {xAxisTitle}
+        yAxisHeader = {yAxisTitle}
+        onClick={handleClick}
+        formatLabelToPercentage = {percentageFormatterObject}
+      />
+      {/* <ReactApexChart options={chartOptions} series={chartOptions.series} type="line" /> */}
     </div>
   );
-  
-  // //updates the filter criteria based on user's click
-  // const handleBarClick = (event, chartContext, config) => {
-  //   const categoryLabels = config.w.globals.labels || config.w.globals.categories;
-  //   const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;
 
-  //     if (selectedValue) {
-  //     // Check if the selected value is already in the filter
-  //     if (filter[xColumn] === selectedValue) {
-  //       // Remove the filter
-  //       updateFilter({ [xColumn]: undefined });
-  //     } else {
-  //       // Add the filter
-  //       updateFilter({ [xColumn]: selectedValue });
-  //     }
-  //   }
-  // };
-
-
-  // return (
-  //     <LineChartBuilder
-  //       dataLabels={labels}
-  //       dataValues={values}
-  //       title={chartTitle}
-  //       xAxisHeader={xAxisTitle}
-  //       yAxisHeader={yAxisTitle}
-  //       // onClick={handleBarClick}
-  //     />
-  //   // </div>
-  // );
 };
 
 export default HistoricalDataTracker;

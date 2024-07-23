@@ -2,19 +2,17 @@ import React, { useMemo } from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
-
 import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart"
 import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/HistoricalDataTracker"
-
 import ValueCountMap from "../ValueCountMap";
-import Report8BenchmarksExpanded from "../../charts/TableUsingMUI/Report8BenchmarksExpanded";
 import ChartCardComponent from "../Cards/ChartCardComponent";
-import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import theme from "../../theme";
 import StatisticsCardComponent from "../Cards/StatisticsCardComponent"
 import {  useFilter } from "../../FilterContext";
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
 import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/MultiLevelExpandableTable/Report5WithMultiLevelBenchmarks";
+import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
+
 
 const Root = styled('div')(({ theme }) => {
   return ({
@@ -51,6 +49,12 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
     return data;
   }, [filter, data]);
   
+  // let groupingColumn = 'datePulled'
+  // const values = filteredData.map(item => item[groupingColumn])
+  // values.forEach(item => {
+  //   console.log(item instanceof Date);
+  // })
+  
   //get sum of Cat1
   const cat1Sum = useMemo(() => {
     return filteredData.reduce((sum, item) => sum + (item.cat1 || 0), 0);
@@ -71,7 +75,6 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
     const countMap = ValueCountMap(filteredData, 'asset');
     return Object.keys(countMap).length;
   }, [filteredData]);
-
 
   const listItems = data.map((item, index) => (
     <li key={index}> <pre>{JSON.stringify(item, null, 2)}</pre> </li>
@@ -120,9 +123,10 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
               >
               </StatisticsCardComponent>
           </Grid>
-          
+        
 
-          <Grid item lg={4} sm={6} xl={4} xs={12}>
+
+        <Grid item lg={6} sm={6} xl={3} xs={12}>
             <ChartCardComponent title = 'Assets by Code'>
               <ApexCountByValueBarChart
                 targetColumn="code"
@@ -133,9 +137,8 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
               />
             </ChartCardComponent>
           </Grid>
-
-          {/* data grid */}
-          <Grid item lg={4} sm={6} xl={4} xs={12}>
+  
+          <Grid item lg={6} sm={6} xl={3} xs={12}>
             <TableGridCardComponent>
               <AveragesGroupedByColumn 
                 groupingColumn = 'code'
@@ -145,7 +148,7 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
             </TableGridCardComponent>
           </Grid>
           
-          <Grid item lg={4} sm={6} xl={4} xs={12}>
+          <Grid item lg={6} sm={6} xl={3} xs={12}>
             <ChartCardComponent title = "Assets by Collection">
               <ApexCountByValueBarChart
                 targetColumn="shortName"
@@ -155,22 +158,25 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
                 data={data}
               />
             </ChartCardComponent>
-          </Grid>
+          </Grid> 
 
-
-
-          {/* <Grid item lg={4} sm={6} xl={4} xs={12}>
-            <ChartCardComponent title = 'Daily Breakdown'>
+          <Grid item lg={6} sm={6} xl={3} xs={12}>
+            <ChartCardComponent title = 'Historical Data'>
               <HistoricalDataTracker
                 groupingColumn="datePulled"
                 targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
-                xAxisTitle="Number of Assets"
-                yAxisTitle= "Code"
+                xAxisTitle="Date"
+                yAxisTitle= "Completion (%)"
                 data={data}
               />
             </ChartCardComponent>
-          </Grid> */}
+          </Grid> 
 
+          <Grid item lg={12} sm={12} xl={12} xs={12}>
+            <ExpandableTableCardComponent>
+              <Report5WithMultiLevelBenchmarks data={data}/>
+            </ExpandableTableCardComponent>
+          </Grid> 
 
         </Grid> 
       </Root>

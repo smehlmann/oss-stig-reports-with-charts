@@ -29,7 +29,7 @@ import SearchIcon from '@mui/icons-material/Search';
 function Row({ parentRow, columns, renderChildRow, filterProperty}) {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(7);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchText, setSearchText] = useState("");
   const { updateFilter, clearFilter } = useFilter();
 
