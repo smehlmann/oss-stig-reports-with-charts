@@ -49,6 +49,8 @@ export const SearchTextField = styled(TextField)(({ theme }) => ({
       },
     },
   },
+
+
   //initial rendering (before hover or focus)
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
@@ -70,29 +72,6 @@ export const SearchTextField = styled(TextField)(({ theme }) => ({
     },
   },
 }));
-
-
-
-export const SearchBar = styled(TextField)({
-  marginTop: "8px",
-  marginBottom: "8px",
-  marginLeft: 1,
-  marginRight: 1,
-  padding: 'auto',
-  "& .MuiOutlinedInput-root": {
-    borderRadius: "25px",
-    height: "5%",
-  },
-  "& .MuiOutlinedInput-input": {
-    padding: "12px",
-  },
-  "& .MuiInputLabel-outlined": {
-    transform: "translate(14px, 14px) scale(1)",
-  },
-  "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
-    transform: "translate(14px, -6px) scale(0.75)",
-  },
-});
 
 
 //standard table components
@@ -118,6 +97,7 @@ export const StyledTableHead = styled(TableHead)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.light,
   display: 'flex',
   height: "55px",
+  margineft: '0',
   alignItems: 'center',
 }));
 //actual cells in the header row (text)

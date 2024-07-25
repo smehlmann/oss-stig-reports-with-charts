@@ -1,6 +1,6 @@
 //accepts an array of objects as data and column names (strings)
 const PropertyAvgMap = (data, properties) => {
-  console.log('properties: ', properties);
+  // console.log('properties: ', properties);
   //initialize an object to store sums and counts for each property
   const sumsAndCounts = properties.reduce((accumulator, property) => {
     //initialize the sum and count for each property

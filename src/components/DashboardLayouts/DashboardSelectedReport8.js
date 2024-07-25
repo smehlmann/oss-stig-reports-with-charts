@@ -1,16 +1,14 @@
 import React, { useMemo } from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
-
-import ApexBarAvgChart from "../../charts/BarCharts/ApexCharts/ApexBarAvgChart";
 import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart"
-import ValueCountMap from "../ValueCountMap";
 import Report8BenchmarksExpanded from "../../charts/TableUsingMUI/Report8BenchmarksExpanded";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import theme from "../../theme";
-import StatisticsCardComponent from "../Cards/StatisticsCardComponent"
+import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import {  useFilter } from "../../FilterContext";
+import FilterBar from "../FilterBar.js";
 
 const Root = styled('div')(({ theme }) => {
   return ({
@@ -47,61 +45,16 @@ const DashboardSelectedReport5 = ({ data }) => {
     return data;
   }, [filter, data]);
   
-
-  //get sum of Cat1
-  const cat1Sum = useMemo(() => {
-    return filteredData.reduce((sum, item) => sum + (item.cat1 || 0), 0);
-  }, [filteredData]);
-  //sum of Cat2
-  const cat2Sum = useMemo(() => {
-    return filteredData.reduce((sum, item) => sum + (item.cat2 || 0), 0);
-  }, [filteredData]);
-  //sum of cat3
-  const cat3Sum = useMemo(() => {
-    return filteredData.reduce((sum, item) => sum + (item.cat3 || 0), 0);
-  }, [filteredData]);
-  //number of assets
-  const assetCount = useMemo(() => {
-    const countMap = ValueCountMap(filteredData, 'asset');
-    return Object.keys(countMap).length;
-  }, [filteredData]);
-  
   return (
     <ThemeProvider theme={theme}>
       {/* <FilterProvider> */}
         <Root>
+          <Grid item lg={12} sm={12} xl={12} xs={12}>
+            <FilterBar />
+          </Grid>
           <Grid container spacing={3}>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <StatisticsCardComponent 
-                  metricValue={assetCount}
-                  metricDisplayedName = "Assets"
-                  measurement="Total"
-                >
-                </StatisticsCardComponent>
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <StatisticsCardComponent 
-                  metricValue={cat1Sum}
-                  metricDisplayedName = "CAT1"
-                  measurement="Total"
-                >
-                </StatisticsCardComponent>
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <StatisticsCardComponent 
-                  metricValue={cat2Sum}
-                  metricDisplayedName = "CAT2"
-                  measurement="Total"
-                >
-                </StatisticsCardComponent>
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <StatisticsCardComponent 
-                  metricValue={cat3Sum}
-                  metricDisplayedName = "CAT3"
-                  measurement="Total"
-                >
-                </StatisticsCardComponent>
+            <Grid item lg={12} sm={12} xl={12} xs={12}>
+              <StatisticsCardGroup data={filteredData} />
             </Grid>
             
 

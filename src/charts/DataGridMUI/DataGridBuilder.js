@@ -13,12 +13,13 @@ const BoldHeader = styled('div')(({ theme }) => ({
   textWrap: 'wrap',
   textAlign: 'center',
   overflowX: 'visible',
-
+  fontSize: 'calc(11px + 0.2vw)', // Responsive font size
+  whiteSpace: 'normal', // Allow text wrapping
+  wordBreak: 'break-word', // Break long words
+  width: '100%',
+  display: 'flex',
 }));
 
-const CenterAlignedCell = styled(TableCell)({
-  textAlign: 'center',
-});
 
 //created styled data grid:
 const StyledDataGrid = styled(DataGrid) (({theme}) => ({
@@ -33,9 +34,12 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   }, 
   //Text in table cells
   "& .MuiDataGrid-cell": {
-    // borderBottom: "none",
+    borderBottom: "none",
     whiteSpace: 'normal', // Allow text wrapping
     wordBreak: 'break-word',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignText: 'center',
   },
 
   "& .MuiDataGrid-columnHeader": {
@@ -45,6 +49,7 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   "& .MuiDataGrid-columnHeaders": {
     backgroundColor: theme.palette.secondary.light,
   },
+
   // "& .MuiDataGrid-virtualScroller": {
   //   backgroundColor: theme.palette.background.paper,
   // },
@@ -58,29 +63,32 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
     color: `${theme.palette.text.primary} !important`,
   },
+
+  "& .MuiDataGrid-columnHeaderTitleContainer" : {
+    display: 'flex',
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }, 
+
+  "& .MuiDataGrid-columnHeaderTitleContainerContent": {
+    // backgroundColor: '#C70039',
+    display: 'flex',
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  "& .css-152u2bk": {
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflowX: 'visible',
+
+  }
   
-/*
- ///// Custom scrollbar styles
-  "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-    width: '5px',
-  },
-  "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track": {
-    background: theme.palette.secondary.light, // Make the scrollbar track transparent
-  },
-  "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-    backgroundColor: '#888',
-    borderRadius: '10px',
-    border: '3px solid transparent',
-  },
-  "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover": {
-    backgroundColor: '#555',
-  },
-  // Firefox scrollbar styles
-  "& .MuiDataGrid-virtualScroller": {
-    scrollbarWidth: 'thin',
-    scrollbarColor: '#888 transparent',
-  },
-*/
 }));
 
 
@@ -103,7 +111,7 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
       display: 'flex',
       height: '100%',
       // maxHeight: '100%', // Ensure it doesn't grow beyond this height
-      overflowY: 'hidden', // Enable vertical scrolling
+      overflowY: 'hidden',
       margin: "0 auto",
       flexDirection: 'column',
     }}>
@@ -114,6 +122,8 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
           ...column,
           headerAlign: 'center',
           align: 'center',
+          flex: 1, // Flex property for responsive resizing
+          minWidth: 100,
           renderHeader: (params) => (
             <BoldHeader>{params.colDef.headerName}</BoldHeader>
           ),

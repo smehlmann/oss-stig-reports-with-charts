@@ -34,13 +34,21 @@
       });
     };
 
+    //remove single key from filter object
+    const removeFilterKey = (key) => {
+      setFilters(prevFilters => {
+        const {[key]: removed, ...rest } = prevFilters;
+        return rest 
+      });
+    };
+
     const clearFilter = () => {
       setFilters({});
     };
   
     return (
       //provides 'filter' state and 'updateFilter' to all components nested in FilterProvider
-      <FilterContext.Provider value={{ filter, updateFilter, clearFilter }}>
+      <FilterContext.Provider value={{ filter, updateFilter, removeFilterKey, clearFilter }}>
         {children}
       </FilterContext.Provider>
     );

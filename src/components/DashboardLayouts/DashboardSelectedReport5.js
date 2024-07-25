@@ -1,26 +1,19 @@
 import React, { useMemo } from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
-
-// import BubbleCountChart from "../../charts/BubbleCharts/BubbleCountChart";
-// import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart";
-// import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart";
-// import ApexBarAvgChart from "../../charts/BarCharts/ApexCharts/ApexBarAvgChart"
-
-import ValueCountMap from "../ValueCountMap";
-// import LineChartBuilder from "../../../charts/LineCharts/Chartjs/LineChartBuilder";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import theme from "../../theme";
-import StatisticsCardComponent from "../Cards/StatisticsCardComponent"
 import {  useFilter } from "../../FilterContext";
-
+import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/MultiLevelExpandableTable/Report5WithMultiLevelBenchmarks";
+import FilterBar from "../FilterBar.js";
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(3),
+  paddingBottom: theme.spacing(3),
   backgroundColor: theme.palette.background.default,
   color: theme.palette.text.primary,
   height: "100%",
@@ -50,66 +43,21 @@ const DashboardSelectedReport5 = ({ data }) => {
   }, [filter, data]);
   
 
-  //get sum of Cat1
-  const cat1Sum = useMemo(() => {
-    return filteredData.reduce((sum, item) => sum + (item.cat1 || 0), 0);
-  }, [filteredData]);
-
-  //sum of Cat2
-  const cat2Sum = useMemo(() => {
-    return filteredData.reduce((sum, item) => sum + (item.cat2 || 0), 0);
-  }, [filteredData]);
-
-  //sum of cat3
-  const cat3Sum = useMemo(() => {
-    return filteredData.reduce((sum, item) => sum + (item.cat3 || 0), 0);
-  }, [filteredData]);
-
-  //number of assets
-  const assetCount = useMemo(() => {
-    const countMap = ValueCountMap(filteredData, 'asset');
-    return Object.keys(countMap).length;
-  }, [filteredData]);
-  
   return (
     <ThemeProvider theme={theme}>
       {/* <FilterProvider> */}
         <Root>
+          {/*Filter Bar*/}
+          <Grid item lg={12} sm={12} xl={12} xs={12}>
+            <FilterBar />
+          </Grid>
           <Grid container spacing={3}>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <StatisticsCardComponent 
-                  metricValue={assetCount}
-                  metricDisplayedName = "Assets"
-                  measurement="Total"
-                >
-                </StatisticsCardComponent>
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <StatisticsCardComponent 
-                  metricValue={cat1Sum}
-                  metricDisplayedName = "CAT1"
-                  measurement="Total"
-                >
-                </StatisticsCardComponent>
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <StatisticsCardComponent 
-                  metricValue={cat2Sum}
-                  metricDisplayedName = "CAT2"
-                  measurement="Total"
-                >
-                </StatisticsCardComponent>
-            </Grid>
-            <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <StatisticsCardComponent 
-                  metricValue={cat3Sum}
-                  metricDisplayedName = "CAT3"
-                  measurement="Total"
-                >
-                </StatisticsCardComponent>
+            {/* Stats cards */}
+            <Grid item lg={12} sm={12} xl={12} xs={12}>
+              <StatisticsCardGroup data={filteredData} />
             </Grid>
             
-
+          
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <ChartCardComponent title = 'Assets by Code'>
                 <ApexCountByValueBarChart

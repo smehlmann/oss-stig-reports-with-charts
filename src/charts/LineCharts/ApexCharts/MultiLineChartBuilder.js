@@ -1,15 +1,15 @@
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useMemo, useEffect, useState, useCallback } from "react";
 import ReactApexChart from "react-apexcharts";
 import { useTheme, palette} from "../../../theme.js"
 
 
-const MultiLineChartBuilder =({ xValues, yValues, xAxisHeader, yAxisHeader, onClick, formatLabelToPercentage }) => {
+const MultiLineChartBuilder =({ xValues, yValues, xAxisHeader, yAxisHeader, formatLabelToPercentage }) => {
   // console.log('xValues (dates): ', xValues);
   // xValues.forEach(item => {
   //   console.log("type: ", item instanceof Date);
   // })
   
-  const theme = useTheme();
+const theme = useTheme();
 const axisTitleStyle = useMemo(() => ({
     fontSize: '14px',
     fontFamily: 'Segoe UI',
@@ -18,7 +18,29 @@ const axisTitleStyle = useMemo(() => ({
     textAlign: 'center',
   }), []);
 
-  
+
+  //set color of lines
+  //useCallback means function only recreated when theme changes
+  const getColorForLabel = useCallback(
+    (label) => {
+      switch (label) {
+        case "Avg Assessed":
+          return theme.palette.assessed;
+        case "Avg Submitted":
+          return theme.palette.submitted;
+        case "Avg Accepted":
+          return theme.palette.accepted;
+        case "Avg Rejected":
+          return theme.palette.rejected;
+        default:
+          return theme.palette.primary.main;
+      }
+    },
+    [theme.palette],
+  );
+
+  const lineColors = useMemo(() => yValues.map(label => getColorForLabel(label.name)), [yValues, getColorForLabel]);
+
   const [options, setOptions] = useState({
     chart: {
       type: 'area',
@@ -26,27 +48,18 @@ const axisTitleStyle = useMemo(() => ({
       width: '100%',
       zoom: {
         type: 'x',
-        enabled: false,
+        enabled: true,
         autoScaleYaxis: true
       },
       markers: {
         size: 0,
       },
-      events: {
-        dataPointSelection: onClick,
-      },
-      // events: {
-      //   dataPointSelection: (event, chartContext, config) => {
-      //     console.log("Data Point Selected: ", config);
-      //     // console.log("Selected Data Labels: ", dataLabels);
-      //     onClick(event, chartContext, config);
-      //   },
-      // },
-      // toolbar: {
-      //   autoSelected: 'zoom'
-      // }
+
+      toolbar: {
+        autoSelected: 'zoom'
+      }
     },
-    color: palette,
+    color: lineColors,
     dataLabels: {
       enabled: false,
     },
@@ -86,30 +99,6 @@ const axisTitleStyle = useMemo(() => ({
         },
       },
     },
-    // tooltip: {
-    //   enabled: true,
-    //   shared: false,
-    //   intersect: true,
-    //   x: {
-    //     formatter: function (val, opts) {
-    //       const dataLabelsArray = opts.w.globals.initialConfig.xaxis.categories;
-    //       // console.log("Tooltip dataLabels: ", dataLabelsArray);
-    //       const dataLabel = dataLabelsArray[opts.dataPointIndex];
-    //       return dataLabel !== undefined ? dataLabel : '';
-    //     },
-    //   },
-    //   y: {
-    //     labels: {
-    //       formatter: function (value) {
-    //         return value;
-    //       },
-          
-    //     },
-    //     title: {
-    //       formatter: () => ""
-    //     }
-    //   },
-    // },
     plotOptions: {
       line: {
         borderRadius: 4,
@@ -143,9 +132,9 @@ const axisTitleStyle = useMemo(() => ({
           style: axisTitleStyle,
         },
       },
+      colors: lineColors,
     }));
-    // console.log("Options Updated: ", dataLabels, xAxisHeader, yAxisHeader);
-  }, [xValues, xAxisHeader, yAxisHeader, axisTitleStyle]);
+  }, [xValues, xAxisHeader, yAxisHeader, axisTitleStyle, lineColors]);
 
   return (
     <div className="apex-chart" style={{ height: '100%', width: '100%', margin: "0" }}>

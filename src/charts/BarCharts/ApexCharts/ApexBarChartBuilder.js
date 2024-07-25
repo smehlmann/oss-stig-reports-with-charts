@@ -16,7 +16,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
     textAlign: 'center',
   }), []);
   
-    //set color of bars based on bar's label
+  //set color of bars based on bar's label
   //useCallback means function only recreated when theme changes
   const getColorForLabel = useCallback(
     (label) => {

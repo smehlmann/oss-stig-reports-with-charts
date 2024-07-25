@@ -2,16 +2,16 @@ import React, { useMemo } from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
-import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart"
 import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/HistoricalDataTracker"
-import ValueCountMap from "../ValueCountMap";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import theme from "../../theme";
-import StatisticsCardComponent from "../Cards/StatisticsCardComponent"
 import {  useFilter } from "../../FilterContext";
-import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
 import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/MultiLevelExpandableTable/Report5WithMultiLevelBenchmarks";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
+import FilterBar from "../FilterBar.js";
+import StatisticsCardGroup from "../StatisticsCardsGroup.js";
+// import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
+import AveragesAndCount from "../../charts/DataGridMUI/AveragesAndCount";
 
 
 const Root = styled('div')(({ theme }) => {
@@ -31,6 +31,7 @@ const Root = styled('div')(({ theme }) => {
 /*
 Grid spacing is split into 12 parts:
   For evenly spaced cards:
+  
   {3} = 4 cards in row (each is 1/4 of section)
   {4} = 3 cards in row (each is 1/3 of section)
   {6} = 2 cards in row (each is 1/2 of section)
@@ -55,92 +56,27 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
   //   console.log(item instanceof Date);
   // })
   
-  //get sum of Cat1
-  const cat1Sum = useMemo(() => {
-    return filteredData.reduce((sum, item) => sum + (item.cat1 || 0), 0);
-  }, [filteredData]);
-
-  //sum of Cat2
-  const cat2Sum = useMemo(() => {
-    return filteredData.reduce((sum, item) => sum + (item.cat2 || 0), 0);
-  }, [filteredData]);
-
-  //sum of cat3
-  const cat3Sum = useMemo(() => {
-    return filteredData.reduce((sum, item) => sum + (item.cat3 || 0), 0);
-  }, [filteredData]);
-
-  //number of assets
-  const assetCount = useMemo(() => {
-    const countMap = ValueCountMap(filteredData, 'asset');
-    return Object.keys(countMap).length;
-  }, [filteredData]);
-
-  const listItems = data.map((item, index) => (
-    <li key={index}> <pre>{JSON.stringify(item, null, 2)}</pre> </li>
-  ));
+  // const listItems = data.map((item, index) => (
+  //   <li key={index}> <pre>{JSON.stringify(item, null, 2)}</pre> </li>
+  // ));
   
-  // return (
-  //   <ul>
-  //     {listItems}
-  //   </ul>
-  // );
-
   return (
     <ThemeProvider theme={theme}>
     {/* <FilterProvider> */}
       <Root>
+        {/*Filter Bar*/}
+        <Grid item lg={12} md={12} sm={12} xl={12} xs={12}>
+          <FilterBar />
+        </Grid>
         <Grid container spacing={3}>
-          <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <StatisticsCardComponent 
-                metricValue={assetCount}
-                metricDisplayedName = "Assets"
-                measurement="Total"
-              >
-              </StatisticsCardComponent>
+          <Grid item lg={12} sm={12} xl={12} xs={12}>
+            <StatisticsCardGroup data={filteredData} />
           </Grid>
-          <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <StatisticsCardComponent 
-                metricValue={cat1Sum}
-                metricDisplayedName = "CAT1"
-                measurement="Total"
-              >
-              </StatisticsCardComponent>
-          </Grid>
-          <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <StatisticsCardComponent 
-                metricValue={cat2Sum}
-                metricDisplayedName = "CAT2"
-                measurement="Total"
-              >
-              </StatisticsCardComponent>
-          </Grid>
-          <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <StatisticsCardComponent 
-                metricValue={cat3Sum}
-                metricDisplayedName = "CAT3"
-                measurement="Total"
-              >
-              </StatisticsCardComponent>
-          </Grid>
-        
 
 
-        <Grid item lg={6} sm={6} xl={3} xs={12}>
-            <ChartCardComponent title = 'Assets by Code'>
-              <ApexCountByValueBarChart
-                targetColumn="code"
-                isHorizontal={true}
-                xAxisTitle="Number of Assets"
-                yAxisTitle= "Code"
-                data={data}
-              />
-            </ChartCardComponent>
-          </Grid>
-  
-          <Grid item lg={6} sm={6} xl={3} xs={12}>
+          <Grid item lg={6} md = {6} sm={12} xl={6} xs={12}>
             <TableGridCardComponent>
-              <AveragesGroupedByColumn 
+              <AveragesAndCount 
                 groupingColumn = 'code'
                 data={data} 
                 targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
@@ -148,7 +84,7 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
             </TableGridCardComponent>
           </Grid>
           
-          <Grid item lg={6} sm={6} xl={3} xs={12}>
+          <Grid item lg={6} sm={6} xl={6} xs={12}>
             <ChartCardComponent title = "Assets by Collection">
               <ApexCountByValueBarChart
                 targetColumn="shortName"
@@ -160,7 +96,7 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
             </ChartCardComponent>
           </Grid> 
 
-          <Grid item lg={6} sm={6} xl={3} xs={12}>
+          <Grid item lg={12} sm={12} xl={12} xs={12}>
             <ChartCardComponent title = 'Historical Data'>
               <HistoricalDataTracker
                 groupingColumn="datePulled"

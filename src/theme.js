@@ -1,19 +1,19 @@
 import {  createTheme, useTheme } from "@mui/material";
-
-// from logo
-// const palette = [
-//   '#0000F0',
-//   '#183090',
-//   '#4860FF',
-//   '#A8A8F0',
-//   // '#6078D8',
-//   '#7890FF',
-//   '#4860D9',
-//   '#3048FF',
-//   '#6060A8',
-//   '#6078FF',
-// ];
-
+/*
+from logo
+const palette = [
+  '#0000F0',
+  '#183090',
+  '#4860FF',
+  '#A8A8F0',
+  // '#6078D8',
+  '#7890FF',
+  '#4860D9',
+  '#3048FF',
+  '#6060A8',
+  '#6078FF',
+];
+*/
 const palette = [
   '#3048ff',
   '#986af9',
@@ -69,7 +69,7 @@ const theme = createTheme({
       xs: 0,
       sm: 600,
       md: 960,
-      extendedMd: 1047.2,
+      extendedMd: 1078,
       lg: 1280,
       extendedLg: 1381,
       xl: 1920,

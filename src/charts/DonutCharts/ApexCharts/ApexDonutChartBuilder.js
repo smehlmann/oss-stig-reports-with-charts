@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback, useMemo} from "react";
-import { palette } from "../../../theme";
-import numeral from "numeral";
+// import numeral from "numeral";
 import Chart from 'react-apexcharts';
 import { useTheme } from "../../../theme.js"
 

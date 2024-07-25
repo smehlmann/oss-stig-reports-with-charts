@@ -1,11 +1,11 @@
-import React, { useMemo, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import MultiLineChartBuilder from "./MultiLineChartBuilder.js";
 import CalculateArrayAvg from "../../../components/CalculateArrayAvg.js";
 import { useFilter } from "../../../FilterContext.js";
 import { getPercentageFormatterObject } from "../../../components/getPercentageFormatterObject.js";
 
 const HistoricalDataTracker = ({ groupingColumn, targetColumns, chartTitle, xAxisTitle, yAxisTitle, data }) => {
-  const { filter, updateFilter } = useFilter();
+  const { filter } = useFilter();
 
   // const values = data.map(item => item[groupingColumn])
   // console.log(values instanceof Date);
@@ -108,29 +108,6 @@ const HistoricalDataTracker = ({ groupingColumn, targetColumns, chartTitle, xAxi
 
   const { series, dates } = useMemo(() => formatChartData(averages), [averages]);
 
-
-    
-  //updates the filter criteria based on user's click
-  const handleClick = (event, chartContext, config) => {
-    console.log("config: ", config);
-    const categoryLabels = config.w.globals.labels || config.w.globals.categories;
-    const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;
-
-    console.log('categoryLabels: ', categoryLabels);
-    console.log('selectedValue: ', selectedValue);
-
-      if (selectedValue) {
-      // Check if the selected value is already in the filter
-      if (filter[groupingColumn] === selectedValue) {
-        // Remove the filter
-        updateFilter({ [groupingColumn]: undefined });
-      } else {
-        // Add the filter
-        updateFilter({ [groupingColumn]: selectedValue });
-      }
-    }
-  };
-
   return (
     <div className="apex-chart" style={{ height: '100%', width: '95%', margin: "0" }}>
       {/* Render averages */}
@@ -150,7 +127,6 @@ const HistoricalDataTracker = ({ groupingColumn, targetColumns, chartTitle, xAxi
         yValues={series}
         xAxisHeader = {xAxisTitle}
         yAxisHeader = {yAxisTitle}
-        onClick={handleClick}
         formatLabelToPercentage = {percentageFormatterObject}
       />
       {/* <ReactApexChart options={chartOptions} series={chartOptions.series} type="line" /> */}
