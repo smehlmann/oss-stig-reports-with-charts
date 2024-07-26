@@ -32,8 +32,7 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(7);
   const [searchText, setSearchText] = useState("");
-  const { updateFilter, clearFilter } = useFilter();
-
+  const { filter, updateFilter, removeFilterKey } = useFilter();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -51,13 +50,26 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
 
   const handleToggleOpen = () => {
     setOpen((prevOpen) => {
-      const newOpen = !prevOpen;
+      const newOpen = !prevOpen; //set state of open to opposite of previous state
+  
+      //when opnening row
       if (newOpen) {
-        // Update filter based on the parent row
-        updateFilter({ [filterProperty]: parentRow[filterProperty] });
-      } else {
-        // Clear filter if collapsing the row
-        clearFilter();
+        //checks if parentRow is valid
+        if (parentRow && Object.keys(parentRow).length > 0) {
+          const key = Object.keys(parentRow)[0];
+          const value = parentRow[key];
+          //extracts first key-value pair from parentRow and updates the filter with key-value pair,specifying source
+          updateFilter({ [key]: value }, 'expandableTable');
+        } else {
+          console.error('Invalid parentRow:', parentRow);
+        }
+      } 
+      //table row is collapsed, remove it from filter.
+      else {
+        if (Object.keys(filter).length > 0) {
+          const key = Object.keys(parentRow)[0];
+          removeFilterKey(key);
+        } 
       }
       return newOpen;
     });
@@ -81,9 +93,8 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
           childRows: filteredChildRows
         }));
       } 
-      
     }
-  }, [open, searchText, parentRow, updateFilter, clearFilter]);
+  }, [open, searchText, parentRow, updateFilter, removeFilterKey]);
 
   return (
     //renders parent row

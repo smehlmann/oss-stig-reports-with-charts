@@ -38,6 +38,18 @@ Grid spacing is split into 12 parts:
   {12} = 1 card in row (takes up whole section)
 */
 
+function getLatestDate(dateObject) {
+  let maxDate = null;
+  let maxDateEntries = null;
+  
+  for(const date in dateObject) {
+    if(!maxDate || date > maxDate) {
+      maxDate = date;
+      maxDateEntries = dateObject[date]
+    }
+  }
+  return {[maxDate]: maxDateEntries}
+};
 
 const DashboardSelectedReport14 = ({ data, handleClick }) => {
   const { filter } = useFilter();
@@ -53,12 +65,36 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
   // let groupingColumn = 'datePulled'
   // const values = filteredData.map(item => item[groupingColumn])
   // values.forEach(item => {
-  //   console.log(item instanceof Date);
+  //   console.log(item);
   // })
+
+  //group all data entries by their date
+  const dataGroupedByDate = filteredData.reduce((accumulator, currentItem) => {
+    //get groupingColumn value in our currentItem
+    const groupingValue = currentItem['datePulled'];
+    //if groupingValue exists as key in accumulator
+    if (!accumulator[groupingValue]) {
+      //if not, add key to accumulator with empty array as value.
+      accumulator[groupingValue] = []; 
+    }
+    //add the currentItem to the array to associated key.
+    accumulator[groupingValue].push(currentItem);
+    return accumulator; //returns {key1:[...], key2:[...], ...}
+  }, {});
+  // console.log('dataGrouped: ', dataGroupedByDate);
+
   
+  const latestDateObj = getLatestDate(dataGroupedByDate);
+
+  //get values (entries with associated date)
+  const dataFromLastPullDate = Object.values(latestDateObj)[0];
+  // console.log(dataFromLastPullDate);
+
   // const listItems = data.map((item, index) => (
   //   <li key={index}> <pre>{JSON.stringify(item, null, 2)}</pre> </li>
   // ));
+
+
   
   return (
     <ThemeProvider theme={theme}>
@@ -70,7 +106,7 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
         </Grid>
         <Grid container spacing={3}>
           <Grid item lg={12} sm={12} xl={12} xs={12}>
-            <StatisticsCardGroup data={filteredData} />
+            <StatisticsCardGroup data={dataFromLastPullDate} />
           </Grid>
 
 
@@ -78,8 +114,8 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
             <TableGridCardComponent>
               <AveragesAndCount 
                 groupingColumn = 'code'
-                data={data} 
-                targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
+                data={dataFromLastPullDate} 
+                targetColumns={["assessed", "submitted", "accepted", "rejected", "asset"]} 
               />
             </TableGridCardComponent>
           </Grid>
@@ -91,7 +127,7 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
                 isHorizontal={false}
                 xAxisTitle="Collection Name"
                 yAxisTitle= "Number of Assets"
-                data={data}
+                data={dataFromLastPullDate}
               />
             </ChartCardComponent>
           </Grid> 
@@ -103,14 +139,14 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
                 targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
                 xAxisTitle="Date"
                 yAxisTitle= "Completion (%)"
-                data={data}
+                data={filteredData}
               />
             </ChartCardComponent>
           </Grid> 
 
           <Grid item lg={12} sm={12} xl={12} xs={12}>
             <ExpandableTableCardComponent>
-              <Report5WithMultiLevelBenchmarks data={data}/>
+              <Report5WithMultiLevelBenchmarks data={dataFromLastPullDate}/>
             </ExpandableTableCardComponent>
           </Grid> 
 

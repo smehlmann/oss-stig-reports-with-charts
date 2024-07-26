@@ -26,12 +26,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 
 // renders a row in the table; manages expanded (open) and non-expanded state,
-function Row({ parentRow, columns, renderChildRow, filterProperty}) {
+function Row({ parentRow, columns, renderChildRow}) {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchText, setSearchText] = useState("");
-  const { updateFilter, clearFilter } = useFilter();
+  const { filter, updateFilter, removeFilterKey } = useFilter();
 
 
   const listItems = columns.map((item) => (
@@ -52,20 +52,34 @@ function Row({ parentRow, columns, renderChildRow, filterProperty}) {
     setPage(0); // Reset page to 0 on search
   };
 
-  //responsible for filtering other visualizations when row expanded
   const handleToggleOpen = () => {
     setOpen((prevOpen) => {
-      const newOpen = !prevOpen;
+      const newOpen = !prevOpen; //set state of open to opposite of previous state
+  
+      //when opnening row
       if (newOpen) {
-        // Update filter based on the parent row
-        updateFilter({ [filterProperty]: parentRow[filterProperty] });
-      } else {
-        // Clear filter if collapsing the row
-        clearFilter();
+        //checks if parentRow is valid
+        if (parentRow && Object.keys(parentRow).length > 0) {
+          const key = Object.keys(parentRow)[0];
+          const value = parentRow[key];
+          //extracts first key-value pair from parentRow and updates the filter with key-value pair,specifying source
+          updateFilter({ [key]: value }, 'expandableTable');
+        } else {
+          console.error('Invalid parentRow:', parentRow);
+        }
+      } 
+      //table row is collapsed, remove it from filter.
+      else {
+        if (Object.keys(filter).length > 0) {
+          const key = Object.keys(parentRow)[0];
+          removeFilterKey(key);
+        } 
       }
       return newOpen;
     });
   };
+
+  
 
   return (
     //renders parent row
@@ -163,7 +177,7 @@ function Row({ parentRow, columns, renderChildRow, filterProperty}) {
 }
 
 export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterProperty, updateFilter, clearFilter, }) => {
-  
+
   return (
     <StyledTableContainer>
       <StyledTable aria-label="collapsible table">
@@ -188,9 +202,6 @@ export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterPr
               parentRow={row}
               columns={columns}
               renderChildRow={renderChildRow}
-              filterProperty={filterProperty}
-              // updateFiler= {updateFilter}
-              // clearFilter={clearFilter}
             />
           ))}
         </TableBody>
@@ -199,3 +210,30 @@ export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterPr
   );
 };
 export default MultiLevelTableBuilder;
+
+//  responsible for filtering other visualizations when row expanded
+  // const handleToggleOpen = () => {
+  //   setOpen((prevOpen) => {
+  //     const newOpen = !prevOpen;
+  //     if (newOpen && !filter) {
+  //       // Update filter based on the parent row
+  //       console.log('Table opened and filter is empty');
+  //       console.log('Parent row:', parentRow);
+  //       updateFilter({ [filterProperty]: parentRow[filterProperty] });
+  //     } else if (newOpen && filter) {
+
+  //       console.log('Table opened and filter is not empty');
+  //       console.log('Parent row:', parentRow);
+  //        // Add to the filter object and open the row
+  //     updateFilter(prevFilter => ({
+  //       ...prevFilter,
+  //       [filterProperty]: parentRow[filterProperty],
+  //     }));
+  //     }
+  //     else {
+  //       // Clear filter if collapsing the row
+  //       clearFilter();
+  //     }
+  //     return newOpen;
+  //   });
+  // };

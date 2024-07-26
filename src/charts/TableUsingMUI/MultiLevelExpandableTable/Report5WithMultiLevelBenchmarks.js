@@ -23,7 +23,6 @@ const formatString = (value) => {
 function Report5WithMultiLevelBenchmarks({ data }) {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
-  const {filter, updateFilter, clearFilter} = useFilter();
   const [searchText, setSearchText] = useState("");
   // const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
   const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
@@ -123,8 +122,6 @@ function Report5WithMultiLevelBenchmarks({ data }) {
       renderChildRow={renderChildRow} 
       searchText={searchText}
       filterProperty="shortName"
-      updateFilter={updateFilter}
-      clearFilter={clearFilter}
     />
   );
 }

@@ -57,7 +57,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
         return accumulator; //returns {key1:[...], key2:[...], ...}
       }, {});
       
-      console.log("dataGrouped: ", dataGrouped);
+      // console.log("dataGrouped: ", dataGrouped);
       //Creates an array of key-value pairs. Calculate averages for the targetColumns in the array associated with a given groupingValue. ie. for code= [0:{'10:[avgAssessed, avgSubmitted...]}, 1:{'25':[avg1, avg2..]}, ...]
       //destructures key-value pair where groupingVal=key, dataPerGroup=value(array of items per group)
       const groupedAverages = Object.entries(dataGrouped).map(([groupingValue, dataPerGroup]) => {
@@ -69,7 +69,6 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
         const averages = targetColumns.reduce((columnAvgAcc, columnName) => {
           //values = array that extracts values from a columnName for each entry in dataPerGroup. This is for each columnName
           const values = dataPerGroup.map((item) => item[columnName]).filter(val => val !== undefined);
-          console.log('values: ', values);
           //first creates a new property and names it, then obtains average of all the values (values from columnName for each record).  
           columnAvgAcc[`avg${columnName.charAt(0).toUpperCase() + columnName.slice(1)}`] = CalculateArrayAvg(values);
 

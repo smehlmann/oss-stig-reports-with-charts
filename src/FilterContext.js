@@ -16,20 +16,39 @@
     //initializes filter as empty object
     const [filter, setFilters] = useState({});
   
-    /* Merges new criteria with the previous filters so they can be applied at the same time. Does not remove any keys*/
-    const updateFilter = (newFilter) => {
+    /* Updates the filter object by adding or removing property-value pairs. 
+    newFilter = obj containing new filter key-value pair to be added/updated
+    source= only needed to clarify if we're using an expandable table*/
+    const updateFilter = (newFilter, source = null) => {
       setFilters(prevFilters => {
         const key = Object.keys(newFilter)[0];
         const value = newFilter[key];
-  
-        if (prevFilters[key] === value) {
+    
+        // console.log(`Current filters: ${JSON.stringify(prevFilters)}`);
+        // console.log(`New filter: ${key} = ${value} from ${source}`);
+    
+        //executes logic only if working with expandable table
+        if (source === 'expandableTable') {
+          //updates filters directly by merging new filter with previous filters
+          const updatedFilters = { ...prevFilters, ...newFilter };
+          return updatedFilters;
+        }
+        
+        //logic for handling other visualizations 
+        else {
+          
+          if (prevFilters[key] === value) {
           // If the new value is the same as the current value for the key, remove the key from the filter.
-          // helps ensure double click will remove criteria from filter. 
-          const { [key]: removed, ...rest } = prevFilters;
-          return rest;
-        } else {
-          // Otherwise, update the filter with the new key-value pair.
-          return { ...prevFilters, ...newFilter };
+          // helps ensure double click will remove criteria from filter. (toggling off)             
+            const { [key]: removed, ...rest } = prevFilters;
+            return rest;
+          } 
+          //if no double-click
+          else {
+            //update add key-value pair in filters (toggling on)
+            const updatedFilters = { ...prevFilters, ...newFilter };
+            return updatedFilters;
+          }
         }
       });
     };
@@ -71,20 +90,20 @@
 //   const [filter, setFilter] = useState({});
 
 //   /* checks if the new filter value is the same as the existing value for the given key. If it is, it removes the key from the filter. Otherwise, it updates the filter with the new key-value pair. This allows toggling filters on and off. */
-//   const updateFilter = (newFilter) => {
-//     setFilter(prevFilter => {
-//       const key = Object.keys(newFilter)[0];
-//       const value = newFilter[key];
+  // const updateFilter = (newFilter) => {
+  //   setFilter(prevFilter => {
+  //     const key = Object.keys(newFilter)[0];
+  //     const value = newFilter[key];
 
-//       //if new filter value === previous value for the key, it removes current key from filter. Otherwise, it updates the filter with new key-value pair.
-//       if (prevFilter[key] === value) {
-//         const { [key]: removed, ...rest } = prevFilter;
-//         return rest;
-//       } else {
-//         return { ...prevFilter, ...newFilter };
-//       }
-//     });
-//   };
+  //     //if new filter value === previous value for the key, it removes current key from filter. Otherwise, it updates the filter with new key-value pair.
+  //     if (prevFilter[key] === value) {
+  //       const { [key]: removed, ...rest } = prevFilter;
+  //       return rest;
+  //     } else {
+  //       return { ...prevFilter, ...newFilter };
+  //     }
+  //   });
+  // };
 
 //   const clearFilter = () => {
 //     setFilter({});
