@@ -92,7 +92,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
     updateFilter({ [groupingColumn]: selectedValue });
   };
 
-  console.log('averages: ', averages);
+  // console.log('averages: ', averages);
 
   //headers for columns
   const tableColumns = [

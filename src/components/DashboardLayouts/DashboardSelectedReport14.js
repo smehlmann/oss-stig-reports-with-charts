@@ -10,7 +10,6 @@ import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/MultiLev
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import FilterBar from "../FilterBar.js";
 import StatisticsCardGroup from "../StatisticsCardsGroup.js";
-// import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
 import AveragesAndCount from "../../charts/DataGridMUI/AveragesAndCount";
 
 
@@ -83,7 +82,7 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
   }, {});
   // console.log('dataGrouped: ', dataGroupedByDate);
 
-  
+
   const latestDateObj = getLatestDate(dataGroupedByDate);
 
   //get values (entries with associated date)
