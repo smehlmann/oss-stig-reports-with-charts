@@ -125,6 +125,9 @@ export default function ReportColumns({ index, item, selectedReport }) {
                         {item.benchmarks}
                     </td>
                     <td>
+                        {item.checks}
+                    </td>
+                    <td>
                         {item.assessed}
                     </td>
                     <td>
@@ -135,7 +138,8 @@ export default function ReportColumns({ index, item, selectedReport }) {
                     </td>
                     <td>
                         {item.rejected}
-                    </td> <td>
+                    </td>
+                    <td>
                         {item.cat3}
                     </td>
                     <td>
@@ -157,6 +161,9 @@ export default function ReportColumns({ index, item, selectedReport }) {
                     </td>
                     <td>
                         {item.asset}
+                    </td>
+                    <td>
+                        {item.checks}
                     </td>
                     <td>
                         {item.assessed}
@@ -219,6 +226,9 @@ export default function ReportColumns({ index, item, selectedReport }) {
                     </td>
                     <td>
                         {item.quarterVer}
+                    </td>
+                    <td>
+                        {item.checks}
                     </td>
                     <td>
                         {item.assessed}
