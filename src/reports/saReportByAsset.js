@@ -31,6 +31,7 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
             { label: 'Last Touched', key: 'lastTouched' },
             { label: 'STIGs', key: 'stigs' },
             { label: 'Benchmarks', key: 'benchmarks' },
+            { label: 'Checks', key: 'checks'},
             { label: 'Assessed', key: 'assessed' },
             { label: 'Submitted', key: 'submitted' },
             { label: 'Accepted', key: 'accepted' },
@@ -90,6 +91,7 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
                 }
 
                 metrics = await reportGetters.getCollectionMerticsAggreatedByAsset(auth, collections[i].collectionId);
+                //metrics = await reportGetters.getCollectionMerticsAggreatedByAsset(auth, collections[i].collectionId);
                 //console.log(metrics);
 
                 if (!metrics) {
@@ -114,9 +116,6 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
                     var assetIdx = assets.data.findIndex(t => t.name === metrics.data[jMetrics].name);
                     var assetName = assets.data[assetIdx].name;
                     var assetEmass = assetEmassMap.get(assetName);
-                    if (assetName === 'NP0902WK400011') {
-                        console.log(assetName);
-                    }
                     if (assetEmass && assetEmass.includes(',')) {
                         // check if duplicate
                         //var assetRowIdx = rows.findIndex(n => n.asset.toUpperCase === assetName.toUpperCase());
@@ -127,8 +126,6 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
                         }
 
                     }
-                    /*var assets = await
-                        reportGetters.getAssetsByName(auth, collections[i].collectionId, encodedName);*/
 
                     var myData =
                         getRow(todayStr, collections[i], metrics.data[jMetrics], labelMap, assets.data[assetIdx],
@@ -153,6 +150,7 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
 
 function getRow(todayStr, collection, metrics, labelMap, asset, emassNum, assetEmassMap) {
 
+    console.log('metrics: ' + metrics);
     var assetMetadata = '';
     var eMass = "";
 
@@ -195,6 +193,10 @@ function getRow(todayStr, collection, metrics, labelMap, asset, emassNum, assetE
     const numSubmitted = metrics.metrics.statuses.submitted;
     const numAccepted = metrics.metrics.statuses.accepted;
     const numRejected = metrics.metrics.statuses.rejected;
+    //const totalChecks = unassessed + numAssessed + numSubmitted + numAccepted + numRejected;
+    //const totalChecks = unassessed + numSubmitted + numAccepted + numRejected;
+    const totalChecks = numAssessments;
+    console.log(totalChecks);
 
     var maxTouchTs = metrics.metrics.maxTouchTs;
     var touchDate = new Date(maxTouchTs);
@@ -267,6 +269,7 @@ function getRow(todayStr, collection, metrics, labelMap, asset, emassNum, assetE
         lastTouched: lastTouched,
         stigs: metrics.benchmarkIds.length,
         benchmarks: benchmarkIDs,
+        checks: totalChecks,
         assessed: avgAssessed + '%',
         submitted: avgSubmitted + '%',
         accepted: avgAccepted + '%',

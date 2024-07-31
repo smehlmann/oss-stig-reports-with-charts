@@ -311,6 +311,17 @@ async function getCollectionMerticsByCollectionAndAsset(auth, collectionId, asse
 
 }
 
+// Return summary metrics for the specified Collection by collection ID, and asset ID
+async function getSummaryMerticsByCollectionAndAsset(auth, collectionId, assetId) {
+
+  var myUrl = apiBase + '/collections/' + collectionId + '/metrics/summary?assetId='
+    + assetId + '&format=json';
+
+  var metrics = getMetricsData(auth, myUrl);
+  return metrics;
+
+}
+
 async function getCollectionMerticsUnaggregated(auth, collectionId) {
 
   var myUrl = apiBase + '/collections/' + collectionId + '/metrics/detail?format=json';
@@ -867,5 +878,6 @@ export {
   getAssetEmassMap,
   getAssetMetadata,
   getMetaMetricsSummary,
-  getMerticsSummarydByBenchmark
+  getMerticsSummarydByBenchmark,
+  getSummaryMerticsByCollectionAndAsset
 };

@@ -27,6 +27,7 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap) {
             { label: 'Latest Revision', key: 'latestRev' },
             { label: 'Previous Revision', key: 'prevRev' },
             { label: 'Current Quarter STIG Version', key: 'quarterVer' },
+            { label: 'Checks', key: 'checks' },
             { label: 'Assessed', key: 'assessed' },
             { label: 'Submitted', key: 'submitted' },
             { label: 'Accepted', key: 'accepted' },
@@ -134,6 +135,7 @@ function getRow(collectionName,
     const numSubmitted = metrics.statuses.submitted;
     const numAccepted = metrics.statuses.accepted;
     const numRejected = metrics.statuses.rejected;
+    const totalChecks = numAssessments;
 
     const assetName = assetMetrics.name;
     const collectionMetadata = reportUtils.getMetadataByAsset(labelMap, assetMetrics.labels);
@@ -177,6 +179,7 @@ function getRow(collectionName,
         latestRev: latestRev,
         prevRev: prevRev,
         quarterVer: quarterVer,
+        checks: totalChecks,
         assessed: avgAssessed + '%',
         submitted: avgSubmitted + '%',
         accepted: avgAccepted + '%',

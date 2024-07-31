@@ -16,6 +16,7 @@ async function runSAReportByLabelAndEmass(auth, emassMap) {
             { label: 'eMASS Number', key: 'emass' },
             { label: 'eMASS Acronym', key: 'acronym' },
             { label: 'Asset', key: 'asset' },
+            { label: 'Checks', key: 'checks' },
             { label: 'Assessed', key: 'assessed' },
             { label: 'Submitted', key: 'submitted' },
             { label: 'Accepted', key: 'accepted' },
@@ -120,10 +121,6 @@ function getRow(emassNum, metrics, acronymMap, assetEmassMap) {
             var assetName = myMetricsData.name;
             var assetEmass = assetEmassMap.get(assetName);
 
-            if (assetName === 'c25-infra-02') {
-                console.log('assetName: ' + assetName);
-            }
-
             if (assetEmass && assetEmass === emassNum) {
                 //numAssets += myMetricsData.assets;
 
@@ -161,6 +158,8 @@ function getRow(emassNum, metrics, acronymMap, assetEmassMap) {
 
     }
 
+    const totalChecks = numAssessments;
+
     var emassAcronym = acronymMap.get(emassNum);
     if (!emassAcronym) {
         emassAcronym = '';
@@ -170,6 +169,7 @@ function getRow(emassNum, metrics, acronymMap, assetEmassMap) {
         emass: emassNum,
         acronym: emassAcronym,
         asset: numAssets,
+        checks: totalChecks,
         assessed: avgAssessed + '%',
         submitted: avgSubmitted + '%',
         accepted: avgAccepted + '%',
