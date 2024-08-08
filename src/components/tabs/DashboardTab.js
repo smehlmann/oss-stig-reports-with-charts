@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 // import useLocalStorageListener from "../useLocalStorageListener";
 import DashboardSelectedReport5 from "../DashboardLayouts/DashboardSelectedReport5";
 import DashboardSelectedReport7 from "../DashboardLayouts/DashboardSelectedReport7";
@@ -190,7 +190,7 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
   //keeps track of the selectedReport state
   const [selectedReport, setSelectedReport] = useState(null);
 
-  console.log("formattedData: ", formattedData);
+  // console.log("formattedData: ", formattedData);
 
   const handleClick = (reportNum) =>  {
     setSelectedReport(reportNum);

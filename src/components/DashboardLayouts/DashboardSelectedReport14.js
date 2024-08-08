@@ -12,7 +12,6 @@ import FilterBar from "../FilterBar.js";
 import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import AveragesAndCount from "../../charts/DataGridMUI/AveragesAndCount";
 
-
 const Root = styled('div')(({ theme }) => {
   return ({
     padding: theme.spacing(3),
@@ -41,14 +40,15 @@ function getLatestDate(dateObject) {
   let maxDate = null;
   let maxDateEntries = null;
   
-  for(const date in dateObject) {
-    if(!maxDate || date > maxDate) {
+  for (const date in dateObject) {
+    if (!maxDate || new Date(date) > new Date(maxDate)) {
       maxDate = date;
-      maxDateEntries = dateObject[date]
+      maxDateEntries = dateObject[date];
     }
   }
-  return {[maxDate]: maxDateEntries}
-};
+  
+  return { [maxDate]: maxDateEntries };
+}
 
 const DashboardSelectedReport14 = ({ data, handleClick }) => {
   const { filter } = useFilter();
@@ -82,7 +82,6 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
   }, {});
   // console.log('dataGrouped: ', dataGroupedByDate);
 
-
   const latestDateObj = getLatestDate(dataGroupedByDate);
 
   //get values (entries with associated date)
@@ -93,8 +92,6 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
   //   <li key={index}> <pre>{JSON.stringify(item, null, 2)}</pre> </li>
   // ));
 
-
-  
   return (
     <ThemeProvider theme={theme}>
     {/* <FilterProvider> */}
@@ -114,7 +111,7 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
               <AveragesAndCount 
                 groupingColumn = 'code'
                 data={dataFromLastPullDate} 
-                targetColumns={["assessed", "submitted", "accepted", "rejected", "asset"]} 
+                targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", 'checks']} 
               />
             </TableGridCardComponent>
           </Grid>

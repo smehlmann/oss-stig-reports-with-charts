@@ -5,9 +5,11 @@ import Typography from '@mui/material/Typography';
 import { LinearProgress } from '@mui/material';
 import { useFilter } from '../../FilterContext';
 import DataGridBuilder from './DataGridBuilder';
-import {getPercentageFormatterObject} from "../../components/getPercentageFormatterObject.js";
+// import {getPercentageFormatterObject} from "../../components/getPercentageFormatterObject.js";
 import CalculateArrayAvg from "../../components/CalculateArrayAvg.js";
-
+import ValueCountMap from "../../components/ValueCountMap.js";
+import {  getGridNumericOperators } from '@mui/x-data-grid';
+import DropdownInputValue from './DropdownInputValue';
 
 const renderProgressBarCell = (params) => (
   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
@@ -24,7 +26,6 @@ const renderProgressBarCell = (params) => (
 function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
   //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
-  //stores the data filter has been applied
   const filteredData = useMemo(() => {
     if (Object.keys(filter).length > 0) {
       const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
@@ -34,12 +35,38 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
   }, [filter, data]);
 
 
-  const [averages, setAverages] = useState([]);
+  const [filterModel, setFilterModel] = useState({
+    items: [],
+  });
+  
+  //stores the data filter has been applie
+  // const filteredData = useMemo(() => {
+  //   console.log('Filtering data with filter:', filter);
+  //   if (!filter || typeof filter !== 'object') {
+  //     console.log('No valid filter; returning unfiltered data.');
+  //     return data;
+  //   }
+  //   const result = data.filter(item => {
+  //     return Object.keys(filter).every(key => item[key] === filter[key]);
+  //   });
+  //   console.log('Filtered data:', result);
+  //   return result;
+  // }, [data, filter]);
 
-  //format the averages
-  const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
+  const [averages, setAverages] = useState([]);
   
   // const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
+  const targetColumnsToBeAveraged = useMemo(() => {
+    const filteredColumns = targetColumns.filter(currColumn =>
+      currColumn === 'assessed' ||
+      currColumn === 'submitted' ||
+      currColumn === 'accepted' ||
+      currColumn === 'rejected'
+    );
+    return filteredColumns;
+  }, [targetColumns]);
+
 
   useEffect(() => {
     if (Array.isArray(filteredData) && filteredData) {
@@ -57,49 +84,59 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
         return accumulator; //returns {key1:[...], key2:[...], ...}
       }, {});
       
-      // console.log("dataGrouped: ", dataGrouped);
       //Creates an array of key-value pairs. Calculate averages for the targetColumns in the array associated with a given groupingValue. ie. for code= [0:{'10:[avgAssessed, avgSubmitted...]}, 1:{'25':[avg1, avg2..]}, ...]
       //destructures key-value pair where groupingVal=key, dataPerGroup=value(array of items per group)
       const groupedAverages = Object.entries(dataGrouped).map(([groupingValue, dataPerGroup]) => {
-        
         /*averages is single object that initially contains 'id' key to identify the grouping value--> ie. for code 15= {id:'15', code:'15'} just to ensure unique identifier and no duplicates
-        columnAvgAcc= accumulator object to store avg of columnName values, columnName= current column name being processed.
+        columnAcc= accumulator object to store avg of columnName values, columnName= current column name being processed.
         averages will contain an array of objects that contain calculated average values of targetColumns based on each groupingColumn entry
         */
-        const averages = targetColumns.reduce((columnAvgAcc, columnName) => {
+        const averages = targetColumns.reduce((columnAcc, columnName) => {
           //values = array that extracts values from a columnName for each entry in dataPerGroup. This is for each columnName
           const values = dataPerGroup.map((item) => item[columnName]).filter(val => val !== undefined);
-          //first creates a new property and names it, then obtains average of all the values (values from columnName for each record).  
-          columnAvgAcc[`avg${columnName.charAt(0).toUpperCase() + columnName.slice(1)}`] = CalculateArrayAvg(values);
 
-          //columnAvgAcc is object where:, for each of our targetColumns, we will have something like {id: '10', 'code':10, avgAssessed:0.978, avgSubmitted:0.922...}
-          return columnAvgAcc;
+          //if columnName= assessed, submitted, accepted or rejected
+          if(targetColumnsToBeAveraged.includes(columnName)) {
+            //first creates a new property and names it, then obtains average of all the values (values from columnName for each record).  
+            columnAcc[`avg${columnName.charAt(0).toUpperCase() + columnName.slice(1)}`] = CalculateArrayAvg(values);
+          }
+          else {
+            const countMap = ValueCountMap(values, columnName);
+            const countValue = Object.values(countMap)[0];
+            columnAcc[`${columnName}Count`] = countValue;
+          }
+          //columnAcc is object where:, for each of our targetColumns, we will have something like {id: '10', 'code':10, avgAssessed:0.978, avgSubmitted:0.922...}
+          return columnAcc;
 
-        }, { id: groupingValue, [groupingColumn]: groupingValue });
+        }, { id: groupingValue, [groupingColumn]: groupingValue});
         //basically the return the accumulator columnAvgAcc
         return averages;
       });
-
-
       setAverages(groupedAverages);
     }
-  }, [targetColumns, filteredData, groupingColumn]);
+  }, [targetColumns, targetColumnsToBeAveraged, filteredData, groupingColumn]);
 
-
+  console.log("AveragesGroupedByColumn: ", averages);
 
   const handleRowClick = (params) => {
     const selectedValue = params.row[groupingColumn]; 
     updateFilter({ [groupingColumn]: selectedValue });
   };
 
-  // console.log('averages: ', averages);
 
+  const operatorsForFiltering = getGridNumericOperators()
+  .filter(op => op.value !== 'isAnyOf')
+  .map(op => ({
+    ...op,
+    InputComponent: DropdownInputValue,
+  }));
   //headers for columns
   const tableColumns = [
     { field: groupingColumn , 
       headerName: groupingColumn.charAt(0).toUpperCase() + groupingColumn.slice(1) , 
       flex: 1 
     },
+    { field: 'assetCount', headerName: 'Asset Count', flex: 1, type: 'number' },
     {
       field: 'avgAssessed',
       headerName: 'Avg of Assessed',
@@ -111,6 +148,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
           {numeral(params.value * 100).format('0.00')}%
         </div>
       ),
+      filterOperators: operatorsForFiltering,
       // renderCell: renderProgressBarCell,
     },
     {
@@ -123,6 +161,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
           {numeral(params.value * 100).format('0.00')}%
         </div>
       ),
+      filterOperators: operatorsForFiltering,
 
       // renderCell: renderProgressBarCell,
     },
@@ -136,30 +175,33 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
           {numeral(params.value * 100).format('0.00')}%
         </div>
       ),
-    
+      filterOperators: operatorsForFiltering,
       // renderCell: renderProgressBarCell,
     },
     {
       field: 'avgRejected',
       headerName: 'Avg of Rejected',
       flex: 1,
+      type: 'number',
       renderCell: (params) => (
         <div>
           {numeral(params.value * 100).format('0.00')}%
         </div>
       ),
+      filterOperators: operatorsForFiltering,
       // renderCell: renderProgressBarCell,
-      
     },
   ];
+  
 
   return (
     <DataGridBuilder 
       data={averages} 
       columns={tableColumns}
       onRowClick={handleRowClick}
-
-      
+      filterModel={filterModel}
+      onFilterModelChange={setFilterModel}
+    
     />
   );
 }

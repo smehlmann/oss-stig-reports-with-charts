@@ -29,7 +29,7 @@ const TabsComponent = () => {
         setDisableDashboard(false);
 
 
-        console.log("reportData from tabscomponent: ", reportData);
+        //console.log("reportData from tabscomponent: ", reportData);
         return (
           <DashboardTab
             reportData={reportData}

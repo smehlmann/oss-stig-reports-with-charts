@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
-import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
+import AveragesAndCount from "../../charts/DataGridMUI/AveragesAndCount";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
@@ -73,10 +73,10 @@ const DashboardSelectedReport5 = ({ data }) => {
             {/* data grid */}
             <Grid item lg={4} sm={6} xl={4} xs={12}>
               <TableGridCardComponent>
-                <AveragesGroupedByColumn 
+                <AveragesAndCount 
                   groupingColumn = 'code'
                   data={data} 
-                  targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
+                  targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", "checks"]} 
                 />
               </TableGridCardComponent>
             </Grid>

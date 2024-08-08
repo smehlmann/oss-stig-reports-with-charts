@@ -1,10 +1,22 @@
 import React, {useState, useMemo} from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar} from '@mui/x-data-grid';
 import { Box, styled } from "@mui/system";
-import TableCell from '@mui/material/TableCell';
 import { useFilter } from '../../FilterContext';
-import FocusTrap from '@mui/material/Unstable_TrapFocus';
+import { getGridNumericOperators } from '@mui/x-data-grid';
+import DropdownInputValue from './DropdownInputValue';
 
+// // Define custom dropdown filter operators
+// const dropdownFilterOperator = {
+//   dropdown: {
+//     value: 'dropdown',
+//     getApplyFilterFn: (filterItem) => {
+//       if (!filterItem.value) return null;
+//       return ({ value }) => value === filterItem.value;
+//     },
+//     InputComponent: DropdownInputValue,
+//     getValueAsString: (value) => value || '',
+//   },
+// };
 
 const BoldHeader = styled('div')(({ theme }) => ({
   // fontSize: '18px', 
@@ -92,10 +104,13 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
 }));
 
 
-function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange, rowSelectionModel}) {
+function DataGridBuilder({ data, columns, onRowClick, filterModel,onFilterModelChange, onRowSelectionModelChange, rowSelectionModel}) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const {updateFilter} = useFilter();
+  // const [filterModel, setFilterModel] = useState({ items: [] });
+  
   //handlers to change page and rows per page
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -104,6 +119,26 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  // Configure columns with custom dropdown filter
+  const updatedColumns = useMemo(
+    () =>
+      columns.map((column) => {
+        if (['avgAssessed', 'avgSubmitted', 'avgAccepted', 'avgRejected'].includes(column.field)) {
+          return {
+            ...column,
+            filterOperators: getGridNumericOperators()
+              .filter((operator) => operator.value !== 'isAnyOf')
+              .map((operator) => ({
+                ...operator,
+                InputComponent: DropdownInputValue,
+              })),
+          };
+        }
+        return column;
+      }),
+    [columns]
+  );
 
   return (
     <Box sx={{
@@ -118,7 +153,7 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
       
       <StyledDataGrid
         rows={data}
-        columns={columns.map((column) => ({
+        columns={updatedColumns.map((column) => ({
           ...column,
           headerAlign: 'center',
           align: 'center',
@@ -140,6 +175,9 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
         disableSelectionOnClick
         onRowClick={onRowClick}
         hideFooter
+        // filterModel={filterModel}
+        // onFilterModelChange={onFilterModelChange }
+        components={{Toolbar: GridToolbar,}}
         // rowSelectionModel={rowSelectionModel}
       />
     </Box>
@@ -147,7 +185,6 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
 }
 
 export default DataGridBuilder;
-
 
 
 // import React, {useState, useMemo} from 'react';

@@ -5,10 +5,16 @@ Output: an object where the keys are the values in the targetProperty, and the v
   ie. countMap = [
     {targetPropertyVal1: count of targetPropVal1},  {targetPropertyVal2: count of targetPropVal2}...]
 
-accumulator = object to build frequency map where each key is unique value of 'nccm' or targetProperty, and value is the counts of these keys
+accumulator = object to build frequency map where each key is targetProperty, and value is the counts of these keys
 row/ item = object to signify single record/row in dataset
 */
 const ValueCountMap = (data, targetProperty) => {
+
+  // Ensure data is an array
+  if (!Array.isArray(data)) {
+  console.warn('Expected an array for data, but received:', data);
+  return {};
+  }
   //create the initial countMap using reduce
   const countMap = data.reduce((countMap, item) => {
     //extract the value of the target property from a given record
@@ -16,6 +22,7 @@ const ValueCountMap = (data, targetProperty) => {
     //increment the count for the extracted property value
     countMap[propertyValue] = (countMap[propertyValue] || 0) + 1;
     return countMap;
+
   }, {});
 
   return countMap;

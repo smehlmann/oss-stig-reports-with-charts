@@ -3,28 +3,30 @@ import {Grid} from '@mui/material';
 import StatisticsCardComponent from './Cards/StatisticsCardComponent';
 import ValueCountMap from './ValueCountMap';
 
-const StatisticsCardGroup = ({data}) => {
+const StatisticsCardGroup = ({data = [] }) => {
+  const safeData = useMemo(() => data || [], [data]);
 
   //get sum of Cat1
   const cat1Sum = useMemo(() => {
-    return data.reduce((sum, item) => sum + (item.cat1 || 0), 0);
-  }, [data]);
+    return safeData.reduce((sum, item) => sum + (item.cat1 || 0), 0);
+  }, [safeData]);
 
   //sum of Cat2
   const cat2Sum = useMemo(() => {
-    return data.reduce((sum, item) => sum + (item.cat2 || 0), 0);
-  }, [data]);
+    return safeData.reduce((sum, item) => sum + (item.cat2 || 0), 0);
+  }, [safeData]);
 
   //sum of cat3
   const cat3Sum = useMemo(() => {
-    return data.reduce((sum, item) => sum + (item.cat3 || 0), 0);
-  }, [data]);
+    return safeData.reduce((sum, item) => sum + (item.cat3 || 0), 0);
+  }, [safeData]);
 
   //number of assets
   const assetCount = useMemo(() => {
-    const countMap = ValueCountMap(data, 'asset');
+    const countMap = ValueCountMap(safeData, 'asset');
     return Object.keys(countMap).length;
-  }, [data]);
+  }, [safeData]);
+
 
   return (
     <Grid container spacing={3}>
@@ -62,6 +64,26 @@ const StatisticsCardGroup = ({data}) => {
 export default StatisticsCardGroup;
 
   /*
+  Code for Reference
+
+  // const assets = [];
+  // //store unique assset values
+  // const unqiueAssets = new Set();
+
+  // //iterate through safeData array
+  // safeData.forEach((obj) => {
+  //   const asset = obj.asset;
+  //   if (!unqiueAssets.has(asset)) {
+  //     //if asset not in set, add to both set and items array
+  //     unqiueAssets.add(asset);
+  //     assets.push(asset);
+  //   }
+  // })
+
+  // console.log("assets array: ", assets);
+  // const assetCount = assets.length;
+  // console.log("assetCount: ", assetCount);
+
   //get avg of assessed
   const assessedValues = useMemo(() => filteredData.map(item => item.assessed), [filteredData]); //extracts values from 'assessed' property and stores them in assessedValues.
   const assessedAvg = CalculateArrayAvg(assessedValues); //gets avg of assessed vals

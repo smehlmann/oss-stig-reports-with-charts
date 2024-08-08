@@ -20,13 +20,17 @@
     newFilter = obj containing new filter key-value pair to be added/updated
     source= only needed to clarify if we're using an expandable table*/
     const updateFilter = (newFilter, source = null) => {
+      // console.log('Updating filter with:', newFilter);
       setFilters(prevFilters => {
         const key = Object.keys(newFilter)[0];
         const value = newFilter[key];
     
         // console.log(`Current filters: ${JSON.stringify(prevFilters)}`);
-        // console.log(`New filter: ${key} = ${value} from ${source}`);
-    
+        // console.log(`New filter: ${key}: ${value}`);
+
+        // console.log('Previous filters:', prevFilters);
+        // console.log('Updating with:', key, ':', value);
+
         //executes logic only if working with expandable table
         if (source === 'expandableTable') {
           //updates filters directly by merging new filter with previous filters
@@ -41,17 +45,20 @@
           // If the new value is the same as the current value for the key, remove the key from the filter.
           // helps ensure double click will remove criteria from filter. (toggling off)             
             const { [key]: removed, ...rest } = prevFilters;
+            // console.log('Filter after removal:', rest);
             return rest;
           } 
           //if no double-click
           else {
             //update add key-value pair in filters (toggling on)
             const updatedFilters = { ...prevFilters, ...newFilter };
+            // console.log('Updated filters:', updatedFilters);
             return updatedFilters;
           }
         }
       });
     };
+
 
     //remove single key from filter object
     const removeFilterKey = (key) => {
@@ -77,46 +84,48 @@
   
 
 
-
-// import React, { createContext, useState, useContext } from 'react';
-
-// const FilterContext = createContext();
-
-// /*
-// The FilterProvider component wraps its children with the FilterContext.Provider and manages the 'filter' state using the 'useState' hook. It also provides the updateFilter function to update the filter state.
-// */
-// export const FilterProvider = ({ children }) => {
-//   //initializes filter as empty object
-//   const [filter, setFilter] = useState({});
-
-//   /* checks if the new filter value is the same as the existing value for the given key. If it is, it removes the key from the filter. Otherwise, it updates the filter with the new key-value pair. This allows toggling filters on and off. */
-  // const updateFilter = (newFilter) => {
-  //   setFilter(prevFilter => {
-  //     const key = Object.keys(newFilter)[0];
+  // const updateFilter = (newFilter, source = null) => {
+  //   console.log('Updating filter with:', newFilter);
+    
+  //   setFilters(prevFilters => {
+  //     // Extracting the key and value from newFilter
+  //     const key = Object.keys(newFilter);
   //     const value = newFilter[key];
-
-  //     //if new filter value === previous value for the key, it removes current key from filter. Otherwise, it updates the filter with new key-value pair.
-  //     if (prevFilter[key] === value) {
-  //       const { [key]: removed, ...rest } = prevFilter;
+        
+  //     // Check if the key includes an operator
+  //     if (key.includes('_')) {
+  //       // Extract column and operator from the key
+  //       const [column, operator] = key.split('_');
+  //       // Reconstruct the key with operator
+  //       const updatedKey = `${column}_${operator}`;
+        
+  //       // Create a new filter object with the updated key
+  //       const updatedFilters = { ...prevFilters, [updatedKey]: value };
+        
+  //       console.log('Updated filters with operator:', updatedFilters);
+  //       return updatedFilters;
+  //     }
+        
+  //     // Handle logic for expandable table
+  //     if (source === 'expandableTable') {
+  //       const updatedFilters = { ...prevFilters, ...newFilter };
+  //       console.log('Updated filters for expandable table:', updatedFilters);
+  //       return updatedFilters;
+  //     }
+      
+  //     // Handle other visualizations
+  //     if (prevFilters[key] === value) {
+  //       // If the new value matches the existing value, remove the filter key
+  //       const { [key]: removed, ...rest } = prevFilters;
+  //       console.log('Filter after removal:', rest);
   //       return rest;
   //     } else {
-  //       return { ...prevFilter, ...newFilter };
+  //       // Add or update the filter key-value pair
+  //       const updatedFilters = { ...prevFilters, ...newFilter };
+  //       console.log('Updated filters:', updatedFilters);
+  //       return updatedFilters;
   //     }
   //   });
   // };
-
-//   const clearFilter = () => {
-//     setFilter({});
-//   };
-
-//   return (
-//     //provides 'filter' state and 'updateFilter' to all components nested in FilterProvider
-//     <FilterContext.Provider value={{ filter, updateFilter, clearFilter }}>
-//       {children}
-//     </FilterContext.Provider>
-//   );
-// };
-
-// export const useFilter = () => useContext(FilterContext);
 
 
