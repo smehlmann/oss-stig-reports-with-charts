@@ -33,7 +33,6 @@ function DropdownInputValue(props) {
         inputRef={focusElementRef}
         variant="standard" // Use "standard" for underline styling
         sx={{
-          // height: 40, // Adjust height to match MUI DataGrid dropdowns
           display: 'flex',
           '& .MuiSelect-select': {
             display: 'flex',

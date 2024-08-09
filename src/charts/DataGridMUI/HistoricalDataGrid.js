@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo,  useEffect } from "react";
 import numeral from 'numeral';
 import Typography from '@mui/material/Typography';
@@ -10,20 +9,25 @@ import ValueCountMap from "../../components/ValueCountMap.js";
 import {  getGridNumericOperators } from '@mui/x-data-grid';
 import DropdownInputValue from './DropdownInputValue';
 
+const renderProgressBarCell = (params) => {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', padding:'8px' }}>
+      <Typography variant="body2" align="center">
+        {numeral(params.value * 100).format('0.00')}%
+      </Typography>
+      <LinearProgress 
+        variant="determinate" 
+        value={params.value * 100} 
+        color="primary"
+        style={{ height: '10px', borderRadius: '5px', width: '100%' }}
+      />
+      
+    </div>
+  );
+};
 
-// const renderProgressBarCell = (params) => (
-//   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
-//     <LinearProgress variant="determinate" value={params.value * 100} 
-//      color="primary"
-//      style={{ height: '10px', borderRadius: '5px' }}
-//     />
-//     <Typography variant="body2" align="center">
-//       {numeral(params.value * 100).format('0.00')}%
-//     </Typography>
-//   </div>
-// );
 
-function AveragesAndCount({ groupingColumn, data, targetColumns }) {
+function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
   //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
   const [filterModel, setFilterModel] = useState({
@@ -88,11 +92,12 @@ function AveragesAndCount({ groupingColumn, data, targetColumns }) {
         let rejectedProductSum = 0;
         let assetCount = 0;
         let totalChecksPerCode = 0; //will store the total checks per code
+        let pullDate = new Date();
 
         //for each entry in dataPerGroup
         dataPerGroup.forEach(item => {
           //accesses nested object (codeVal: entries)- and extracts product properties from said object and assigns them corresponding variables 
-          const { checks, assessed, submitted, accepted, rejected, asset } = item;
+          const { checks, assessed, submitted, accepted, rejected, asset, datePulled} = item;
 
           //sum of checks for each code
           totalChecksPerCode +=checks;
@@ -101,12 +106,17 @@ function AveragesAndCount({ groupingColumn, data, targetColumns }) {
           const countMap = ValueCountMap(dataPerGroup, asset);
           assetCount = Object.values(countMap)[0];
 
+          //get latest date
+          pullDate = datePulled;
+
           //for each entry in my value array, calculate the checks[i] * assessed[i] and push it to assessedProducts array. 
           assessedProductSum += (checks * (assessed || 0));
           submittedProductSum += (checks * (submitted || 0));
           acceptedProductSum += (checks * (accepted || 0));
           rejectedProductSum += (checks * (rejected || 0));
         });
+
+        console.log('datePulled: ', typeof pullDate);
 
         //calculate the averages (ProductSum/totalChecksPerCode)
         const avgAssessed = assessedProductSum/totalChecksPerCode;
@@ -118,14 +128,17 @@ function AveragesAndCount({ groupingColumn, data, targetColumns }) {
         acc[groupingValue] = {
           id: groupingValue,
           groupingColumn: groupingValue,
+          pullDate,
           assetCount,
           avgAssessed,
           avgSubmitted,
           avgAccepted,
           avgRejected,
         };
+        console.log("avg: ", acc);
         return acc; //final accumulator = groupedAverages
       }, {});
+
 
       //convert groupedProducts object to array
       const groupedAveragesArray = Object.keys(groupedAverages).map(groupingValue => {
@@ -139,7 +152,6 @@ function AveragesAndCount({ groupingColumn, data, targetColumns }) {
     }
   }, [filteredData, groupingColumn, totalChecks]);
 
-  console.log("AveragesAndCount: ", averages);
   /*
   FIX division because we shouldn't be dividing by totalchecks. 
   we should be dividing by sum of checks for each code.
@@ -163,59 +175,59 @@ function AveragesAndCount({ groupingColumn, data, targetColumns }) {
       flex: 1 
     },
     { field: 'assetCount', headerName: 'Asset Count', flex: 1, type: 'number' },
+    { field: 'pullDate', headerName: 'Date Pulled', flex: 1, type: 'date' },
     {
       field: 'avgAssessed',
       headerName: 'Avg of Assessed',
       wrap: true,
       flex: 1,
       type: 'number',
-      renderCell: (params) => (
-        <div>
-          {numeral(params.value * 100).format('0.00')}%
-        </div>
-      ),
+      // renderCell: (params) => (
+      //   <div>
+      //     {numeral(params.value * 100).format('0.00')}%
+      //   </div>
+      // ),
       filterOperators: operatorsForFiltering,
-      // renderCell: renderProgressBarCell,
+      renderCell: renderProgressBarCell,
     },
     {
       field: 'avgSubmitted',
       headerName: 'Avg of Submitted',
       flex: 1,
       type: 'number',
-      renderCell: (params) => (
-        <div>
-          {numeral(params.value * 100).format('0.00')}%
-        </div>
-      ),
+      // renderCell: (params) => (
+      //   <div>
+      //     {numeral(params.value * 100).format('0.00')}%
+      //   </div>
+      // ),
       filterOperators: operatorsForFiltering,
-
-      // renderCell: renderProgressBarCell,
+      renderCell: renderProgressBarCell,
     },
     {
       field: 'avgAccepted',
       headerName: 'Avg of Accepted',
       flex: 1,
       type: 'number', // Set the type to 'number' for proper filtering
-      renderCell: (params) => (
-        <div>
-          {numeral(params.value * 100).format('0.00')}%
-        </div>
-      ),
+      // renderCell: (params) => (
+      //   <div>
+      //     {numeral(params.value * 100).format('0.00')}%
+      //   </div>
+      // ),
       filterOperators: operatorsForFiltering,
-      // renderCell: renderProgressBarCell,
+      renderCell: renderProgressBarCell,
     },
     {
       field: 'avgRejected',
       headerName: 'Avg of Rejected',
       flex: 1,
       type: 'number',
-      renderCell: (params) => (
-        <div>
-          {numeral(params.value * 100).format('0.00')}%
-        </div>
-      ),
+      // renderCell: (params) => (
+      //   <div>
+      //     {numeral(params.value * 100).format('0.00')}%
+      //   </div>
+      // ),
       filterOperators: operatorsForFiltering,
-      // renderCell: renderProgressBarCell,
+      renderCell: renderProgressBarCell,
     },
   ];
 
@@ -230,4 +242,4 @@ function AveragesAndCount({ groupingColumn, data, targetColumns }) {
     />
   );
 }
-export default AveragesAndCount;
+export default HistoricalDataGrid;

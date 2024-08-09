@@ -18,18 +18,23 @@ import DropdownInputValue from './DropdownInputValue';
 //   },
 // };
 
+
 const BoldHeader = styled('div')(({ theme }) => ({
   // fontSize: '18px', 
   fontFamily: 'Segoe UI',
   fontWeight: '700',
-  textWrap: 'wrap',
   textAlign: 'center',
-  overflowX: 'visible',
   fontSize: 'calc(11px + 0.2vw)', // Responsive font size
-  whiteSpace: 'normal', // Allow text wrapping
-  wordBreak: 'break-word', // Break long words
+  whiteSpace: 'normal', 
+  // wordBreak: 'break-word', // Break long words
   width: '100%',
   display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  [theme.breakpoints.down('sm')]: {
+    fontSize: 'calc(9px + 0.5vw)', // Adjust font size for small screens
+  },
 }));
 
 
@@ -42,29 +47,13 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   },
   "& .MuiDataGrid-scrollbarFiller--header": {
     backgroundColor: theme.palette.secondary.light
-
   }, 
   //Text in table cells
   "& .MuiDataGrid-cell": {
     borderBottom: "none",
     whiteSpace: 'normal', // Allow text wrapping
     wordBreak: 'break-word',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignText: 'center',
   },
-
-  "& .MuiDataGrid-columnHeader": {
-    backgroundColor: theme.palette.secondary.light,
-    // borderBottom: 'none',
-  },
-  "& .MuiDataGrid-columnHeaders": {
-    backgroundColor: theme.palette.secondary.light,
-  },
-
-  // "& .MuiDataGrid-virtualScroller": {
-  //   backgroundColor: theme.palette.background.paper,
-  // },
   "& .MuiDataGrid-footerContainer": {
     borderTop: "none",
     backgroundColor: theme.palette.secondary.light,
@@ -75,15 +64,27 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
     color: `${theme.palette.text.primary} !important`,
   },
-
+  "& .MuiDataGrid-columnHeaders": { //targets entire header row
+    backgroundColor: theme.palette.secondary.light,
+  },
+  //targets each header cell (where names and sorting appear)
+  "& .MuiDataGrid-columnHeader": {  
+    backgroundColor: theme.palette.secondary.light,
+    border: 'none',
+    textAlign: 'center',
+    position: 'relative',
+  },
   "& .MuiDataGrid-columnHeaderTitleContainer" : {
     display: 'flex',
     flex: 1,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    // overflow: 'visible',
+    padding: 0,
   }, 
 
+  //text in columnHeaderTitleContent
   "& .MuiDataGrid-columnHeaderTitleContainerContent": {
     // backgroundColor: '#C70039',
     display: 'flex',
@@ -91,16 +92,26 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'visible',
+    textOverflow: 'ellipsis',
+    textWrap: 'wrap',
+
   },
 
-  "& .css-152u2bk": {
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflowX: 'visible',
+  "& .MuiDataGrid-columnHeaderIcon": {
+    // Ensure the sorting and more options icons are positioned correctly
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    fontSize: '0.5rem',
+  },
 
-  }
-  
+  // "& .css-152u2bk": {
+  //   textAlign: 'center',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   overflowX: 'visible',
+  // }
 }));
 
 
@@ -145,6 +156,7 @@ function DataGridBuilder({ data, columns, onRowClick, filterModel,onFilterModelC
       width: '100%',
       display: 'flex',
       height: '100%',
+      maxWidth: 'auto',
       // maxHeight: '100%', // Ensure it doesn't grow beyond this height
       overflowY: 'hidden',
       margin: "0 auto",

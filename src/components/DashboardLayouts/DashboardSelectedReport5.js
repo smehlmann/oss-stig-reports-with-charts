@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import { Grid, ThemeProvider, styled } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
-import AveragesAndCount from "../../charts/DataGridMUI/AveragesAndCount";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
@@ -10,6 +9,8 @@ import {  useFilter } from "../../FilterContext";
 import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/MultiLevelExpandableTable/Report5WithMultiLevelBenchmarks";
 import FilterBar from "../FilterBar.js";
+import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
+
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(3),
@@ -57,23 +58,12 @@ const DashboardSelectedReport5 = ({ data }) => {
               <StatisticsCardGroup data={filteredData} />
             </Grid>
             
-          
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
-              <ChartCardComponent title = 'Assets by Code'>
-                <ApexCountByValueBarChart
-                  targetColumn="code"
-                  isHorizontal={true}
-                  xAxisTitle="Number of Assets"
-                  yAxisTitle= "Code"
-                  data={data}
-                />
-              </ChartCardComponent>
-            </Grid>
+
 
             {/* data grid */}
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
+            <Grid item lg={6} sm={6} xl={6} xs={12}>
               <TableGridCardComponent>
-                <AveragesAndCount 
+                <AveragesGroupedByColumn 
                   groupingColumn = 'code'
                   data={data} 
                   targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", "checks"]} 
@@ -81,7 +71,7 @@ const DashboardSelectedReport5 = ({ data }) => {
               </TableGridCardComponent>
             </Grid>
             
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
+            <Grid item lg={6} sm={6} xl={6} xs={12}>
               <ChartCardComponent title = "Assets by Collection">
                 <ApexCountByValueBarChart
                   targetColumn="shortName"

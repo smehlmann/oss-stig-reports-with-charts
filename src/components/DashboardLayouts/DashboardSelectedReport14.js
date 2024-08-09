@@ -10,7 +10,7 @@ import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/MultiLev
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import FilterBar from "../FilterBar.js";
 import StatisticsCardGroup from "../StatisticsCardsGroup.js";
-import AveragesAndCount from "../../charts/DataGridMUI/AveragesAndCount";
+import HistoricalDataGrid from "../../charts/DataGridMUI/HistoricalDataGrid";
 
 const Root = styled('div')(({ theme }) => {
   return ({
@@ -106,17 +106,17 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
           </Grid>
 
 
-          <Grid item lg={6} md = {6} sm={12} xl={6} xs={12}>
+          <Grid item lg={6} md={8} sm={12} xl={6} xs={12}>
             <TableGridCardComponent>
-              <AveragesAndCount 
+              <HistoricalDataGrid 
                 groupingColumn = 'code'
                 data={dataFromLastPullDate} 
-                targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", 'checks']} 
+                targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", "checks", "datePulled"]} 
               />
             </TableGridCardComponent>
           </Grid>
           
-          <Grid item lg={6} sm={6} xl={6} xs={12}>
+          <Grid item lg={6} md={4} sm={12} xl={6} xs={12}>
             <ChartCardComponent title = "Assets by Collection">
               <ApexCountByValueBarChart
                 targetColumn="shortName"
