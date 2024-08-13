@@ -26,30 +26,16 @@ async function runSAReportByLabelAndEmass(auth, emassMap) {
             { label: 'CAT1', key: 'cat1' }
         ];
 
-        /*emassMap = reportUtils.filterCollectionsByEmassNumber(collections);
-        var iKey = 0;
-        var iKeyend = emassMap.size;
-        var myKeys = emassMap.keys();
-        //console.log(myKeys);
-
-        while (iKey < iKeyend) {*/
         const emassKeysArray = Array.from(emassMap.keys());
 
         for (var iEmass = 0; iEmass < emassKeysArray.length; iEmass++) {
             console.log('emassKeysArray[iEmass]: ' + emassKeysArray[iEmass]);
-            const collections = emassMap.get(emassKeysArray[iEmass]);
             var emassNum = emassKeysArray[iEmass];
             var myCollections = emassMap.get(emassNum);
             var metricsData = [];
             var assetEmassMap;
 
             for (var i = 0; i < myCollections.length; i++) {
-
-                /*var containsStr = myCollections[i].name.includes('Database/Web');
-
-                if (containsStr) {
-                    continue;
-                }*/
 
                 var collectionEmass = myCollections[i].metadata.eMASS;
 
@@ -72,13 +58,6 @@ async function runSAReportByLabelAndEmass(auth, emassMap) {
                     metricsData.push(metrics);
                 }
 
-                /*for (var iAsset = 0; iAsset < assets.data.length; iAsset++) {
-
-                    metrics = await reportGetters.getCollectionMerticsByCollectionAndAsset(auth, myCollections[i].collectionId,
-                        assets.data[iAsset].assetId);
-                    //console.log(metrics);n
-                    metricsData.push(metrics);
-                }*/
             }
 
             if (metricsData.length > 0) {

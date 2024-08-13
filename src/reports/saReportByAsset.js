@@ -38,7 +38,8 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
             { label: 'Rejected', key: 'rejected' },
             { label: 'CAT3', key: 'cat3' },
             { label: 'CAT2', key: 'cat2' },
-            { label: 'CAT1', key: 'cat1' }
+            { label: 'CAT1', key: 'cat1' },
+            { label: 'Web or DB', key: 'cklWebOrDatabase' }
         ]
 
         var today = new Date();
@@ -86,7 +87,7 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
                     }*/
                     labelMap.set(labels.data[x].labelId, labels.data[x].description);
                     if(!labels.data[x].description){
-                        console.log('No label description fpr labelId: ' + labels.data[x].labelId);
+                        console.log('No label description for labelId: ' + labels.data[x].labelId);
                     }
                 }
 
@@ -127,9 +128,17 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
 
                     }
 
+                    var cklWebOrDatabase = '';
+                    if (
+                        assets.data[assetIdx] &&
+                        assets.data[assetIdx].metadata &&
+                        assets.data[assetIdx].metadata.cklWebOrDatabase)
+                        {
+                            cklWebOrDatabase = assets.data[assetIdx].metadata.cklWebOrDatabase;
+                        }
                     var myData =
                         getRow(todayStr, collections[i], metrics.data[jMetrics], labelMap, assets.data[assetIdx],
-                            emassNum, assetEmassMap);
+                            emassNum, assetEmassMap, cklWebOrDatabase);
                     if (myData) {
                         rows.push(myData);
                     }
@@ -148,7 +157,7 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
     }
 }
 
-function getRow(todayStr, collection, metrics, labelMap, asset, emassNum, assetEmassMap) {
+function getRow(todayStr, collection, metrics, labelMap, asset, emassNum, assetEmassMap, cklWebOrDatabase) {
 
     console.log('metrics: ' + metrics);
     var assetMetadata = '';
@@ -276,7 +285,8 @@ function getRow(todayStr, collection, metrics, labelMap, asset, emassNum, assetE
         rejected: avgRejected + '%',
         cat3: sumOfCat3,
         cat2: sumOfCat2,
-        cat1: sumOfCat1
+        cat1: sumOfCat1,
+        cklWebOrDatabase: cklWebOrDatabase
     }
 
     return rowData;

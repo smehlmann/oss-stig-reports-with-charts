@@ -317,56 +317,86 @@ function getMetadata(labelMap, metrics) {
     other: "",
   };
 
-  if (metrics.name === "NPK8VDIESX29") {
-    console.log("asset: " + metrics.name);
-  }
   const labels = metrics.labels;
-  var labelDesc = "";
+  if(!labels || labels.length === 0){
+    return collectionMetadata;
+  }
+  const nameMap = new Map();
 
   try {
-    for (var iLabel = 0; iLabel < labels.length; iLabel++) {
-      //console.log("labelId: " + labels[iLabel].labelId);
-
-      labelDesc = labelMap.get(labels[iLabel].labelId);
-      console.log('labelDesc: ' + labelDesc);
-      if (!labelDesc) {
-        return collectionMetadata;
-      }
-      labelDesc = labelMap.get(labels[iLabel].labelId).toUpperCase();
-
-      switch (labelDesc) {
-        case "PRIMARY OWNER":
-          collectionMetadata.primOwner = labels[iLabel].name;
-          break;
-        case "SYS ADMIN":
-          collectionMetadata.sysAdmin = labels[iLabel].name;
-          break;
-        case "CCB_SA_ACTIONS":
-          collectionMetadata.ccbSAActions = labels[iLabel].name;
-          break;
-        case "RMF ACTION":
-          collectionMetadata.rmfAction = labels[iLabel].name;
-          break;
-        case "ISSO":
-          collectionMetadata.isso = labels[iLabel].name;
-          break;
-        case "OTHER":
-          collectionMetadata.other = labels[iLabel].name;
-          break;
-        case "ASSET TYPE":
-          collectionMetadata.device = labels[iLabel].name;
-          break;
-        default:
-          break;
-      }
+    for(var i = 0; i < labels.length; i++){
+      nameMap.set(labels[i].labelId, labels[i].name)
     }
+
+    labelMap.forEach((value, key, map) => {
+      console.log(key, value);
+      var labelId = key;
+      var labelDesc = value.toUpperCase();
+
+      var name = nameMap.get(labelId);      
+
+      if(name && name !== ''){
+        //labelDesc = labelMap.get(labels[iLabel].labelId);
+        //console.log("labelDesc: " + labelDesc);
+        //labelDesc = labelMap.get(labels[iLabel].labelId).toUpperCase();
+
+        switch (labelDesc) {
+          case "PRIMARY OWNER":
+            collectionMetadata.primOwner =
+              collectionMetadata.primOwner + name + ";";
+            break;
+          case "SYS ADMIN":
+            collectionMetadata.sysAdmin =
+              collectionMetadata.sysAdmin + name + ";";
+            break;
+          case "CCB_SA_ACTIONS":
+            collectionMetadata.ccbSAActions =
+              collectionMetadata.ccbSAActions + name + ";";
+            break;
+          case "RMF ACTION":
+            collectionMetadata.rmfAction =
+              collectionMetadata.rmfAction + name + ";";
+            break;
+          case "ISSO":
+            collectionMetadata.isso = collectionMetadata.isso + name + ";";
+            break;
+          case "OTHER":
+            collectionMetadata.other = collectionMetadata.other + name + ";";
+            break;
+          case "ASSET TYPE":
+            collectionMetadata.device = collectionMetadata.device + name + ";";
+            break;
+          default:
+            break;
+        }
+      } // end check for no name
+    }); // end for each labelMap
+
+    // remove trailing ';'
+    collectionMetadata.primOwner = collectionMetadata.primOwner.replace(
+      /;$/,
+      ""
+    );
+    collectionMetadata.sysAdmin = collectionMetadata.sysAdmin.replace(/;$/, "");
+    collectionMetadata.ccbSAActions = collectionMetadata.ccbSAActions.replace(
+      /;$/,
+      ""
+    );
+    collectionMetadata.rmfAction = collectionMetadata.rmfAction.replace(
+      /;$/,
+      ""
+    );
+    collectionMetadata.isso = collectionMetadata.isso.replace(/;$/, "");
+    collectionMetadata.other = collectionMetadata.other.replace(/;$/, "");
+    collectionMetadata.device = collectionMetadata.device.replace(/;$/, "");
+
+    return collectionMetadata;
   } catch (e) {
     console.log(e);
     throw e;
   }
 
-  return collectionMetadata;
-}
+} // end function getMetadata
 
 function getMetadataByAsset(labelMap, labels) {
   var collectionMetadata = {
@@ -516,11 +546,27 @@ async function getAssetEmassMapByAssets(
   return assetEmassMap;
 }
 
+function formatCsvString(myDetail) {
+  var detail = myDetail.replaceAll("/", "-");
+  detail = detail.replaceAll("\r", "\\r");
+  detail = detail.replaceAll("\n", "\\n");
+  detail = detail.replaceAll("\t", "\\t");
+  detail = detail.replaceAll(",", ";");
+  /*if(detail === '0' || detail === '1' || detail === '2'){
+                                            console.log('myDetail before truncate: ' + myDetail);
+                                        }*/
+
+  if (detail.length > 32000) {
+    detail = detail.substring(0, 32000);
+  }
+
+  return detail;
+}
+
 async function getAssetEmassMapForUnassigned(assets) {
   var unassignedAssets = [];
   if (assets) {
     for (var i = 0; i < assets.data.length; i++) {
-      var emassNum = "";
       if (assets.data[i] && !assets.data[i].metadata) {
         unassignedAssets.push(assets.data[i]);
       }
@@ -553,4 +599,5 @@ export {
   getFilteredCollections,
   getAssetEmassMapByAssets,
   getAssetEmassMapForUnassigned,
+  formatCsvString,
 };

@@ -12,7 +12,7 @@ import * as pinnedReport from "./pinnedReport.js";
 import * as reportGetters from "./reportGetters.js";
 import * as reportUtils from "./reportUtils.js";
 
-async function GenerateReport(auth, selection, inEmassNums, numDaysOver) {
+async function GenerateReport(auth, selection, inEmassNums, numDaysOver, benchmark) {
   var rows = [];
   var collections = [];
 
@@ -85,7 +85,8 @@ async function GenerateReport(auth, selection, inEmassNums, numDaysOver) {
         rows =
           await saReportWithMetricsAndVersions.runSAReportWithMetricsAndVersions(
             auth,
-            emassMap
+            emassMap,
+            benchmark
           );
         break;
       case "9":
@@ -93,7 +94,8 @@ async function GenerateReport(auth, selection, inEmassNums, numDaysOver) {
         console.log("Run 5. STIG Benchmark By Results");
         rows = await stigBenchmarkByResults.runStigBenchmarkByResults(
           auth,
-          emassMap
+          emassMap,
+          benchmark
         );
         break;
       case "10":
