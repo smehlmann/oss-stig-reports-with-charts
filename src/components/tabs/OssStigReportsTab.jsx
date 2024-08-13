@@ -17,6 +17,8 @@ const OssStigReportsTab = () => {
   const [report, setReport] = useState("");
   const [emassNums, setEmassNums] = useState("");
   const [showEmassNum, setShowEmassNums] = useState(false);
+  const [benchmark, setBenchmark] = useState("");
+  const [showBenchmark, setShowBenchmark] = useState(false);
   const [showNumDaysOver, setShowNumDaysOver] = useState(false);
   const [numDaysOver, setNumDaysOver] = useState("360");
   const [showData, setShowData] = useState(false);
@@ -42,11 +44,11 @@ const OssStigReportsTab = () => {
   // this function will be called when a radio button is checked
   const onRadioChange = (e) => {
     setReport(e.target.value);
-    if (
-      e.target.value !== "12" &&
-      e.target.value !== "14"
-    ) {
+    if (e.target.value !== "12" && e.target.value !== "14") {
       setShowEmassNums(true);
+    }
+    if (e.target.value === "9" || e.target.value === "8") {
+      setShowBenchmark(true);
     }
     if (e.target.value === "11") {
       setShowNumDaysOver(true);
@@ -58,6 +60,11 @@ const OssStigReportsTab = () => {
   const updateEmass = (event) => {
     // 👇 Get input value from "event"
     setEmassNums(event.target.value);
+  };
+
+  const updateBenchmark = (event) => {
+    // 👇 Get input value from "event"
+    setBenchmark(event.target.value);
   };
 
   const updateNumDaysOver = (event) => {
@@ -95,6 +102,10 @@ const OssStigReportsTab = () => {
       alert("You must enter EMASS number(s)");
       return;
     }
+    if (report === "9" && benchmark === '') {
+      alert("You must enter Benchmark ID");
+      return;
+    }
 
     if (report === "11" && numDaysOver === "") {
       alert("You must enter the number of days over.");
@@ -107,37 +118,39 @@ const OssStigReportsTab = () => {
     setDisableNewReport(true);
     setDisableCancelReport(false);
 
-    await callAPI(auth, report, emassNums, numDaysOver).then((data) => {
-      if (report !== "14") {
-        if (data && data.rows && data.rows.length > 0) {
-          var mergedData = reportUtils.mergeHeadersAndData(data);
-          //setApiResponse(data.rows);
-          setApiResponse(mergedData);
-          setFileData(data.rows);
-          setHeaders(data.headers);
-          setShowData(true);
-          var reportData = dispatch({
-            type: "refresh-reportData",
-            reportData: data.rows,
-          });
-          if (reportData) {
-            console.log("reportData found");
-            localStorage.setItem("ossStigReport", JSON.stringify(data.rows));
-            localStorage.setItem("selectedReport", report);
-            window.dispatchEvent(new Event("storage"));
+    await callAPI(auth, report, emassNums, numDaysOver, benchmark).then(
+      (data) => {
+        if (report !== "14") {
+          if (data && data.rows && data.rows.length > 0) {
+            var mergedData = reportUtils.mergeHeadersAndData(data);
+            //setApiResponse(data.rows);
+            setApiResponse(mergedData);
+            setFileData(data.rows);
+            setHeaders(data.headers);
+            setShowData(true);
+            var reportData = dispatch({
+              type: "refresh-reportData",
+              reportData: data.rows,
+            });
+            if (reportData) {
+              console.log("reportData found");
+              localStorage.setItem("ossStigReport", JSON.stringify(data.rows));
+              localStorage.setItem("selectedReport", report);
+              window.dispatchEvent(new Event("storage"));
+            }
+          } else {
+            setShowNoDataFound(true);
+            setDisableCancelReport(true);
           }
         } else {
-          setShowNoDataFound(true);
+          /* logic for historical data*/
+          localStorage.setItem("selectedReport", report);
+          window.dispatchEvent(new Event("storage"));
+          setShowData(false);
           setDisableCancelReport(true);
         }
-      } else {
-        /* logic for historical data*/
-        localStorage.setItem("selectedReport", report);
-        window.dispatchEvent(new Event("storage"));
-        setShowData(false);
-        setDisableCancelReport(true);
       }
-    });
+    );
 
     setLoading(false);
     setButtonDisabled(true);
@@ -288,6 +301,21 @@ const OssStigReportsTab = () => {
                   />
                 </div>
               )}
+              {showBenchmark && (
+                <div id="benchmarkDiv">
+                  <label htmlFor="benchmarkText">
+                    Required for reports 5.
+                    <br /> Enter Benchmark ID:{" "}
+                  </label>
+                  <input
+                    id="benchmarkText"
+                    type="text"
+                    value={benchmark}
+                    onChange={updateBenchmark}
+                    disabled={isButtonDisabled}
+                  />
+                </div>
+              )}
               <br />
               {showNumDaysOver && (
                 <div>
@@ -374,7 +402,7 @@ const OssStigReportsTab = () => {
   }
 };
 
-async function callAPI(auth, report, emassNums, numDaysOver) {
+async function callAPI(auth, report, emassNums, numDaysOver, benchmark) {
   //alert('callAPI report: ' + report);
 
   var rows;
@@ -384,7 +412,8 @@ async function callAPI(auth, report, emassNums, numDaysOver) {
       auth,
       report,
       emassNums,
-      numDaysOver
+      numDaysOver,
+      benchmark
     );
 
     //alert('calApi number of rows retruned: ' + rows.length);
