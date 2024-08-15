@@ -79,8 +79,11 @@ function getCollectionsByEmassNumber(collections, emassNumsFilter) {
   return emassMap;
 }
 
-function getCurrentQuarter() {
+function getCurrentQuarter(latestRevisinDate) {
+  
   const currentDate = new Date();
+  const revisionDate = new Date(latestRevisinDate);
+  
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth() + 1;
 
@@ -99,6 +102,15 @@ function getCurrentQuarter() {
         retQuarter = quarters[i];
         break;
       }
+    }
+  }
+
+  if(retQuarter){
+    const startDate = new Date(retQuarter.startDate);
+    const endDate = new Date(retQuarter.endDate);
+
+    if(revisionDate < startDate || revisionDate > endDate){
+      retQuarter = null;
     }
   }
 
@@ -329,7 +341,7 @@ function getMetadata(labelMap, metrics) {
     }
 
     labelMap.forEach((value, key, map) => {
-      console.log(key, value);
+      //console.log(key, value);
       var labelId = key;
       var labelDesc = value.toUpperCase();
 

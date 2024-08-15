@@ -5,34 +5,12 @@ async function runChecklistOver365Days(auth, emassMap, numDaysOver) {
 
     try {
 
-        //const currentQuarter = reportUtils.getCurrentQuarter();
-
         console.log(`runSAReportWithMetricsAndVersions: Requesting STIG Manager Collections`);
 
         var labels = [];
         let labelMap = new Map();
         var rows = []
         const emassKeysArray = Array.from(emassMap.keys());
-
-        /*var rows = [
-            {
-                collectionName: 'Collection',
-                asset: 'Asset',
-                primOwner: 'Primary Owner',
-                sysAdmin: 'Sys Admin',
-                other: "OTHER",
-                benchmark: 'STIG Benchmark',
-                revision: 'Revision',
-                groupId: 'Group ID',
-                result: 'Result',
-                modifiedDate: 'Modified Date',
-                modifiedBy: 'Modified By',
-                ruleId: 'Rule',
-                status: 'Status',
-                statusDate: 'Status Date',
-                checkedBy: 'Checked By'
-            }
-        ];*/
 
         var headers = [
 
@@ -56,8 +34,6 @@ async function runChecklistOver365Days(auth, emassMap, numDaysOver) {
 
         for (var iEmass = 0; iEmass < emassKeysArray.length; iEmass++) {
             var collections = emassMap.get(emassKeysArray[iEmass]);
-            var emassNum = emassKeysArray[iEmass];
-            var assetEmassMap;
 
             console.log('emassKeysArray[iEmass]: ' + emassKeysArray[iEmass]);
             console.log('Number of collections: ' + collections.length);
@@ -69,14 +45,6 @@ async function runChecklistOver365Days(auth, emassMap, numDaysOver) {
 
                 labelMap.clear();
                 labels.length = 0;
-                if (collectionName.toUpperCase() === "HAPPY CORP") {
-                    continue;
-                }
-
-                //exclude collections that do not start with NP_C
-                if (!collectionName.startsWith('NP_C')) {
-                    continue;
-                }
 
                 var collection = await
                     reportGetters.getCollectionMerticsSummary(auth, collectionId);

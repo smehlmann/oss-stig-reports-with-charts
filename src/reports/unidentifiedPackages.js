@@ -7,8 +7,6 @@ async function runUnidentifiedPackages(auth, collections) {
 
         console.log(`runUnidentifiedPackages: Requesting STIG Manager Collections`);
 
-        const currentQuarter = reportUtils.getCurrentQuarter();
-
         var labels = [];
         let labelMap = new Map();
         var rows = [];
@@ -101,6 +99,8 @@ async function runUnidentifiedPackages(auth, collections) {
                         latestRev = stig.data.lastRevisionStr;
                         latestRevDate = stig.data.lastRevisionDate;
                     }
+
+                    const currentQuarter = reportUtils.getCurrentQuarter(latestRevDate);
 
                     var myData = getRow(
                         collectionName,

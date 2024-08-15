@@ -7,8 +7,6 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
       `runSAReportWithMetricsAndVersions: Requesting STIG Manager Collections`
     );
 
-    const currentQuarter = reportUtils.getCurrentQuarter();
-
     var labels = [];
     let labelMap = new Map();
     var rows = [];
@@ -19,22 +17,10 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
       { label: "Device-Asset", key: "deviveType" },
       { label: "Primary Owner", key: "primOwner" },
       { label: "Sys Admin", key: "sysAdmin" },
-      { label: "RMF Action", key: "rmfAction" },
-      { label: "ISSO", key: "isso" },
-      { label: "CCB_SA_Actions", key: "ccbSAActions" },
-      { label: "Orher", key: "other" },
       { label: "STIG Benchmark", key: "benchmarks" },
       { label: "Latest Revision", key: "latestRev" },
       { label: "Previous Revision", key: "prevRev" },
       { label: "Current Quarter STIG Version", key: "quarterVer" },
-      { label: "Checks", key: "checks" },
-      { label: "Assessed", key: "assessed" },
-      { label: "Submitted", key: "submitted" },
-      { label: "Accepted", key: "accepted" },
-      { label: "Rejected", key: "rejected" },
-      { label: "CAT3", key: "cat3" },
-      { label: "CAT2", key: "cat2" },
-      { label: "CAT1", key: "cat1" },
       { label: "Web or DB", key: "cklWebOrDatabase" },
     ];
 
@@ -105,11 +91,14 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
               prevRev = revisions[bmIdx].revisionStr;
             }
           }
+
+          const currentQuarter = reportUtils.getCurrentQuarter(latestRevDate);
+
           //
           // Get Assets associated with a stig
           //
           var tempAssets =
-            await reportGetters.getAssetMetricsSummaryByBenchmark(
+            await reportGetters.getCollectionMerticsByCollectionAndBenchmark(
               auth,
               collectionId,
               benchmarkId
@@ -119,71 +108,33 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
           }
           var assets = tempAssets.data;
           for (var iAssets = 0; iAssets < assets.length; iAssets++) {
-            var assetMetrics = assets[iAssets].metrics;
+
+            var tempMeta = await reportGetters.getAssetMetadata(
+              auth,
+              assets[iAssets].assetId
+            );
+            var metaData = tempMeta.data;
+
+            var cklWebOrDatabase = "";
+            if (metaData && metaData.cklWebOrDatabase) {
+              cklWebOrDatabase = metaData.cklWebOrDatabase;
+            }
 
             var myData = getRow(
               collectionName,
-              assetMetrics,
               labelMap,
               latestRev,
               latestRevDate,
               prevRev,
               benchmarkId,
-              currentQuarter
+              currentQuarter,
+              assets[iAssets],
+              cklWebOrDatabase
             );
 
             rows.push(myData);
           } // end for each asset
         } // end for each stig
-
-        // get assets
-        /*var assets = await reportGetters.getAssetMetricsSummary(auth, collections[i].collectionId);
-
-                for (var iAssets = 0; iAssets < assets.data.length; iAssets++) {
-                    var assetMetrics = await
-                        reportGetters.getAssetMetricsSummaryByAssetId(auth, collections[i].collectionId, assets.data[iAssets].assetId);
-
-                    for (var iMetrics = 0; iMetrics < assetMetrics.data.length; iMetrics++) {
-
-                        var benchmarkId = assetMetrics.data[iMetrics].benchmarkId;
-                        console.log('benchmarkId: ' + benchmarkId);
-
-                        var revisions = await reportGetters.getBenchmarkRevisions(auth, benchmarkId);
-
-                        var latestRev = '';
-                        var prevRev = '';
-                        var latestRevDate = '';
-                        if (revisions) {
-                            for (var bmIdx = 0; bmIdx < revisions.data.length && bmIdx < 2; bmIdx++) {
-                                if (bmIdx === 0) {
-                                    latestRev = revisions.data[bmIdx].revisionStr;
-                                    latestRevDate = revisions.data[bmIdx].benchmarkDate;
-                                }
-                                else if (bmIdx === 1) {
-                                    prevRev = revisions.data[bmIdx].revisionStr;
-                                }
-                            }
-                        }
-                        else {
-                            var stig = await reportGetters.getStigById(auth, benchmarkId);
-
-                            latestRev = stig.data.lastRevisionStr;
-                            latestRevDate = stig.data.lastRevisionDate;
-                        }
-
-                        var myData = getRow(
-                            collectionName,
-                            assetMetrics.data[iMetrics],
-                            labelMap,
-                            latestRev,
-                            latestRevDate,
-                            prevRev,
-                            benchmarkId,
-                            currentQuarter);
-
-                        rows.push(myData);
-                    }
-                } end for each asset*/
       } // end for each collection
     } // end for each iEmass
 
@@ -197,13 +148,14 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
 
 function getRow(
   collectionName,
-  assetMetrics,
   labelMap,
   latestRev,
   latestRevDate,
   prevRev,
   benchmarkID,
-  currentQuarter
+  currentQuarter,
+  asset,
+  cklWebOrDatabase
 ) {
   const quarterVer = reportUtils.getVersionForQuarter(
     currentQuarter,
@@ -211,43 +163,11 @@ function getRow(
     latestRev
   );
 
-  const metrics = assetMetrics;
-  const numAssessments = metrics.assessments;
-  const numAssessed = metrics.assessed;
-  const numSubmitted = metrics.statuses.submitted;
-  const numAccepted = metrics.statuses.accepted;
-  const numRejected = metrics.statuses.rejected;
-  const totalChecks = numAssessments;
-
-  const assetName = assetMetrics.name;
+  const assetName = asset.name;
   const collectionMetadata = reportUtils.getMetadataByAsset(
     labelMap,
-    assetMetrics.labels
+    asset.labels
   );
-
-  var avgAssessed = 0;
-  var avgSubmitted = 0;
-  var avgAccepted = 0;
-  var avgRejected = 0;
-  var temp = 0;
-
-  if (numAssessments) {
-    temp = (numAssessed / numAssessments) * 100;
-    avgAssessed = temp.toFixed(2);
-
-    temp = ((numSubmitted + numAccepted + numRejected) / numAssessments) * 100;
-    avgSubmitted = temp.toFixed(2);
-
-    temp = (numAccepted / numAssessments) * 100;
-    avgAccepted = temp.toFixed(2);
-
-    temp = (numRejected / numAssessments) * 100;
-    avgRejected = temp.toFixed(2);
-  }
-
-  const sumOfCat3 = metrics.findings.low;
-  const sumOfCat2 = metrics.findings.medium;
-  const sumOfCat1 = metrics.findings.high;
 
   var rowData = {
     collectionName: collectionName,
@@ -255,22 +175,11 @@ function getRow(
     deviveType: collectionMetadata.device,
     primOwner: collectionMetadata.primOwner,
     sysAdmin: collectionMetadata.sysAdmin,
-    rmfAction: collectionMetadata.rmfAction,
-    isso: collectionMetadata.isso,
-    ccbSAActions: collectionMetadata.ccbSAActions,
-    other: collectionMetadata.other,
     benchmarks: benchmarkID,
     latestRev: latestRev,
     prevRev: prevRev,
     quarterVer: quarterVer,
-    checks: totalChecks,
-    assessed: avgAssessed + "%",
-    submitted: avgSubmitted + "%",
-    accepted: avgAccepted + "%",
-    rejected: avgRejected + "%",
-    cat3: sumOfCat3,
-    cat2: sumOfCat2,
-    cat1: sumOfCat1,
+    cklWebOrDatabase: cklWebOrDatabase,
   };
 
   return rowData;

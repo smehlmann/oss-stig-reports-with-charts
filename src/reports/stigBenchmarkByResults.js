@@ -2,8 +2,7 @@ import * as reportGetters from "./reportGetters.js";
 import * as reportUtils from "./reportUtils.js";
 
 async function runStigBenchmarkByResults(auth, emassMap, benchmark) {
-  const currentQuarter = reportUtils.getCurrentQuarter();
-
+  
   var rows = [];
 
   const headers = [
@@ -96,6 +95,8 @@ async function runStigBenchmarkByResults(auth, emassMap, benchmark) {
               prevRev = revisions[bmIdx].revisionStr;
             }
           }
+
+          const currentQuarter = reportUtils.getCurrentQuarter(latestRevDate );
 
           //
           // Get Assets associated with a stig
