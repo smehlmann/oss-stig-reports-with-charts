@@ -268,7 +268,7 @@ const OssStigReportsTab = () => {
       alert("You must enter EMASS number(s)");
       return;
     }
-    if (report === "9" && benchmark === "") {
+    if ((report === "8" || report === "9") && benchmark === "") {
       alert("You must enter Benchmark ID");
       return;
     }
