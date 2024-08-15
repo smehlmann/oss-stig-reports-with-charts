@@ -10,6 +10,13 @@ import { getAuth } from "../../store/index.js";
 import * as reportUtils from "../../reports/reportUtils.js";
 import ClipLoader from "react-spinners/ClipLoader";
 
+import * as DialogMessages from "./DialogMessages.jsx";
+
+import { IconButton, Alert, Dialog, DialogContent } from "@mui/material";
+
+import { FlashlightOffRounded, Info } from "@mui/icons-material";
+import Button from "@mui/material/Button";
+
 const OssStigReportsTab = () => {
   const [apiResponse, setApiResponse] = useState([]);
   const [fileData, setFileData] = useState("");
@@ -29,10 +36,17 @@ const OssStigReportsTab = () => {
   const [disableCancelReport, setDisableCancelReport] = useState(true);
   const [disableRunReport, setDisableRunReport] = useState(true);
 
-  //localStorage.removeItem("ossStigReport");
-  //localStorage.removeItem("selectedReport");
+  const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
+  const [open4, setOpen4] = useState(false);
+  const [open5, setOpen5] = useState(false);
+  const [open6, setOpen6] = useState(false);
+  const [open7, setOpen7] = useState(false);
+  const [open8, setOpen8] = useState(false);
+  const [open9, setOpen9] = useState(false);
+  const [option, setOption] = useState("");
 
-  //var jsonData = null;
   var auth = getAuth();
   const dispatch = useDispatch();
 
@@ -49,9 +63,13 @@ const OssStigReportsTab = () => {
     }
     if (e.target.value === "9" || e.target.value === "8") {
       setShowBenchmark(true);
+    } else {
+      setShowBenchmark(false);
     }
     if (e.target.value === "11") {
       setShowNumDaysOver(true);
+    } else {
+      setShowNumDaysOver(false);
     }
 
     setDisableRunReport(false);
@@ -80,6 +98,154 @@ const OssStigReportsTab = () => {
     window.location.reload();
   };
 
+  const handleInfoClick = (event) => {
+    console.log(event);
+    console.log(event.currentTarget.attributes.option.nodeValue);
+    //alert("Info icon clicked!");
+    const option = event.currentTarget.attributes.option.nodeValue;
+    setOption(option);
+    switch (option) {
+      case "report1":
+        setOpen1(true);
+        setOpen2(false);
+        setOpen3(false);
+        setOpen4(false);
+        setOpen5(false);
+        setOpen6(false);
+        setOpen7(false);
+        setOpen8(false);
+        setOpen9(false);
+        break;
+      case "report2":
+        setOpen1(false);
+        setOpen2(true);
+        setOpen3(false);
+        setOpen4(false);
+        setOpen5(false);
+        setOpen6(false);
+        setOpen7(false);
+        setOpen8(false);
+        setOpen9(false);
+        break;
+      case "report3":
+        setOpen1(false);
+        setOpen2(false);
+        setOpen3(true);
+        setOpen4(false);
+        setOpen5(false);
+        setOpen6(false);
+        setOpen7(false);
+        setOpen8(false);
+        setOpen9(false);
+        break;
+      case "report4":
+        setOpen1(false);
+        setOpen2(false);
+        setOpen3(false);
+        setOpen4(FlashlightOffRounded);
+        setOpen5(true);
+        setOpen6(false);
+        setOpen7(false);
+        setOpen8(false);
+        setOpen9(false);
+        break;
+      case "report5":
+        setOpen1(false);
+        setOpen2(false);
+        setOpen3(false);
+        setOpen4(false);
+        setOpen5(true);
+        setOpen6(false);
+        setOpen7(false);
+        setOpen8(false);
+        setOpen9(false);
+        break;
+      case "report6":
+        setOpen1(false);
+        setOpen2(false);
+        setOpen3(false);
+        setOpen4(false);
+        setOpen5(false);
+        setOpen6(true);
+        setOpen7(false);
+        setOpen8(false);
+        setOpen9(false);
+        break;
+      case "report7":
+        setOpen1(false);
+        setOpen2(false);
+        setOpen3(false);
+        setOpen4(false);
+        setOpen5(false);
+        setOpen6(false);
+        setOpen7(true);
+        setOpen8(false);
+        setOpen9(false);
+        break;
+      case "report8":
+        setOpen1(false);
+        setOpen2(false);
+        setOpen3(false);
+        setOpen4(false);
+        setOpen5(false);
+        setOpen6(false);
+        setOpen7(false);
+        setOpen8(true);
+        setOpen9(false);
+        break;
+      case "report9":
+        setOpen1(false);
+        setOpen2(false);
+        setOpen3(false);
+        setOpen4(false);
+        setOpen5(false);
+        setOpen6(false);
+        setOpen7(false);
+        setOpen8(false);
+        setOpen9(true);
+        break;
+      default:
+    }
+    //setAnchorEl(event.currentTarget);
+  };
+
+  const handleInfoClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    switch (option) {
+      case "report1":
+        setOpen1(false);
+        break;
+      case "report2":
+        setOpen2(false);
+        break;
+        case "report3":
+        setOpen3(false);
+        break;
+        case "report4":
+        setOpen4(false);
+        break;
+        case "report5":
+        setOpen5(false);
+        break;
+        case "report6":
+        setOpen6(false);
+        break;
+        case "report7":
+        setOpen7(false);
+        break;
+        case "report8":
+        setOpen8(false);
+        break;
+        case "report9":
+        setOpen9(false);
+        break;
+      default:
+    }
+    //setAnchorEl(null);
+  };
+
   const handleSubmit = async (e) => {
     if (isButtonDisabled === true) {
       return;
@@ -102,7 +268,7 @@ const OssStigReportsTab = () => {
       alert("You must enter EMASS number(s)");
       return;
     }
-    if (report === "9" && benchmark === '') {
+    if (report === "9" && benchmark === "") {
       alert("You must enter Benchmark ID");
       return;
     }
@@ -186,6 +352,40 @@ const OssStigReportsTab = () => {
                   disabled={isButtonDisabled}
                 />
                 <span>1. RMF SAP Report</span>
+                <IconButton
+                  option="report1"
+                  onClick={handleInfoClick}
+                  size="small"
+                  style={{ marginLeft: 4 }}
+                >
+                  <Info fontSize="small" />
+                </IconButton>
+                <Dialog
+                  open={open1}
+                  onClose={handleInfoClose}
+                  fullWidth
+                  maxWidth="md"
+                  PaperProps={{
+                    sx: {
+                      position: "absolute",
+                      top: 0,
+                      margin: 5,
+                    },
+                  }}
+                >
+                  <DialogContent>
+                    <Alert
+                      onClose={handleInfoClose}
+                      severity="info"
+                      sx={{ width: "100%" }}
+                    >
+                      <DialogMessages.Report1DialogMessage />
+                    </Alert>
+                    <Button onClick={handleInfoClose} color="primary">
+                      Close
+                    </Button>
+                  </DialogContent>
+                </Dialog>
               </label>
               <br />
               <label>
@@ -196,9 +396,41 @@ const OssStigReportsTab = () => {
                   onChange={onRadioChange}
                   disabled={isButtonDisabled}
                 />
-                <span>
-                  2. Asset Collection per Primary Owner and System Admin
-                </span>
+                <span>2. Asset Metrics</span>
+                <IconButton
+                  option="report2"
+                  onClick={handleInfoClick}
+                  size="small"
+                  style={{ marginLeft: 4 }}
+                >
+                  <Info fontSize="small" />
+                </IconButton>
+                <Dialog
+                  open={open2}
+                  onClose={handleInfoClose}
+                  fullWidth
+                  maxWidth="md"
+                  PaperProps={{
+                    sx: {
+                      position: "absolute",
+                      top: 0,
+                      margin: 5,
+                    },
+                  }}
+                >
+                  <DialogContent>
+                    <Alert
+                      onClose={handleInfoClose}
+                      severity="info"
+                      sx={{ width: "100%" }}
+                    >
+                      <DialogMessages.Report2DialogMessage />
+                    </Alert>
+                    <Button onClick={handleInfoClose} color="primary">
+                      Close
+                    </Button>
+                  </DialogContent>
+                </Dialog>
               </label>
               <br />
               <label>
@@ -209,7 +441,41 @@ const OssStigReportsTab = () => {
                   onChange={onRadioChange}
                   disabled={isButtonDisabled}
                 />
-                <span>3. Asset Status per eMASS</span>
+                <span>3. RMF Package Asset Count </span>
+                <IconButton
+                  option="report3"
+                  onClick={handleInfoClick}
+                  size="small"
+                  style={{ marginLeft: 4 }}
+                >
+                  <Info fontSize="small" />
+                </IconButton>
+                <Dialog
+                  open={open3}
+                  onClose={handleInfoClose}
+                  fullWidth
+                  maxWidth="md"
+                  PaperProps={{
+                    sx: {
+                      position: "absolute",
+                      top: 0,
+                      margin: 5,
+                    },
+                  }}
+                >
+                  <DialogContent>
+                    <Alert
+                      onClose={handleInfoClose}
+                      severity="info"
+                      sx={{ width: "100%" }}
+                    >
+                      <DialogMessages.Report3DialogMessage />
+                    </Alert>
+                    <Button onClick={handleInfoClose} color="primary">
+                      Close
+                    </Button>
+                  </DialogContent>
+                </Dialog>
               </label>
               <br />
               <label>
@@ -221,9 +487,42 @@ const OssStigReportsTab = () => {
                   disabled={isButtonDisabled}
                 />
                 <span>
-                  4. STIG Deltas per Primary Owner and System Admin (EMASS
-                  number(s) required)
+                  4. STIG Benchmark Version Deltas (EMASS number(s) required)
                 </span>
+                <IconButton
+                  option="report4"
+                  onClick={handleInfoClick}
+                  size="small"
+                  style={{ marginLeft: 4 }}
+                >
+                  <Info fontSize="small" />
+                </IconButton>
+                <Dialog
+                  open={open4}
+                  onClose={handleInfoClose}
+                  fullWidth
+                  maxWidth="md"
+                  PaperProps={{
+                    sx: {
+                      position: "absolute",
+                      top: 0,
+                      margin: 5,
+                    },
+                  }}
+                >
+                  <DialogContent>
+                    <Alert
+                      onClose={handleInfoClose}
+                      severity="info"
+                      sx={{ width: "100%" }}
+                    >
+                      <DialogMessages.Report4DialogMessage />
+                    </Alert>
+                    <Button onClick={handleInfoClose} color="primary">
+                      Close
+                    </Button>
+                  </DialogContent>
+                </Dialog>
               </label>
               <br />
               <label>
@@ -235,8 +534,42 @@ const OssStigReportsTab = () => {
                   disabled={isButtonDisabled}
                 />
                 <span>
-                  5. STIG Benchmark By Results (EMASS number(s) required)
+                  5. Open Result Finding Metrics (EMASS number(s) required)
                 </span>
+                <IconButton
+                  option="report5"
+                  onClick={handleInfoClick}
+                  size="small"
+                  style={{ marginLeft: 4 }}
+                >
+                  <Info fontSize="small" />
+                </IconButton>
+                <Dialog
+                  open={open5}
+                  onClose={handleInfoClose}
+                  fullWidth
+                  maxWidth="md"
+                  PaperProps={{
+                    sx: {
+                      position: "absolute",
+                      top: 0,
+                      margin: 5,
+                    },
+                  }}
+                >
+                  <DialogContent>
+                    <Alert
+                      onClose={handleInfoClose}
+                      severity="info"
+                      sx={{ width: "100%" }}
+                    >
+                      <DialogMessages.Report5DialogMessage />
+                    </Alert>
+                    <Button onClick={handleInfoClose} color="primary">
+                      Close
+                    </Button>
+                  </DialogContent>
+                </Dialog>
               </label>
               <br />
               <label>
@@ -248,8 +581,42 @@ const OssStigReportsTab = () => {
                   disabled={isButtonDisabled}
                 />
                 <span>
-                  6. Checklist Over 356 Days (EMASS number(s) required)
+                  6. Checks Not Updated in x Days. (EMASS number(s) required)
                 </span>
+                <IconButton
+                  option="report6"
+                  onClick={handleInfoClick}
+                  size="small"
+                  style={{ marginLeft: 4 }}
+                >
+                  <Info fontSize="small" />
+                </IconButton>
+                <Dialog
+                  open={open6}
+                  onClose={handleInfoClose}
+                  fullWidth
+                  maxWidth="md"
+                  PaperProps={{
+                    sx: {
+                      position: "absolute",
+                      top: 0,
+                      margin: 5,
+                    },
+                  }}
+                >
+                  <DialogContent>
+                    <Alert
+                      onClose={handleInfoClose}
+                      severity="info"
+                      sx={{ width: "100%" }}
+                    >
+                      <DialogMessages.Report6DialogMessage />
+                    </Alert>
+                    <Button onClick={handleInfoClose} color="primary">
+                      Close
+                    </Button>
+                  </DialogContent>
+                </Dialog>
               </label>
               <br />
               <label>
@@ -260,7 +627,41 @@ const OssStigReportsTab = () => {
                   onChange={onRadioChange}
                   disabled={isButtonDisabled}
                 />
-                <span>7. STIG Deltas for Unidentified NCCM Packages</span>
+                <span>7. Unidentified NCCM Assets </span>
+                <IconButton
+                  option="report7"
+                  onClick={handleInfoClick}
+                  size="small"
+                  style={{ marginLeft: 4 }}
+                >
+                  <Info fontSize="small" />
+                </IconButton>
+                <Dialog
+                  open={open7}
+                  onClose={handleInfoClose}
+                  fullWidth
+                  maxWidth="md"
+                  PaperProps={{
+                    sx: {
+                      position: "absolute",
+                      top: 0,
+                      margin: 5,
+                    },
+                  }}
+                >
+                  <DialogContent>
+                    <Alert
+                      onClose={handleInfoClose}
+                      severity="info"
+                      sx={{ width: "100%" }}
+                    >
+                      <DialogMessages.Report7DialogMessage />
+                    </Alert>
+                    <Button onClick={handleInfoClose} color="primary">
+                      Close
+                    </Button>
+                  </DialogContent>
+                </Dialog>
               </label>
               <br />
               <label>
@@ -271,7 +672,41 @@ const OssStigReportsTab = () => {
                   onChange={onRadioChange}
                   disabled={isButtonDisabled}
                 />
-                <span>8. Pinned Report (EMASS number(s) required)</span>
+                <span>8. Pinned Revisions (EMASS number(s) required)</span>
+                <IconButton
+                  option="report8"
+                  onClick={handleInfoClick}
+                  size="small"
+                  style={{ marginLeft: 4 }}
+                >
+                  <Info fontSize="small" />
+                </IconButton>
+                <Dialog
+                  open={open8}
+                  onClose={handleInfoClose}
+                  fullWidth
+                  maxWidth="md"
+                  PaperProps={{
+                    sx: {
+                      position: "absolute",
+                      top: 0,
+                      margin: 5,
+                    },
+                  }}
+                >
+                  <DialogContent>
+                    <Alert
+                      onClose={handleInfoClose}
+                      severity="info"
+                      sx={{ width: "100%" }}
+                    >
+                      <DialogMessages.Report8DialogMessage />
+                    </Alert>
+                    <Button onClick={handleInfoClose} color="primary">
+                      Close
+                    </Button>
+                  </DialogContent>
+                </Dialog>
               </label>
               <br />
               <label>
@@ -282,7 +717,41 @@ const OssStigReportsTab = () => {
                   onChange={onRadioChange}
                   disabled={isButtonDisabled}
                 />
-                <span>9. Display Historical Data</span>
+                <span>9. Historical Data</span>
+                <IconButton
+                  option="report9"
+                  onClick={handleInfoClick}
+                  size="small"
+                  style={{ marginLeft: 4 }}
+                >
+                  <Info fontSize="small" />
+                </IconButton>
+                <Dialog
+                  open={open9}
+                  onClose={handleInfoClose}
+                  fullWidth
+                  maxWidth="md"
+                  PaperProps={{
+                    sx: {
+                      position: "absolute",
+                      top: 0,
+                      margin: 5,
+                    },
+                  }}
+                >
+                  <DialogContent>
+                    <Alert
+                      onClose={handleInfoClose}
+                      severity="info"
+                      sx={{ width: "100%" }}
+                    >
+                      <DialogMessages.Report9DialogMessage />
+                    </Alert>
+                    <Button onClick={handleInfoClose} color="primary">
+                      Close
+                    </Button>
+                  </DialogContent>
+                </Dialog>
               </label>
               <br />
               <br />
