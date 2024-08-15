@@ -1,5 +1,5 @@
 import React, {useMemo} from "react";
-import { Grid, ThemeProvider,styled} from "@mui/material";
+import {ThemeProvider,styled} from "@mui/material";
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
@@ -8,20 +8,21 @@ import {  useFilter } from "../../FilterContext";
 import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import FromTwoPropertiesBarChart from "../../charts/BarCharts/ApexCharts/FromTwoPropertiesBarChart";
 import FilterBar from "../FilterBar.js";
+import GetFilteredData from "../GetFilteredData.js";
+import Grid from '@mui/material/Unstable_Grid2';
 
 
 const Root = styled('div')(({ theme }) => ({
-  padding: theme.spacing(3),
-  paddingBottom: theme.spacing(3),
-
-  backgroundColor: theme.palette.background.default,
-  color: theme.palette.text.primary,
-  height: '100vh',
-  // display: 'flex', //stats cards will be enlarged in height
-  // flex: 1,
-  flexDirection: 'column',
-  // position: 'inherit',
-
+    padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)} ${theme.spacing(3)}`,
+    backgroundColor: theme.palette.background.default,
+    color: theme.palette.text.primary,
+    display: 'flex',
+    flexDirection: 'column',
+    // height:  `calc(100vh - ${verticalPadding}px)`, // subtract verticalPadding from 100vh
+    minHeight: '100vh',
+    boxSizing: 'border-box',
+    flexGrow: 1, //take up remaining space
+   // position: 'inherit',
 }));
 
 /*
@@ -37,29 +38,24 @@ const DashboardSelectedReport7 = ({ data }) => {
 
   //useFilter contains 'filter' state and when it's updated
   const { filter } = useFilter();
-  //stores the data filter has been applied
-  const filteredData = useMemo(() => {
-    if (Object.keys(filter).length > 0) {
-      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-      return filtered;
-    }
-    return data;
-  }, [filter, data]);
+  //gets the data when filter is applied
+  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
   return (
     <ThemeProvider theme={theme}>
       {/* <FilterProvider> */}
         <Root>
           {/*Filter Bar*/}
-          <Grid item lg={12} sm={12} xl={12} xs={12}>
-            <FilterBar />
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid item lg={12} sm={12} xl={12} xs={12}>
+          <Grid container spacing={{xs:2, s:2, md:3, lg:3}} >
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <FilterBar />
+            </Grid>
+            
+            <Grid lg={12} sm={12} xl={12} xs={12}>
               <StatisticsCardGroup data={filteredData} />
             </Grid>
 
-            <Grid item lg={8} sm={6} xl={8} xs={12}>
+            <Grid lg={8} sm={6} xl={8} xs={12}>
               <ChartCardComponent title = "Assets by eMass">
               <FromTwoPropertiesBarChart
                   labelColumn="acronym"
@@ -72,7 +68,7 @@ const DashboardSelectedReport7 = ({ data }) => {
               </ChartCardComponent>
             </Grid>
             
-            <Grid item lg={4} sm={6} xl={4} xs={12}>
+            <Grid lg={4} sm={6} xl={4} xs={12}>
               <TableGridCardComponent>
                 <AveragesGroupedByColumn 
                   groupingColumn = 'emass'
@@ -82,7 +78,6 @@ const DashboardSelectedReport7 = ({ data }) => {
               </TableGridCardComponent>
             </Grid>
 
-            
           </Grid> 
         </Root>
       {/* </FilterProvider> */}

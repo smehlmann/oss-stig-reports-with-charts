@@ -8,7 +8,7 @@ import DataGridBuilder from './DataGridBuilder';
 import ValueCountMap from "../../components/ValueCountMap.js";
 import { getGridNumericOperators } from '@mui/x-data-grid';
 import DropdownInputValue from './DropdownInputValue';
-
+import GetFilteredData from "../../components/GetFilteredData.js";
 
 const renderProgressBarCell = (params) => {
   return (
@@ -35,14 +35,8 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
   });
   const [averages, setAverages] = useState([]);
 
-  //stores the data filter has been applied
-  const filteredData = useMemo(() => {
-    if (Object.keys(filter).length > 0) {
-      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-      return filtered;
-    }
-    return data;
-  }, [filter, data]);
+  //gets the data when filter has been applied
+  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
   //stores the data filter has been applie
   // const filteredData = useMemo(() => {

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Grid, ThemeProvider, styled } from "@mui/material";
+import {ThemeProvider, styled } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/HistoricalDataTracker"
@@ -11,20 +11,22 @@ import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent"
 import FilterBar from "../FilterBar.js";
 import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import HistoricalDataGrid from "../../charts/DataGridMUI/HistoricalDataGrid";
+import GetFilteredData from "../GetFilteredData.js";
+import Grid from '@mui/material/Unstable_Grid2';
 
-const Root = styled('div')(({ theme }) => {
-  return ({
-    padding: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
+
+const Root = styled('div')(({ theme }) => ({
+    padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)} ${theme.spacing(3)}`,
     backgroundColor: theme.palette.background.default,
     color: theme.palette.text.primary,
-    height: '100%',
-    // display: 'flex',
-    // flex: 1,
-    // flexDirection: 'column',
-    // position: 'inherit',
-  });
-});
+    display: 'flex',
+    flexDirection: 'column',
+    // height:  `calc(100vh - ${verticalPadding}px)`, // subtract verticalPadding from 100vh
+    minHeight: '100vh',
+    boxSizing: 'border-box',
+    flexGrow: 1, //take up remaining space
+   // position: 'inherit',
+}));
 
 /*
 Grid spacing is split into 12 parts:
@@ -46,20 +48,13 @@ function getLatestDate(dateObject) {
       maxDateEntries = dateObject[date];
     }
   }
-  
   return { [maxDate]: maxDateEntries };
 }
 
-const DashboardSelectedReport14 = ({ data, handleClick }) => {
+const DashboardSelectedReport14 = ({ data }) => {
   const { filter } = useFilter();
-  //stores the data filter has been applied
-  const filteredData = useMemo(() => {
-    if (Object.keys(filter).length > 0) {
-      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-      return filtered;
-    }
-    return data;
-  }, [filter, data]);
+  //gets the data when filter is applied
+  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
   
   // let groupingColumn = 'datePulled'
   // const values = filteredData.map(item => item[groupingColumn])
@@ -80,13 +75,11 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
     accumulator[groupingValue].push(currentItem);
     return accumulator; //returns {key1:[...], key2:[...], ...}
   }, {});
-  // console.log('dataGrouped: ', dataGroupedByDate);
-
+  //latest date
   const latestDateObj = getLatestDate(dataGroupedByDate);
 
-  //get values (entries with associated date)
+  //get values (entries from latest date)
   const dataFromLastPullDate = Object.values(latestDateObj)[0];
-  // console.log(dataFromLastPullDate);
 
   // const listItems = data.map((item, index) => (
   //   <li key={index}> <pre>{JSON.stringify(item, null, 2)}</pre> </li>
@@ -97,16 +90,17 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
     {/* <FilterProvider> */}
       <Root>
         {/*Filter Bar*/}
-        <Grid item lg={12} md={12} sm={12} xl={12} xs={12}>
-          <FilterBar />
-        </Grid>
-        <Grid container spacing={3}>
-          <Grid item lg={12} sm={12} xl={12} xs={12}>
+        <Grid container spacing={{xs:2, s:2, md:3, lg:3}} >
+          <Grid lg={12} sm={12} xl={12} xs={12}>
+            <FilterBar />
+          </Grid>
+          
+          <Grid lg={12} sm={12} xl={12} xs={12}>
             <StatisticsCardGroup data={dataFromLastPullDate} />
           </Grid>
 
 
-          <Grid item lg={6} md={8} sm={12} xl={6} xs={12}>
+          <Grid lg={8} md={8} sm={12} xl={6} xs={12}>
             <TableGridCardComponent>
               <HistoricalDataGrid 
                 groupingColumn = 'code'
@@ -116,7 +110,7 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
             </TableGridCardComponent>
           </Grid>
           
-          <Grid item lg={6} md={4} sm={12} xl={6} xs={12}>
+          <Grid lg={4} md={4} sm={12} xl={6} xs={12}>
             <ChartCardComponent title = "Assets by Collection">
               <ApexCountByValueBarChart
                 targetColumn="shortName"
@@ -128,19 +122,19 @@ const DashboardSelectedReport14 = ({ data, handleClick }) => {
             </ChartCardComponent>
           </Grid> 
 
-          <Grid item lg={12} sm={12} xl={12} xs={12}>
+          <Grid lg={12} sm={12} xl={12} xs={12}>
             <ChartCardComponent title = 'Historical Data'>
               <HistoricalDataTracker
                 groupingColumn="datePulled"
                 targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
-                xAxisTitle="Date"
+                xAxisTitle="Date"s
                 yAxisTitle= "Completion (%)"
                 data={filteredData}
               />
             </ChartCardComponent>
           </Grid> 
 
-          <Grid item lg={12} sm={12} xl={12} xs={12}>
+          <Grid lg={12} sm={12} xl={12} xs={12}>
             <ExpandableTableCardComponent>
               <Report5WithMultiLevelBenchmarks data={dataFromLastPullDate}/>
             </ExpandableTableCardComponent>

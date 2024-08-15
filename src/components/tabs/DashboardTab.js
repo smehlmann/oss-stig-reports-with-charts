@@ -165,7 +165,6 @@ const formatData = (parsedData, selectedReportNum) => {
         entry.code = numToString(entry.code)
       }
     }
-
     //convert benchmarks to array for report5
     if (entry.benchmarks !== 'undefined') {
       entry.benchmarks = convertBenchmarksToArray(entry.benchmarks, selectedReportNum);
@@ -190,7 +189,7 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
   //keeps track of the selectedReport state
   const [selectedReport, setSelectedReport] = useState(null);
 
-  //console.log("formattedData: ", formattedData);
+  // console.log("formattedData: ", formattedData);
 
   const handleClick = (reportNum) =>  {
     setSelectedReport(reportNum);

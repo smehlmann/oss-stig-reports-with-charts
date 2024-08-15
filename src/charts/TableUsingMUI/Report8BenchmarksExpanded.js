@@ -12,9 +12,7 @@ import {
   ExpandedTableHead,
   ExpandedHeaderCell,
   ExpandedTableCell,
-  
 } from './StyledTableComponents';
-
 
 
 //format sysAdmin and primOwner to remove quotation marks
@@ -26,15 +24,17 @@ const formatString = (value) => {
 };
 
 function Report8BenchmarksExpanded({ data }) {
-  const { filter, updateFilter, clearFilter} = useFilter();
+  const { updateFilter, clearFilter} = useFilter();
   const [searchText, setSearchText] = useState("");
-  const [filteredChildRows, setFilteredChildRows] = useState({}); // State to hold filtered data
+  
+ // const [filteredChildRows, setFilteredChildRows] = useState({}); // State to hold filtered data
 
   const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
 
 
   const [parentRows, setParentRows] = useState([]);
-  //checks if data is array of objects. If so, groyup by 'benchmarks' property.
+
+  //checks if data is array of objects. If so, group by 'benchmarks' property.
   useEffect(() => {
     try {
       if (Array.isArray(data) && data.length > 0) {
@@ -63,10 +63,36 @@ function Report8BenchmarksExpanded({ data }) {
     }
   }, [data]);
 
+  
+  // //filter data for visualizations based on searchText
+  // useEffect(() => {
+  //   // Filter data for other visualizations based on searchText
+  //   const filteredData = {}; // Data for other visualizations after filtering
+  //   parentRows.forEach((parentRow) => {
+  //     // Apply search text filter
+  //     const filteredChildRows = parentRow.childRows.filter(
+  //       (childRow) =>
+  //         childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
+  //         childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
+  //         childRow.primOwner.toLowerCase().includes(searchText.toLowerCase())
+  //     );
+  //     // Add filtered data to the result
+  //     filteredData[parentRow.shortName] = filteredChildRows;
+  //   });
 
-  const handleSearchChange = (event) => {
-    setSearchText(event.target.value);
-  };
+  //   // Update filters for other visualizations
+  //   updateFilter({ searchText, childRows: filteredData });
+
+  //   // Set filtered child rows for the expandable table
+  //   setFilteredChildRows(filteredData);
+  // }, [searchText, parentRows, updateFilter]);
+  // const handleSearchChange = (event) => {
+  //   setSearchText(event.target.value);
+  // };
+
+
+
+  
   //code responsible for creating childRows in expanded section
   const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
     //filter child rows based on text in searchbar
@@ -136,7 +162,6 @@ function Report8BenchmarksExpanded({ data }) {
       renderChildRow={renderChildRow} 
       searchText={searchText}
       filterProperty="benchmarks"
-      onSearchChange={handleSearchChange}
       updateFilter={updateFilter}
       clearFilter={clearFilter}
     />

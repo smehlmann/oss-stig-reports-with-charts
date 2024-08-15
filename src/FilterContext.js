@@ -16,6 +16,10 @@
     //initializes filter as empty object
     const [filter, setFilters] = useState({});
   
+    //keeps track of switch's on/off status
+    const [isWebOrDBIncluded, setIsWebOrDBIncluded] = useState(true); //state for the switch
+
+  
     /* Updates the filter object by adding or removing property-value pairs. 
     newFilter = obj containing new filter key-value pair to be added/updated
     source= only needed to clarify if we're using an expandable table*/
@@ -60,6 +64,7 @@
     };
 
 
+    
     //remove single key from filter object
     const removeFilterKey = (key) => {
       setFilters(prevFilters => {
@@ -71,10 +76,15 @@
     const clearFilter = () => {
       setFilters({});
     };
+
+    //updates the isWebOrDBIncluded state when switch is toggled
+    const toggleWebOrDBFilter = (isChecked) => {
+      setIsWebOrDBIncluded(isChecked);
+    };
   
     return (
       //provides 'filter' state and 'updateFilter' to all components nested in FilterProvider
-      <FilterContext.Provider value={{ filter, updateFilter, removeFilterKey, clearFilter }}>
+      <FilterContext.Provider value={{ filter, updateFilter, removeFilterKey, clearFilter, isWebOrDBIncluded, toggleWebOrDBFilter  }}>
         {children}
       </FilterContext.Provider>
     );

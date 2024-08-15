@@ -3,6 +3,7 @@ import MultiLineChartBuilder from "./MultiLineChartBuilder.js";
 import CalculateArrayAvg from "../../../components/CalculateArrayAvg.js";
 import { useFilter } from "../../../FilterContext.js";
 import { getPercentageFormatterObject } from "../../../components/getPercentageFormatterObject.js";
+import GetFilteredData from "../../../components/GetFilteredData.js";
 
 const HistoricalDataTracker = ({ groupingColumn, targetColumns, chartTitle, xAxisTitle, yAxisTitle, data }) => {
   const { filter } = useFilter();
@@ -10,13 +11,8 @@ const HistoricalDataTracker = ({ groupingColumn, targetColumns, chartTitle, xAxi
   // const values = data.map(item => item[groupingColumn])
   // console.log(values instanceof Date);
 
-  const filteredData = useMemo(() => {
-    if (Object.keys(filter).length > 0) { 
-      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-      return filtered;
-    }
-    return data;
-  }, [filter, data]);
+  //gets the data when filter is applied
+  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
   const [averages, setAverages] = useState([]);
 

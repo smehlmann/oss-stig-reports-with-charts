@@ -2,18 +2,13 @@ import React, { useMemo } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
-
+import GetFilteredData from "../../../components/GetFilteredData.js";
 
 const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
   const { filter, updateFilter } = useFilter();
 
-  const filteredData = useMemo(() => {
-    if (Object.keys(filter).length > 0) { 
-      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-      return filtered;
-    }
-    return data;
-  }, [filter, data]);
+  //gets the data when filter is applied
+  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
   //ValueCountMap -> count the number of times a value appears in the targetColumn
   const countMap = useMemo(() => ValueCountMap(filteredData, targetColumn), [filteredData, targetColumn]);

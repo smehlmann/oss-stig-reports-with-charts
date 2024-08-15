@@ -4,20 +4,16 @@ import ValueCountMap from "../../../components/ValueCountMap.js";
 // import PieChartBuilder from "./PieChartBuilder.js";
 import ApexDonutChartBuilder from "./ApexDonutChartBuilder.js";
 import { useFilter } from "../../../FilterContext.js";
+import GetFilteredData from "../../../components/GetFilteredData.js";
+
 //"data" is an array of objects. 
 
 const ApexDonutCountChart = ({ targetColumn, legendName, data }) => {
 
   //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
-  //stores the data filter has been applied
-  const filteredData = useMemo(() => {
-    if (Object.keys(filter).length > 0) {
-      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-      return filtered;
-    }
-    return data;
-  }, [filter, data]);
+  //gets the data when filter is applied
+  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
 
   //donutLabels = value, donutValues = number of occurrences of value

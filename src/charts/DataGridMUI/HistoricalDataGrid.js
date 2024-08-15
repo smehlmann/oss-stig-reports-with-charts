@@ -5,9 +5,9 @@ import { LinearProgress } from '@mui/material';
 import { useFilter } from '../../FilterContext';
 import DataGridBuilder from './DataGridBuilder';
 import ValueCountMap from "../../components/ValueCountMap.js";
-
 import {  getGridNumericOperators } from '@mui/x-data-grid';
 import DropdownInputValue from './DropdownInputValue';
+import GetFilteredData from "../../components/GetFilteredData.js";
 
 const renderProgressBarCell = (params) => {
   return (
@@ -26,7 +26,6 @@ const renderProgressBarCell = (params) => {
   );
 };
 
-
 function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
   //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
@@ -35,14 +34,9 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
   });
   const [averages, setAverages] = useState([]);
 
-  const filteredData = useMemo(() => {
-    if (Object.keys(filter).length > 0) {
-      const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-      return filtered;
-    }
-    return data;
-  }, [filter, data]);
-
+  //gets the data when filter is applied
+  const filteredData = useMemo(() => GetFilteredData(data, filter) || [], [filter, data]);
+  
   //stores the data filter has been applie
   // const filteredData = useMemo(() => {
   //   console.log('Filtering data with filter:', filter);
@@ -58,45 +52,38 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
   // }, [data, filter]);
 
 
-  const totalChecks = useMemo(() => {
-    return filteredData.reduce((sum, item) => sum + (item.checks || 0), 0);
-  }, [filteredData]);
-
-
   useEffect(() => {
     if (Array.isArray(filteredData) && filteredData) {
       //groups the filteredData by the groupingColumn by making an object whose keys=values in grouping column, values per key=array of records belonging to that group. currentItem = current item being processed. (ie. groupingColumn = code --> {'10': [all records belonging to code 10], ...}) 
       const dataGroupedByCode = filteredData.reduce((accumulator, currentItem) => {
         //get groupingColumn value in our currentItem
         const groupingValue = currentItem[groupingColumn];
-        //if groupingValue exists as key in accumulator
+        //if groupingValue not key in accumulator
         if (!accumulator[groupingValue]) {
-          //if not, add key to accumulator with empty array as value.
+          //add key to accumulator with empty array as value.
           accumulator[groupingValue] = []; 
         }
         //add the currentItem to the array to associated key.
         accumulator[groupingValue].push(currentItem);
-        return accumulator; //returns {key1:[...], key2:[...], ...}
+        return accumulator; 
       }, {});
-      
-      // console.log("grouped by code: ", dataGroupedByCode);
-      /*large object where we have {codeValue: {assessedProdSum:_, submittedProdSum:[],...}, codeValue2:{...}, }
+      /*groupedAverages = large object where we have {codeValue: {assessedProdSum:_, submittedProdSum:[],...}, codeValue2:{...}, }
       groupingVal is codeVal, dataPerGroup is array of entries where key=codeValue
-      acc stores the calculated sum of products for each entry within the array of entries grouped by the groupingColumn (ie. products of entries in the values array from dataGroupedByCode)
-      basically [groupingValue, dataPerGroup] destructures entries of dataGroupedByCode into {grouingVal: dataPerGroup}
+      acc stores the calculated sum of products for each entry within the array of grouped entries (ie. products of entries in the values array from dataGroupedByCode).
+      [groupingValue, dataPerGroup] destructures objects in  dataGroupedByCode into {groupingVal: dataPerGroup}
       */
       let groupedAverages = Object.entries(dataGroupedByCode).reduce((acc, [groupingValue, dataPerGroup]) => {
-        let assessedProductSum = 0; //contains (checks[i]*assessed[i])
-        let submittedProductSum = 0;
-        let acceptedProductSum = 0;
-        let rejectedProductSum = 0;
+        let assessedProductSum = 0; //SUM(checks[i]*assessed[i])
+        let submittedProductSum = 0; //SUM (checks[i]*submitted[i])
+        let acceptedProductSum = 0; //SUM(checks[i]*submitted[i])
+        let rejectedProductSum = 0; //SUM (checks[i]*rejected[i])
         let assetCount = 0;
         let totalChecksPerCode = 0; //will store the total checks per code
         let pullDate = new Date();
 
         //for each entry in dataPerGroup
         dataPerGroup.forEach(item => {
-          //accesses nested object (codeVal: entries)- and extracts product properties from said object and assigns them corresponding variables 
+          //accesses nested object (codeVal: entries) and extracts product properties from said object and assigns them corresponding variables 
           const { checks, assessed, submitted, accepted, rejected, asset, datePulled} = item;
 
           //sum of checks for each code
@@ -109,14 +96,12 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
           //get latest date
           pullDate = datePulled;
 
-          //for each entry in my value array, calculate the checks[i] * assessed[i] and push it to assessedProducts array. 
+          //for each entry in my entry, calculate the SUM(checks[i] * assessed[i]), SUM(checks[i]*submitted[i])...
           assessedProductSum += (checks * (assessed || 0));
           submittedProductSum += (checks * (submitted || 0));
           acceptedProductSum += (checks * (accepted || 0));
           rejectedProductSum += (checks * (rejected || 0));
         });
-
-        console.log('datePulled: ', typeof pullDate);
 
         //calculate the averages (ProductSum/totalChecksPerCode)
         const avgAssessed = assessedProductSum/totalChecksPerCode;
@@ -135,12 +120,11 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
           avgAccepted,
           avgRejected,
         };
-        console.log("avg: ", acc);
         return acc; //final accumulator = groupedAverages
       }, {});
 
 
-      //convert groupedProducts object to array
+      //convert groupedAverages object to array
       const groupedAveragesArray = Object.keys(groupedAverages).map(groupingValue => {
         return {
           [groupingColumn]: groupingValue,
@@ -150,24 +134,23 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
       
       setAverages(groupedAveragesArray);
     }
-  }, [filteredData, groupingColumn, totalChecks]);
+  }, [filteredData, groupingColumn]);
 
-  /*
-  FIX division because we shouldn't be dividing by totalchecks. 
-  we should be dividing by sum of checks for each code.
-  
-  */
+
   const handleRowClick = (params) => {
     const selectedValue = params.row[groupingColumn]; 
     updateFilter({ [groupingColumn]: selectedValue });
   };
 
+  //extract operator for filtering all visuals
   const operatorsForFiltering = getGridNumericOperators()
   .filter(op => op.value !== 'isAnyOf')
   .map(op => ({
     ...op,
     InputComponent: DropdownInputValue,
   }));
+
+
   //headers for columns
   const tableColumns = [
     { field: groupingColumn , 
@@ -182,11 +165,7 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
       wrap: true,
       flex: 1,
       type: 'number',
-      // renderCell: (params) => (
-      //   <div>
-      //     {numeral(params.value * 100).format('0.00')}%
-      //   </div>
-      // ),
+
       filterOperators: operatorsForFiltering,
       renderCell: renderProgressBarCell,
     },
@@ -195,11 +174,6 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
       headerName: 'Avg of Submitted',
       flex: 1,
       type: 'number',
-      // renderCell: (params) => (
-      //   <div>
-      //     {numeral(params.value * 100).format('0.00')}%
-      //   </div>
-      // ),
       filterOperators: operatorsForFiltering,
       renderCell: renderProgressBarCell,
     },
@@ -207,12 +181,7 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
       field: 'avgAccepted',
       headerName: 'Avg of Accepted',
       flex: 1,
-      type: 'number', // Set the type to 'number' for proper filtering
-      // renderCell: (params) => (
-      //   <div>
-      //     {numeral(params.value * 100).format('0.00')}%
-      //   </div>
-      // ),
+      type: 'number',
       filterOperators: operatorsForFiltering,
       renderCell: renderProgressBarCell,
     },
@@ -221,11 +190,6 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
       headerName: 'Avg of Rejected',
       flex: 1,
       type: 'number',
-      // renderCell: (params) => (
-      //   <div>
-      //     {numeral(params.value * 100).format('0.00')}%
-      //   </div>
-      // ),
       filterOperators: operatorsForFiltering,
       renderCell: renderProgressBarCell,
     },

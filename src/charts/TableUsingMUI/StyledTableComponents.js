@@ -49,15 +49,12 @@ export const SearchTextField = styled(TextField)(({ theme }) => ({
       },
     },
   },
-
-
   //initial rendering (before hover or focus)
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
       borderColor: 'transparent', 
       borderRadius: '25px', 
       // backgroundColor: alpha(theme.palette.primary.light, 0.15),
-
     },
     // Adjust border color on hover if needed
     '&:hover fieldset': {
@@ -99,14 +96,19 @@ export const StyledTableHead = styled(TableHead)(({ theme }) => ({
   height: "55px",
   margineft: '0',
   alignItems: 'center',
+  border: 'none',
+  width: '100%',
 }));
+
 //actual cells in the header row (text)
 export const StyledHeaderCell = styled(TableCell)(({ theme }) => ({
   // fontSize: '24px',
   fontSize: theme.typography.h3.fontSize,
   fontWeight: 'bold',
+  border: 'none'
 }));
 
+//parent rows
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:hover": {
     backgroundColor: theme.palette.action.selected,
@@ -120,9 +122,7 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
   "&.second-level-child-row": {
     border: 'none', 
-
-  }
-  
+  } 
 }));
 
 //normal table cell, basically outermost rows (controls text)
@@ -213,7 +213,6 @@ export const ExpandedFirstLevelHeaderCell = styled(TableCell)(({ theme }) => ({
     backgroundColor:  theme.palette.secondary.light,
     color: theme.palette.text.primary,
   },
-  
 }));
 
 
@@ -233,7 +232,6 @@ export const Expanded2ndLevelHeaderCell = styled(TableCell)(({ theme }) => ({
 }));
 
 
-
 export const ExpandedFirstLevelRow = styled(TableRow)(({ theme }) => ({
   "&:hover": {
     backgroundColor: theme.palette.action.selected,
@@ -246,7 +244,6 @@ export const ExpandedFirstLevelRow = styled(TableRow)(({ theme }) => ({
   },
   "&.second-level-child-row": {
     border: 'none', 
-
   }
   
 }));

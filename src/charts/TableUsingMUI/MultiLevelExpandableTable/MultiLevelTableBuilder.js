@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import TablePagination from '@mui/material/TablePagination';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-// import { styled } from '@mui/material/styles';
 import { useFilter } from '../../../FilterContext';
 
 import {
@@ -34,9 +33,9 @@ function Row({ parentRow, columns, renderChildRow}) {
   const { filter, updateFilter, removeFilterKey } = useFilter();
 
 
-  const listItems = columns.map((item) => (
-    <li key={item.id}> </li>
-  ));
+  // const listItems = columns.map((item) => (
+  //   <li key={item.id}> </li>
+  // ));
   
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -79,7 +78,6 @@ function Row({ parentRow, columns, renderChildRow}) {
     });
   };
 
-  
 
   return (
     //renders parent row

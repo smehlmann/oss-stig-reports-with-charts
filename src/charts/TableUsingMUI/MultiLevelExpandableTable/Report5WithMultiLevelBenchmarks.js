@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import MultiLevelTableBuilder from "./MultiLevelTableBuilder.js";
 import TableBody from '@mui/material/TableBody';
-import { useFilter } from '../../../FilterContext.js';
+// import { useFilter } from '../../../FilterContext.js';
 import {useTheme} from "../../../theme.js"
 // import { useTheme } from '@mui/material/styles';
 import {
@@ -21,10 +21,9 @@ const formatString = (value) => {
 };
 
 function Report5WithMultiLevelBenchmarks({ data }) {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const theme = useTheme();
   const [searchText, setSearchText] = useState("");
-  // const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
   const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
 
   //checks if data is array of objects. If so, group by 'shortName' property.
@@ -32,10 +31,10 @@ function Report5WithMultiLevelBenchmarks({ data }) {
     try {
       if (Array.isArray(data) && data.length > 0) {
       const dataGroupedByShortName = data.reduce((accumulator, currentValue) => {
-        //the accumulator is an object whose properties (or keys) the values for shortName
-        if (!accumulator[currentValue.shortName]) {
+        //the accumulator is an object whose properties (or keys)= the values for shortName. 
+        if (!accumulator[currentValue.shortName]) { 
           accumulator[currentValue.shortName] = [];  //each property is assigned empty array  
-        }  //ie. accumulator = {'B3COI': [], 'NCCM':[]...}
+        }  //ie. accumulator = {'B3COI': [], 'NCCM-S':[]...}
         //populates the empty array associated with a given key
         accumulator[currentValue.shortName].push({
           asset: currentValue.asset,
@@ -95,7 +94,6 @@ function Report5WithMultiLevelBenchmarks({ data }) {
       <StyledChildTableContainer sx={{ margin: 1 }}>
         <StyledTable size="small" aria-label="child table">
           <ExpandedTableHead sx={{ border: 'none', backgroundColor: theme.palette.secondary.main}}>
-             
             <ExpandedFirstLevelHeaderCell>Asset</ExpandedFirstLevelHeaderCell>
             <ExpandedFirstLevelHeaderCell >Sys Admin</ExpandedFirstLevelHeaderCell>
             <ExpandedFirstLevelHeaderCell >Primary Owner</ExpandedFirstLevelHeaderCell>
@@ -104,7 +102,7 @@ function Report5WithMultiLevelBenchmarks({ data }) {
           <TableBody>
             {displayedRows.map((childRow, index) => (
                 <NestedSecondLevelChildRow key={index} childRow={childRow} />
-              ))}
+            ))}
           </TableBody>
         </StyledTable>
       </StyledChildTableContainer>

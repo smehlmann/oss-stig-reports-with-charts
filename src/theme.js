@@ -1,19 +1,5 @@
 import {  createTheme, useTheme } from "@mui/material";
-/*
-from logo
-const palette = [
-  '#0000F0',
-  '#183090',
-  '#4860FF',
-  '#A8A8F0',
-  // '#6078D8',
-  '#7890FF',
-  '#4860D9',
-  '#3048FF',
-  '#6060A8',
-  '#6078FF',
-];
-*/
+
 const palette = [
   '#3048ff',
   '#986af9',
@@ -80,27 +66,27 @@ const theme = createTheme({
     fontFamily: 'Segoe UI, Arial, sans-serif',
     h1: { 
       fontSize: '2.5rem', // about 40 px
-      fontWeight: 300,
+      fontWeight: 800,
       letterSpacing: '-0.01562em',
     },
     h2: { 
       fontSize: '2rem', //about 32 px
-      fontWeight: 300,
+      fontWeight: 700,
       letterSpacing: '-0.00833em',
     },
     h3: { 
       fontSize: '1.75rem', //about 28px
-      fontWeight: 400,
+      fontWeight: 500,
       letterSpacing: '0em',
     },
     h4: { 
       fontSize: '1.5rem', //about 24px
-      fontWeight: 400,
+      fontWeight: 500,
       letterSpacing: '0.00735em',
     },
     h5: { 
       fontSize: '1.25rem', //roughly 20px
-      fontWeight: 400,
+      fontWeight: 500,
       letterSpacing: '0em',
     },
     h6: { 
@@ -142,7 +128,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '8px',
+          borderRadius: '10px',
           textTransform: 'none',
           fontSize: '0.875rem',
           padding: '8px 16px',
@@ -171,7 +157,21 @@ export default theme;
 //export hook 
 export { useTheme, palette };
 
-
+/*
+from logo
+const palette = [
+  '#0000F0',
+  '#183090',
+  '#4860FF',
+  '#A8A8F0',
+  // '#6078D8',
+  '#7890FF',
+  '#4860D9',
+  '#3048FF',
+  '#6060A8',
+  '#6078FF',
+];
+*/
 
 //maybe bg = #303060 
 //current bg = #323447

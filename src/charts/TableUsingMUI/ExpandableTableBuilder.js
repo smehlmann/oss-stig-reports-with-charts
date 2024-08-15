@@ -19,7 +19,6 @@ import {
   StyledTableCell,
   StyledTable,
   ExpandedContentCell,
-  // SearchBar
   SearchBarContainer,
   SearchTextField,
 } from './StyledTableComponents';
@@ -75,26 +74,27 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
     });
   };
 
-  useEffect(() => {
-    // Update filter based on the search text in the expanded section's table
-    if (open && searchText.trim() !== "") {
-      const filteredChildRows = parentRow.childRows.filter(
-        (childRow) =>
-          childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
-          childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
-          childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
-          childRow.accepted.toString().includes(searchText)
-      );
 
-      //merge new criteria to filter with old
-      if (filteredChildRows.length > 0) {
-        updateFilter((prevFilter) => ({
-          ...prevFilter,
-          childRows: filteredChildRows
-        }));
-      } 
-    }
-  }, [open, searchText, parentRow, updateFilter, removeFilterKey]);
+  // useEffect(() => {
+  //   // Update filter based on the search text in the expanded section's table
+  //   if (open && searchText.trim() !== "") {
+  //     const filteredChildRows = parentRow.childRows.filter(
+  //       (childRow) =>
+  //         childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
+  //         childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
+  //         childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
+  //         childRow.accepted.toString().includes(searchText)
+  //     );
+
+  //     //merge new criteria to filter with old
+  //     if (filteredChildRows.length > 0) {
+  //       updateFilter((prevFilter) => ({
+  //         ...prevFilter,
+  //         childRows: filteredChildRows
+  //       }));
+  //     } 
+  //   }
+  // }, [open, searchText, parentRow, updateFilter, removeFilterKey]);
 
   return (
     //renders parent row
@@ -122,61 +122,59 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
             style={{ paddingBottom: 0, paddingTop: 0, }}  // colSpan={columns.length + 1}
           >
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1,  marginLeft: 0,  overflow: "hidden" }}>
-                <Box sx={{display: 'flex', flexDirection: 'column'}}>
-                  <SearchBarContainer>
-                    <SearchTextField
-                      placeholder = 'Search...'
-                      inputProps={{ 'aria-label': 'search' }}
-                      InputProps = {{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <SearchIcon sx={{color: '#000'}}/>
-                          </InputAdornment>
-                        ),
-                      }}
-                      id = "search-bar"
-                      type = "search"
-                      // variant = "outlined"
-                      value = {searchText}
-                      onChange = {handleSearchChange}
-                    >
-                    </SearchTextField>
-                  </SearchBarContainer>
-                  {/* RENDERS THE mini-table within expanded row if not null*/}
-                  {renderChildRow ? (
-                    // This part calls the renderChildRow function and passes parentRow, page, rowsPerPage, and searchText as arguments. This function should return the JSX for the mini-table.
-                    <>
-                      {renderChildRow(parentRow, page, rowsPerPage, searchText)}
-                      <TablePagination
-                        rowsPerPageOptions={[7, 14, 21]}
-                        component="div"
-                        count={parentRow.childRows.filter(childRow => {
-                          const searchValue = searchText.toLowerCase();
-                          const searchValueAsNumber = parseFloat(searchValue);
-  
-                          const formattedAccepted = (childRow.accepted * 100).toFixed(2);
-                          const acceptedMatches = formattedAccepted.startsWith(searchValue) || childRow.accepted.toString().includes(searchValueAsNumber.toString());
-  
-                          return (
-                            childRow.asset.toLowerCase().includes(searchValue) ||
-                            childRow.sysAdmin.toLowerCase().includes(searchValue) ||
-                            childRow.primOwner.toLowerCase().includes(searchValue) ||
-                            acceptedMatches
-                          );
-                        }).length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
-                    </>
-                  ) : (
-                    <Typography variant="h6" gutterBottom component="div">
-                      No child row renderer provided
-                    </Typography>
-                  )}
-                </Box>
+              <Box sx={{ display: 'flex', flexDirection: 'column', margin: 1,  marginLeft: 0,  overflow: "hidden" }}>
+                <SearchBarContainer>
+                  <SearchTextField
+                    placeholder = 'Search...'
+                    inputProps={{ 'aria-label': 'search' }}
+                    InputProps = {{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon sx={{color: '#000'}}/>
+                        </InputAdornment>
+                      ),
+                    }}
+                    id = "search-bar"
+                    type = "search"
+                    // variant = "outlined"
+                    value = {searchText}
+                    onChange = {handleSearchChange}
+                  >
+                  </SearchTextField>
+                </SearchBarContainer>
+                {/* RENDERS THE mini-table within expanded row if not null*/}
+                {renderChildRow ? (
+                  // This part calls the renderChildRow function and passes parentRow, page, rowsPerPage, and searchText as arguments. This function should return the JSX for the mini-table.
+                  <>
+                    {renderChildRow(parentRow, page, rowsPerPage, searchText)}
+                    <TablePagination
+                      rowsPerPageOptions={[7, 14, 21]}
+                      component="div"
+                      count={parentRow.childRows.filter(childRow => {
+                        const searchValue = searchText.toLowerCase();
+                        const searchValueAsNumber = parseFloat(searchValue);
+
+                        const formattedAccepted = (childRow.accepted * 100).toFixed(2);
+                        const acceptedMatches = formattedAccepted.startsWith(searchValue) || childRow.accepted.toString().includes(searchValueAsNumber.toString());
+
+                        return (
+                          childRow.asset.toLowerCase().includes(searchValue) ||
+                          childRow.sysAdmin.toLowerCase().includes(searchValue) ||
+                          childRow.primOwner.toLowerCase().includes(searchValue) ||
+                          acceptedMatches
+                        );
+                      }).length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </>
+                ) : (
+                  <Typography variant="h6" gutterBottom component="div">
+                    No child row renderer provided
+                  </Typography>
+                )}
               </Box>
             </Collapse>
           </ExpandedContentCell>
