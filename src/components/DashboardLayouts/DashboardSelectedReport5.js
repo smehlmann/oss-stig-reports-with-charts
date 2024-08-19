@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { ThemeProvider } from "@mui/material";
+import { ThemeProvider, Box } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
@@ -49,12 +49,20 @@ const DashboardSelectedReport5 = ({ data }) => {
               px: { lg: 5, xl: 10 }, // Padding-left and padding-right for lg and xl screens
             }}
           >
-            <Grid lg={12} sm={12} xl={12} xs={12}>
+            {/* <Grid lg={12} sm={12} xl={12} xs={12} sx={{ mb: 0 }}>
               <FilterBar data={filteredData} />
             </Grid>
-            {/* Stats cards */}
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <StatisticsCardGroup data={filteredData} />
+            </Grid> */}
+
+            <Grid item lg={12} sm={12} xl={12} xs={12} sx={{ mb: 0 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <FilterBar data={filteredData} />
+                <Box sx={{ mt: 0 }}> {/* No spacing between FilterBar and StatisticsCardGroup */}
+                  <StatisticsCardGroup data={filteredData} />
+                </Box>
+              </Box>
             </Grid>
             
             {/* data grid */}

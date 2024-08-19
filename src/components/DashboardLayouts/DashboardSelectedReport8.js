@@ -8,10 +8,10 @@ import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent"
 import theme from "../../theme";
 // import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import {  useFilter } from "../../FilterContext";
-import FilterBar from "../FilterBar.js";
 import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
+// import FilterBar from "../FilterBar.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -44,9 +44,9 @@ const DashboardSelectedReport5 = ({ data }) => {
         <DashboardRoot>
 
           <Grid container spacing={{xs:2, s:2, md:3, lg:3}} >
-            <Grid lg={12} sm={12} xl={12} xs={12}>
-              <FilterBar />
-            </Grid>
+            {/* <Grid lg={12} sm={12} xl={12} xs={12}>
+              <FilterBar data={filteredData} />
+            </Grid> */}
 
             {/* <Grid lg={12} sm={12} xl={12} xs={12}>
               <StatisticsCardGroup data={filteredData} />

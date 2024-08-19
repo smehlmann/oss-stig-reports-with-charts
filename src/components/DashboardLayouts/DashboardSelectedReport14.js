@@ -90,7 +90,7 @@ const DashboardSelectedReport14 = ({ data }) => {
         {/*Filter Bar*/}
         <Grid container spacing={{xs:2, s:2, md:3, lg:3}} >
           <Grid lg={12} sm={12} xl={12} xs={12}>
-            <FilterBar />
+            <FilterBar data={dataFromLastPullDate} />
           </Grid>
           
           <Grid lg={12} sm={12} xl={12} xs={12}>

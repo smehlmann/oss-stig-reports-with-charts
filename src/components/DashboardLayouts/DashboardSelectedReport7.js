@@ -7,10 +7,10 @@ import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
 import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import FromTwoPropertiesBarChart from "../../charts/BarCharts/ApexCharts/FromTwoPropertiesBarChart";
-import FilterBar from "../FilterBar.js";
 import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
+// import FilterBar from "../FilterBar.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -24,19 +24,9 @@ Grid spacing is split into 12 parts:
 const DashboardSelectedReport7 = ({ data }) => {
 
   //useFilter contains 'filter' state and when it's updated
-  const { filter, isWebOrDBIncluded} = useFilter();
-  
+  const { filter } = useFilter();
   //gets the data when filter is applied
-  const filteredData = useMemo(() => {
-    let result = GetFilteredData(data, filter);
-
-    if (!isWebOrDBIncluded) {
-      result = result.filter(item => !item.cklWebOrDatabase);
-    }
-
-    return result;
-  }, [filter, data, isWebOrDBIncluded]);
-  
+  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -47,9 +37,9 @@ const DashboardSelectedReport7 = ({ data }) => {
             spacing={{xs:2, s:2, md:3, lg:3}} 
             sx={{px: {lg:5, xl: 10}}}
           >
-            <Grid lg={12} sm={12} xl={12} xs={12}>
-              <FilterBar />
-            </Grid>
+            {/* <Grid lg={12} sm={12} xl={12} xs={12}>
+              <FilterBar data={filteredData} />
+            </Grid> */}
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <StatisticsCardGroup data={filteredData} />
             </Grid>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 import { useFilter } from '../FilterContext';
 import { Box, Chip, Button, Switch, FormControlLabel } from '@mui/material';
 import { useTheme } from "../theme";
@@ -12,14 +12,34 @@ const FilterBar = ({data}) => {
     removeFilterKey(key);
   };
 
+  const getChipLabel = useCallback(
+    (label) => {
+      switch(label) {
+        case 'shortName':
+          return 'Package Name';
+        case 'code':
+          return 'Code';
+        case 'sysAdmin':
+          return 'System Admin';
+        case 'primOwner':
+          return 'Primary Owner';
+        case 'emass':
+          return 'eMASS';
+        case 'collectionName':
+          return 'Collection';
+        
+        default: 
+          return '';
+      }
+    },
+    ([]),
+  );
 
-  
-  // if (Object.keys(filter).length === 0) {
-  //   return null;
-  // }
+  const sysAdminsList = [...new Set(data.map(item => item.sysAdmin).filter(sysAdmin => sysAdmin != null))];
 
-  const uniqueSysAdmins = [...new Set(data.map(item => item.sysAdmin).filter(sysAdmin => sysAdmin != null))];;
+  const primOwnersList = [...new Set(data.map(item => item.primOwner).filter(primOwner => primOwner != null))];
 
+  // const packageShortNamesList = [...new Set(data.map(item => item.shortName).filter(shortName => shortName != null))];
   // const uniqueSysAdmins = data.map(item => item.sysAdmin);
   // console.log(uniqueSysAdmins);
 
@@ -27,8 +47,9 @@ const FilterBar = ({data}) => {
     <Box 
       display="flex" 
       justifyContent="space-between" 
+      height= '150'
       // alignItems="stretch"  // Ensure children take full height
-      sx={{gap: 2, backgroundColor: '#a931a3' }}
+      sx={{gap: 1, marginBottom: 0}}
     >
       {/* Container for filter chips and clear button */}
       <Box component='span' 
@@ -42,7 +63,10 @@ const FilterBar = ({data}) => {
         {Object.keys(filter).map((key) => (
           <Chip
             key={key}
-            label={key}
+            // color= '#6476FF'  //primary.light
+            variant='outlined'
+            color='primary'
+            label={getChipLabel(key)}
             onDelete={() => handleRemoveFilter(key)}
             style={{ marginRight: '12px' }}
           />
@@ -61,10 +85,18 @@ const FilterBar = ({data}) => {
         </Button>
       </Box>
 
-      {/* Dropdown for SysAdmins */}
+      {/* Dropdown filter lists */}
       <Box sx={{padding:'10px'}}>
-        <SearchDropdownFilterList targetProperty='sysAdmin' valueOptions={uniqueSysAdmins} />
+        <SearchDropdownFilterList targetProperty='sysAdmin' label='System Admin' valueOptions={sysAdminsList} />
       </Box>
+      
+      <Box display='flex' sx={{padding:'10px'}}>
+        <SearchDropdownFilterList targetProperty='primOwner' label='Primary Owner' valueOptions={primOwnersList} />
+      </Box>
+
+      {/* <Box sx={{padding:'10px'}}>
+        <SearchDropdownFilterList targetProperty='shortName' label='Package Name' valueOptions={packageShortNamesList} />
+      </Box> */}
 
 
       {/* Switch for DB/Web inclusion */}

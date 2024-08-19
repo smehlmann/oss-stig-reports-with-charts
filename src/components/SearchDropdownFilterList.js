@@ -29,7 +29,7 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
 }));
 
 
-const SearchDropdownFilterList = ({targetProperty, options }) => {
+const SearchDropdownFilterList = ({targetProperty, label, valueOptions }) => {
   const {filter, updateFilter, removeFilterKey } = useFilter();
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -55,20 +55,21 @@ const SearchDropdownFilterList = ({targetProperty, options }) => {
       <CustomAutocomplete
         value={selectedOption}
         onChange={handleSearchChange}
-        options={options}
+        options={valueOptions}
         getOptionLabel={(option) => option || ''}
         renderInput={(params) => (
           <TextField
             {...params}
-            // label="System Admin"
-            placeholder="System Admin"
+            placeholder= {label}
             // variant="filled"
             InputLabelProps={{
               style: { 
                 color: selectedOption ? 'black' : 'grey' }, // Change the color based on selection
             }}
             sx={{
-              borderRadius: '10px'}}
+              borderRadius: '10px',
+              display: 'block',
+            }}
           />
         )}
         isOptionEqualToValue={(option, value) => option === value}
