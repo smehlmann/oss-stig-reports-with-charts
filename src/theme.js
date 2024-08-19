@@ -131,7 +131,6 @@ const theme = createTheme({
           borderRadius: '10px',
           textTransform: 'none',
           fontSize: '0.875rem',
-          padding: '8px 16px',
         },
       },
     },

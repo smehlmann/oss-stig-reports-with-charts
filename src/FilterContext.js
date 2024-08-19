@@ -81,10 +81,13 @@
     const toggleWebOrDBFilter = (isChecked) => {
       setIsWebOrDBIncluded(isChecked);
     };
+
+
+    
   
     return (
       //provides 'filter' state and 'updateFilter' to all components nested in FilterProvider
-      <FilterContext.Provider value={{ filter, updateFilter, removeFilterKey, clearFilter, isWebOrDBIncluded, toggleWebOrDBFilter  }}>
+      <FilterContext.Provider value={{ filter, updateFilter, removeFilterKey, clearFilter, isWebOrDBIncluded, toggleWebOrDBFilter }}>
         {children}
       </FilterContext.Provider>
     );

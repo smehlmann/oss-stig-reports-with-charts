@@ -160,10 +160,11 @@ function DataGridBuilder({ data, columns, onRowClick, filterModel,onFilterModelC
       width: '100%',
       display: 'flex',
       height: '100%',
-      maxWidth: 'auto',
+      // maxWidth: 'auto',
       // maxHeight: '100%', // Ensure it doesn't grow beyond this height
+      // overflow: 'hidden',
       overflowY: 'hidden',
-      margin: "0 auto",
+
       flexDirection: 'column',
     }}>
       

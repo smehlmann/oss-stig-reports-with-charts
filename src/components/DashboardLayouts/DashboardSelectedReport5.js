@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { ThemeProvider, styled } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
@@ -13,20 +13,7 @@ import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByC
 import GetFilteredData from "../GetFilteredData.js";
 import FilterMenu from "../FilterMenu.js";
 import Grid from '@mui/material/Unstable_Grid2';
-
-
-const Root = styled('div')(({ theme }) => ({
-    padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)} ${theme.spacing(3)}`,
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.text.primary,
-    display: 'flex',
-    flexDirection: 'column',
-    // height:  `calc(100vh - ${verticalPadding}px)`, // subtract verticalPadding from 100vh
-    minHeight: '100vh',
-    boxSizing: 'border-box',
-    flexGrow: 1, //take up remaining space
-   // position: 'inherit',
-}));
+import { DashboardRoot } from "./DashboardRoot.js"; 
 
 /*
 Grid spacing is split into 12 parts:
@@ -46,35 +33,24 @@ const DashboardSelectedReport5 = ({ data }) => {
     let result = GetFilteredData(data, filter);
 
     if (!isWebOrDBIncluded) {
-      result = result.filter(item => item.cklWebOrDatabase);
+      result = result.filter(item => !item.cklWebOrDatabase);
     }
 
     return result;
   }, [filter, data, isWebOrDBIncluded]);
   
-    // const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
-
-  //get objs whose cklWebOrDatabase val != empty
-  // const WebOrDBAssets = filteredData.reduce((accumulator, currentObj) => { 
-  //   //if currentObj's prop is not empty/null
-  //   if(currentObj['cklWebOrDatabase']) {
-  //     //add to accumulator array
-  //     accumulator.push(currentObj);
-  //   } 
-  //   return accumulator;
-  // }, []);
-  // console.log("count: ", WebOrDBAssets);
-
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <FilterProvider> */}
-        <Root>
-          {/*Filter Bar*/}
-
-          <Grid container spacing={{xs:2, s:2, md:3, lg:3}} >
+        <DashboardRoot>
+          <Grid container 
+            spacing={{xs:2, s:2, md:3, lg:3}}
+            sx={{
+              px: { lg: 5, xl: 10 }, // Padding-left and padding-right for lg and xl screens
+            }}
+          >
             <Grid lg={12} sm={12} xl={12} xs={12}>
-              <FilterBar />
+              <FilterBar data={filteredData} />
             </Grid>
             {/* Stats cards */}
             <Grid lg={12} sm={12} xl={12} xs={12}>
@@ -111,7 +87,7 @@ const DashboardSelectedReport5 = ({ data }) => {
             </Grid> 
 
           </Grid> 
-        </Root>
+        </DashboardRoot>
     </ThemeProvider>
   );
 };

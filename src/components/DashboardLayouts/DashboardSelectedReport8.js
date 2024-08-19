@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import {ThemeProvider, styled } from "@mui/material";
+import {ThemeProvider } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart"
 import Report8BenchmarksExpanded from "../../charts/TableUsingMUI/Report8BenchmarksExpanded";
@@ -11,19 +11,7 @@ import {  useFilter } from "../../FilterContext";
 import FilterBar from "../FilterBar.js";
 import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
-
-const Root = styled('div')(({ theme }) => ({
-    padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)} ${theme.spacing(3)}`,
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.text.primary,
-    display: 'flex',
-    flexDirection: 'column',
-    // height:  `calc(100vh - ${verticalPadding}px)`, // subtract verticalPadding from 100vh
-    minHeight: '100vh',
-    boxSizing: 'border-box',
-    flexGrow: 1, //take up remaining space
-   // position: 'inherit',
-}));
+import { DashboardRoot } from "./DashboardRoot.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -36,14 +24,24 @@ Grid spacing is split into 12 parts:
 
 const DashboardSelectedReport5 = ({ data }) => {
 
-  const { filter } = useFilter();
+  const { filter, isWebOrDBIncluded} = useFilter();
+  
   //gets the data when filter is applied
-  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
+  const filteredData = useMemo(() => {
+    let result = GetFilteredData(data, filter);
+
+    if (!isWebOrDBIncluded) {
+      result = result.filter(item => !item.cklWebOrDatabase);
+    }
+
+    return result;
+  }, [filter, data, isWebOrDBIncluded]);
+  
   
   return (
     <ThemeProvider theme={theme}>
       {/* <FilterProvider> */}
-        <Root>
+        <DashboardRoot>
 
           <Grid container spacing={{xs:2, s:2, md:3, lg:3}} >
             <Grid lg={12} sm={12} xl={12} xs={12}>
@@ -87,7 +85,7 @@ const DashboardSelectedReport5 = ({ data }) => {
             
 
           </Grid> 
-        </Root>
+        </DashboardRoot>
       {/* </FilterProvider> */}
     </ThemeProvider>
   );

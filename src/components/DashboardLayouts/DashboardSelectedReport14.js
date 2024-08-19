@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import {ThemeProvider, styled } from "@mui/material";
+import {ThemeProvider } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/HistoricalDataTracker"
@@ -13,20 +13,8 @@ import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import HistoricalDataGrid from "../../charts/DataGridMUI/HistoricalDataGrid";
 import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
+import { DashboardRoot } from "./DashboardRoot.js";
 
-
-const Root = styled('div')(({ theme }) => ({
-    padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)} ${theme.spacing(3)}`,
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.text.primary,
-    display: 'flex',
-    flexDirection: 'column',
-    // height:  `calc(100vh - ${verticalPadding}px)`, // subtract verticalPadding from 100vh
-    minHeight: '100vh',
-    boxSizing: 'border-box',
-    flexGrow: 1, //take up remaining space
-   // position: 'inherit',
-}));
 
 /*
 Grid spacing is split into 12 parts:
@@ -52,9 +40,19 @@ function getLatestDate(dateObject) {
 }
 
 const DashboardSelectedReport14 = ({ data }) => {
-  const { filter } = useFilter();
+  const { filter, isWebOrDBIncluded} = useFilter();
+  
   //gets the data when filter is applied
-  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
+  const filteredData = useMemo(() => {
+    let result = GetFilteredData(data, filter);
+
+    if (!isWebOrDBIncluded) {
+      result = result.filter(item => !item.cklWebOrDatabase);
+    }
+
+    return result;
+  }, [filter, data, isWebOrDBIncluded]);
+  
   
   // let groupingColumn = 'datePulled'
   // const values = filteredData.map(item => item[groupingColumn])
@@ -88,7 +86,7 @@ const DashboardSelectedReport14 = ({ data }) => {
   return (
     <ThemeProvider theme={theme}>
     {/* <FilterProvider> */}
-      <Root>
+      <DashboardRoot>
         {/*Filter Bar*/}
         <Grid container spacing={{xs:2, s:2, md:3, lg:3}} >
           <Grid lg={12} sm={12} xl={12} xs={12}>
@@ -98,7 +96,6 @@ const DashboardSelectedReport14 = ({ data }) => {
           <Grid lg={12} sm={12} xl={12} xs={12}>
             <StatisticsCardGroup data={dataFromLastPullDate} />
           </Grid>
-
 
           <Grid lg={8} md={8} sm={12} xl={6} xs={12}>
             <TableGridCardComponent>
@@ -141,7 +138,7 @@ const DashboardSelectedReport14 = ({ data }) => {
           </Grid> 
 
         </Grid> 
-      </Root>
+      </DashboardRoot>
 
   </ThemeProvider>
 
