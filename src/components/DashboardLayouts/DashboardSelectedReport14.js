@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import {ThemeProvider } from "@mui/material";
+import {ThemeProvider,Typography, Box} from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/HistoricalDataTracker"
@@ -8,13 +8,14 @@ import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
 import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/MultiLevelExpandableTable/Report5WithMultiLevelBenchmarks";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
-import FilterBar from "../FilterBar.js";
 import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import HistoricalDataGrid from "../../charts/DataGridMUI/HistoricalDataGrid";
 import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
-
+import FilterBar from "../FilterBar.js";
+import FilterMenu from "../FilterMenu.js";
+import FilterSelectionDrawer from "../FilterSelectionDrawer.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -79,18 +80,23 @@ const DashboardSelectedReport14 = ({ data }) => {
   //get values (entries from latest date)
   const dataFromLastPullDate = Object.values(latestDateObj)[0];
 
-  // const listItems = data.map((item, index) => (
-  //   <li key={index}> <pre>{JSON.stringify(item, null, 2)}</pre> </li>
-  // ));
 
   return (
     <ThemeProvider theme={theme}>
     {/* <FilterProvider> */}
       <DashboardRoot>
         {/*Filter Bar*/}
-        <Grid container spacing={{xs:2, s:2, md:3, lg:3}} >
+        <Grid container
+          spacing={{xs:2, s:2, md:3, lg:3}}
+          sx={{
+            px: { lg: 5, xl: 15 }, // Padding-left and padding-right for lg and xl screens
+          }}
+        >
           <Grid lg={12} sm={12} xl={12} xs={12}>
-            <FilterBar data={dataFromLastPullDate} />
+            <Box display="flex" justifyContent="space-between">
+              <Typography variant='h2'> Historical Data </Typography>
+              <FilterSelectionDrawer data={dataFromLastPullDate} />
+            </Box>
           </Grid>
           
           <Grid lg={12} sm={12} xl={12} xs={12}>

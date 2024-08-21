@@ -18,7 +18,7 @@ const renderProgressBarCell = (params) => {
       <LinearProgress 
         variant="determinate" 
         value={params.value * 100} 
-        color="primary"
+        color="secondary"
         style={{ height: '10px', borderRadius: '5px', width: '100%' }}
       />
       

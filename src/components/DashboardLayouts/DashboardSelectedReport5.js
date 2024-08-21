@@ -49,14 +49,8 @@ const DashboardSelectedReport5 = ({ data }) => {
               px: { lg: 5, xl: 10 }, // Padding-left and padding-right for lg and xl screens
             }}
           >
-            {/* <Grid lg={12} sm={12} xl={12} xs={12} sx={{ mb: 0 }}>
-              <FilterBar data={filteredData} />
-            </Grid>
-            <Grid lg={12} sm={12} xl={12} xs={12}>
-              <StatisticsCardGroup data={filteredData} />
-            </Grid> */}
 
-            <Grid item lg={12} sm={12} xl={12} xs={12} sx={{ mb: 0 }}>
+            <Grid item lg={12} sm={12} xl={12} xs={12}>
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <FilterBar data={filteredData} />
                 <Box sx={{ mt: 0 }}> {/* No spacing between FilterBar and StatisticsCardGroup */}
@@ -77,11 +71,11 @@ const DashboardSelectedReport5 = ({ data }) => {
             </Grid>
             
             <Grid lg={6} sm={6} xl={6} xs={12}>
-              <ChartCardComponent title = "Assets by Collection">
+              <ChartCardComponent title = "Assets by Package">
                 <ApexCountByValueBarChart
                   targetColumn="shortName"
                   isHorizontal={false}
-                  xAxisTitle="Collection Name"
+                  xAxisTitle="Package Name"
                   yAxisTitle= "Number of Assets"
                   data={filteredData}
                 />

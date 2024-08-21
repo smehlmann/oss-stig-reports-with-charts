@@ -43,13 +43,14 @@ const DashboardSelectedReport5 = ({ data }) => {
       {/* <FilterProvider> */}
         <DashboardRoot>
 
-          <Grid container spacing={{xs:2, s:2, md:3, lg:3}} >
+          <Grid container 
+            spacing={{xs:2, s:2, md:3, lg:3}}
+            sx={{
+              px: { lg: 5, xl: 10 }, //padding
+            }}
+          >
             {/* <Grid lg={12} sm={12} xl={12} xs={12}>
               <FilterBar data={filteredData} />
-            </Grid> */}
-
-            {/* <Grid lg={12} sm={12} xl={12} xs={12}>
-              <StatisticsCardGroup data={filteredData} />
             </Grid> */}
             
 

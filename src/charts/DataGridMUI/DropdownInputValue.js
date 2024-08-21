@@ -54,10 +54,10 @@ function DropdownInputValue(props) {
         }}
       >
         <MenuItem value=""><em>None</em></MenuItem>
-        <MenuItem value="0.25">25</MenuItem>
-        <MenuItem value="0.50">50</MenuItem>
-        <MenuItem value="0.75">75</MenuItem>
-        <MenuItem value="1">100</MenuItem>
+        <MenuItem value="0.25">25%</MenuItem>
+        <MenuItem value="0.50">50%</MenuItem>
+        <MenuItem value="0.75">75%</MenuItem>
+        <MenuItem value="1">100%</MenuItem>
       </Select>
     </FormControl>
   );

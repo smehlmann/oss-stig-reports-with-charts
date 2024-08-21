@@ -4,7 +4,7 @@ import { Box, Chip, Button, Switch, FormControlLabel } from '@mui/material';
 import { useTheme } from "../theme";
 import SearchDropdownFilterList from './SearchDropdownFilterList';
 
-const FilterBar = ({data}) => {
+const FilterBar = ({data = []}) => {
   const { filter, clearFilter, removeFilterKey, isWebOrDBIncluded, toggleWebOrDBFilter  } = useFilter();
   const theme = useTheme();
 
@@ -57,9 +57,9 @@ const FilterBar = ({data}) => {
         alignItems="center"
         sx={{padding: '10px'  }}
       >
-        <Box component="span" marginRight="8px" sx={theme.typography.h5}>
+        {/* <Box component="span" marginRight="8px" sx={theme.typography.h5}>
           Filters:
-        </Box>
+        </Box> */}
         {Object.keys(filter).map((key) => (
           <Chip
             key={key}
@@ -76,7 +76,7 @@ const FilterBar = ({data}) => {
           variant="contained" 
           onClick={clearFilter}
           sx={{ 
-            height: '100%',  // Make the button take full height
+           height: '100%',  
             display: 'flex',
             position: 'relative',
           }}

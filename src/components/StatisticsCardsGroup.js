@@ -30,28 +30,28 @@ const StatisticsCardGroup = ({data = [] }) => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item lg={3} sm={6} xl={3} xs={12}>
+      <Grid item lg={3} md={3} sm={6} xl={3} xs={12}>
         <StatisticsCardComponent 
           metricValue={assetCount}
           metricDisplayedName="Assets"
           measurement="Total"
         />
       </Grid>
-      <Grid item lg={3} sm={6} xl={3} xs={12}>
+      <Grid item lg={3} md={3} sm={6} xl={3} xs={12}>
         <StatisticsCardComponent 
           metricValue={cat1Sum}
           metricDisplayedName="CAT1"
           measurement="Total"
         />
       </Grid>
-      <Grid item lg={3} sm={6} xl={3} xs={12}>
+      <Grid item lg={3} md={3} sm={6} xl={3} xs={12}>
         <StatisticsCardComponent 
           metricValue={cat2Sum}
           metricDisplayedName="CAT2"
           measurement="Total"
         />
       </Grid>
-      <Grid item lg={3} sm={6} xl={3} xs={12}>
+      <Grid item lg={3} md={3} sm={6} xl={3} xs={12}>
         <StatisticsCardComponent 
           metricValue={cat3Sum}
           metricDisplayedName="CAT3"

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Autocomplete, TextField } from '@mui/material';
+import { Box, Autocomplete, TextField, Checkbox, ListItemText } from '@mui/material';
 import { useFilter } from '../FilterContext';
 import { styled, alpha } from "@mui/system";
 
@@ -9,6 +9,8 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
     border: '2px solid #b2bbff',
     backgroundColor: '#ffffff',
     alignItems: 'center',
+    height:'45px',
+    padding: '2px 8px',
     boxShadow: 'none', // Initial state without shadow
     transition: 'box-shadow 0.3s ease',
     '&:hover': {
@@ -20,6 +22,7 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
       boxShadow: `0 4px 8px ${alpha(theme.palette.primary.main, 0.2)}`, // Shadow on focus
     },
   },
+  
   '& .MuiOutlinedInput-notchedOutline': {
     border: 'none',
   },
@@ -31,18 +34,23 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
 
 const SearchDropdownFilterList = ({targetProperty, label, valueOptions }) => {
   const {filter, updateFilter, removeFilterKey } = useFilter();
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOptions, setSelectedOption] = useState([]);
 
   //when content in search changes
   const handleSearchChange = (event, newValue) => {
     setSelectedOption(newValue);
 
-    if (newValue) {
-      //update the filter object with the selected val
-      updateFilter({ [targetProperty]: newValue });
+    if (newValue.length > 0) {
+      //only 1 item selected, add it as a single item to the filter
+      if (newValue.length === 1) {
+        updateFilter({ [targetProperty]: newValue[0] });
+      } else {
+        //when mult items selected, keep the array structure
+        updateFilter({ [targetProperty]: newValue });
+      }
     } else {
-      // if no val selected, remove from global filter
-      removeFilterKey([targetProperty]);
+      // If no values are selected, remove the property from the filter
+      removeFilterKey(targetProperty);
     }
   };
 
@@ -50,13 +58,24 @@ const SearchDropdownFilterList = ({targetProperty, label, valueOptions }) => {
     <Box display="inline-block" 
       minWidth='200px' 
       maxWidth='100%' 
-      width='auto'
+      width='100%'
     >
       <CustomAutocomplete
-        value={selectedOption}
+        multiple
+        value={selectedOptions}
         onChange={handleSearchChange}
         options={valueOptions}
+        disableCloseOnSelect
         getOptionLabel={(option) => option || ''}
+        renderOption={(props, option, { selected }) => (
+          <li {...props}>
+            <Checkbox
+              checked={selected}
+              style={{ marginRight: 8 }}
+            />
+            <ListItemText primary={option} />
+          </li>
+        )}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -64,7 +83,7 @@ const SearchDropdownFilterList = ({targetProperty, label, valueOptions }) => {
             // variant="filled"
             InputLabelProps={{
               style: { 
-                color: selectedOption ? 'black' : 'grey' }, // Change the color based on selection
+                color: selectedOptions ? 'black' : 'grey' }, // Change the color based on selection
             }}
             sx={{
               borderRadius: '10px',
@@ -79,4 +98,7 @@ const SearchDropdownFilterList = ({targetProperty, label, valueOptions }) => {
   );
 };
 export default SearchDropdownFilterList;
+
+
+
 

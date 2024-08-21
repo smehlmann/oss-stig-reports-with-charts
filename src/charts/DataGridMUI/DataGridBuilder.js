@@ -104,8 +104,10 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
 
   "& .MuiDataGrid-columnHeaderIcon": {
     // Ensure the sorting and more options icons are positioned correctly
-    position: 'absolute',
-    top: '50%',
+    position: 'relative',
+    // top: '50%',
+    margin:0,
+    padding:0,
     transform: 'translateY(-50%)',
     fontSize: '0.5rem',
   },

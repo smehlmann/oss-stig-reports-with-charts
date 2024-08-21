@@ -4,7 +4,6 @@ import {
   Button,
   Chip,
   Divider,
-  FormControlLabel,
   IconButton,
   Switch,
   Typography,
@@ -15,6 +14,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useFilter } from '../FilterContext'; // Adjust the import path as needed
 import { useTheme } from "../theme";
 
+
+/**
+IN UI: When the button labeled 'FIlter' is selected, menu below will appear with filter options
+
+
+ */
 
 const FilterMenu = () => {
   const { filter, clearFilter, removeFilterKey, isWebOrDBIncluded, toggleWebOrDBFilter } = useFilter();
@@ -73,8 +78,8 @@ const FilterMenu = () => {
         <Divider sx={{ my: 1 }} />
 
         {/* Applied Filter Chips */}
-        <Box sx={theme.typography.h6}>Applied Filters</Box>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+        <Box sx={theme.typography.h5}>Applied Filters</Box>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0.5 }}>
           {Object.keys(filter).length > 0 ? (
             Object.keys(filter).map((key) => (
               <Chip
@@ -90,7 +95,7 @@ const FilterMenu = () => {
 
         {/* Toggle Web/DB Assets */}
         <Box display="flex" justifyContent="space-between" sx={{mt: 2, alignItems:'center'}}>
-          <Box sx={theme.typography.h6}>Include DB/Web</Box>
+          <Box sx={theme.typography.h5}>Include DB/Web</Box>
           <Switch
             checked={isWebOrDBIncluded}
             onChange = {(event) => toggleWebOrDBFilter(event.target.checked)}

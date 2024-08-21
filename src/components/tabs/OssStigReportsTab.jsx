@@ -377,7 +377,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ width: "100%" }}
+                      sx={{ padding: 2 }}
                     >
                       <DialogMessages.Report1DialogMessage />
                     </Alert>
@@ -422,7 +422,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ width: "100%" }}
+                      sx={{ padding: 2 }}
                     >
                       <DialogMessages.Report2DialogMessage />
                     </Alert>
@@ -467,7 +467,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ width: "100%" }}
+                      sx={{ padding: 2 }}
                     >
                       <DialogMessages.Report3DialogMessage />
                     </Alert>
@@ -514,7 +514,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ width: "100%" }}
+                      sx={{ padding: 2}}
                     >
                       <DialogMessages.Report4DialogMessage />
                     </Alert>
@@ -561,7 +561,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ width: "100%" }}
+                      sx={{ padding: 2 }}
                     >
                       <DialogMessages.Report5DialogMessage />
                     </Alert>
@@ -608,7 +608,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ width: "100%" }}
+                      sx={{ padding: 2}}
                     >
                       <DialogMessages.Report6DialogMessage />
                     </Alert>
@@ -653,7 +653,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ width: "100%" }}
+                      sx={{ padding: 2 }}
                     >
                       <DialogMessages.Report7DialogMessage />
                     </Alert>
@@ -698,7 +698,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ width: "100%" }}
+                      sx={{ padding: 2 }}
                     >
                       <DialogMessages.Report8DialogMessage />
                     </Alert>
@@ -743,7 +743,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ width: "100%" }}
+                      sx={{ padding: 2 }}
                     >
                       <DialogMessages.Report9DialogMessage />
                     </Alert>
