@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { ThemeProvider, Box } from "@mui/material";
+import { ThemeProvider, Box, Typography} from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
@@ -8,12 +8,11 @@ import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
 import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/MultiLevelExpandableTable/Report5WithMultiLevelBenchmarks";
-import FilterBar from "../FilterBar.js";
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
 import GetFilteredData from "../GetFilteredData.js";
-import FilterMenu from "../FilterMenu.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js"; 
+import FilterSelectionDrawer from "../FilterSelectionDrawer.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -24,7 +23,7 @@ Grid spacing is split into 12 parts:
   {12} = 1 card in row (takes up whole section)
 */
 
-const DashboardSelectedReport5 = ({ data }) => {
+const DashboardSelectedReport5 = ({ data, title }) => {
 
   const { filter, isWebOrDBIncluded} = useFilter();
   
@@ -46,16 +45,19 @@ const DashboardSelectedReport5 = ({ data }) => {
           <Grid container 
             spacing={{xs:2, s:2, md:3, lg:3}}
             sx={{
-              px: { lg: 5, xl: 10 }, // Padding-left and padding-right for lg and xl screens
+              px: { lg: 5, xl: 15 }, // Padding-left and padding-right for lg and xl screens
             }}
           >
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <Box display='inline-flex' justifyContent="space-between" sx={{ width:'100%'}} >
+                <Typography variant='h1'>{title}</Typography> 
+                <FilterSelectionDrawer data={filteredData} />
+              </Box>
+            </Grid>
 
-            <Grid item lg={12} sm={12} xl={12} xs={12}>
-              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <FilterBar data={filteredData} />
-                <Box sx={{ mt: 0 }}> {/* No spacing between FilterBar and StatisticsCardGroup */}
-                  <StatisticsCardGroup data={filteredData} />
-                </Box>
+            <Grid lg={12} md={12} xl={12} xs={12}>
+              <Box> 
+                <StatisticsCardGroup data={filteredData} />
               </Box>
             </Grid>
             

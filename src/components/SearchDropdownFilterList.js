@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Autocomplete, TextField, Checkbox, ListItemText } from '@mui/material';
 import { useFilter } from '../FilterContext';
 import { styled, alpha } from "@mui/system";
@@ -32,9 +32,16 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
 }));
 
 
-const SearchDropdownFilterList = ({targetProperty, label, valueOptions }) => {
-  const {filter, updateFilter, removeFilterKey } = useFilter();
+const SearchDropdownFilterList = ({targetProperty, label, valueOptions, clearSelections }) => {
+  const { updateFilter, removeFilterKey } = useFilter();
   const [selectedOptions, setSelectedOption] = useState([]);
+
+  //reset the selected options when clearSelections prop changes
+  useEffect(() => {
+    if (clearSelections) {
+      setSelectedOption([]); //clear selected options from chips
+    }
+  }, [clearSelections]);
 
   //when content in search changes
   const handleSearchChange = (event, newValue) => {

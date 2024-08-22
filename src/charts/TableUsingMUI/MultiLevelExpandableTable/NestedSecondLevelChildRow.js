@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import {useTheme} from "../../../theme.js"
 import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
 import TablePagination from '@mui/material/TablePagination';
@@ -40,8 +40,8 @@ function NestedSecondLevelChildRow({ childRow }) {
     setPage(0);
   };
 
-  const filteredBenchmarks = childRow.benchmarks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
+  const filteredBenchmarks = childRow.benchmarks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   return (
     <>
       <StyledTableRow className="first-level-child-row">
@@ -73,7 +73,7 @@ function NestedSecondLevelChildRow({ childRow }) {
                     </ExpandedTableHead>
                     <TableBody>
                       {filteredBenchmarks.map((benchmark, index) => (
-                        <StyledTableRow key={index}>
+                        <StyledTableRow key={index} className="second-child-row">
                           <ExpandedTableCell>{benchmark}</ExpandedTableCell>
                         </StyledTableRow>
                       ))}

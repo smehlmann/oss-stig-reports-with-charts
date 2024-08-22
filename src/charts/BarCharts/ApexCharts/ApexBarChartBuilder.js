@@ -151,84 +151,86 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
     legend: {
       show: false,
     },
-    responsive: [
-      {
-        breakpoint: 1300,
-        options: {
-          enableToolbar: true,
-          xaxis: {
-            labels: {
-              style: {
-                fontSize: '11px',
-              },
-            },
-            title: {
-              style: {
-                fontSize: '15px',
-              },
-            },
-          },
-          yaxis: {
-            labels: {
-              formatter: function (value) {
-                if (formatLabelToPercentage) {
-                  return formatLabelToPercentage.formatter(value);
-                }
-                return value;
-              },
-              style: {
-                fontSize: '11px',
-              },
-            },
-            title: {
-              style: {
-                fontSize: '12px',
-              },
-            },
-          },
-          title: {
-            style: {
-              fontSize: '20px',
-            },
-          },
-        },
-      },
-      {
-        breakpoint: 600,
-        options: {
-          enableToolbar: true,
-          xaxis: {
-            labels: {
-              style: {
-                fontSize: '8px',
-              },
-            },
-            title: {
-              style: {
-                fontSize: '10px',
-              },
-            },
-          },
-          yaxis: {
-            labels: {
-              style: {
-                fontSize: '8px',
-              },
-            },
-            title: {
-              style: {
-                fontSize: '10px',
-              },
-            },
-          },
-          title: {
-            style: {
-              fontSize: '15px',
-            },
-          },
-        },
-      },
-    ],
+    // responsive: [
+    //   {
+    //     breakpoint: 1300,
+    //     options: {
+    //       enableToolbar: true,
+    //       xaxis: {
+    //         labels: {
+    //           style: {
+    //             fontSize: '11px',
+    //           },
+    //         },
+    //         title: {
+    //           style: {
+    //             fontSize: '15px',
+    //           },
+    //         },
+    //       },
+    //       yaxis: {
+    //         labels: {
+    //           formatter: function (value) {
+    //             if (formatLabelToPercentage) {
+    //               return formatLabelToPercentage.formatter(value);
+    //             }
+    //             return value;
+    //           },
+    //           style: {
+    //             fontSize: '11px',
+    //           },
+    //         },
+    //         title: {
+    //           style: {
+    //             text: yAxisHeader,
+    //             fontSize: '12px',
+    //           },
+    //         },
+    //       },
+    //       title: {
+    //         style: {
+    //           fontSize: '20px',
+    //         },
+    //       },
+    //     },
+    //   },
+    //   {
+    //     breakpoint: 600,
+    //     options: {
+    //       enableToolbar: true,
+    //       xaxis: {
+    //         labels: {
+    //           style: {
+    //             fontSize: '8px',
+    //           },
+    //         },
+    //         title: {
+    //           style: {
+    //             fontSize: '10px',
+    //           },
+    //         },
+    //       },
+    //       yaxis: {
+    //         labels: {
+    //           style: {
+    //             fontSize: '8px',
+    //           },
+    //         },
+    //         title: {
+    //           style: {
+    //             text: yAxisHeader,
+    //             fontSize: '10px',
+    //           },
+    //         },
+    //       },
+    //       title: {
+    //         style: {
+    //           fontSize: '15px',
+    //         },
+    //       },
+    //     },
+    //   },
+    // ],
   });
 
   // useEffect(() => {

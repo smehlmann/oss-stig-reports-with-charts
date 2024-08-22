@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
-import {ThemeProvider } from "@mui/material";
+import {ThemeProvider,Box, Typography } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
-import DonutAvgChart from "../../charts/DonutCharts/ApexCharts/DonutAvgChart"
+import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart.js"
 import Report8BenchmarksExpanded from "../../charts/TableUsingMUI/Report8BenchmarksExpanded";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
@@ -11,7 +11,7 @@ import {  useFilter } from "../../FilterContext";
 import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
-// import FilterBar from "../FilterBar.js";
+import FilterSelectionDrawer from "../FilterSelectionDrawer.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -22,7 +22,7 @@ Grid spacing is split into 12 parts:
   {12} = 1 card in row (takes up whole section)
 */
 
-const DashboardSelectedReport5 = ({ data }) => {
+const DashboardSelectedReport5 = ({ data, title }) => {
 
   const { filter, isWebOrDBIncluded} = useFilter();
   
@@ -46,41 +46,43 @@ const DashboardSelectedReport5 = ({ data }) => {
           <Grid container 
             spacing={{xs:2, s:2, md:3, lg:3}}
             sx={{
-              px: { lg: 5, xl: 10 }, //padding
+              px: { lg: 5, xl: 15 }, //padding-left and padding-right for lg and xl screens
             }}
           >
-            {/* <Grid lg={12} sm={12} xl={12} xs={12}>
-              <FilterBar data={filteredData} />
-            </Grid> */}
+
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <Box display="flex" justifyContent="space-between">
+              <Typography variant='h1'> {title} </Typography>
+              <FilterSelectionDrawer data={filteredData} />
+              </Box>
+            </Grid> 
             
 
             <Grid lg={8} sm={6} xl={8} xs={12}>
               <ChartCardComponent title = 'Assets by Benchmark'>
                 <ApexCountByValueBarChart
                   targetColumn="benchmarks"
-                  isHorizontal={true}
-                  xAxisTitle="Number of Assets"
-                  yAxisTitle= "STIGG Benchmark"
-                  data={data}
+                  isHorizontal={false}
+                  xAxisTitle="STIG Benchmark"
+                  yAxisTitle= "Number of Assets"
+                  data={filteredData}
                 />
               </ChartCardComponent>
             </Grid>
             
             <Grid lg={4} sm={6} xl={4} xs={12}>
-              <ChartCardComponent title = "Averages">
-                <DonutAvgChart
-                  targetColumns={["assessed", "submitted", "accepted", "rejected"]}
-                  xAxisTitle= "Packages"
-                  yAxisTitle= "Number of Assets"
-                  disableFilterUpdate={true}
-                  data={data}
+              <ChartCardComponent title = "Latest Revision">
+                <ApexDonutCountChart
+                  targetColumn='latestRev'
+                  legendTitle='Latest Revision'
+                  data={filteredData}
                 />
               </ChartCardComponent>
             </Grid> 
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
-                <Report8BenchmarksExpanded data={data}/>
+                <Report8BenchmarksExpanded data={filteredData}/>
               </ExpandableTableCardComponent>
             </Grid>
             
@@ -93,3 +95,16 @@ const DashboardSelectedReport5 = ({ data }) => {
 };
 
 export default DashboardSelectedReport5;
+
+/*
+To make DonutAvgChart:
+<ChartCardComponent title = "Averages">
+  <DonutAvgChart
+    targetColumns={["assessed", "submitted", "accepted", "rejected"]}
+    xAxisTitle= "Packages"
+    yAxisTitle= "Number of Assets"
+    disableFilterUpdate={true}
+    data={data}
+  />
+ 
+ */

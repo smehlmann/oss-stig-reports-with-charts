@@ -1,7 +1,7 @@
 import {styled } from "@mui/material";
 
 export const DashboardRoot = styled('div')(({ theme }) => ({
-  padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)} ${theme.spacing(3)}`,
+  padding: `${theme.spacing(3)} ${theme.spacing(3)} ${theme.spacing(3)} ${theme.spacing(3)}`,
   backgroundColor: theme.palette.background.default,
   color: theme.palette.text.primary,
   display: 'flex',

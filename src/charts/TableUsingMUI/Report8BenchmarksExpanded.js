@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import ExpandableTableBuilder from "./ExpandableTableBuilder";
 import TableBody from '@mui/material/TableBody';
 import { useFilter } from '../../FilterContext';
-import {getPercentageFormatterObject} from "../../components/getPercentageFormatterObject.js";
 
 // import { useTheme } from '@mui/material/styles';
 import {
@@ -25,12 +24,9 @@ const formatString = (value) => {
 
 function Report8BenchmarksExpanded({ data }) {
   const { updateFilter, clearFilter} = useFilter();
-  const [searchText, setSearchText] = useState("");
+  const [searchText] = useState("");
   
  // const [filteredChildRows, setFilteredChildRows] = useState({}); // State to hold filtered data
-
-  const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
-
 
   const [parentRows, setParentRows] = useState([]);
 
@@ -97,22 +93,12 @@ function Report8BenchmarksExpanded({ data }) {
   const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
     //filter child rows based on text in searchbar
     const filteredChildRows = parentRow.childRows.filter((childRow) => {
-      //filtering specifically for accepted column
-      const searchValue = searchText.toLowerCase();
-      const searchValueAsNumber = parseFloat(searchValue);
-
-      const formattedAccepted = (childRow.accepted * 100).toFixed(2);
-      const acceptedMatches = formattedAccepted.startsWith(searchValue) || childRow.accepted.toString().includes(searchValueAsNumber.toString());
-      
       return (
       //set to lowercase for searchability 
       childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
       childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
-      childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
-      // childRow.accepted.toString().includes(searchText)
-      acceptedMatches
+      childRow.primOwner.toLowerCase().includes(searchText.toLowerCase())
       );
-    
     });
     
     if (filteredChildRows.length === 0) {
@@ -130,7 +116,6 @@ function Report8BenchmarksExpanded({ data }) {
               <ExpandedHeaderCell>Asset</ExpandedHeaderCell>
               <ExpandedHeaderCell >Sys Admin</ExpandedHeaderCell>
               <ExpandedHeaderCell >Primary Owner</ExpandedHeaderCell>
-              <ExpandedHeaderCell >Accepted %</ExpandedHeaderCell>
             </StyledTableRow>
           </ExpandedTableHead>
           <TableBody>
@@ -139,9 +124,7 @@ function Report8BenchmarksExpanded({ data }) {
                 <ExpandedTableCell>{childRow.asset}</ExpandedTableCell>
                 <ExpandedTableCell>{childRow.sysAdmin}</ExpandedTableCell>
                 <ExpandedTableCell>{childRow.primOwner}</ExpandedTableCell>
-                <ExpandedTableCell>
-                  {percentageFormatterObject.formatter(childRow.accepted)}
-                </ExpandedTableCell>
+
               </StyledTableRow>
             ))}
           </TableBody>

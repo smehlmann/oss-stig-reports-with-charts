@@ -112,7 +112,7 @@ async function fetchReportData() {
     //const text = await response.text();
     const data = await response.text();
     const reportData = JSON.parse(data);
-    console.log(reportData);
+    // console.log(reportData);
        
    // Ensure each item has a unique key (if not already unique)
    reportData.forEach((item, index) => {

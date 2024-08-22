@@ -1,12 +1,14 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback} from 'react';
 import { useFilter } from '../FilterContext';
-import { Box, Chip, Button, Switch, FormControlLabel } from '@mui/material';
-import { useTheme } from "../theme";
+import { Box, Chip, IconButton, Switch, FormControlLabel } from '@mui/material';
+// import { useTheme } from "../theme";
+import FilterAltOff from '@mui/icons-material/FilterAltOff';
+
 import SearchDropdownFilterList from './SearchDropdownFilterList';
 
 const FilterBar = ({data = []}) => {
   const { filter, clearFilter, removeFilterKey, isWebOrDBIncluded, toggleWebOrDBFilter  } = useFilter();
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const handleRemoveFilter = (key) => {
     removeFilterKey(key);
@@ -27,7 +29,8 @@ const FilterBar = ({data = []}) => {
           return 'eMASS';
         case 'collectionName':
           return 'Collection';
-        
+        case 'acronym':
+          return 'eMASS Acronym';
         default: 
           return '';
       }
@@ -35,30 +38,40 @@ const FilterBar = ({data = []}) => {
     ([]),
   );
 
-  const sysAdminsList = [...new Set(data.map(item => item.sysAdmin).filter(sysAdmin => sysAdmin != null))];
-
-  const primOwnersList = [...new Set(data.map(item => item.primOwner).filter(primOwner => primOwner != null))];
-
-  // const packageShortNamesList = [...new Set(data.map(item => item.shortName).filter(shortName => shortName != null))];
-  // const uniqueSysAdmins = data.map(item => item.sysAdmin);
-  // console.log(uniqueSysAdmins);
+  // const sysAdminsList = [...new Set(data.map(item => item.sysAdmin).filter(sysAdmin => sysAdmin != null))];
+  // const primOwnersList = [...new Set(data.map(item => item.primOwner).filter(primOwner => primOwner != null))];
 
   return (
     <Box 
       display="flex" 
-      justifyContent="space-between" 
+      // justifyContent='flex-end'
+      justifyContent='flex-end'
       height= '150'
       // alignItems="stretch"  // Ensure children take full height
-      sx={{gap: 1, marginBottom: 0}}
+      sx={{gap: 1, marginBottom: 0 }}
     >
       {/* Container for filter chips and clear button */}
       <Box component='span' 
         display="flex" 
         alignItems="center"
-        sx={{padding: '10px'  }}
+
+        sx={{padding: '0 10px'  }}
       >
+        <IconButton 
+          color="primary" 
+          variant="contained" 
+          onClick={clearFilter}
+          sx={{ 
+           height: '100%',  
+            display: 'flex',
+            position: 'relative',
+            // boxShadow: theme.shadows[3]
+          }}
+        >
+          <FilterAltOff />
+        </IconButton>
         {/* <Box component="span" marginRight="8px" sx={theme.typography.h5}>
-          Filters:
+          Filters applied:
         </Box> */}
         {Object.keys(filter).map((key) => (
           <Chip
@@ -68,39 +81,21 @@ const FilterBar = ({data = []}) => {
             color='primary'
             label={getChipLabel(key)}
             onDelete={() => handleRemoveFilter(key)}
-            style={{ marginRight: '12px' }}
+            style={{ marginRight: '5px' }}
           />
         ))}
-        <Button 
-          color="primary" 
-          variant="contained" 
-          onClick={clearFilter}
-          sx={{ 
-           height: '100%',  
-            display: 'flex',
-            position: 'relative',
-          }}
-        >
-          Clear Filters
-        </Button>
+        
       </Box>
 
       {/* Dropdown filter lists */}
-      <Box sx={{padding:'10px'}}>
+      {/* <Box sx={{padding:'10px'}}>
         <SearchDropdownFilterList targetProperty='sysAdmin' label='System Admin' valueOptions={sysAdminsList} />
       </Box>
-      
       <Box display='flex' sx={{padding:'10px'}}>
         <SearchDropdownFilterList targetProperty='primOwner' label='Primary Owner' valueOptions={primOwnersList} />
-      </Box>
-
-      {/* <Box sx={{padding:'10px'}}>
-        <SearchDropdownFilterList targetProperty='shortName' label='Package Name' valueOptions={packageShortNamesList} />
       </Box> */}
 
-
       {/* Switch for DB/Web inclusion */}
-      
       <FormControlLabel
         control={
           <Switch 

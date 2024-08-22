@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import PropertyAvgMap from "../../../components/PropertyAvgMap.js";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import { useFilter } from "../../../FilterContext.js";
-import numeral from "numeral";
+// import numeral from "numeral";
 import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
 import GetFilteredData from "../../../components/GetFilteredData.js";
 

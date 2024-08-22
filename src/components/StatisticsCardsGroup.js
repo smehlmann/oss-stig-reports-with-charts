@@ -3,7 +3,7 @@ import {Grid} from '@mui/material';
 import StatisticsCardComponent from './Cards/StatisticsCardComponent';
 import ValueCountMap from './ValueCountMap';
 
-const StatisticsCardGroup = ({data = [] }) => {
+const StatisticsCardGroup = ({data = [], source='' }) => {
   const safeData = useMemo(() => data || [], [data]);
 
   //get sum of Cat1
@@ -23,9 +23,13 @@ const StatisticsCardGroup = ({data = [] }) => {
 
   //number of assets
   const assetCount = useMemo(() => {
-    const countMap = ValueCountMap(safeData, 'asset');
-    return Object.keys(countMap).length;
-  }, [safeData]);
+    if (source === 'report7') {
+      return safeData.reduce((sum, item) => sum + (item.asset || 0), 0);
+    } else {
+      const countMap = ValueCountMap(safeData, 'asset');
+      return Object.keys(countMap).length;
+    }
+  }, [safeData, source]);
 
 
   return (

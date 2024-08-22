@@ -13,8 +13,6 @@ import HistoricalDataGrid from "../../charts/DataGridMUI/HistoricalDataGrid";
 import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
-import FilterBar from "../FilterBar.js";
-import FilterMenu from "../FilterMenu.js";
 import FilterSelectionDrawer from "../FilterSelectionDrawer.js";
 
 /*
@@ -40,7 +38,7 @@ function getLatestDate(dateObject) {
   return { [maxDate]: maxDateEntries };
 }
 
-const DashboardSelectedReport14 = ({ data }) => {
+const DashboardSelectedReport14 = ({ data, title}) => {
   const { filter, isWebOrDBIncluded} = useFilter();
   
   //gets the data when filter is applied
@@ -54,13 +52,6 @@ const DashboardSelectedReport14 = ({ data }) => {
     return result;
   }, [filter, data, isWebOrDBIncluded]);
   
-  
-  // let groupingColumn = 'datePulled'
-  // const values = filteredData.map(item => item[groupingColumn])
-  // values.forEach(item => {
-  //   console.log(item);
-  // })
-
   //group all data entries by their date
   const dataGroupedByDate = filteredData.reduce((accumulator, currentItem) => {
     //get groupingColumn value in our currentItem
@@ -87,14 +78,14 @@ const DashboardSelectedReport14 = ({ data }) => {
       <DashboardRoot>
         {/*Filter Bar*/}
         <Grid container
-          spacing={{xs:2, s:2, md:3, lg:3}}
+          spacing={{xs:2, s:2, md:2, lg:2.5}}
           sx={{
             px: { lg: 5, xl: 15 }, // Padding-left and padding-right for lg and xl screens
           }}
         >
           <Grid lg={12} sm={12} xl={12} xs={12}>
-            <Box display="flex" justifyContent="space-between">
-              <Typography variant='h2'> Historical Data </Typography>
+            <Box display="flex" justifyContent="space-between" alignItems='center'>
+              <Typography variant='h1'> {title} </Typography>
               <FilterSelectionDrawer data={dataFromLastPullDate} />
             </Box>
           </Grid>

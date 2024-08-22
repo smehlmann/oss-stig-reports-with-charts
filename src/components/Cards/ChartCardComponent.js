@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardHeader, CardContent, styled, CardHeader as MuiCardHeader  } from '@mui/material';
+import { Card, CardHeader, CardContent, styled  } from '@mui/material';
 
 
 const StyledCard = styled(Card)(({ theme }) => ({

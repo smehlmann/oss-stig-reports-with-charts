@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import MultiLevelTableBuilder from "./MultiLevelTableBuilder.js";
 import TableBody from '@mui/material/TableBody';
 // import { useFilter } from '../../../FilterContext.js';
@@ -23,7 +23,7 @@ const formatString = (value) => {
 function Report5WithMultiLevelBenchmarks({ data }) {
   // const [open, setOpen] = useState(false);
   const theme = useTheme();
-  const [searchText, setSearchText] = useState("");
+  const [searchText] = useState("");
   const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
 
   //checks if data is array of objects. If so, group by 'shortName' property.

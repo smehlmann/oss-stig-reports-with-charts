@@ -1,6 +1,5 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
-import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
 import GetFilteredData from "../../../components/GetFilteredData.js";
 

@@ -21,7 +21,7 @@ const ApexDonutChartBuilder = ({dataLabels, dataValues, legendTitle, onClick, fo
         case "Rejected":
           return theme.palette.rejected;
         default:
-          return theme.palette.primary.main;
+          return theme.palette.secondary.main;
       }
     },
     [theme.palette],

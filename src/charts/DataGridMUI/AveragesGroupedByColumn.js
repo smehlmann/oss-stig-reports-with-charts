@@ -19,7 +19,7 @@ const renderProgressBarCell = (params) => {
       <LinearProgress 
         variant="determinate" 
         value={params.value * 100} 
-        color="primary"
+        color="secondary"
         style={{ height: '10px', borderRadius: '5px', width: '100%' }}
       />
       
@@ -27,10 +27,10 @@ const renderProgressBarCell = (params) => {
   );
 };
 
-function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
+function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
   //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
-  const [filterModel, setFilterModel] = useState({
+  const [ setFilterModel] = useState({
     items: [],
   });
   const [averages, setAverages] = useState([]);
@@ -92,8 +92,12 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns }) {
           totalChecksPerCode +=checks;
 
           //get the number of unique assets
-          const countMap = ValueCountMap(dataPerGroup, asset);
-          assetCount = Object.values(countMap)[0];
+          if(source === 'report7') {
+            assetCount +=asset;
+          }else {
+            const countMap = ValueCountMap(dataPerGroup, asset);
+            assetCount = Object.values(countMap)[0];
+          }
 
           //for each entry in my value array, calculate the checks[i] * assessed[i] and push it to assessedProducts array. 
           assessedProductSum += (checks * (assessed || 0));
@@ -226,6 +230,9 @@ export default AveragesGroupedByColumn;
 
 
 /*
+function AveragesGroupedByColumn({ groupingColumn, data, targetColumns}) {
+
+
 OLD useEffect
   const targetColumnsToBeAveraged = useMemo(() => {
     const filteredColumns = targetColumns.filter(currColumn =>

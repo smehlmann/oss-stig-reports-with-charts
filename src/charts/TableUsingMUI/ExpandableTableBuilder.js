@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -73,7 +73,6 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
       return newOpen;
     });
   };
-
 
   // useEffect(() => {
   //   // Update filter based on the search text in the expanded section's table
@@ -152,16 +151,10 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
                       component="div"
                       count={parentRow.childRows.filter(childRow => {
                         const searchValue = searchText.toLowerCase();
-                        const searchValueAsNumber = parseFloat(searchValue);
-
-                        const formattedAccepted = (childRow.accepted * 100).toFixed(2);
-                        const acceptedMatches = formattedAccepted.startsWith(searchValue) || childRow.accepted.toString().includes(searchValueAsNumber.toString());
-
                         return (
                           childRow.asset.toLowerCase().includes(searchValue) ||
                           childRow.sysAdmin.toLowerCase().includes(searchValue) ||
-                          childRow.primOwner.toLowerCase().includes(searchValue) ||
-                          acceptedMatches
+                          childRow.primOwner.toLowerCase().includes(searchValue) 
                         );
                       }).length}
                       rowsPerPage={rowsPerPage}

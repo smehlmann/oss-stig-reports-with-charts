@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo, useCallback, useEffect} from "react";
 // import useLocalStorageListener from "../useLocalStorageListener";
 import DashboardSelectedReport5 from "../DashboardLayouts/DashboardSelectedReport5";
 import DashboardSelectedReport7 from "../DashboardLayouts/DashboardSelectedReport7";
@@ -17,7 +17,6 @@ const formatPercentage = (percentageString) => {
   const percentageValue = parseFloat(percentageString);
   return percentageValue / 100; // Convert to decimal
 };
-
 
 const objectToString = (object) => {
   if (!object) {
@@ -56,156 +55,108 @@ const numToString = (num) => {
   return stringVer;
 }
 
-//Only for report 5 (2nd option), split string into array of strings if it contains a space
+//Only for report5 and historical, split string into array of strings if it contains a space
 const convertBenchmarksToArray = (initialString, selectReportNum) => {
   if (selectReportNum === '5' || selectReportNum === '14') {
     //if initialString contains spaces
     if(initialString.includes(" ")){
       return initialString.split(" ");
     }
-    //store in array 
+    //handle when only 1 benchmark
     else {
       return [initialString];
     }
-  }
-  else {
-    return initialString;
-  }
+  } 
 };
-
 
 const formatData = (parsedData, selectedReportNum) => {
   if (!Array.isArray(parsedData)) {
     return [];
   }
 
-  return parsedData.map((entry, index) => {
+  const updatedData= parsedData.map((entry, index) => {
+    //prevents updating the objs in parsedData
+    const updatedEntry = { ...entry, uniqueId: index }; // Create a new object
 
-    //convert pulledDate to date object
-    if (typeof entry.datePulled !== 'undefined' && entry.datePulled !== null) {
-      if (typeof entry.datePulled !== 'string') {
-        entry.datePulled = objectToString(entry.datePulled);
-      }
-      entry.datePulled = stringToDate(entry.datePulled);
-      // console.log('type: ', entry.datePulled instanceof Date)
-      // console.log("datePulled after: ", entry.datePulled);
-      // console.log("type for datePulled after: ", typeof entry.datePulled);
+    //convert datePulled
+    if (updatedEntry.datePulled) {
+      updatedEntry.datePulled = stringToDate(objectToString(updatedEntry.datePulled));
     }
     
     //convert percentage strings to decimals
-    if (entry.assessed !== 'undefined') {
-      if (typeof entry.assessed === 'string') {
-        entry.assessed = formatPercentage(entry.assessed);
+    ['assessed', 'submitted', 'accepted', 'rejected'].forEach(prop => {
+      if (typeof updatedEntry[prop] === 'string') {
+        updatedEntry[prop] = formatPercentage(updatedEntry[prop]);
       }
-    }
-    if (entry.submitted !== 'undefined') {
-      if (typeof entry.submitted === 'string') {
-        entry.submitted = formatPercentage(entry.submitted);
+    });
+
+    //convert objects to strings
+    ['sysAdmin', 'primOwner', 'deviceType'].forEach(prop => {
+      if (updatedEntry[prop]) {
+        updatedEntry[prop] = objectToString(updatedEntry[prop]).replace("_$", "");
       }
-    }
-    if (entry.accepted !== 'undefined') {
-      if (typeof entry.accepted === 'string') {
-        entry.accepted = formatPercentage(entry.accepted);
+    });
+
+    //convert to numeric
+    const numericProperties = ['cat1', 'cat2', 'cat3'];
+    numericProperties.forEach(prop => {
+      if (updatedEntry[prop] !== undefined) {
+        updatedEntry[prop] = stringToNumeric(objectToString(updatedEntry[prop]));
       }
-    }
-    if (entry.rejected !== 'undefined') {
-      if (typeof entry.rejected === 'string') {
-        entry.rejected = formatPercentage(entry.rejected);
+    });
+
+    //convert emass and code to strings
+    ['emass', 'code'].forEach(prop => {
+      if (updatedEntry[prop]) {
+        updatedEntry[prop] = numToString(updatedEntry[prop]);
       }
+    });
+
+    //convert benchmarks to array for report5 and report14
+    if (updatedEntry.benchmarks) {
+      updatedEntry.benchmarks = convertBenchmarksToArray(updatedEntry.benchmarks, selectedReportNum);
     }
 
-    //convert objs to strings
-    if (entry.sysAdmin !== 'undefined' && entry.sysAdmin !== null) {
-      if (entry.sysAdmin !== 'string') {
-        entry.sysAdmin = objectToString(entry.sysAdmin).replace("_$", "");
-      }
-      entry.sysAdmin = entry.sysAdmin.replace("_$", "");
-    }
-    if (entry.primOwner !== 'undefined' && entry.primOwner !== null) {
-      if (entry.primOwner !== 'string') {
-        entry.primOwner = objectToString(entry.primOwner).replace("_$", "");
-      }
-    }
-    if (entry.deviceType !== 'undefined' && entry.deviceType !== null) {
-      if (entry.deviceType !== 'string') {
-        entry.deviceType = objectToString(entry.deviceType).replace("_$", "");
-      }
+    if ((selectedReportNum === '5' || selectedReportNum === '14') && updatedEntry.shortName === "NCCM") {
+      updatedEntry.shortName = updatedEntry.nccm || "NCCM";
     }
 
-
-    //convert cat1, cat2 and cat3 to numberic
-    if (entry.cat1 !== 'undefined') {
-      if (typeof entry.cat1 === 'object') {
-        entry.cat1 = objectToString(entry.cat1); //convert to string if not already one
-      }
-      entry.cat1 = stringToNumeric(entry.cat1);
-    }
-    if (entry.cat2 !== 'undefined') {
-      if (typeof entry.cat2 === 'object') {
-        entry.cat2 = objectToString(entry.cat2);
-      }
-      entry.cat2 = stringToNumeric(entry.cat2);
-    }
-    if (entry.cat3 !== 'undefined') {
-      if (typeof entry.cat3 === 'object') {
-        entry.cat3 = objectToString(entry.cat3); 
-      }
-      entry.cat3 = stringToNumeric(entry.cat3);
-    }
-
-    //convert emass and code to strings 
-    if (entry.emass !== 'undefined')
-    {
-      if (entry.emass !== 'string') {
-        entry.emass = numToString(entry.emass)
-      }
-    }
-    if (entry.code !== 'undefined') {
-      if (entry.code !== 'string') {
-        entry.code = numToString(entry.code)
-      }
-    }
-    //convert benchmarks to array for report5
-    if (entry.benchmarks !== 'undefined') {
-      entry.benchmarks = convertBenchmarksToArray(entry.benchmarks, selectedReportNum);
-    }
-
-    if ((selectedReportNum === '5' || selectedReportNum === '14') && entry.shortName === "NCCM") {
-      entry.shortName = entry.nccm || "NCCM";
-    }
-
-    return { ...entry, uniqueId: index }; // Add a unique identifier
+    // return { ...entry, uniqueId: index }; // Add a unique identifier
+    return updatedEntry;
   });
+
+  return updatedData;
 };
 
 
 
 const DashboardTab = ({reportData, selectedReportNum}) => {
-  //parse data from string to array
-  let parsedData = typeof reportData == 'string' ? JSON.parse(reportData): reportData;
+  //converts JSON strings to JS objects/array 
+  let parsedData = typeof reportData === 'string' ? JSON.parse(reportData): reportData;
 
-  const formattedData = formatData(parsedData, selectedReportNum); 
+  const formattedData = useMemo(() => formatData(parsedData, selectedReportNum), [parsedData, selectedReportNum]);
 
   //keeps track of the selectedReport state
-  const [selectedReport, setSelectedReport] = useState(null);
+  const [setSelectedReport] = useState(null);
 
-  // console.log("formattedData: ", formattedData);
+  useEffect(() => {
+    console.log('Formatted Data:', formattedData);
+  }, [formattedData]);
 
-  const handleClick = (reportNum) =>  {
+  const handleClick = useCallback((reportNum) => {
     setSelectedReport(reportNum);
-  }
+  }, [setSelectedReport]);
 
   // decide which grid layout to display based on report
   switch (selectedReportNum) {
     case '5':
-      return <DashboardSelectedReport5 data={formattedData} handleClick={handleClick} />
+      return <DashboardSelectedReport5 data={formattedData} title=' Asset Metrics' handleClick={handleClick} />
     case '7':
-      return <DashboardSelectedReport7 data={formattedData} handleClick={handleClick} />
+      return <DashboardSelectedReport7 data={formattedData} title='RMF Package Asset Count' handleClick={handleClick} />
     case '8':
-      return <DashboardSelectedReport8 data={formattedData} handleClick={handleClick} />
+      return <DashboardSelectedReport8 data={formattedData} title='STIG Benchmark Version Deltas' handleClick={handleClick} />
     case '14':
-      return <DashboardSelectedReport14 data={formattedData} handleClick={handleClick} />
-
+      return <DashboardSelectedReport14 data={formattedData} title='Historical Data' handleClick={handleClick} />
     default:
       return null
   }    

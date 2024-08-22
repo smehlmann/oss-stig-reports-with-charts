@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useMemo } from "react";
 // import { Chart } from "chart.js/auto";
 import ValueCountMap from "../../../components/ValueCountMap.js";
 // import PieChartBuilder from "./PieChartBuilder.js";
@@ -21,7 +21,8 @@ const ApexDonutCountChart = ({ targetColumn, legendName, data }) => {
   
   const donutLabels = useMemo(() => Object.keys(countMap), [countMap]);
   const donutValues = useMemo(() => Object.values(countMap), [countMap]);
-  
+
+
   //updates the filter criteria based on user's click
   const handleDonutClick = (event, chartContext, config) => {
     const selectedValue = config.w.config.labels[config.dataPointIndex];

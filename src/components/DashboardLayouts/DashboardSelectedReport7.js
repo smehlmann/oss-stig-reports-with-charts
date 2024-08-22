@@ -1,5 +1,5 @@
 import React, {useMemo} from "react";
-import {ThemeProvider} from "@mui/material";
+import {ThemeProvider, Typography,Box} from "@mui/material";
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
@@ -10,7 +10,7 @@ import FromTwoPropertiesBarChart from "../../charts/BarCharts/ApexCharts/FromTwo
 import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
-// import FilterBar from "../FilterBar.js";
+import FilterBar from "../FilterBar.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -21,7 +21,7 @@ Grid spacing is split into 12 parts:
   {12} = 1 card in row (takes up whole section)
 */
 
-const DashboardSelectedReport7 = ({ data }) => {
+const DashboardSelectedReport7 = ({ data, title }) => {
 
   //useFilter contains 'filter' state and when it's updated
   const { filter } = useFilter();
@@ -34,17 +34,21 @@ const DashboardSelectedReport7 = ({ data }) => {
         <DashboardRoot>
           {/*Filter Bar*/}
           <Grid container 
-            spacing={{xs:2, s:2, md:3, lg:3}} 
+            spacing={{xs:2, s:2, md:3, lg:3}}
             sx={{px: {lg:5, xl: 10}}}
           >
-            {/* <Grid lg={12} sm={12} xl={12} xs={12}>
-              <FilterBar data={filteredData} />
-            </Grid> */}
             <Grid lg={12} sm={12} xl={12} xs={12}>
-              <StatisticsCardGroup data={filteredData} />
+              <Box display='inline-flex' justifyContent="space-between" sx={{ width:'100%'}} >
+                <Typography variant='h1'> {title} </Typography>
+                <FilterBar data={filteredData}/>
+              </Box>
+            </Grid>
+            
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <StatisticsCardGroup source='report7' data={filteredData} />
             </Grid>
 
-            <Grid lg={8} sm={6} xl={8} xs={12}>
+            <Grid lg={6} sm={6} xl={6} xs={12}>
               <ChartCardComponent title = "Assets by eMass">
               <FromTwoPropertiesBarChart
                   labelColumn="acronym"
@@ -57,12 +61,12 @@ const DashboardSelectedReport7 = ({ data }) => {
               </ChartCardComponent>
             </Grid>
             
-            <Grid lg={4} sm={6} xl={4} xs={12}>
+            <Grid lg={6} sm={6} xl={6} xs={12}>
               <TableGridCardComponent>
                 <AveragesGroupedByColumn 
                   groupingColumn = 'emass'
                   data={data} 
-                  targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
+                  source='report7'
                 />
               </TableGridCardComponent>
             </Grid>
