@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import "../../App.css";
-//import './ReportSelection.css';
 import { CSVLink } from "react-csv";
 import * as GenerateReport from "../../reports/GenerateReport.js";
 import ReportColumns from "../ReportColumns";
 import { getAuth } from "../../store/index.js";
-//import { getReportData } from '../../store/index.js';
 import * as reportUtils from "../../reports/reportUtils.js";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -30,6 +28,7 @@ const OssStigReportsTab = () => {
   const [numDaysOver, setNumDaysOver] = useState("360");
   const [showData, setShowData] = useState(false);
   const [showNoDataFound, setShowNoDataFound] = useState(false);
+  const [showNoPinnedDataFound, setShowNoPinnedDataFound] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [disableNewReport, setDisableNewReport] = useState(true);
@@ -61,13 +60,14 @@ const OssStigReportsTab = () => {
     if (e.target.value !== "12" && e.target.value !== "14") {
       setShowEmassNums(true);
     }
-    if (e.target.value === "9" || e.target.value === "8") {
+    if (e.target.value === "9" ){
       setShowBenchmark(true);
     } else {
       setShowBenchmark(false);
     }
     if (e.target.value === "11") {
       setShowNumDaysOver(true);
+      alert('Report 6 may take an hour to complete.');
     } else {
       setShowNumDaysOver(false);
     }
@@ -265,13 +265,13 @@ const OssStigReportsTab = () => {
         report === "13") &&
       emassNums === ""
     ) {
-      alert("You must enter EMASS number(s)");
+      alert("You must enter eMASS number(s)");
       return;
     }
-    if ((report === "8" || report === "9") && benchmark === "") {
+    /*if ((report === "8" || report === "9") && benchmark === "") {
       alert("You must enter Benchmark ID");
       return;
-    }
+    }*/
 
     if (report === "11" && numDaysOver === "") {
       alert("You must enter the number of days over.");
@@ -305,7 +305,13 @@ const OssStigReportsTab = () => {
               window.dispatchEvent(new Event("storage"));
             }
           } else {
+            if(report === '13')
+            {
+              setShowNoPinnedDataFound(true);
+            }
+            else{
             setShowNoDataFound(true);
+            }
             setDisableCancelReport(true);
           }
         } else {
@@ -377,7 +383,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ padding: 2 }}
+                      sx={{ width: "100%" }}
                     >
                       <DialogMessages.Report1DialogMessage />
                     </Alert>
@@ -422,7 +428,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ padding: 2 }}
+                      sx={{ width: "100%" }}
                     >
                       <DialogMessages.Report2DialogMessage />
                     </Alert>
@@ -467,7 +473,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ padding: 2 }}
+                      sx={{ width: "100%" }}
                     >
                       <DialogMessages.Report3DialogMessage />
                     </Alert>
@@ -487,7 +493,7 @@ const OssStigReportsTab = () => {
                   disabled={isButtonDisabled}
                 />
                 <span>
-                  4. STIG Benchmark Version Deltas (EMASS number(s) required)
+                  4. STIG Benchmark Version Deltas (eMASS number(s) required)
                 </span>
                 <IconButton
                   option="report4"
@@ -514,7 +520,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ padding: 2}}
+                      sx={{ width: "100%" }}
                     >
                       <DialogMessages.Report4DialogMessage />
                     </Alert>
@@ -534,7 +540,7 @@ const OssStigReportsTab = () => {
                   disabled={isButtonDisabled}
                 />
                 <span>
-                  5. Open Result Finding Metrics (EMASS number(s) required)
+                  5. Open Result Finding Metrics (eMASS number(s) required)
                 </span>
                 <IconButton
                   option="report5"
@@ -561,7 +567,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ padding: 2 }}
+                      sx={{ width: "100%" }}
                     >
                       <DialogMessages.Report5DialogMessage />
                     </Alert>
@@ -581,7 +587,7 @@ const OssStigReportsTab = () => {
                   disabled={isButtonDisabled}
                 />
                 <span>
-                  6. Checks Not Updated in x Days. (EMASS number(s) required)
+                  6. Checks Not Updated in x Days (eMASS number(s) required)  <b>NOTE: may take an hour to complete.</b>
                 </span>
                 <IconButton
                   option="report6"
@@ -608,7 +614,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ padding: 2}}
+                      sx={{ width: "100%" }}
                     >
                       <DialogMessages.Report6DialogMessage />
                     </Alert>
@@ -653,7 +659,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ padding: 2 }}
+                      sx={{ width: "100%" }}
                     >
                       <DialogMessages.Report7DialogMessage />
                     </Alert>
@@ -672,7 +678,7 @@ const OssStigReportsTab = () => {
                   onChange={onRadioChange}
                   disabled={isButtonDisabled}
                 />
-                <span>8. Pinned Revisions (EMASS number(s) required)</span>
+                <span>8. Pinned Revisions (eMASS number(s) required)</span>
                 <IconButton
                   option="report8"
                   onClick={handleInfoClick}
@@ -698,7 +704,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ padding: 2 }}
+                      sx={{ width: "100%" }}
                     >
                       <DialogMessages.Report8DialogMessage />
                     </Alert>
@@ -743,7 +749,7 @@ const OssStigReportsTab = () => {
                     <Alert
                       onClose={handleInfoClose}
                       severity="info"
-                      sx={{ padding: 2 }}
+                      sx={{ width: "100%" }}
                     >
                       <DialogMessages.Report9DialogMessage />
                     </Alert>
@@ -759,7 +765,7 @@ const OssStigReportsTab = () => {
                 <div id="emassDiv">
                   <label htmlFor="emassNumsText">
                     Required for reports 4, 5, 6, 8. Optional for all others.
-                    <br /> Enter EMASS Number(s) separated by commas:{" "}
+                    <br /> Enter eMASS Number(s) separated by commas:{" "}
                   </label>
                   <input
                     id="emassNumsText"
@@ -773,8 +779,7 @@ const OssStigReportsTab = () => {
               {showBenchmark && (
                 <div id="benchmarkDiv">
                   <label htmlFor="benchmarkText">
-                    Required for reports 5.
-                    <br /> Enter Benchmark ID:{" "}
+                    <br /> Optional: Enter Benchmark ID:{" "}
                   </label>
                   <input
                     id="benchmarkText"
@@ -830,6 +835,13 @@ const OssStigReportsTab = () => {
                 <div className="title-div">
                   <strong className="title">
                     No data matching your selection found.
+                  </strong>
+                </div>
+              )}
+              {showNoPinnedDataFound && (
+                <div className="title-div">
+                  <strong className="title">
+                  "eMASS entered has no pinned revisions.
                   </strong>
                 </div>
               )}
