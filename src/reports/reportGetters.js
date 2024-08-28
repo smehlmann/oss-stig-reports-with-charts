@@ -120,7 +120,7 @@ async function getCollectionByName(auth, collectionName) {
 
 async function getStigs(auth, collectionId) {
   //console.log('inGetStigs')
-  var myUrl = apiBase + "/collections/" + collectionId + "/stigs";
+  var myUrl = apiBase + "/collections/" + collectionId + "/stigs?projection=assets";
   var stigs = getMetricsData(auth, myUrl);
   return stigs;
 }
@@ -208,19 +208,19 @@ async function getMetaMetricsSummaryAggregatedByStig(
   benchmarkId
 ) {
   //console.log('getMetaMetricsSummary')
-  /*var myUrl =
+  var myUrl =
     apiBase +
     "/collections/meta/metrics/summary/stig?collectionId=" +
     collectionId +
-    "&format=json";*/
+    "&format=json";
   // http://localhost:64001/api/collections/1/metrics/summary/stig?benchmarkId=22&format=json
-  var myUrl =
+  /*var myUrl =
     apiBase +
     "/collections/" +
     collectionId +
     "/metrics/summary/stig?benchmarkId=" +
     benchmarkId +
-    "&format=json";
+    "&format=json";*/
   var metaData = getMetricsData(auth, myUrl);
   return metaData;
 }
@@ -234,6 +234,27 @@ async function getAssetMetricsSummaryByAssetId(auth, collectionId, assetId) {
     "/metrics/summary?assetId=" +
     assetId +
     "&format=json";
+  var assets = getMetricsData(auth, myUrl);
+  return assets;
+}
+
+async function getAssetMetricsSummaryByAssetIdAndBenchmarkId(
+  auth,
+  collectionId,
+  assetId,
+  benchmarkId
+) {
+  //console.log('getAssetMetricsSummaryByAssetIdAndBenchmarkId');
+  var myUrl =
+    apiBase +
+    "/collections/" +
+    collectionId +
+    "/metrics/summary/asset?benchmarkId=" +
+    benchmarkId +
+    "&assetId=" +
+    assetId +
+    "&format=json";
+
   var assets = getMetricsData(auth, myUrl);
   return assets;
 }
@@ -449,7 +470,13 @@ async function getCollectionMerticsByCollectionAndBenchmark(
   collectionId,
   benchmarkId
 ) {
-  var myUrl =  apiBase +  "/collections/" +  collectionId + "/metrics/detail/asset?benchmarkId=" +  benchmarkId +  "&format=json";
+  var myUrl =
+    apiBase +
+    "/collections/" +
+    collectionId +
+    "/metrics/detail/asset?benchmarkId=" +
+    benchmarkId +
+    "&format=json";
 
   var metrics = await getMetricsData(auth, myUrl);
   return metrics;
@@ -829,18 +856,15 @@ async function getReviewByCollectionAndAsset(auth, collectionId, assetId) {
 async function createLabel(auth, collectionId, labelDetails, labelAssetMap) {
   //var myUrl = apiBase + '/collections/' + collectionId + '/labels';
   //console.log(labelDetails);
-  var mappedAssets;
 
   const primOwner = labelDetails.primOwner;
   const sysAdmin = labelDetails.sysAdmin;
   const assetType = labelDetails.assetType;
-  var label;
   var labelName = "";
-  var labelId = "";
   var description = "";
   var color = "";
 
-  if (primOwner && !primOwner == "") {
+  if (primOwner && !primOwner === "") {
     labelName = labelDetails.primOwner;
     description = "Primary Owner";
     color = "0000ff";
@@ -855,7 +879,7 @@ async function createLabel(auth, collectionId, labelDetails, labelAssetMap) {
     );
     //console.log(labelAssetMap);
   }
-  if (sysAdmin && !sysAdmin == "") {
+  if (sysAdmin && !sysAdmin === "") {
     labelName = labelDetails.sysAdmin;
     description = "Sys Admin";
     color = "ffff00";
@@ -869,7 +893,7 @@ async function createLabel(auth, collectionId, labelDetails, labelAssetMap) {
       labelDetails.asset
     );
   }
-  if (assetType && !assetType == "") {
+  if (assetType && !assetType === "") {
     labelName = labelDetails.assetType;
     description = "Asset Type";
     color = "90EE90";
@@ -1068,6 +1092,18 @@ async function getReviewsByAsset(auth, collectionId, assetId, benchmarkId) {
   }
 }
 
+async function getAllStigs(auth) {
+  try {
+    //console.log('getAssetsByCollection');
+    var myUrl = apiBase + "/stigs?elevate=false";
+    var stigs = getMetricsData(auth, myUrl);
+    return stigs;
+  } catch (e) {
+    console.log("Error in getAssetsByCollection");
+    console.log(e);
+  }
+}
+
 export {
   getCollections,
   getCollectionByName,
@@ -1112,12 +1148,13 @@ export {
   getAssetMetadata,
   getMetaMetricsSummary,
   getMerticsSummarydByBenchmark,
+  getAssetMetricsSummaryByAssetIdAndBenchmarkId,
   getSummaryMerticsByCollectionAndAsset,
   getJsonSummary,
   getMetaMetricsSummaryAggregatedByStig,
   getReviewsByAsset,
   getAssetMetricsSummaryByBenchmark,
   getCollectionsMetrics,
-  getCollectionMerticsByCollectionAndBenchmark
-
+  getCollectionMerticsByCollectionAndBenchmark,
+  getAllStigs,
 };

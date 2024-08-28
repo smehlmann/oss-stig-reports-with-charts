@@ -20,7 +20,7 @@ async function runUnidentifiedPackages(auth, collections) {
             { label: "RMF Action", key: 'rmfAction' },
             { label: "ISSO", key: 'isso' },
             { label: 'CCB_SA_Actions', key: 'ccbSAActions' },
-            { label: "Orher", key: 'other' },
+            { label: "Other", key: 'other' },
             { label: 'STIG Benchmark', key: 'benchmarks' },
             { label: 'Latest Revision', key: 'latestRev' },
             { label: 'Previous Revision', key: 'prevRev' },

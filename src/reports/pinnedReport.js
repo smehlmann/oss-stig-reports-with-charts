@@ -20,7 +20,7 @@ async function runPinnedReport(auth, emassMap) {
             { label: "RMF Action", key: 'rmfAction' },
             { label: "ISSO", key: 'isso' },
             { label: 'CCB_SA_Actions', key: 'ccbSAActions' },
-            { label: "Orher", key: 'other' },
+            { label: "Other", key: 'other' },
             { label: 'STIG Benchmark', key: 'benchmarks' },
             { label: 'Pinned Revision', key: 'pinnedRev' },
             { label: 'Latest Revision', key: 'latestRev' },

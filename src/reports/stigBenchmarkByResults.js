@@ -52,11 +52,8 @@ async function runStigBenchmarkByResults(auth, emassMap, benchmark) {
         for (var iStigs = 0; iStigs < stigs.length; iStigs++) {
           var myMetrics = stigs[iStigs].metrics;
           var benchmarkId = stigs[iStigs].benchmarkId;
-          if (benchmarkId !== benchmark) {
+          if (benchmark !== '' && benchmark !== benchmarkId) {
             continue;
-          }
-          if (benchmarkId === "Splunk_Enterprise_7-x_for_Windows_STIG") {
-            console.log(benchmarkId);
           }
 
           if (

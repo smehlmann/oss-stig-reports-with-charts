@@ -34,10 +34,6 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
         var collectionId = collections[i].collectionId;
         console.log("collection name: " + collectionName);
 
-        if (!collectionName.startsWith("NP_C")) {
-          continue;
-        }
-
         labelMap.clear();
         labels.length = 0;
 
@@ -45,8 +41,10 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
           auth,
           collections[i].collectionId
         );
-        for (var x = 0; x < labels.data.length; x++) {
-          labelMap.set(labels.data[x].labelId, labels.data[x].description);
+        if (labels && labels.data) {
+          for (var x = 0; x < labels.data.length; x++) {
+            labelMap.set(labels.data[x].labelId, labels.data[x].description);
+          }
         }
 
         //
@@ -67,7 +65,7 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
           //var myMetrics = stigs[iStigs].metrics;
           var benchmarkId = stigs[iStigs].benchmarkId;
           if (benchmarkId !== benchmark) {
-            continue;
+            //continue;
           }
 
           //
@@ -77,6 +75,9 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
             auth,
             benchmarkId
           );
+          if(!revisionsData){
+            continue;
+          }
           var revisions = revisionsData.data;
 
           var latestRev = "";
@@ -108,7 +109,6 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
           }
           var assets = tempAssets.data;
           for (var iAssets = 0; iAssets < assets.length; iAssets++) {
-
             var tempMeta = await reportGetters.getAssetMetadata(
               auth,
               assets[iAssets].assetId
