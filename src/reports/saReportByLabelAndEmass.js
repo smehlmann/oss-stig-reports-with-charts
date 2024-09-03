@@ -16,14 +16,14 @@ async function runSAReportByLabelAndEmass(auth, emassMap) {
             { label: 'eMASS Number', key: 'emass' },
             { label: 'eMASS Acronym', key: 'acronym' },
             { label: 'Asset', key: 'asset' },
-            { label: 'Checks', key: 'checks' },
             { label: 'Assessed', key: 'assessed' },
             { label: 'Submitted', key: 'submitted' },
             { label: 'Accepted', key: 'accepted' },
             { label: 'Rejected', key: 'rejected' },
             { label: 'CAT3', key: 'cat3' },
             { label: 'CAT2', key: 'cat2' },
-            { label: 'CAT1', key: 'cat1' }
+            { label: 'CAT1', key: 'cat1' },
+            { label: 'Checks', key: 'checks' }
         ];
 
         const emassKeysArray = Array.from(emassMap.keys());
@@ -148,14 +148,14 @@ function getRow(emassNum, metrics, acronymMap, assetEmassMap) {
         emass: emassNum,
         acronym: emassAcronym,
         asset: numAssets,
-        checks: totalChecks,
         assessed: avgAssessed + '%',
         submitted: avgSubmitted + '%',
         accepted: avgAccepted + '%',
         rejected: avgRejected + '%',
         cat3: sumOfCat3,
         cat2: sumOfCat2,
-        cat1: sumOfCat1
+        cat1: sumOfCat1,
+        checks: totalChecks,
     }
 
 

@@ -28,10 +28,8 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
             { label: "ISSO", key: 'isso' },
             { label: 'CCB_SA_Actions', key: 'ccbSAActions' },
             { label: "Other", key: 'other' },
-            { label: 'Last Touched', key: 'lastTouched' },
             { label: 'STIGs', key: 'stigs' },
             { label: 'Benchmarks', key: 'benchmarks' },
-            { label: 'Checks', key: 'checks'},
             { label: 'Assessed', key: 'assessed' },
             { label: 'Submitted', key: 'submitted' },
             { label: 'Accepted', key: 'accepted' },
@@ -39,7 +37,8 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
             { label: 'CAT3', key: 'cat3' },
             { label: 'CAT2', key: 'cat2' },
             { label: 'CAT1', key: 'cat1' },
-            { label: 'Web or DB', key: 'cklWebOrDatabase' }
+            { label: 'Web or DB', key: 'cklWebOrDatabase' },
+            { label: 'Checks', key: 'checks'}
         ]
 
         var today = new Date();
@@ -275,10 +274,8 @@ function getRow(todayStr, collection, metrics, labelMap, asset, emassNum, assetE
         isso: collectionMetadata.isso,
         ccbSAActions: collectionMetadata.ccbSAActions,
         other: collectionMetadata.other,
-        lastTouched: lastTouched,
         stigs: metrics.benchmarkIds.length,
         benchmarks: benchmarkIDs,
-        checks: totalChecks,
         assessed: avgAssessed + '%',
         submitted: avgSubmitted + '%',
         accepted: avgAccepted + '%',
@@ -286,7 +283,8 @@ function getRow(todayStr, collection, metrics, labelMap, asset, emassNum, assetE
         cat3: sumOfCat3,
         cat2: sumOfCat2,
         cat1: sumOfCat1,
-        cklWebOrDatabase: cklWebOrDatabase
+        cklWebOrDatabase: cklWebOrDatabase,
+        checks: totalChecks
     }
 
     return rowData;

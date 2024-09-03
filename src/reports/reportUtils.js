@@ -80,10 +80,9 @@ function getCollectionsByEmassNumber(collections, emassNumsFilter) {
 }
 
 function getCurrentQuarter(latestRevisinDate) {
-  
   const currentDate = new Date();
   const revisionDate = new Date(latestRevisinDate);
-  
+
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth() + 1;
 
@@ -105,11 +104,11 @@ function getCurrentQuarter(latestRevisinDate) {
     }
   }
 
-  if(retQuarter){
+  if (retQuarter) {
     const startDate = new Date(retQuarter.startDate);
     const endDate = new Date(retQuarter.endDate);
 
-    if(revisionDate < startDate || revisionDate > endDate){
+    if (revisionDate < startDate || revisionDate > endDate) {
       retQuarter = null;
     }
   }
@@ -330,14 +329,14 @@ function getMetadata(labelMap, metrics) {
   };
 
   const labels = metrics.labels;
-  if(!labels || labels.length === 0){
+  if (!labels || labels.length === 0) {
     return collectionMetadata;
   }
   const nameMap = new Map();
 
   try {
-    for(var i = 0; i < labels.length; i++){
-      nameMap.set(labels[i].labelId, labels[i].name)
+    for (var i = 0; i < labels.length; i++) {
+      nameMap.set(labels[i].labelId, labels[i].name);
     }
 
     labelMap.forEach((value, key, map) => {
@@ -345,9 +344,9 @@ function getMetadata(labelMap, metrics) {
       var labelId = key;
       var labelDesc = value.toUpperCase();
 
-      var name = nameMap.get(labelId);      
+      var name = nameMap.get(labelId);
 
-      if(name && name !== ''){
+      if (name && name !== "") {
         //labelDesc = labelMap.get(labels[iLabel].labelId);
         //console.log("labelDesc: " + labelDesc);
         //labelDesc = labelMap.get(labels[iLabel].labelId).toUpperCase();
@@ -407,7 +406,6 @@ function getMetadata(labelMap, metrics) {
     console.log(e);
     throw e;
   }
-
 } // end function getMetadata
 
 function getMetadataByAsset(labelMap, labels) {
@@ -424,34 +422,89 @@ function getMetadataByAsset(labelMap, labels) {
   var labelDesc = "";
 
   for (var iLabel = 0; iLabel < labels.length; iLabel++) {
-    labelDesc = labelMap.get(labels[iLabel].labelId).toUpperCase();
+    var assetLabel = labels[iLabel].labelId;
+    if (!assetLabel) {
+      assetLabel = "";
+    } else {
+      assetLabel = assetLabel.toUpperCase();
+      labelDesc = labelMap.get(labels[iLabel].labelId).toUpperCase();
 
-    switch (labelDesc) {
-      case "PRIMARY OWNER":
-        collectionMetadata.primOwner = labels[iLabel].name;
-        break;
-      case "SYS ADMIN":
-        collectionMetadata.sysAdmin = labels[iLabel].name;
-        break;
-      case "CCB_SA_ACTIONS":
-        collectionMetadata.ccbSAActions = labels[iLabel].name;
-        break;
-      case "RMF Action":
-        collectionMetadata.rmfAction = labels[iLabel].name;
-        break;
-      case "ISSO":
-        collectionMetadata.isso = labels[iLabel].name;
-        break;
-      case "OTHER":
-        collectionMetadata.other = labels[iLabel].name;
-        break;
-      case "ASSET TYPE":
-        collectionMetadata.device = labels[iLabel].name;
-        break;
-      default:
-        break;
+      switch (labelDesc) {
+        case "PRIMARY OWNER":
+          collectionMetadata.primOwner = labels[iLabel].name;
+          break;
+        case "SYS ADMIN":
+          collectionMetadata.sysAdmin = labels[iLabel].name;
+          break;
+        case "CCB_SA_ACTIONS":
+          collectionMetadata.ccbSAActions = labels[iLabel].name;
+          break;
+        case "RMF Action":
+          collectionMetadata.rmfAction = labels[iLabel].name;
+          break;
+        case "ISSO":
+          collectionMetadata.isso = labels[iLabel].name;
+          break;
+        case "OTHER":
+          collectionMetadata.other = labels[iLabel].name;
+          break;
+        case "ASSET TYPE":
+          collectionMetadata.device = labels[iLabel].name;
+          break;
+        default:
+          break;
+      }
     }
   }
+
+  return collectionMetadata;
+}
+
+function getAssetMetadata(labelMap, labels) {
+  var collectionMetadata = {
+    primOwner: "",
+    sysAdmin: "",
+    device: "",
+    ccbSAActions: "",
+    rmfAction: "",
+    isso: "",
+    other: "",
+  };
+
+  var labelDesc = "";
+
+  for (var iLabel = 0; iLabel < labels.length; iLabel++) {
+    var labelId = labels[iLabel];
+    labelDesc = labelMap.get(labelId);
+    if (labelDesc) {
+      labelDesc = labelDesc.toLocaleUpperCase();
+      switch (labelDesc) {
+        case "PRIMARY OWNER":
+          collectionMetadata.primOwner = labels[iLabel].name;
+          break;
+        case "SYS ADMIN":
+          collectionMetadata.sysAdmin = labels[iLabel].name;
+          break;
+        case "CCB_SA_ACTIONS":
+          collectionMetadata.ccbSAActions = labels[iLabel].name;
+          break;
+        case "RMF Action":
+          collectionMetadata.rmfAction = labels[iLabel].name;
+          break;
+        case "ISSO":
+          collectionMetadata.isso = labels[iLabel].name;
+          break;
+        case "OTHER":
+          collectionMetadata.other = labels[iLabel].name;
+          break;
+        case "ASSET TYPE":
+          collectionMetadata.device = labels[iLabel].name;
+          break;
+        default:
+          break;
+      } // end switch
+    } // end if label decsription
+  } // end for each label
 
   return collectionMetadata;
 }
@@ -612,4 +665,5 @@ export {
   getAssetEmassMapByAssets,
   getAssetEmassMapForUnassigned,
   formatCsvString,
+  getAssetMetadata,
 };
