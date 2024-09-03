@@ -13,7 +13,7 @@ import HistoricalDataGrid from "../../charts/DataGridMUI/HistoricalDataGrid";
 import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
-import FilterSelectionDrawer from "../FilterSelectionDrawer.js";
+import FilterSelectionDrawer from "../FilterSideMenu/FilterSelectionDrawer.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -105,11 +105,11 @@ const DashboardSelectedReport14 = ({ data, title}) => {
           </Grid>
           
           <Grid lg={4} md={4} sm={12} xl={6} xs={12}>
-            <ChartCardComponent title = "Assets by Collection">
+            <ChartCardComponent title = "Assets by Packages">
               <ApexCountByValueBarChart
                 targetColumn="shortName"
                 isHorizontal={false}
-                xAxisTitle="Collection Name"
+                xAxisTitle="Package Name"
                 yAxisTitle= "Number of Assets"
                 data={dataFromLastPullDate}
               />

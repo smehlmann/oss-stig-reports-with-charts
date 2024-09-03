@@ -96,7 +96,7 @@ const FilterBar = ({data = []}) => {
       </Box> */}
 
       {/* Switch for DB/Web inclusion */}
-      <FormControlLabel
+      {/* <FormControlLabel
         control={
           <Switch 
             color="primary" 
@@ -110,7 +110,7 @@ const FilterBar = ({data = []}) => {
           marginLeft: 'auto',
           fontSize: 'theme.typography.h3.fontSize' 
         }}
-      />
+      /> */}
 
     </Box>
   );

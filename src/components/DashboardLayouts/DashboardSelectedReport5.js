@@ -12,7 +12,7 @@ import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByC
 import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js"; 
-import FilterSelectionDrawer from "../FilterSelectionDrawer.js";
+import FilterSelectionDrawer from "../FilterSideMenu/FilterSelectionDrawer.js";
 
 /*
 Grid spacing is split into 12 parts:

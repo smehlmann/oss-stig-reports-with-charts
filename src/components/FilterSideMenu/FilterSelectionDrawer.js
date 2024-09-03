@@ -2,9 +2,9 @@ import React, { useState, useCallback} from 'react';
 import { Box, Button, IconButton, Divider, Typography, Chip, Drawer } from '@mui/material';
 import FilterAlt from '@mui/icons-material/FilterAlt';
 import CloseIcon from '@mui/icons-material/Close';
-import { useFilter } from '../FilterContext';
+import { useFilter } from '../../FilterContext';
 import { useTheme } from '@mui/system';
-import SearchDropdownFilterList from './SearchDropdownFilterList';
+import SearchDropdownFilterList from '../SearchDropdownFilterList';
 import { FilterSwitch } from './FilterSwitch';
 
 
@@ -48,7 +48,7 @@ const FilterSelectionDrawer = ({ data = [] }) => {
           return 'Collection';
         case 'acronym':
           return 'eMASS Acronym';
-        case 'benchmarks':
+        case 'benchmarkId':
           return 'STIG Benchmark';
         case 'latestRev':
           return 'Latest Revision';

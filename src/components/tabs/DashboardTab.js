@@ -66,7 +66,10 @@ const convertBenchmarksToArray = (initialString, selectReportNum) => {
     else {
       return [initialString];
     }
-  } 
+  }  else {
+    //mainly for selectReportNum === '8'
+    return initialString;
+  }
 };
 
 const formatData = (parsedData, selectedReportNum) => {
@@ -115,6 +118,7 @@ const formatData = (parsedData, selectedReportNum) => {
     //convert benchmarks to array for report5 and report14
     if (updatedEntry.benchmarks) {
       updatedEntry.benchmarks = convertBenchmarksToArray(updatedEntry.benchmarks, selectedReportNum);
+      // console.log("benchmarks: ", updatedEntry.benchmarks);
     }
 
     if ((selectedReportNum === '5' || selectedReportNum === '14') && updatedEntry.shortName === "NCCM") {

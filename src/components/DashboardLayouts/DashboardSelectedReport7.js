@@ -49,7 +49,7 @@ const DashboardSelectedReport7 = ({ data, title }) => {
             </Grid>
 
             <Grid lg={6} sm={6} xl={6} xs={12}>
-              <ChartCardComponent title = "Assets by eMass">
+              <ChartCardComponent title = "Assets by Package">
               <FromTwoPropertiesBarChart
                   labelColumn="acronym"
                   valueColumn = "asset"

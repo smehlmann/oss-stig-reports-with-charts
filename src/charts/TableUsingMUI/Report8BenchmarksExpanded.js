@@ -30,15 +30,15 @@ function Report8BenchmarksExpanded({ data }) {
 
   const [parentRows, setParentRows] = useState([]);
 
-  //checks if data is array of objects. If so, group by 'benchmarks' property.
+  //checks if data is array of objects. If so, group by 'benchmarkId' property.
   useEffect(() => {
     try {
       if (Array.isArray(data) && data.length > 0) {
       const dataGroupedByBenchmarks = data.reduce((accumulator, currentValue) => {
-        if (!accumulator[currentValue.benchmarks]) {
-          accumulator[currentValue.benchmarks] = [];
+        if (!accumulator[currentValue.benchmarkId]) {
+          accumulator[currentValue.benchmarkId] = [];
         }        
-        accumulator[currentValue.benchmarks].push({
+        accumulator[currentValue.benchmarkId].push({
           asset: currentValue.asset,
           sysAdmin: formatString(currentValue.sysAdmin),
           primOwner: formatString(currentValue.primOwner),
@@ -47,9 +47,9 @@ function Report8BenchmarksExpanded({ data }) {
         return accumulator;
       }, {});
 
-      //parentRows display 'shortName' value, and childRows are content for each 'shortName' value
-      const parentRows = Object.entries(dataGroupedByBenchmarks).map(([benchmarks, childRows]) => ({
-        benchmarks,
+      //parentRows display 'benchmarkId' value, and childRows are content for each 'benchmarkId' value
+      const parentRows = Object.entries(dataGroupedByBenchmarks).map(([benchmarkId, childRows]) => ({
+        benchmarkId,
         childRows
       }));
       setParentRows(parentRows);
@@ -134,7 +134,7 @@ function Report8BenchmarksExpanded({ data }) {
   };
 
   const columnHeaders = [
-    { id: 'benchmarks', label: 'STIG Benchmarks' }
+    { id: 'benchmarkId', label: 'STIG Benchmarks' }
   ];
 
 
@@ -144,7 +144,7 @@ function Report8BenchmarksExpanded({ data }) {
       columns={columnHeaders} 
       renderChildRow={renderChildRow} 
       searchText={searchText}
-      filterProperty="benchmarks"
+      filterProperty="benchmarkId"
       updateFilter={updateFilter}
       clearFilter={clearFilter}
     />

@@ -11,7 +11,7 @@ import {  useFilter } from "../../FilterContext";
 import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
-import FilterSelectionDrawer from "../FilterSelectionDrawer.js";
+import FilterSelectionDrawer from "../FilterSideMenu/FilterSelectionDrawer.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -58,10 +58,10 @@ const DashboardSelectedReport5 = ({ data, title }) => {
             </Grid> 
             
 
-            <Grid lg={8} sm={6} xl={8} xs={12}>
-              <ChartCardComponent title = 'Assets by Benchmark'>
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <ChartCardComponent title = 'Assets by STIG Benchmark'>
                 <ApexCountByValueBarChart
-                  targetColumn="benchmarks"
+                  targetColumn="benchmarkId"
                   isHorizontal={false}
                   xAxisTitle="STIG Benchmark"
                   yAxisTitle= "Number of Assets"
@@ -70,15 +70,6 @@ const DashboardSelectedReport5 = ({ data, title }) => {
               </ChartCardComponent>
             </Grid>
             
-            <Grid lg={4} sm={6} xl={4} xs={12}>
-              <ChartCardComponent title = "Latest Revision">
-                <ApexDonutCountChart
-                  targetColumn='latestRev'
-                  legendTitle='Latest Revision'
-                  data={filteredData}
-                />
-              </ChartCardComponent>
-            </Grid> 
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
