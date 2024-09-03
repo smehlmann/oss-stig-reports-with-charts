@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import "../../App.css";
 import { CSVLink } from "react-csv";
 import * as GenerateReport from "../../reports/GenerateReport.js";
-import ReportColumns from "../ReportColumns";
+import ReportColumns from "./ReportColumns.jsx";
 import { getAuth } from "../../store/index.js";
 import * as reportUtils from "../../reports/reportUtils.js";
 import ClipLoader from "react-spinners/ClipLoader";

@@ -201,25 +201,16 @@ export default function ReportColumns({ index, item, selectedReport }) {
                         {item.asset}
                     </td>
                     <td>
+                        {item.deviceType}
+                    </td>
+                    <td>
                         {item.primOwner}
                     </td>
                     <td>
                         {item.sysAdmin}
                     </td>
                     <td>
-                        {item.rmfAction}
-                    </td>
-                    <td>
-                        {item.isso}
-                    </td>
-                    <td>
-                        {item.ccbSAActions}
-                    </td>
-                    <td>
-                        {item.other}
-                    </td>
-                    <td>
-                        {item.benchmarks}
+                        {item.benchmarkId}
                     </td>
                     <td>
                         {item.latestRev}
@@ -231,28 +222,7 @@ export default function ReportColumns({ index, item, selectedReport }) {
                         {item.quarterVer}
                     </td>
                     <td>
-                        {item.checks}
-                    </td>
-                    <td>
-                        {item.assessed}
-                    </td>
-                    <td>
-                        {item.submitted}
-                    </td>
-                    <td>
-                        {item.accepted}
-                    </td>
-                    <td>
-                        {item.rejected}
-                    </td>
-                    <td>
-                        {item.cat3}
-                    </td>
-                    <td>
-                        {item.cat2}
-                    </td>
-                    <td>
-                        {item.cat1}
+                        {item.cklWebOrDatabase}
                     </td>
                 </tr>
             );
@@ -263,25 +233,22 @@ export default function ReportColumns({ index, item, selectedReport }) {
                         {item.collectionName}
                     </td>
                     <td>
+                        {item.asset}
+                    </td>
+                    <td>
+                        {item.primOwner}
+                    </td>
+                    <td>
+                        {item.sysAdmin}
+                    </td>
+                    <td>
                         {item.benchmark}
                     </td>
                     <td>
                         {item.latestRev}
                     </td>
                     <td>
-                        {item.prevRev}
-                    </td>
-                    <td>
                         {item.quarterVer}
-                    </td>
-                    <td>
-                        {item.groupId}
-                    </td>
-                    <td>
-                        {item.asset}
-                    </td>
-                    <td>
-                        {item.result}
                     </td>
                     <td>
                         {item.detail}
@@ -361,9 +328,6 @@ export default function ReportColumns({ index, item, selectedReport }) {
                     </td>
                     <td>
                         {item.sysAdmin}
-                    </td>
-                    <td>
-                        {item.other}
                     </td>
                     <td>
                         {item.benchmark}
