@@ -36,7 +36,7 @@ const Report5DialogMessage = () => {
 const Report6DialogMessage = () => {
 
   return (
-  <p>Displays any checks not updated (import,submitted, or accepted) outside threshold identified by user. </p>
+  <p>Displays checks that were imported or last modified by the number of days identified in threshold set by user. Note: This also includes checks that have never been assessed.</p>
   )
 }
 
