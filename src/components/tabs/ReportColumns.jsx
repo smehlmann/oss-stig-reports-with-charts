@@ -116,9 +116,6 @@ export default function ReportColumns({ index, item, selectedReport }) {
                         {item.other}
                     </td>
                     <td>
-                        {item.lastTouched}
-                    </td>
-                    <td>
                         {item.stigs}
                     </td>
                     <td>
