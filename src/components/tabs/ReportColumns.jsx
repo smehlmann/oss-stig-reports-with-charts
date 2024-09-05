@@ -92,9 +92,6 @@ export default function ReportColumns({ index, item, selectedReport }) {
                         {item.asset}
                     </td>
                     <td>
-                        {item.nccm}
-                    </td>
-                    <td>
                         {item.deviceType}
                     </td>
                     <td>
