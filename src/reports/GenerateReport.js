@@ -65,7 +65,7 @@ async function GenerateReport(auth, selection, inEmassNums, numDaysOver, benchma
         break;
       case "5":
         console.log(
-          "Run 2. Asset Collection per Primary Owner and System Admin"
+          "Run 2. Asset Mewtrics"
         );
         rows = await saReportByAsset.runSAReportByAsset(
           auth,
@@ -74,14 +74,14 @@ async function GenerateReport(auth, selection, inEmassNums, numDaysOver, benchma
         );
         break;
       case "7":
-        console.log("Run 3.  Asset Status per eMASS");
+        console.log("Run 3. RMF Package Asset Count");
         rows = await saReportByLabelAndEmass.runSAReportByLabelAndEmass(
           auth,
           emassMap
         );
         break;
       case "8":
-        console.log("Run 4. STIG Deltas per Primary Owner and System Admin");
+        console.log("Run 4. STIG Benchmark Version Deltas");
         rows =
           await saReportWithMetricsAndVersions.runSAReportWithMetricsAndVersions(
             auth,
@@ -91,7 +91,7 @@ async function GenerateReport(auth, selection, inEmassNums, numDaysOver, benchma
         break;
       case "9":
         // run STIG Benchmark by Results
-        console.log("Run 5. STIG Benchmark By Results");
+        console.log("Run 5. Open Result Finding Metrics ");
         rows = await stigBenchmarkByResults.runStigBenchmarkByResults(
           auth,
           emassMap,
@@ -112,7 +112,7 @@ async function GenerateReport(auth, selection, inEmassNums, numDaysOver, benchma
         break;
       case "11":
         // run Run 6.Checklist Over 356 days
-        console.log("Run 9. Checklist Over 365 Days");
+        console.log("Run 6. Checks Not Updated in x Days");
         rows = await checklistOver365Days.runChecklistOver365Days(
           auth,
           emassMap,
@@ -120,7 +120,7 @@ async function GenerateReport(auth, selection, inEmassNums, numDaysOver, benchma
         );
         break;
       case "12":
-        // run 7. STIG Deltas for Unidentified Packages
+        // removed report 7. STIG Deltas for Unidentified Packages
         console.log("Run 7. STIG Deltas for Unidetified Packages");
         rows = await unidentifiedPackages.runUnidentifiedPackages(
           auth,
@@ -128,7 +128,7 @@ async function GenerateReport(auth, selection, inEmassNums, numDaysOver, benchma
         );
         break;
       case "13":
-        // run 8. Pinned Report
+        // run 7. Pinned Report
         console.log("Run 8. Pinned Report");
         rows = await pinnedReport.runPinnedReport(auth, emassMap);
         break;
