@@ -41,7 +41,7 @@ const OssStigReportsTab = () => {
   const [open4, setOpen4] = useState(false);
   const [open5, setOpen5] = useState(false);
   const [open6, setOpen6] = useState(false);
-  const [open7, setOpen7] = useState(false);
+  //const [open7, setOpen7] = useState(false);
   const [open8, setOpen8] = useState(false);
   const [open9, setOpen9] = useState(false);
   const [option, setOption] = useState("");
@@ -67,7 +67,7 @@ const OssStigReportsTab = () => {
     }
     if (e.target.value === "11") {
       setShowNumDaysOver(true);
-      alert('Report 6 may take an hour to complete.');
+      alert('Report 6 may take an hour or more to complete.');
     } else {
       setShowNumDaysOver(false);
     }
@@ -112,7 +112,6 @@ const OssStigReportsTab = () => {
         setOpen4(false);
         setOpen5(false);
         setOpen6(false);
-        setOpen7(false);
         setOpen8(false);
         setOpen9(false);
         break;
@@ -123,7 +122,6 @@ const OssStigReportsTab = () => {
         setOpen4(false);
         setOpen5(false);
         setOpen6(false);
-        setOpen7(false);
         setOpen8(false);
         setOpen9(false);
         break;
@@ -134,7 +132,6 @@ const OssStigReportsTab = () => {
         setOpen4(false);
         setOpen5(false);
         setOpen6(false);
-        setOpen7(false);
         setOpen8(false);
         setOpen9(false);
         break;
@@ -142,10 +139,9 @@ const OssStigReportsTab = () => {
         setOpen1(false);
         setOpen2(false);
         setOpen3(false);
-        setOpen4(FlashlightOffRounded);
-        setOpen5(true);
+        setOpen4(true);
+        setOpen5(false);
         setOpen6(false);
-        setOpen7(false);
         setOpen8(false);
         setOpen9(false);
         break;
@@ -156,7 +152,6 @@ const OssStigReportsTab = () => {
         setOpen4(false);
         setOpen5(true);
         setOpen6(false);
-        setOpen7(false);
         setOpen8(false);
         setOpen9(false);
         break;
@@ -167,18 +162,6 @@ const OssStigReportsTab = () => {
         setOpen4(false);
         setOpen5(false);
         setOpen6(true);
-        setOpen7(false);
-        setOpen8(false);
-        setOpen9(false);
-        break;
-      case "report7":
-        setOpen1(false);
-        setOpen2(false);
-        setOpen3(false);
-        setOpen4(false);
-        setOpen5(false);
-        setOpen6(false);
-        setOpen7(true);
         setOpen8(false);
         setOpen9(false);
         break;
@@ -189,7 +172,6 @@ const OssStigReportsTab = () => {
         setOpen4(false);
         setOpen5(false);
         setOpen6(false);
-        setOpen7(false);
         setOpen8(true);
         setOpen9(false);
         break;
@@ -200,7 +182,6 @@ const OssStigReportsTab = () => {
         setOpen4(false);
         setOpen5(false);
         setOpen6(false);
-        setOpen7(false);
         setOpen8(false);
         setOpen9(true);
         break;
@@ -231,9 +212,6 @@ const OssStigReportsTab = () => {
         break;
         case "report6":
         setOpen6(false);
-        break;
-        case "report7":
-        setOpen7(false);
         break;
         case "report8":
         setOpen8(false);
@@ -587,7 +565,7 @@ const OssStigReportsTab = () => {
                   disabled={isButtonDisabled}
                 />
                 <span>
-                  6. Checks Not Updated in x Days (eMASS number(s) required)  <b>NOTE: may take an hour to complete.</b>
+                  6. Checks Not Updated in x Days (eMASS number(s) required)  <b>NOTE: may take an hour or more to complete.</b>
                 </span>
                 <IconButton
                   option="report6"
@@ -628,57 +606,12 @@ const OssStigReportsTab = () => {
               <label>
                 <input
                   type="radio"
-                  value="12"
-                  checked={report === "12"}
-                  onChange={onRadioChange}
-                  disabled={isButtonDisabled}
-                />
-                <span>7. Unidentified NCCM Assets </span>
-                <IconButton
-                  option="report7"
-                  onClick={handleInfoClick}
-                  size="small"
-                  style={{ marginLeft: 4 }}
-                >
-                  <Info fontSize="small" />
-                </IconButton>
-                <Dialog
-                  open={open7}
-                  onClose={handleInfoClose}
-                  fullWidth
-                  maxWidth="md"
-                  PaperProps={{
-                    sx: {
-                      position: "absolute",
-                      top: 0,
-                      margin: 5,
-                    },
-                  }}
-                >
-                  <DialogContent>
-                    <Alert
-                      onClose={handleInfoClose}
-                      severity="info"
-                      sx={{ width: "100%" }}
-                    >
-                      <DialogMessages.Report7DialogMessage />
-                    </Alert>
-                    <Button onClick={handleInfoClose} color="primary">
-                      Close
-                    </Button>
-                  </DialogContent>
-                </Dialog>
-              </label>
-              <br />
-              <label>
-                <input
-                  type="radio"
                   value="13"
                   checked={report === "13"}
                   onChange={onRadioChange}
                   disabled={isButtonDisabled}
                 />
-                <span>8. Pinned Revisions (eMASS number(s) required)</span>
+                <span>7. Pinned Revisions (eMASS number(s) required)</span>
                 <IconButton
                   option="report8"
                   onClick={handleInfoClick}
@@ -723,7 +656,7 @@ const OssStigReportsTab = () => {
                   onChange={onRadioChange}
                   disabled={isButtonDisabled}
                 />
-                <span>9. Historical Data</span>
+                <span>8. Historical Data</span>
                 <IconButton
                   option="report9"
                   onClick={handleInfoClick}
