@@ -29,10 +29,17 @@ function getCollectionsByEmassNumber(collections, emassNumsFilter) {
 
   try {
     var emassArray = emassNumsFilter.split(",");
+    var collectionEmass = '';
 
     if (emassNumsFilter) {
       for (var x = 0; x < collections.data.length; x++) {
-        var collectionEmass = collections.data[x].metadata.eMASS;
+        if(collections.data[x].name === 'NP_C34-NCCM-NW_7371_Zone B'){
+          console.log(collections.data[x].name);
+        }
+        else if(collections.data[x].name === 'NP_C60-NCCM-S_7373_Zone B'){
+          console.log(collections.data[x].name);
+        }
+        collectionEmass = collections.data[x].metadata.eMASS;
         if (collectionEmass) {
           var collectioEmassArray = collectionEmass.split(",");
 
@@ -54,7 +61,7 @@ function getCollectionsByEmassNumber(collections, emassNumsFilter) {
       }
     } else {
       for (var x = 0; x < collections.data.length; x++) {
-        var collectionEmass = collections.data[x].metadata.eMASS;
+        collectionEmass = collections.data[x].metadata.eMASS;
         if (collectionEmass) {
           var collectioEmassArray = collectionEmass.split(",");
 
