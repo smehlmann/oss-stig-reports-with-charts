@@ -62,7 +62,7 @@ const DashboardSelectedReport5 = ({ data, title }) => {
               <ChartCardComponent title = 'Assets by STIG Benchmark'>
                 <ApexCountByValueBarChart
                   targetColumn="benchmarkId"
-                  isHorizontal={false}
+                  isHorizontal={true}
                   xAxisTitle="STIG Benchmark"
                   yAxisTitle= "Number of Assets"
                   data={filteredData}

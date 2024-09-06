@@ -14,6 +14,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
     fontWeight: '500',
     margin: '0',
     textAlign: 'center',
+
   }), []);
   
   //set color of bars based on bar's label
@@ -50,9 +51,8 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
       type: 'bar',
       height: '100%',
       width: '100%',
-      // events: {
-      //   dataPointSelection: onClick,
-      // },
+      justifyContent:'center',
+      alignItems: 'center',
       events: {
         dataPointSelection: (event, chartContext, config) => {
           // console.log("Data Point Selected: ", config);
@@ -97,13 +97,24 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
         style: axisTitleStyle,
       },
       labels: {
+        //if values are decimals, format as %
         formatter: function (value) {
           if (formatLabelToPercentage) {
             return formatLabelToPercentage.formatter(value);
           }
           return value;
         },
-      },
+        hideOverlappingLabels: false,
+        trim: false,
+        show: true,
+        style: {
+          // fontSize: '12px',
+          fontFamily: 'Segoe UI, Arial, sans-serif',
+          fontWeight: 400,
+          cssClass: 'apexcharts-yaxis-label',
+        },
+      }, //labels
+
     },
     tooltip: {
       enabled: true,
@@ -112,7 +123,6 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
       x: {
         formatter: function (val, opts) {
           const dataLabelsArray = opts.w.globals.initialConfig.xaxis.categories;
-          // console.log("Tooltip dataLabels: ", dataLabelsArray);
           const dataLabel = dataLabelsArray[opts.dataPointIndex];
           return dataLabel !== undefined ? dataLabel : '';
         },
@@ -138,99 +148,98 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
         horizontal: isHorizontal,
         columnWidth: "34%",
         colors: {
-          backgroundBarColors: [],
           backgroundBarOpacity: 1,
-          opacity: 1, // Ensure bars are 100% opaque
+          opacity: 1, 
         },
       },
       enableToolbar: true,
     },
     fill: {
-      opacity: 1 // Ensure bars are 100% opaque
+      opacity: 1 
     },
     legend: {
       show: false,
     },
-    // responsive: [
-    //   {
-    //     breakpoint: 1300,
-    //     options: {
-    //       enableToolbar: true,
-    //       xaxis: {
-    //         labels: {
-    //           style: {
-    //             fontSize: '11px',
-    //           },
-    //         },
-    //         title: {
-    //           style: {
-    //             fontSize: '15px',
-    //           },
-    //         },
-    //       },
-    //       yaxis: {
-    //         labels: {
-    //           formatter: function (value) {
-    //             if (formatLabelToPercentage) {
-    //               return formatLabelToPercentage.formatter(value);
-    //             }
-    //             return value;
-    //           },
-    //           style: {
-    //             fontSize: '11px',
-    //           },
-    //         },
-    //         title: {
-    //           style: {
-    //             text: yAxisHeader,
-    //             fontSize: '12px',
-    //           },
-    //         },
-    //       },
-    //       title: {
-    //         style: {
-    //           fontSize: '20px',
-    //         },
-    //       },
-    //     },
-    //   },
-    //   {
-    //     breakpoint: 600,
-    //     options: {
-    //       enableToolbar: true,
-    //       xaxis: {
-    //         labels: {
-    //           style: {
-    //             fontSize: '8px',
-    //           },
-    //         },
-    //         title: {
-    //           style: {
-    //             fontSize: '10px',
-    //           },
-    //         },
-    //       },
-    //       yaxis: {
-    //         labels: {
-    //           style: {
-    //             fontSize: '8px',
-    //           },
-    //         },
-    //         title: {
-    //           style: {
-    //             text: yAxisHeader,
-    //             fontSize: '10px',
-    //           },
-    //         },
-    //       },
-    //       title: {
-    //         style: {
-    //           fontSize: '15px',
-    //         },
-    //       },
-    //     },
-    //   },
-    // ],
+    responsive: [
+      {
+        breakpoint: 1300,
+        options: {
+          enableToolbar: true,
+          xaxis: {
+            labels: {
+              style: {
+                fontSize: '11px',
+              },
+            },
+            title: {
+              style: {
+                fontSize: '15px',
+              },
+            },
+          },
+          yaxis: {
+            labels: {
+              formatter: function (value) {
+                if (formatLabelToPercentage) {
+                  return formatLabelToPercentage.formatter(value);
+                }
+                return value;
+              },
+              style: {
+                fontSize: '11px',
+              },
+            },
+            title: {
+              style: {
+                text: yAxisHeader,
+                fontSize: '12px',
+              },
+            },
+          },
+          title: {
+            style: {
+              fontSize: '20px',
+            },
+          },
+        },
+      },
+      {
+        breakpoint: 600,
+        options: {
+          enableToolbar: true,
+          xaxis: {
+            labels: {
+              style: {
+                fontSize: '8px',
+              },
+            },
+            title: {
+              style: {
+                fontSize: '10px',
+              },
+            },
+          },
+          yaxis: {
+            labels: {
+              style: {
+                fontSize: '8px',
+              },
+            },
+            title: {
+              style: {
+                text: yAxisHeader,
+                fontSize: '10px',
+              },
+            },
+          },
+          title: {
+            style: {
+              fontSize: '15px',
+            },
+          },
+        },
+      },
+    ],
   });
 
   // useEffect(() => {
@@ -238,7 +247,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
   // }, [dataValues, xAxisHeader, barColors ]);
 
   //update series data when dataValues, dataLabels, or getColorForLabel change
-  useEffect(() => {
+  useEffect(() => { 
     const updatedSeriesData = dataValues.map((value, index) => ({
       x: dataLabels[index],
       y: value,
@@ -266,13 +275,13 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
           style: axisTitleStyle,
         },
       },
-      colors: barColors,
+     colors: barColors,
     }));
     // console.log("Options Updated: ", dataLabels, xAxisHeader, yAxisHeader);
   }, [dataLabels, xAxisHeader, yAxisHeader, axisTitleStyle,barColors]);
 
   return (
-    <div className="apex-chart" style={{ height: '100%', width: '100%', margin: "0" }}>
+    <div className="apex-chart" style={{ height: '100%', width: '100%', margin: "0"}}>
       <ReactApexChart options={options} series={series} type="bar" height='100%' />
     </div>
   );

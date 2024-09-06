@@ -121,13 +121,10 @@ const formatData = (parsedData, selectedReportNum) => {
       // console.log("benchmarks: ", updatedEntry.benchmarks);
     }
 
-    if ((selectedReportNum === '5' || selectedReportNum === '14') && updatedEntry.shortName === "NCCM") {
-      updatedEntry.shortName = updatedEntry.nccm || "NCCM";
-    }
-
     // return { ...entry, uniqueId: index }; // Add a unique identifier
     return updatedEntry;
   });
+
 
   return updatedData;
 };
@@ -143,9 +140,9 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
   //keeps track of the selectedReport state
   const [setSelectedReport] = useState(null);
 
-  useEffect(() => {
-    console.log('Formatted Data:', formattedData);
-  }, [formattedData]);
+  // useEffect(() => {
+  //   console.log('Formatted Data:', formattedData);
+  // }, [formattedData]);
 
   const handleClick = useCallback((reportNum) => {
     setSelectedReport(reportNum);

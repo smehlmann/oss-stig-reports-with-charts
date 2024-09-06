@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState} from "react";
 import {ThemeProvider,Typography, Box} from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
@@ -71,7 +71,6 @@ const DashboardSelectedReport14 = ({ data, title}) => {
   //get values (entries from latest date)
   const dataFromLastPullDate = Object.values(latestDateObj)[0];
 
-
   return (
     <ThemeProvider theme={theme}>
     {/* <FilterProvider> */}
@@ -83,6 +82,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
             px: { lg: 5, xl: 15 }, // Padding-left and padding-right for lg and xl screens
           }}
         >
+
           <Grid lg={12} sm={12} xl={12} xs={12}>
             <Box display="flex" justifyContent="space-between" alignItems='center'>
               <Typography variant='h1'> {title} </Typography>

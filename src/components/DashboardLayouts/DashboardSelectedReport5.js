@@ -38,6 +38,15 @@ const DashboardSelectedReport5 = ({ data, title }) => {
     return result;
   }, [filter, data, isWebOrDBIncluded]);
   
+  const shortName = filteredData.map(item => item['shortName']);
+  const uniqueShortName = [...new Set(shortName)];
+
+  const uniqueValuesWithTypes = uniqueShortName.map(value => ({
+    value: value,
+  }));
+  uniqueValuesWithTypes.forEach(item => {
+    console.log("item: ", item);
+  });
 
   return (
     <ThemeProvider theme={theme}>

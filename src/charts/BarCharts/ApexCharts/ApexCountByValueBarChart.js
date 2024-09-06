@@ -3,6 +3,7 @@ import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
 import GetFilteredData from "../../../components/GetFilteredData.js";
+import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
 
 const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
   const { filter, updateFilter } = useFilter();
@@ -32,27 +33,37 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
     }
   };
 
-  return (
-    // <div style={{width: '100%', height: '100%'}}>
-      // {barValues.map((val, index) => (
-      //   <div key={index}>
-      //     <body1>Name: {barLabels[index]} </body1><br></br>
-      //     <body2>Count: {val}</body2>
-      //     <hr />
-      //   </div>
-      // ))} 
+  // Function to render the appropriate chart based on orientation
+  const renderChart = () => {
+    if (isHorizontal) {
+      return (
+        <HorizontalBarChartBuilder
+          dataLabels={barLabels}
+          dataValues={barValues}
+          title={chartTitle}
+          isHorizontal={isHorizontal}
+          xAxisHeader={xAxisTitle}
+          yAxisHeader={yAxisTitle}
+          onClick={handleBarClick}
+        />
+      );
+    } else {
+      return (
+        <ApexBarChartBuilder
+          dataLabels={barLabels}
+          dataValues={barValues}
+          title={chartTitle}
+          isHorizontal={isHorizontal}
+          xAxisHeader={xAxisTitle}
+          yAxisHeader={yAxisTitle}
+          onClick={handleBarClick}
+        />
+      );
+    }
+  };
 
-      <ApexBarChartBuilder
-        dataLabels={barLabels}
-        dataValues={barValues}
-        title={chartTitle}
-        isHorizontal={isHorizontal}
-        xAxisHeader={xAxisTitle}
-        yAxisHeader={yAxisTitle}
-        onClick={handleBarClick}
-      />
-    // </div>
-  );
+  // Return the chart
+  return <>{renderChart()}</>;
 };
 
 export default ApexCountByValueBarChart;
