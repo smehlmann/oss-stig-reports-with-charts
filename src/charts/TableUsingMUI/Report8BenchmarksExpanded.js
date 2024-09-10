@@ -42,7 +42,9 @@ function Report8BenchmarksExpanded({ data }) {
           asset: currentValue.asset,
           sysAdmin: formatString(currentValue.sysAdmin),
           primOwner: formatString(currentValue.primOwner),
-          accepted: currentValue.accepted,
+          collectionName: formatString(currentValue.collectionName),
+          latestRev: formatString(currentValue.latestRev),
+          quarterVer: formatString(currentValue.quarterVer),
         });
         return accumulator;
       }, {});
@@ -93,11 +95,14 @@ function Report8BenchmarksExpanded({ data }) {
   const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
     //filter child rows based on text in searchbar
     const filteredChildRows = parentRow.childRows.filter((childRow) => {
+
       return (
       //set to lowercase for searchability 
       childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
       childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
-      childRow.primOwner.toLowerCase().includes(searchText.toLowerCase())
+      childRow.collectionName.toString().includes(searchText.toLowerCase()) ||
+      childRow.latestRev.toString().includes(searchText.toLowercase()) ||
+      childRow.quarterVer.toString().includes(searchText.toLowercase())
       );
     });
     
@@ -116,6 +121,9 @@ function Report8BenchmarksExpanded({ data }) {
               <ExpandedHeaderCell>Asset</ExpandedHeaderCell>
               <ExpandedHeaderCell >Sys Admin</ExpandedHeaderCell>
               <ExpandedHeaderCell >Primary Owner</ExpandedHeaderCell>
+              <ExpandedHeaderCell >Collection</ExpandedHeaderCell>
+              <ExpandedHeaderCell >Latest Revision</ExpandedHeaderCell>
+              <ExpandedHeaderCell >Current Quarter Stig </ExpandedHeaderCell>
             </StyledTableRow>
           </ExpandedTableHead>
           <TableBody>
@@ -124,7 +132,9 @@ function Report8BenchmarksExpanded({ data }) {
                 <ExpandedTableCell>{childRow.asset}</ExpandedTableCell>
                 <ExpandedTableCell>{childRow.sysAdmin}</ExpandedTableCell>
                 <ExpandedTableCell>{childRow.primOwner}</ExpandedTableCell>
-
+                <ExpandedTableCell>{childRow.collectionName}</ExpandedTableCell>
+                <ExpandedTableCell>{childRow.latestRev}</ExpandedTableCell>
+                <ExpandedTableCell>{childRow.quarterVer}</ExpandedTableCell>
               </StyledTableRow>
             ))}
           </TableBody>

@@ -27,7 +27,7 @@ const StatisticsCardGroup = ({data = [], source='' }) => {
       return safeData.reduce((sum, item) => sum + (item.asset || 0), 0);
     } else {
       const countMap = ValueCountMap(safeData, 'asset');
-      return Object.keys(countMap).length;
+      return Object.values(countMap).reduce((sum, value) => sum + (value || 0), 0); //sum of all asset values (includes dups)
     }
   }, [safeData, source]);
 

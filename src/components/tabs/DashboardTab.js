@@ -3,6 +3,7 @@ import React, { useState, useMemo, useCallback, useEffect} from "react";
 import DashboardSelectedReport5 from "../DashboardLayouts/DashboardSelectedReport5";
 import DashboardSelectedReport7 from "../DashboardLayouts/DashboardSelectedReport7";
 import DashboardSelectedReport8 from "../DashboardLayouts/DashboardSelectedReport8";
+import DashboardSelectedReport9 from "../DashboardLayouts/DashboardSelectedReport9";
 import DashboardSelectedReport14 from "../DashboardLayouts/DashboardSelectedReport14";
 import { parseISO } from 'date-fns';
 
@@ -156,6 +157,8 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
       return <DashboardSelectedReport7 data={formattedData} title='RMF Package Asset Count' handleClick={handleClick} />
     case '8':
       return <DashboardSelectedReport8 data={formattedData} title='STIG Benchmark Version Deltas' handleClick={handleClick} />
+    case '9':
+        return <DashboardSelectedReport9 data={formattedData} title='Open Result Finding Metrics' handleClick={handleClick} />
     case '14':
       return <DashboardSelectedReport14 data={formattedData} title='Historical Data' handleClick={handleClick} />
     default:

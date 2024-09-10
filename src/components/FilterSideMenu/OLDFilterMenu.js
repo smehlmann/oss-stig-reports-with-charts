@@ -16,8 +16,8 @@ import { useTheme } from "../../theme";
 
 
 /**
+NOT BEING USED
 IN UI: When the button labeled 'FIlter' is selected, menu below will appear with filter options
-
 
  */
 

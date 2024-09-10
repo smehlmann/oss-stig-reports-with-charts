@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Box, Autocomplete, TextField, Checkbox, ListItemText } from '@mui/material';
-import { useFilter } from '../FilterContext';
 import { styled, alpha } from "@mui/system";
 
+//styling for how it will appear
 const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
   '& .MuiAutocomplete-inputRoot': {
     borderRadius: '10px',
     border: '2px solid #b2bbff',
     backgroundColor: '#ffffff',
     alignItems: 'center',
-    height:'45px',
+    // height:'45px',
     padding: '2px 8px',
     boxShadow: 'none', // Initial state without shadow
     transition: 'box-shadow 0.3s ease',
@@ -29,36 +29,35 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
   '& .MuiAutocomplete-popupIndicator': {
     color: theme.palette.primary.main,
   },
+  '& .MuiAutocomplete-paper': {
+    maxHeight: '300px', // Adjust this value as needed
+    overflowY: 'auto',
+  },
 }));
 
 
-const SearchDropdownFilterList = ({targetProperty, label, valueOptions, clearSelections }) => {
-  const { updateFilter, removeFilterKey } = useFilter();
-  const [selectedOptions, setSelectedOption] = useState([]);
+const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, clearSelections, onChange }) => {
+
+  // Add "Select All" option to valueOptions
+  const optionsWithSelectAll = ['Select All', ...valueOptions];
 
   //reset the selected options when clearSelections prop changes
-  useEffect(() => {
-    if (clearSelections) {
-      setSelectedOption([]); //clear selected options from chips
-    }
-  }, [clearSelections]);
+  React.useEffect(() => {
+  if (clearSelections) {
+    onChange([], targetProperty); // Clear selected options
+  }
+}, [clearSelections, onChange, targetProperty]);
 
-  //when content in search changes
-  const handleSearchChange = (event, newValue) => {
-    setSelectedOption(newValue);
 
-    if (newValue.length > 0) {
-      //only 1 item selected, add it as a single item to the filter
-      if (newValue.length === 1) {
-        updateFilter({ [targetProperty]: newValue[0] });
-      } else {
-        //when mult items selected, keep the array structure
-        updateFilter({ [targetProperty]: newValue });
-      }
-    } else {
-      // If no values are selected, remove the property from the filter
-      removeFilterKey(targetProperty);
-    }
+  //when the selected options changes (ie new value is added or removed)
+  const handleOptionSelected = (event, newValue) => {
+    //select everything
+   if (newValue.includes('Select All')) {
+   onChange(valueOptions, targetProperty);
+   }
+   else {
+    onChange(newValue, targetProperty);
+   }
   };
 
   return (
@@ -70,8 +69,8 @@ const SearchDropdownFilterList = ({targetProperty, label, valueOptions, clearSel
       <CustomAutocomplete
         multiple
         value={selectedOptions}
-        onChange={handleSearchChange}
-        options={valueOptions}
+        onChange={handleOptionSelected}
+        options={optionsWithSelectAll}
         disableCloseOnSelect
         getOptionLabel={(option) => option || ''}
         renderOption={(props, option, { selected }) => (
@@ -86,8 +85,6 @@ const SearchDropdownFilterList = ({targetProperty, label, valueOptions, clearSel
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder= {label}
-            // variant="filled"
             InputLabelProps={{
               style: { 
                 color: selectedOptions ? 'black' : 'grey' }, // Change the color based on selection
@@ -104,7 +101,7 @@ const SearchDropdownFilterList = ({targetProperty, label, valueOptions, clearSel
     </Box>
   );
 };
-export default SearchDropdownFilterList;
+export default SelectionDropdownList;
 
 
 

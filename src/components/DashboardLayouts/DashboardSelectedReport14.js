@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState} from "react";
+import React, { useMemo} from "react";
 import {ThemeProvider,Typography, Box} from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";

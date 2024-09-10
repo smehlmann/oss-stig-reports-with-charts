@@ -13,6 +13,7 @@ import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js"; 
 import FilterSelectionDrawer from "../FilterSideMenu/FilterSelectionDrawer.js";
+import ValueCountMap from "../ValueCountMap.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -38,15 +39,17 @@ const DashboardSelectedReport5 = ({ data, title }) => {
     return result;
   }, [filter, data, isWebOrDBIncluded]);
   
-  const shortName = filteredData.map(item => item['shortName']);
-  const uniqueShortName = [...new Set(shortName)];
 
-  const uniqueValuesWithTypes = uniqueShortName.map(value => ({
-    value: value,
-  }));
-  uniqueValuesWithTypes.forEach(item => {
-    console.log("item: ", item);
-  });
+  // const uniqueShortName = [...new Set(allShortNames)];
+
+  // const shortNameSet = uniqueShortName.map(value => ({
+  //   value: value,
+  // }));
+  // shortNameSet.forEach(item => {
+  //   console.log("item: ", item);
+  // });
+  
+  
 
   return (
     <ThemeProvider theme={theme}>

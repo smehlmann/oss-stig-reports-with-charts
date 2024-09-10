@@ -4,18 +4,35 @@ import FilterAlt from '@mui/icons-material/FilterAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import { useFilter } from '../../FilterContext';
 import { useTheme } from '@mui/system';
-import SearchDropdownFilterList from '../SearchDropdownFilterList';
+import SelectionDropdownList from '../SelectionDropdownList';
 import { FilterSwitch } from './FilterSwitch';
 
+/*
+The filter drawer that appears to users. 
+
+
+*/
 
 
 const FilterSelectionDrawer = ({ data = [] }) => {
-  const { filter, clearFilter, removeFilterKey, isWebOrDBIncluded, toggleWebOrDBFilter } = useFilter();
+  const { filter, clearFilter, removeFilterKey, isWebOrDBIncluded, toggleWebOrDBFilter, updateFilter } = useFilter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   //clears all selections made in dropdown lists
-  const [clearSelectionsTrigger, setClearSelectionsTrigger] = useState(false);
+  const [clearDropdownSelectionsTrigger, setClearSelectionsTrigger] = useState(false);
+
+
   const theme = useTheme();
 
+
+  // Local state to temporarily hold the selected filters before selecting "Apply"
+  const [tempFilter, setTempFilter] = useState({
+    sysAdmin: [],
+    primOwner: [],
+    isWebOrDBIncluded: isWebOrDBIncluded
+  });
+
+
+  //drawer or sidemenu is open
   const handleOpenDrawer = () => {
     setIsDrawerOpen(true);
   };
@@ -27,7 +44,46 @@ const FilterSelectionDrawer = ({ data = [] }) => {
   //clears all items from filter and all chips from dropdown lists
   const handleClearAll = () => {
     clearFilter();
-    setClearSelectionsTrigger(!clearSelectionsTrigger);
+    setClearSelectionsTrigger(!clearDropdownSelectionsTrigger);
+    setTempFilter({ sysAdmin: [], primOwner: [], isWebOrDBIncluded: true });
+    handleApplyFilters();
+  };
+
+  // Update temporary filter state when a dropdown is changed
+  const handleTempFilterChange = (newValue, key) => {
+    setTempFilter((prev) => ({ ...prev, [key]: newValue }));
+  };
+
+
+  //when "Applied" button is selected (update global filter with selections)
+  // When the apply button is clicked, apply the temp filters to the global filter
+  const handleApplyFilters = () => {
+
+    // console.log("Applying Filters:", {
+    //   sysAdmin: tempFilter.sysAdmin,
+    //   primOwner: tempFilter.primOwner,
+    //   isWebOrDBIncluded: tempFilter.isWebOrDBIncluded
+    // });
+    
+
+    console.log("sysAdmin: ",tempFilter.sysAdmin)
+
+    //add filters ONLY if they have non-empty values
+    if(tempFilter.sysAdmin.length > 0) {
+      if (Array.isArray(tempFilter.sysAdmin)) {
+        updateFilter({sysAdmin: tempFilter.sysAdmin});
+      }
+      else { updateFilter({sysAdmin: tempFilter.sysAdmin[0]})}
+    }
+    if(tempFilter.primOwner.length> 0) {
+      updateFilter({primOwner: tempFilter.primOwner});
+
+    }
+
+
+    
+    toggleWebOrDBFilter(tempFilter.isWebOrDBIncluded);
+    setIsDrawerOpen(false); // Close the drawer after applying
   };
 
   //formats labels for chips
@@ -92,12 +148,9 @@ const FilterSelectionDrawer = ({ data = [] }) => {
         >
           <Typography variant='h5'>Filter</Typography>
         </Button>
-
-
       </Box>
 
   
-
       <Drawer
         anchor='right'
         open={isDrawerOpen}
@@ -159,10 +212,13 @@ const FilterSelectionDrawer = ({ data = [] }) => {
           sx={{ flexWrap: 'wrap', gap: 1, mt: 2, mb: 2 }}
         >
           <Box sx={theme.typography.h5}>System Admin</Box>
-          <SearchDropdownFilterList
+          <SelectionDropdownList
             targetProperty='sysAdmin'
             valueOptions={sysAdminsList}
-            clearSelections={clearSelectionsTrigger}
+            selectedOptions={tempFilter.sysAdmin}
+            clearSelections={clearDropdownSelectionsTrigger}
+            onChange={handleTempFilterChange}
+            multiSelect // Enabling multi-select
           />
         </Box>
 
@@ -174,22 +230,27 @@ const FilterSelectionDrawer = ({ data = [] }) => {
           sx={{ flexWrap: 'wrap', gap: 1, mt: 2, mb: 2 }}
         >
           <Box sx={theme.typography.h5}>Primary Owner</Box>
-          <SearchDropdownFilterList
+          <SelectionDropdownList
             targetProperty='primOwner'
             valueOptions={primOwnersList}
+            clearSelections={clearDropdownSelectionsTrigger}
+            selectedOptions={tempFilter.primOwner}
+            onChange={handleTempFilterChange}
+            multiSelect // Enabling multi-select
           />
         </Box>
 
         <Divider sx={{ my: 2 }} />
 
         {/* Clears all filters*/}
-        <Button
-          variant='contained'
-          onClick={handleClearAll}
-          sx={{ backgroundColor: theme.palette.primary.dark, height: '5%' }}
-        >
-          Clear All
-        </Button>
+        <Box display="flex" justifyContent="space-between">
+          <Button variant="outlined" onClick={handleClearAll} sx={{ backgroundColor: theme.palette.primary.light}}>
+            Clear All
+          </Button>
+          <Button variant="contained" onClick={handleApplyFilters} sx={{ backgroundColor: theme.palette.primary.dark}}>
+            Apply
+          </Button>
+        </Box>
       </Drawer>
     </>
   );

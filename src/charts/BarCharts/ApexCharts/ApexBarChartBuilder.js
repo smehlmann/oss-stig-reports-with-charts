@@ -14,7 +14,6 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
     fontWeight: '500',
     margin: '0',
     textAlign: 'center',
-
   }), []);
   
   //set color of bars based on bar's label
@@ -179,12 +178,6 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
           },
           yaxis: {
             labels: {
-              formatter: function (value) {
-                if (formatLabelToPercentage) {
-                  return formatLabelToPercentage.formatter(value);
-                }
-                return value;
-              },
               style: {
                 fontSize: '11px',
               },

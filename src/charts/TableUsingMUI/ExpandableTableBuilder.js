@@ -154,7 +154,12 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
                         return (
                           childRow.asset.toLowerCase().includes(searchValue) ||
                           childRow.sysAdmin.toLowerCase().includes(searchValue) ||
-                          childRow.primOwner.toLowerCase().includes(searchValue) 
+                          childRow.primOwner.toLowerCase().includes(searchValue) ||
+                          childRow.asset.toLowerCase().includes(searchValue) ||
+                          childRow.sysAdmin.toLowerCase().includes(searchValue) ||
+                          childRow.collectionName.toString().includes(searchValue) ||
+                          childRow.latestRev.toString().includes(searchValue) ||
+                          childRow.quarterVer.toString().includes(searchValue)
                         );
                       }).length}
                       rowsPerPage={rowsPerPage}

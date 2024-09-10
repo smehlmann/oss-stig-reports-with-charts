@@ -4,7 +4,7 @@ import { Box, Chip, IconButton, Switch, FormControlLabel } from '@mui/material';
 // import { useTheme } from "../theme";
 import FilterAltOff from '@mui/icons-material/FilterAltOff';
 
-import SearchDropdownFilterList from './SearchDropdownFilterList';
+import SearchDropdownFilterList from './SelectionDropdownList';
 
 const FilterBar = ({data = []}) => {
   const { filter, clearFilter, removeFilterKey, isWebOrDBIncluded, toggleWebOrDBFilter  } = useFilter();
