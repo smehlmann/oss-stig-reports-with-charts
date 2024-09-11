@@ -1,13 +1,13 @@
 import React, {useCallback} from 'react';
 import { useFilter } from '../FilterContext';
-import { Box, Chip, IconButton, Switch, FormControlLabel } from '@mui/material';
+import { Box, Chip, IconButton} from '@mui/material';
 // import { useTheme } from "../theme";
 import FilterAltOff from '@mui/icons-material/FilterAltOff';
 
-import SearchDropdownFilterList from './SelectionDropdownList';
+// import SearchDropdownFilterList from './SearchDropdownFilterList';
 
 const FilterBar = ({data = []}) => {
-  const { filter, clearFilter, removeFilterKey, isWebOrDBIncluded, toggleWebOrDBFilter  } = useFilter();
+  const { filter, clearFilter, removeFilterKey } = useFilter();
   // const theme = useTheme();
 
   const handleRemoveFilter = (key) => {

@@ -8,29 +8,32 @@ import SelectionDropdownList from '../SelectionDropdownList';
 import { FilterSwitch } from './FilterSwitch';
 
 /*
-The filter drawer that appears to users. 
+The filter drawer that appears to users when "Filter" button is pressed, and allows users to filter visualizations.
 
+This structure contains a switch to toggle on/off the presence Web/DB assets, a list to display what filters are currently applied, a multi-select dropdown list to select sysAdmin, a multi-select dropdown list to select primOwner, a "Clear All" button to clear ALL filters, and an "Apply" button to filter the data based selected.
 
+We have 2 "filter" objects: 
+  1. the global filter object that is responsible for syncing the data across all visualizations
+  2. the local/temp filter that stores the key-value pairs, where each key is a property, before we select the "Apply" button. This lets the user select more than one option from the dropdown lists so that we can filter for more than one value. If we didn't have this, only 1 filter can be applied.
+
+  When the "Apply" button is selected, all the contents of temp filter will be added to the global filter and applied to the dashboard.
 */
 
 
 const FilterSelectionDrawer = ({ data = [] }) => {
   const { filter, clearFilter, removeFilterKey, isWebOrDBIncluded, toggleWebOrDBFilter, updateFilter } = useFilter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  //clears all selections made in dropdown lists
+  //clears content in temporary filter and global filter when "clear all" button press
   const [clearDropdownSelectionsTrigger, setClearSelectionsTrigger] = useState(false);
-
-
   const theme = useTheme();
 
 
-  // Local state to temporarily hold the selected filters before selecting "Apply"
+  // local state to temporarily hold the selected filters before selecting "Apply"
   const [tempFilter, setTempFilter] = useState({
     sysAdmin: [],
     primOwner: [],
     isWebOrDBIncluded: isWebOrDBIncluded
   });
-
 
   //drawer or sidemenu is open
   const handleOpenDrawer = () => {
@@ -43,45 +46,26 @@ const FilterSelectionDrawer = ({ data = [] }) => {
 
   //clears all items from filter and all chips from dropdown lists
   const handleClearAll = () => {
-    clearFilter();
     setClearSelectionsTrigger(!clearDropdownSelectionsTrigger);
     setTempFilter({ sysAdmin: [], primOwner: [], isWebOrDBIncluded: true });
-    handleApplyFilters();
+    clearFilter();
   };
 
   // Update temporary filter state when a dropdown is changed
   const handleTempFilterChange = (newValue, key) => {
-    setTempFilter((prev) => ({ ...prev, [key]: newValue }));
+    setTempFilter((prev) => ({ ...prev, [key]: newValue })); 
   };
 
 
-  //when "Applied" button is selected (update global filter with selections)
   // When the apply button is clicked, apply the temp filters to the global filter
   const handleApplyFilters = () => {
-
-    // console.log("Applying Filters:", {
-    //   sysAdmin: tempFilter.sysAdmin,
-    //   primOwner: tempFilter.primOwner,
-    //   isWebOrDBIncluded: tempFilter.isWebOrDBIncluded
-    // });
-    
-
-    console.log("sysAdmin: ",tempFilter.sysAdmin)
-
     //add filters ONLY if they have non-empty values
     if(tempFilter.sysAdmin.length > 0) {
-      if (Array.isArray(tempFilter.sysAdmin)) {
-        updateFilter({sysAdmin: tempFilter.sysAdmin});
-      }
-      else { updateFilter({sysAdmin: tempFilter.sysAdmin[0]})}
+      updateFilter({sysAdmin: tempFilter.sysAdmin});
     }
     if(tempFilter.primOwner.length> 0) {
       updateFilter({primOwner: tempFilter.primOwner});
-
     }
-
-
-    
     toggleWebOrDBFilter(tempFilter.isWebOrDBIncluded);
     setIsDrawerOpen(false); // Close the drawer after applying
   };
@@ -150,7 +134,7 @@ const FilterSelectionDrawer = ({ data = [] }) => {
         </Button>
       </Box>
 
-  
+      {/* Drawer itself */}
       <Drawer
         anchor='right'
         open={isDrawerOpen}
@@ -216,8 +200,8 @@ const FilterSelectionDrawer = ({ data = [] }) => {
             targetProperty='sysAdmin'
             valueOptions={sysAdminsList}
             selectedOptions={tempFilter.sysAdmin}
-            clearSelections={clearDropdownSelectionsTrigger}
             onChange={handleTempFilterChange}
+            selectAllOptionsFlag={true}
             multiSelect // Enabling multi-select
           />
         </Box>
@@ -233,9 +217,9 @@ const FilterSelectionDrawer = ({ data = [] }) => {
           <SelectionDropdownList
             targetProperty='primOwner'
             valueOptions={primOwnersList}
-            clearSelections={clearDropdownSelectionsTrigger}
             selectedOptions={tempFilter.primOwner}
             onChange={handleTempFilterChange}
+            selectAllOptionsFlag={true}
             multiSelect // Enabling multi-select
           />
         </Box>
@@ -244,7 +228,7 @@ const FilterSelectionDrawer = ({ data = [] }) => {
 
         {/* Clears all filters*/}
         <Box display="flex" justifyContent="space-between">
-          <Button variant="outlined" onClick={handleClearAll} sx={{ backgroundColor: theme.palette.primary.light}}>
+          <Button variant='outlined' onClick={handleClearAll}>
             Clear All
           </Button>
           <Button variant="contained" onClick={handleApplyFilters} sx={{ backgroundColor: theme.palette.primary.dark}}>

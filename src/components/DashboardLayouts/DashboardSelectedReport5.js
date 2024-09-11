@@ -13,7 +13,6 @@ import GetFilteredData from "../GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js"; 
 import FilterSelectionDrawer from "../FilterSideMenu/FilterSelectionDrawer.js";
-import ValueCountMap from "../ValueCountMap.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -32,6 +31,7 @@ const DashboardSelectedReport5 = ({ data, title }) => {
   const filteredData = useMemo(() => {
     let result = GetFilteredData(data, filter);
 
+    //remove any assets where cklWebOrDatabase = true
     if (!isWebOrDBIncluded) {
       result = result.filter(item => !item.cklWebOrDatabase);
     }

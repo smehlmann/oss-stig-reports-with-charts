@@ -2,6 +2,18 @@ import React from 'react';
 import { Box, Autocomplete, TextField, Checkbox, ListItemText } from '@mui/material';
 import { styled, alpha } from "@mui/system";
 
+
+/*
+Creates a multi-select dropdown menu. 
+Includes:
+target property: the property and values you search through
+valueOptions: all the values for our given property
+selectedOptions: the selection options user can choose from (usually the same thing as the valueOptions)
+onChange: function that determines the behavior based on the selection
+selectAllOptionsFlag: determines if we include the "select all" option to selection options
+
+*/
+
 //styling for how it will appear
 const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
   '& .MuiAutocomplete-inputRoot': {
@@ -36,27 +48,22 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
 }));
 
 
-const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, clearSelections, onChange }) => {
+const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, onChange, selectAllOptionsFlag}) => {
 
-  // Add "Select All" option to valueOptions
-  const optionsWithSelectAll = ['Select All', ...valueOptions];
-
-  //reset the selected options when clearSelections prop changes
-  React.useEffect(() => {
-  if (clearSelections) {
-    onChange([], targetProperty); // Clear selected options
-  }
-}, [clearSelections, onChange, targetProperty]);
+  // add "Select All" option based on selectAllOptionsFlag
+  const optionsWithSelectAll = selectAllOptionsFlag 
+    ? ['Select All', ...valueOptions] 
+    : valueOptions;
 
 
   //when the selected options changes (ie new value is added or removed)
   const handleOptionSelected = (event, newValue) => {
     //select everything
    if (newValue.includes('Select All')) {
-   onChange(valueOptions, targetProperty);
+   onChange(valueOptions, targetProperty); //select all the values
    }
    else {
-    onChange(newValue, targetProperty);
+    onChange(newValue, targetProperty); //select the specified value
    }
   };
 
@@ -73,6 +80,7 @@ const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, c
         options={optionsWithSelectAll}
         disableCloseOnSelect
         getOptionLabel={(option) => option || ''}
+        //render list of values to choose from
         renderOption={(props, option, { selected }) => (
           <li {...props}>
             <Checkbox
@@ -87,7 +95,7 @@ const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, c
             {...params}
             InputLabelProps={{
               style: { 
-                color: selectedOptions ? 'black' : 'grey' }, // Change the color based on selection
+                color: selectedOptions ? 'black' : 'grey' },
             }}
             sx={{
               borderRadius: '10px',

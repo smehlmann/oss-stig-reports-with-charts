@@ -31,9 +31,8 @@
       const key = Object.keys(newFilter)[0];
       const value = newFilter[key];
   
-      console.log(`Current filters: ${JSON.stringify(prevFilters)}`);
-      console.log(`New filter: ${key}: ${value}`);
-
+      // console.log(`Current filters: ${JSON.stringify(prevFilters)}`);
+      // console.log(`New filter: ${key}: ${value}`);
       // console.log('Previous filters:', prevFilters);
       // console.log('Updating with:', key, ':', value);
 
@@ -43,41 +42,42 @@
         const updatedFilters = { ...prevFilters, ...newFilter };
         return updatedFilters;
       }
-       //determines the filtering logic for updating filter state when filter value is single value or array
-   
 
+       //determines the filtering logic for updating filter state when filter value is single value or array
+  
       //retrieves current value of filter for a given key from prevFilters
-      const existingValue = prevFilters;
-      console.log("Existing value: ", existingValue);
-      console.log('Updating filter with:', { key, value, existingValue });
-      
+      const existingValue = prevFilters;      
+
+      //double-click logic: Remove the entire key-value pair if the value already exists
+      if (prevFilters[key] === value || (Array.isArray(existingValue) && existingValue.includes(value))) {
+        const { [key]: removed, ...rest } = prevFilters; //remove the key-value pair
+        return rest; // return the rest of the filters without the removed key
+      }
       //if current filter value (existingValue) and new filter value (value) are arrays
       if (Array.isArray(existingValue)) {
         if (Array.isArray(value)) {
-          // Merge arrays if both existing and new values are arrays
+          //merge arrays if both existing and new values are arrays
           const updatedArray = [...new Set([...existingValue, ...value])];
           return { ...prevFilters, [key]: updatedArray };
         } else {
-          // Replace existing array with a new single value
+          //replace existing array with a new single value
           return { ...prevFilters, [key]: [value] };
         }
       } else if (Array.isArray(value)) {
-        // If new value is an array, use it directly
+        // if new value is an array, use it directly
         return { ...prevFilters, [key]: value };
       } else if (existingValue === value) {
-        // Remove key if new value is the same as the existing value
+        // remove if new value is the same as the existing value
         const { [key]: removed, ...rest } = prevFilters;
         return rest;
       } else {
-        // Add or update key with new value
+        //add or update key with new value
         return { ...prevFilters, [key]: value };
       }
       
      });
     };
 
-
-    
     //remove single key from filter object
     const removeFilterKey = (key) => {
       setFilters(prevFilters => {
