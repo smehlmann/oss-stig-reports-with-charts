@@ -103,9 +103,6 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
           }
           return value;
         },
-        hideOverlappingLabels: false,
-        trim: false,
-        show: true,
         style: {
           // fontSize: '12px',
           fontFamily: 'Segoe UI, Arial, sans-serif',

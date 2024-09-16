@@ -8,7 +8,7 @@ Creates a multi-select dropdown menu.
 Includes:
 target property: the property and values you search through
 valueOptions: all the values for our given property
-selectedOptions: the selection options user can choose from (usually the same thing as the valueOptions)
+selectedOptions: the selection options user can choose from
 onChange: function that determines the behavior based on the selection
 selectAllOptionsFlag: determines if we include the "select all" option to selection options
 
@@ -41,9 +41,20 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
   '& .MuiAutocomplete-popupIndicator': {
     color: theme.palette.primary.main,
   },
-  '& .MuiAutocomplete-paper': {
+  '& .MuiAutocomplete-paper': { 
     maxHeight: '300px', // Adjust this value as needed
     overflowY: 'auto',
+  },
+  //adjust spacing between dropdown items
+  '& .MuiAutocomplete-listbox': {
+    padding: 0, //remove padding between list items
+    
+
+  },
+  '& .MuiAutocomplete-option': {
+    padding: '2px 4px', //adjust padding to make the items closer
+    minHeight: 'auto', //can also reduce the height
+    backgroundColor:'#8855ff',
   },
 }));
 
@@ -63,7 +74,7 @@ const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, o
    onChange(valueOptions, targetProperty); //select all the values
    }
    else {
-    onChange(newValue, targetProperty); //select the specified value
+    onChange(newValue, targetProperty); //new set of selected value(s) after user selects or de-selects option
    }
   };
 
@@ -75,6 +86,7 @@ const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, o
     >
       <CustomAutocomplete
         multiple
+        limitTags={2}
         value={selectedOptions}
         onChange={handleOptionSelected}
         options={optionsWithSelectAll}

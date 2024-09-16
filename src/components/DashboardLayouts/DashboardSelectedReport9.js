@@ -1,36 +1,87 @@
 import React, { useMemo} from "react";
 import {ThemeProvider,Typography, Box} from "@mui/material";
-import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
-import StatisticsCardGroup from "../StatisticsCardsGroup.js";
-import GetFilteredData from "../GetFilteredData.js";
+import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
-import FilterSelectionDrawer from "../FilterSideMenu/FilterSelectionDrawer.js";
+import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
+import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
+import SimpleExpandableTable from "../../charts/TableUsingMUI/SimpleExpandableTable.js";
 
+/* Displays report option 5.Open Result Finding Metrics (eMASS number(s) required)  */
 
-const DashboardSelectedReport9 = ({ data }) => {
-
-  // const { filter, updateFilter } = useFilter();
-  // //stores the data filter has been applied
-  // const filteredData = useMemo(() => {
-  //   if (Object.keys(filter).length > 0) {
-  //     const filtered = data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-  //     return filtered;
-  //   }
-  //   return data;
-  // }, [filter, data]);
-
-
+const DashboardSelectedReport9 = ({ title, data }) => {
+  const { filter, isWebOrDBIncluded} = useFilter();
   
+  //gets the data when filter is applied
+  const filteredData = useMemo(() => {
+    let result = GetFilteredData(data, filter);
+
+    if (!isWebOrDBIncluded) {
+      result = result.filter(item => !item.cklWebOrDatabase);
+    }
+
+    return result;
+  }, [filter, data, isWebOrDBIncluded]);
+
+
   return (
-    <div>
-      <ul>{data}</ul>
-    </div>
+    <ThemeProvider theme={theme}>
+      {/* <FilterProvider> */}
+        <DashboardRoot>
+          <Grid container 
+            spacing={{xs:2, s:2, md:3, lg:3}}
+            sx={{
+              px: { lg: 5, xl: 15 }, //padding-left and padding-right for lg and xl screens
+            }}
+          >
+
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <Box display="flex" justifyContent="space-between">
+              <Typography variant='h1'> {title} </Typography>
+              <FilterSelectionDrawer data={filteredData} />
+              </Box>
+            </Grid> 
+            
+
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <ChartCardComponent title = 'Assets by STIG Benchmark'>
+                <ApexCountByValueBarChart
+                  targetColumn="benchmark"
+                  isHorizontal={true}
+                  xAxisTitle="Number of Assets"
+                  yAxisTitle= "STIG Benchmark"
+                  data={filteredData}
+                />
+              </ChartCardComponent>
+            </Grid>
+            
+            {/* <Grid lg={12} sm={12} xl={12} xs={12}>
+              <ExpandableTableCardComponent>
+                <Report9ResultsBenchmarksMetrics data={filteredData}/>
+              </ExpandableTableCardComponent>
+            </Grid> */}
+
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <ExpandableTableCardComponent>
+                <SimpleExpandableTable
+                  parentRowColumn="benchmark"
+                  childRows={["asset", "latestRev", "quarterVer", "status", "detail", "comment"]} 
+                  expandedSectionHeaders={['Asset', 'Latest Revision', 'Current Quarter STIG', 'Status', 'Detail', 'Comment']}
+                  data={filteredData}
+                />
+              </ExpandableTableCardComponent>
+            </Grid>
+
+            
+
+          </Grid> 
+        </DashboardRoot>
+      {/* </FilterProvider> */}
+    </ThemeProvider>
   );
 };
-
 export default DashboardSelectedReport9;

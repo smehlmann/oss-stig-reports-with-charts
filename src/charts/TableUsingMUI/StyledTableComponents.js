@@ -102,7 +102,6 @@ export const StyledTableHead = styled(TableHead)(({ theme }) => ({
 
 //actual cells in the header row (text)
 export const StyledHeaderCell = styled(TableCell)(({ theme }) => ({
-  // fontSize: '24px',
   fontSize: theme.typography.h3.fontSize,
   fontWeight: 'bold',
   border: 'none'
@@ -161,46 +160,15 @@ export const StyledChildTableContainer = styled(Paper)(({ theme }) => ({
 
 //Header in expanded section
 export  const ExpandedTableHead= styled(TableHead)(({ theme }) => ({
-  backgroundColor: theme.palette.secondary.light,
+  // backgroundColor: theme.palette.secondary.light,
+  backgroundColor: theme.palette.secondary.main,
   border: 'none',
   alignItems: 'center',
   whiteSpace: 'normal',
+  
 }));
 
-//header cells in expanded section (NOT FOR MULTILEVEL)
-export const ExpandedHeaderCell = styled(TableCell)(({ theme }) => ({
-  // fontSize: '18px',
-  borderTop: 'none',
-  borderLeft: 'none',
-  borderRight: 'none',
-  fontSize: theme.typography.h2,
-  fontWeight: 'bold',
-  alignItems: 'center',
-  "&:hover": {
-    backgroundColor:  theme.palette.secondary.light,
-  },
-}));
-
-
-export const ExpandedTableCell = styled(TableCell)(({ theme }) => ({
-  padding: '8px',
-  textAlign: 'left',
-  border: `1px solid ${theme.palette.divider}`,
-  fontSize: theme.typography.body2,
-  overflow: 'auto',
-  whiteSpace: 'normal',
-  // maxWidth: '33%',
-  wordBreak: 'break-all',
-  flex: '1',
-
-  "&.first-level-cell": {
-    border: 'none', 
-    backgroundColor: '#FF5733',
-  },
-}));
-
-
-//in MULTILEVEL: header for first table in expanded section
+//cells in header for first table in expanded section
 export const ExpandedFirstLevelHeaderCell = styled(TableCell)(({ theme }) => ({
   color: '#FFF', //font color
   borderTop: 'none',
@@ -216,7 +184,7 @@ export const ExpandedFirstLevelHeaderCell = styled(TableCell)(({ theme }) => ({
 }));
 
 
-//in MULTILEVEL: header for second table in expanded section
+//in MULTILEVEL: cells in header for second table in expanded section
 export const Expanded2ndLevelHeaderCell = styled(TableCell)(({ theme }) => ({
   color: '#FFF', //font color
   borderTop: 'none',
@@ -232,37 +200,23 @@ export const Expanded2ndLevelHeaderCell = styled(TableCell)(({ theme }) => ({
 }));
 
 
-export const ExpandedFirstLevelRow = styled(TableRow)(({ theme }) => ({
-  "&:hover": {
-    backgroundColor: theme.palette.action.selected,
-  },
-  "&:first-of-type": {
-    border: 'none', 
-  },
-  "&.first-level-child-row": {
-    border: 'none', 
-  },
-  "&.second-level-child-row": {
-    border: 'none', 
-  }
-  
-}));
 
-
-//In expanded section, row of first level 
-export const ExpandedFirstLevelCell = styled(TableRow)(({ theme }) => ({
-  // "&:hover": {
-  //   backgroundColor: theme.palette.action.selected,
-  // },
-  backgroundColor: '#6230EC',
-  // padding: '8px',
+export const ExpandedTableCell = styled(TableCell)(({ theme }) => ({
+  padding: '8px',
   textAlign: 'left',
   border: `1px solid ${theme.palette.divider}`,
   fontSize: theme.typography.body2,
   overflow: 'auto',
   whiteSpace: 'normal',
   wordBreak: 'break-all',
-  flex: '1'
-  
-  
+  wordWrap: 'break-word',
+  flex: '1',
+
+  "&.first-level-cell": {
+    
+    border: 'none', 
+    // backgroundColor: '#FF5733',
+  },
 }));
+
+

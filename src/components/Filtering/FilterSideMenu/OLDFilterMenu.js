@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
-import { useFilter } from '../../FilterContext'; // Adjust the import path as needed
-import { useTheme } from "../../theme";
+import { useFilter } from '../../../FilterContext'; // Adjust the import path as needed
+import { useTheme } from "../../../theme";
 
 
 /**

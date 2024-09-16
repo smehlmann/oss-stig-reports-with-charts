@@ -6,14 +6,14 @@ import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/Historical
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
-import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/MultiLevelExpandableTable/Report5WithMultiLevelBenchmarks";
+import MultiLevelCollapsibleTable from "../../charts/TableUsingMUI/MultiLevelExpandableTable/MultiLevelCollapsibleTable.js";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
-import StatisticsCardGroup from "../StatisticsCardsGroup.js";
+import StatisticsCardGroup from "../Cards/StatisticsCardsGroup.js";
 import HistoricalDataGrid from "../../charts/DataGridMUI/HistoricalDataGrid";
-import GetFilteredData from "../GetFilteredData.js";
+import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
-import FilterSelectionDrawer from "../FilterSideMenu/FilterSelectionDrawer.js";
+import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
 
 /*
 Grid spacing is split into 12 parts:
@@ -130,7 +130,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
 
           <Grid lg={12} sm={12} xl={12} xs={12}>
             <ExpandableTableCardComponent>
-              <Report5WithMultiLevelBenchmarks data={dataFromLastPullDate}/>
+              <MultiLevelCollapsibleTable data={dataFromLastPullDate}/>
             </ExpandableTableCardComponent>
           </Grid> 
 

@@ -3,7 +3,7 @@ import MultiLineChartBuilder from "./MultiLineChartBuilder.js";
 import CalculateArrayAvg from "../../../components/CalculateArrayAvg.js";
 import { useFilter } from "../../../FilterContext.js";
 import { getPercentageFormatterObject } from "../../../components/getPercentageFormatterObject.js";
-import GetFilteredData from "../../../components/GetFilteredData.js";
+import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
 
 const HistoricalDataTracker = ({ groupingColumn, targetColumns, chartTitle, xAxisTitle, yAxisTitle, data }) => {
   const { filter } = useFilter();

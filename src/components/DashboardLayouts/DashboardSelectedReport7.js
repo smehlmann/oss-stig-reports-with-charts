@@ -5,20 +5,15 @@ import ChartCardComponent from "../Cards/ChartCardComponent";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
-import StatisticsCardGroup from "../StatisticsCardsGroup.js";
+import StatisticsCardGroup from "../Cards/StatisticsCardsGroup.js";
 import FromTwoPropertiesBarChart from "../../charts/BarCharts/ApexCharts/FromTwoPropertiesBarChart";
-import GetFilteredData from "../GetFilteredData.js";
+import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
-import FilterBar from "../FilterBar.js";
+import FilterBar from "../Filtering/FilterBar.js";
 
 /*
-Grid spacing is split into 12 parts:
-  For evenly spaced cards:
-  {3} = 4 cards in row (each is 1/4 of section)
-  {4} = 3 cards in row (each is 1/3 of section)
-  {6} = 2 cards in row (each is 1/2 of section)
-  {12} = 1 card in row (takes up whole section)
+ Displays report option 3. RMF Package Asset Count 
 */
 
 const DashboardSelectedReport7 = ({ data, title }) => {

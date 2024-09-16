@@ -6,21 +6,16 @@ import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
-import StatisticsCardGroup from "../StatisticsCardsGroup.js";
-import Report5WithMultiLevelBenchmarks from "../../charts/TableUsingMUI/MultiLevelExpandableTable/Report5WithMultiLevelBenchmarks";
+import StatisticsCardGroup from "../Cards/StatisticsCardsGroup.js";
+import MultiLevelCollapsibleTable from "../../charts/TableUsingMUI/MultiLevelExpandableTable/MultiLevelCollapsibleTable";
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
-import GetFilteredData from "../GetFilteredData.js";
+import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js"; 
-import FilterSelectionDrawer from "../FilterSideMenu/FilterSelectionDrawer.js";
+import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
 
 /*
-Grid spacing is split into 12 parts:
-  For evenly spaced cards:
-  {3} = 4 cards in row (each is 1/4 of section)
-  {4} = 3 cards in row (each is 1/3 of section)
-  {6} = 2 cards in row (each is 1/2 of section)
-  {12} = 1 card in row (takes up whole section)
+ Displays report option 2. Asset Metrics
 */
 
 const DashboardSelectedReport5 = ({ data, title }) => {
@@ -98,7 +93,7 @@ const DashboardSelectedReport5 = ({ data, title }) => {
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
-                <Report5WithMultiLevelBenchmarks data={filteredData}/>
+                <MultiLevelCollapsibleTable data={filteredData}/>
               </ExpandableTableCardComponent>
             </Grid> 
 

@@ -9,7 +9,7 @@ import {
   StyledTableRow,
   StyledChildTableContainer,
   ExpandedTableHead,
-  ExpandedHeaderCell,
+  ExpandedFirstLevelHeaderCell,
   ExpandedTableCell,
 } from './StyledTableComponents';
 
@@ -25,7 +25,8 @@ const formatString = (value) => {
 function Report8BenchmarksExpanded({ data }) {
   const { updateFilter, clearFilter} = useFilter();
   const [searchText] = useState("");
-  
+
+
  // const [filteredChildRows, setFilteredChildRows] = useState({}); // State to hold filtered data
 
   const [parentRows, setParentRows] = useState([]);
@@ -61,6 +62,18 @@ function Report8BenchmarksExpanded({ data }) {
     }
   }, [data]);
 
+  //function to number of childrows (needed for table pagination)
+  const getFilteredChildRowsCount = (parentRow, searchText) => {
+    return parentRow.childRows.filter((childRow) => {
+      return (
+        childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
+        childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
+        childRow.collectionName.toString().includes(searchText.toLowerCase()) ||
+        childRow.latestRev.toString().includes(searchText.toLowerCase()) ||
+        childRow.quarterVer.toString().includes(searchText.toLowerCase())
+      );
+    }).length;
+  };
   
   // //filter data for visualizations based on searchText
   // useEffect(() => {
@@ -95,7 +108,6 @@ function Report8BenchmarksExpanded({ data }) {
   const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
     //filter child rows based on text in searchbar
     const filteredChildRows = parentRow.childRows.filter((childRow) => {
-
       return (
       //set to lowercase for searchability 
       childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -110,42 +122,47 @@ function Report8BenchmarksExpanded({ data }) {
       return null;
     }
 
+
     const displayedRows = filteredChildRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     //update state with filtered dat
 
     return (
-      <StyledChildTableContainer sx={{ margin: 1 }}>
-        <StyledTable size="small" aria-label="child table">
-          <ExpandedTableHead sx={{ border: 'none'}}>
-            <StyledTableRow>
-              <ExpandedHeaderCell>Asset</ExpandedHeaderCell>
-              <ExpandedHeaderCell >Sys Admin</ExpandedHeaderCell>
-              <ExpandedHeaderCell >Primary Owner</ExpandedHeaderCell>
-              <ExpandedHeaderCell >Collection</ExpandedHeaderCell>
-              <ExpandedHeaderCell >Latest Revision</ExpandedHeaderCell>
-              <ExpandedHeaderCell >Current Quarter Stig </ExpandedHeaderCell>
-            </StyledTableRow>
-          </ExpandedTableHead>
-          <TableBody>
-            {displayedRows.map((childRow, index) => (
-              <StyledTableRow key={index} className="child-row">
-                <ExpandedTableCell>{childRow.asset}</ExpandedTableCell>
-                <ExpandedTableCell>{childRow.sysAdmin}</ExpandedTableCell>
-                <ExpandedTableCell>{childRow.primOwner}</ExpandedTableCell>
-                <ExpandedTableCell>{childRow.collectionName}</ExpandedTableCell>
-                <ExpandedTableCell>{childRow.latestRev}</ExpandedTableCell>
-                <ExpandedTableCell>{childRow.quarterVer}</ExpandedTableCell>
+      <>
+        <StyledChildTableContainer sx={{ margin: 1 }}>
+          <StyledTable size="small" aria-label="child table">
+            <ExpandedTableHead sx={{ border: 'none'}}>
+              <StyledTableRow>
+                <ExpandedFirstLevelHeaderCell>Asset</ExpandedFirstLevelHeaderCell>
+                <ExpandedFirstLevelHeaderCell >Sys Admin</ExpandedFirstLevelHeaderCell>
+                <ExpandedFirstLevelHeaderCell >Primary Owner</ExpandedFirstLevelHeaderCell>
+                <ExpandedFirstLevelHeaderCell >Collection</ExpandedFirstLevelHeaderCell>
+                <ExpandedFirstLevelHeaderCell >Latest Revision</ExpandedFirstLevelHeaderCell>
+                <ExpandedFirstLevelHeaderCell >Current Quarter Stig </ExpandedFirstLevelHeaderCell>
               </StyledTableRow>
-            ))}
-          </TableBody>
-        </StyledTable>
-      </StyledChildTableContainer>
+            </ExpandedTableHead>
+            <TableBody>
+              {displayedRows.map((childRow, index) => (
+                <StyledTableRow key={index} className="child-row">
+                  <ExpandedTableCell>{childRow.asset}</ExpandedTableCell>
+                  <ExpandedTableCell>{childRow.sysAdmin}</ExpandedTableCell>
+                  <ExpandedTableCell>{childRow.primOwner}</ExpandedTableCell>
+                  <ExpandedTableCell>{childRow.collectionName}</ExpandedTableCell>
+                  <ExpandedTableCell>{childRow.latestRev}</ExpandedTableCell>
+                  <ExpandedTableCell>{childRow.quarterVer}</ExpandedTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </StyledTable>
+        </StyledChildTableContainer>
+      </>
     );
   };
 
   const columnHeaders = [
     { id: 'benchmarkId', label: 'STIG Benchmarks' }
   ];
+
+  const filteredChildRowsCount = parentRows.map(parentRow => getFilteredChildRowsCount(parentRow, searchText));
 
 
   return (
@@ -157,6 +174,7 @@ function Report8BenchmarksExpanded({ data }) {
       filterProperty="benchmarkId"
       updateFilter={updateFilter}
       clearFilter={clearFilter}
+      childRowCount={filteredChildRowsCount}
     />
   );
 }

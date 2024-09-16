@@ -20,7 +20,7 @@ const formatString = (value) => {
   return value;
 };
 
-function Report5WithMultiLevelBenchmarks({ data }) {
+function MultiLevelCollapsibleTable({ data }) {
   // const [open, setOpen] = useState(false);
   const theme = useTheme();
   const [searchText] = useState("");
@@ -124,7 +124,7 @@ function Report5WithMultiLevelBenchmarks({ data }) {
   );
 }
 
-export default Report5WithMultiLevelBenchmarks;
+export default MultiLevelCollapsibleTable;
 
 
 //  //code responsible for creating childRows in expanded section
@@ -153,10 +153,10 @@ export default Report5WithMultiLevelBenchmarks;
 //       <StyledTable size="small" aria-label="child table">
 //         <ExpandedTableHead sx={{ border: 'none'}}>
 //           <StyledTableRow>
-//             <ExpandedHeaderCell>Asset</ExpandedHeaderCell>
-//             <ExpandedHeaderCell >Sys Admin</ExpandedHeaderCell>
-//             <ExpandedHeaderCell >Primary Owner</ExpandedHeaderCell>
-//             <ExpandedHeaderCell >Accepted %</ExpandedHeaderCell>
+//             <ExpandedFirstLevelHeaderCell>Asset</ExpandedFirstLevelHeaderCell>
+//             <ExpandedFirstLevelHeaderCell >Sys Admin</ExpandedFirstLevelHeaderCell>
+//             <ExpandedFirstLevelHeaderCell >Primary Owner</ExpandedFirstLevelHeaderCell>
+//             <ExpandedFirstLevelHeaderCell >Accepted %</ExpandedFirstLevelHeaderCell>
 //           </StyledTableRow>
 //         </ExpandedTableHead>
 //         {/* <TableBody>

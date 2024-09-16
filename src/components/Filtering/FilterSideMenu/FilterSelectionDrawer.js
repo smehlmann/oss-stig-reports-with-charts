@@ -2,9 +2,9 @@ import React, { useState, useCallback} from 'react';
 import { Box, Button, IconButton, Divider, Typography, Chip, Drawer } from '@mui/material';
 import FilterAlt from '@mui/icons-material/FilterAlt';
 import CloseIcon from '@mui/icons-material/Close';
-import { useFilter } from '../../FilterContext';
+import { useFilter } from '../../../FilterContext';
 import { useTheme } from '@mui/system';
-import SelectionDropdownList from '../SelectionDropdownList';
+import SelectionDropdownList from '../../dropdowns/SelectionDropdownList';
 import { FilterSwitch } from './FilterSwitch';
 
 /*

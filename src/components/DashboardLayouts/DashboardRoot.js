@@ -12,3 +12,14 @@ export const DashboardRoot = styled('div')(({ theme }) => ({
   flexGrow: 1, //take up remaining space
  // position: 'inherit',
 }));
+
+/*
+Guide for Grid spacing:
+Grid spacing is split into 12 parts:
+  For evenly spaced cards:
+  {3} = 4 cards in row (each is 1/4 of section)
+  {4} = 3 cards in row (each is 1/3 of section)
+  {6} = 2 cards in row (each is 1/2 of section)
+  {12} = 1 card in row (takes up whole section)
+
+*/

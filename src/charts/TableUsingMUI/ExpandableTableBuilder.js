@@ -26,7 +26,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 
 //renders a row in the table; manages expanded (open) and non-expanded state,
-function Row({ parentRow, columns, renderChildRow, filterProperty }) {
+function Row({ parentRow, columns, renderChildRow, childRowCount, filterProperty }) {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(7);
@@ -47,16 +47,19 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
     setPage(0); // Reset page to 0 on search
   };
 
-  const handleToggleOpen = () => {
+  const handleToggleOpen = (key) => {
     setOpen((prevOpen) => {
       const newOpen = !prevOpen; //set state of open to opposite of previous state
-  
+
       //when opnening row
       if (newOpen) {
         //checks if parentRow is valid
         if (parentRow && Object.keys(parentRow).length > 0) {
-          const key = Object.keys(parentRow)[0];
-          const value = parentRow[key];
+          // const key = Object.keys(parentRow)[0];
+          // const value = parentRow[key];
+          const key = filterProperty;
+          const value = parentRow.row;
+
           //extracts first key-value pair from parentRow and updates the filter with key-value pair,specifying source
           updateFilter({ [key]: value }, 'expandableTable');
         } else {
@@ -66,14 +69,16 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
       //table row is collapsed, remove it from filter.
       else {
         if (Object.keys(filter).length > 0) {
-          const key = Object.keys(parentRow)[0];
-          removeFilterKey(key);
+          removeFilterKey(filterProperty);
         } 
+        // When collapsing row
+        // if (filter[filterProperty]) {
+        //   removeFilterKey(filterProperty);
+        // }
       }
       return newOpen;
     });
   };
-
   // useEffect(() => {
   //   // Update filter based on the search text in the expanded section's table
   //   if (open && searchText.trim() !== "") {
@@ -95,6 +100,7 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
   //   }
   // }, [open, searchText, parentRow, updateFilter, removeFilterKey]);
 
+  
   return (
     //renders parent row
     <React.Fragment>
@@ -104,7 +110,8 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
           <IconButton onClick={handleToggleOpen}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-          {parentRow[columns[0].id]}
+          {/* {parentRow[columns[0].id]}     */}
+          {parentRow.row} 
         </StyledTableCell>
         {columns.slice(1).map((column) => (
           <StyledTableCell key={column.id} align={column.align}>
@@ -149,19 +156,7 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
                     <TablePagination
                       rowsPerPageOptions={[7, 14, 21]}
                       component="div"
-                      count={parentRow.childRows.filter(childRow => {
-                        const searchValue = searchText.toLowerCase();
-                        return (
-                          childRow.asset.toLowerCase().includes(searchValue) ||
-                          childRow.sysAdmin.toLowerCase().includes(searchValue) ||
-                          childRow.primOwner.toLowerCase().includes(searchValue) ||
-                          childRow.asset.toLowerCase().includes(searchValue) ||
-                          childRow.sysAdmin.toLowerCase().includes(searchValue) ||
-                          childRow.collectionName.toString().includes(searchValue) ||
-                          childRow.latestRev.toString().includes(searchValue) ||
-                          childRow.quarterVer.toString().includes(searchValue)
-                        );
-                      }).length}
+                      count={childRowCount}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       onPageChange={handleChangePage}
@@ -182,7 +177,7 @@ function Row({ parentRow, columns, renderChildRow, filterProperty }) {
   );
 }
 
-export const ExpandableTableBuilder = ({ rows, columns, renderChildRow, filterProperty }) => (
+export const ExpandableTableBuilder = ({ rows, columns, renderChildRow, childRowCount, filterProperty }) => (
   <StyledTableContainer>
     <StyledTable aria-label="collapsible table">
       <StyledTableHead>
@@ -207,6 +202,7 @@ export const ExpandableTableBuilder = ({ rows, columns, renderChildRow, filterPr
             columns={columns}
             renderChildRow={renderChildRow}
             filterProperty={filterProperty}
+            childRowCount={childRowCount}            
           />
         ))}
       </TableBody>

@@ -1,12 +1,14 @@
-import React, { useState, useMemo, useCallback, useEffect} from "react";
+// import React, { useState, useMemo, useCallback, useEffect} from "react";
+import React, { useState, useMemo, useCallback} from "react";
+
 // import useLocalStorageListener from "../useLocalStorageListener";
 import DashboardSelectedReport5 from "../DashboardLayouts/DashboardSelectedReport5";
 import DashboardSelectedReport7 from "../DashboardLayouts/DashboardSelectedReport7";
 import DashboardSelectedReport8 from "../DashboardLayouts/DashboardSelectedReport8";
 import DashboardSelectedReport9 from "../DashboardLayouts/DashboardSelectedReport9";
 import DashboardSelectedReport14 from "../DashboardLayouts/DashboardSelectedReport14";
+import DashboardSelectedReport11 from "../DashboardLayouts/DashboardSelectedReport11";
 import { parseISO } from 'date-fns';
-
 import "./DashboardTab.css"
 /* Include statement to handle how data is parsed based on the report selected*/
 
@@ -82,9 +84,14 @@ const formatData = (parsedData, selectedReportNum) => {
     //prevents updating the objs in parsedData
     const updatedEntry = { ...entry, uniqueId: index }; // Create a new object
 
-    //convert datePulled
+    //convert datePulled to date
     if (updatedEntry.datePulled) {
       updatedEntry.datePulled = stringToDate(objectToString(updatedEntry.datePulled));
+    }
+
+    //convert modifiedDate to date
+    if(updatedEntry.modifiedDate) {
+      updatedEntry.modifiedDate = stringToDate(updatedEntry.modifiedDate);
     }
     
     //convert percentage strings to decimals
@@ -125,8 +132,6 @@ const formatData = (parsedData, selectedReportNum) => {
     // return { ...entry, uniqueId: index }; // Add a unique identifier
     return updatedEntry;
   });
-
-
   return updatedData;
 };
 
@@ -158,7 +163,9 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
     case '8':
       return <DashboardSelectedReport8 data={formattedData} title='STIG Benchmark Version Deltas' handleClick={handleClick} />
     case '9':
-        return <DashboardSelectedReport9 data={formattedData} title='Open Result Finding Metrics' handleClick={handleClick} />
+      return <DashboardSelectedReport9 data={formattedData} title='Open Result Finding Metrics' handleClick={handleClick} />
+    case '11':
+      return <DashboardSelectedReport11 data={formattedData} title='Checks Not Updated in x Days' handleClick={handleClick} />
     case '14':
       return <DashboardSelectedReport14 data={formattedData} title='Historical Data' handleClick={handleClick} />
     default:

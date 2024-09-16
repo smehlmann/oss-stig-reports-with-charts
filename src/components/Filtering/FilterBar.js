@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import { useFilter } from '../FilterContext';
+import { useFilter } from '../../FilterContext';
 import { Box, Chip, IconButton} from '@mui/material';
 // import { useTheme } from "../theme";
 import FilterAltOff from '@mui/icons-material/FilterAltOff';

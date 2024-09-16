@@ -134,12 +134,7 @@ function Row({ parentRow, columns, renderChildRow}) {
                       <TablePagination
                         rowsPerPageOptions={[5, 10, 15]}
                         component="div"
-                        // count={parentRow.childRows.filter(childRow => (
-                        //   childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
-                        //   childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
-                        //   childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
-                        //   childRow.accepted.toString().includes(searchText)
-                        // )).length}
+
                         count={parentRow.childRows.filter(childRow => {
                           const searchValue = searchText.toLowerCase();
                           const searchValueAsNumber = parseFloat(searchValue);

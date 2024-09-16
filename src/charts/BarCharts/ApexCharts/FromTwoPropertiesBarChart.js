@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import { useFilter } from "../../../FilterContext.js";
-import GetFilteredData from "../../../components/GetFilteredData.js";
+import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
 
 const ValueSumMap = (data, targetColumn, valueColumn) => {
   return data.reduce((acc, item) => {

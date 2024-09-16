@@ -43,9 +43,9 @@ const CustomCardContent = styled(CardContent)(({ theme }) => ({
   alignItems: 'center',
   // overflow:'visible',
   overflow: 'clip',
-  '&:last-child': {
-    paddingBottom: '0px',
-  }
+  // '&:last-child': {
+  //   paddingBottom: '0px',
+  // }
 }));
 
 const ChartCardComponent = ({ title, children }) => {

@@ -1,8 +1,8 @@
 import React, { useMemo, useEffect, useState, useCallback } from "react";
-import ReactApexChart from "react-apexcharts";
 // import { palette } from "../../palette.js";
 import { useTheme } from "../../../theme.js"
-import { flexbox } from "@mui/system";
+import ReactApexChart from "react-apexcharts";
+// import Chart  from "react-apexcharts";
 
 const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader, yAxisHeader, onClick, formatLabelToPercentage }) => {
   const theme = useTheme();
@@ -55,8 +55,6 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
       scrollable: true,
       events: {
         dataPointSelection: (event, chartContext, config) => {
-          // console.log("Data Point Selected: ", config);
-          // console.log("Selected Data Labels: ", dataLabels);
           onClick(event, chartContext, config);
         },
       },
@@ -72,16 +70,25 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
     },
     xaxis: {
       // tickPlacement: 'on',
-      type: 'category',
-      categories: dataLabels,
+      type:'numeric',
       title: {
         text: xAxisHeader,
         style: axisTitleStyle,
       },
-      tickAmount: dataValues.length > 5 ? undefined : dataValues.length, // set tickAmount based on data length
+      tickAmount: dataValues.length > 4 ? undefined : dataValues.length, // set tickAmount based on data length
+      labels: {
+        //if values are decimals, format as %
+        formatter: function (value) {
+          return formatLabelToPercentage ? formatLabelToPercentage.formatter(value) : value;
+        },
+        trim: false,
+        showDuplicates:false,
+      }, //labels
     },
 
     yaxis: {
+      type: 'category',
+      categories: dataLabels,
       title: {
         text: yAxisHeader,
         style: axisTitleStyle,
@@ -89,23 +96,11 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
       labels: {
         //if values are decimals, format as %
         formatter: function (value) {
-          if (formatLabelToPercentage) {
-            return formatLabelToPercentage.formatter(value);
-          }
-          return value;
+          return formatLabelToPercentage ? formatLabelToPercentage.formatter(value) : value;
         },
         trim: false,
-        show: true,
-        style: {
-          fontFamily: 'Segoe UI, Arial, sans-serif',
-          fontWeight: 400,
-          // fontSize: '14px',
-          cssClass: 'apexcharts-yaxis-label',
-          padding: 15,
-          width: '200px',
-        },
+
       }, //labels
-  
     },
     tooltip: {
       enabled: true,
@@ -128,19 +123,14 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
           },
           
         },
-        title: {
-          formatter: () => ""
-        }
       },
     },
     plotOptions: {
       bar: {
         borderRadius: 4,
         horizontal: isHorizontal,
-        // columnWidth: '50%',
-        distributed: true, // Set to false to have bars based on values rather than categories
+        distributed: true, 
       },
-      enableToolbar: true,
     },
     fill: {
       opacity: 1 
@@ -151,88 +141,89 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
     },
     grid: {
       left: 200,
+
     },
     
-  //  responsive : [
-  //     {
-  //       breakpoint: 1300,
-  //       options: {
-  //         enableToolbar: true,
-  //         xaxis: {
-  //           labels: {
-  //             style: {
-  //               fontSize: '11px',
-  //             },
-  //           },
-  //           title: {
-  //             style: {
-  //               fontSize: '15px',
-  //             },
-  //           },
-  //         },
-  //         yaxis: {
-  //           labels: {
-  //             formatter: function (value) {
-  //               if (formatLabelToPercentage) {
-  //                 return formatLabelToPercentage.formatter(value);
-  //               }
-  //               return value;
-  //             },
-  //             style: {
-  //               fontSize: '11px',
-  //             },
-  //           },
-  //           title: {
-  //             style: {
-  //               text: yAxisHeader,
-  //               fontSize: '12px',
-  //             },
-  //           },
-  //         },
-  //         title: {
-  //           style: {
-  //             fontSize: '20px',
-  //           },
-  //         },
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 600,
-  //       options: {
-  //         enableToolbar: true,
-  //         xaxis: {
-  //           labels: {
-  //             style: {
-  //               fontSize: '8px',
-  //             },
-  //           },
-  //           title: {
-  //             style: {
-  //               fontSize: '10px',
-  //             },
-  //           },
-  //         },
-  //         yaxis: {
-  //           labels: {
-  //             style: {
-  //               fontSize: '8px',
-  //             },
-  //           },
-  //           title: {
-  //             style: {
-  //               text: yAxisHeader,
-  //               fontSize: '8px',
-  //             },
-  //           },
-  //         },
-  //         title: {
-  //           style: {
-  //             fontSize: '15px',
-  //           },
-  //         },
-  //       },
-  //     },
-  //   ],
+   responsive : [
+      {
+        breakpoint: 1300,
+        options: {
+          enableToolbar: true,
+          xaxis: {
+            labels: {
+              style: {
+                fontSize: '11px',
+              },
+            },
+            title: {
+              style: {
+                fontSize: '15px',
+              },
+            },
+          },
+          yaxis: {
+            labels: {
+              formatter: function (value) {
+                if (formatLabelToPercentage) {
+                  return formatLabelToPercentage.formatter(value);
+                }
+                return value;
+              },
+              style: {
+                fontSize: '11px',
+              },
+            },
+            title: {
+              style: {
+                text: yAxisHeader,
+                fontSize: '12px',
+              },
+            },
+          },
+          title: {
+            style: {
+              fontSize: '20px',
+            },
+          },
+        },
+      },
+      {
+        breakpoint: 600,
+        options: {
+          enableToolbar: true,
+          xaxis: {
+            labels: {
+              style: {
+                fontSize: '8px',
+              },
+            },
+            title: {
+              style: {
+                fontSize: '10px',
+              },
+            },
+          },
+          yaxis: {
+            labels: {
+              style: {
+                fontSize: '8px',
+              },
+            },
+            title: {
+              style: {
+                text: yAxisHeader,
+                fontSize: '8px',
+              },
+            },
+          },
+          title: {
+            style: {
+              fontSize: '15px',
+            },
+          },
+        },
+      },
+    ],
   });
 
   
@@ -266,7 +257,16 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
         },
         labels: {
           maxWidth: '40%', //enough to fully display labels
-          style: { width: '200px'}
+          offsetX: 3,
+          
+          style: {
+            fontFamily: 'Segoe UI, Arial, sans-serif',
+            fontWeight: 400,
+            fontSize: '14px',
+            cssClass: 'apexcharts-yaxis-label',
+            padding: 15,
+            width: '250px',
+          },
         }
       },
      colors: barColors,
@@ -275,8 +275,13 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
   }, [dataLabels, xAxisHeader, yAxisHeader, axisTitleStyle,barColors]);
   
   return (
-    <div className="apex-chart" style={{ height: '100%', width: '100%', overflowY:'auto'}}>
-      <ReactApexChart options={options} series={series} type="bar" height='100%' />
+    <div className="apex-chart" 
+      style={{ height: '100%', width: '100%', 
+      paddingRight: '5px', overflowY:'scroll',
+      }}
+    >
+      {/* conditionally set height based on how many datalabels there are */}
+      <ReactApexChart options={options} series={series} type="bar" height={dataLabels.length >= 16 ? 'auto' : '100%'}  />
     </div>
   );
   };

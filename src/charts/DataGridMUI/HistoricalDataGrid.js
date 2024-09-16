@@ -7,7 +7,7 @@ import DataGridBuilder from './DataGridBuilder';
 import ValueCountMap from "../../components/ValueCountMap.js";
 import {  getGridNumericOperators } from '@mui/x-data-grid';
 import DropdownInputValue from './DropdownInputValue';
-import GetFilteredData from "../../components/GetFilteredData.js";
+import GetFilteredData from "../../components/Filtering/GetFilteredData.js";
 
 const renderProgressBarCell = (params) => {
   return (

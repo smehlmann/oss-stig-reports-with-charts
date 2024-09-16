@@ -44,7 +44,8 @@ const TabsComponent = () => {
             selectedReport === "5" ||
             selectedReport === "7" ||
             selectedReport === "8" ||
-            selectedReport === "9"
+            selectedReport === "9" ||
+            selectedReport === "11"
           ) {
             setDisableDashboard(false);
           } else {

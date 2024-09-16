@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
-import GetFilteredData from "../../../components/GetFilteredData.js";
+import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
 import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
 
 const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {

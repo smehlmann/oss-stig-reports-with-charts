@@ -1,7 +1,7 @@
 import React, { useMemo} from 'react';
 import {Grid} from '@mui/material';
-import StatisticsCardComponent from './Cards/StatisticsCardComponent';
-import ValueCountMap from './ValueCountMap';
+import StatisticsCardComponent from './StatisticsCardComponent';
+import ValueCountMap from '../ValueCountMap';
 
 const StatisticsCardGroup = ({data = [], source='' }) => {
   const safeData = useMemo(() => data || [], [data]);
@@ -28,6 +28,7 @@ const StatisticsCardGroup = ({data = [], source='' }) => {
     } else {
       const countMap = ValueCountMap(safeData, 'asset');
       return Object.values(countMap).reduce((sum, value) => sum + (value || 0), 0); //sum of all asset values (includes dups)
+      
     }
   }, [safeData, source]);
 
