@@ -1,5 +1,4 @@
 import * as reportGetters from "./reportGetters.js";
-import * as reportUtils from "./reportUtils.js";
 
 async function runAssetByCollectionReport(auth, emassMap) {
   try {
