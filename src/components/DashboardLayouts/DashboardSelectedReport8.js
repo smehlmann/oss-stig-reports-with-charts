@@ -55,8 +55,8 @@ const DashboardSelectedReport5 = ({ data, title }) => {
                 <ApexCountByValueBarChart
                   targetColumn="benchmarkId"
                   isHorizontal={true}
-                  xAxisTitle="STIG Benchmark"
-                  yAxisTitle= "Number of Assets"
+                  xAxisTitle="Number of Assets"
+                  yAxisTitle="STIG Benchmark"
                   data={filteredData}
                 />
               </ChartCardComponent>
@@ -67,9 +67,9 @@ const DashboardSelectedReport5 = ({ data, title }) => {
                 {/* <Report8BenchmarksExpanded data={filteredData}/> */}
                 <SimpleExpandableTable 
                   parentRowColumn="benchmarkId"
-                  childRows={["asset", "sysAdmin", "primOwner", "collectionName", "latestRev", 
+                  childRows={["collectionName", "asset", "sysAdmin", "primOwner", "latestRev", 
                     "quarterVer"]} 
-                  expandedSectionHeaders={['Asset','System Admin', 'Primary Owner', 'Collection', 
+                  expandedSectionHeaders={['Collection','Asset','System Admin', 'Primary Owner', 
                     'Latest Revision', 'Current Quarter STIG']}
                   data={filteredData}
                 />

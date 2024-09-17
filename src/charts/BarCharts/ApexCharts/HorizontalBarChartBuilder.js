@@ -265,7 +265,7 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
             fontSize: '14px',
             cssClass: 'apexcharts-yaxis-label',
             padding: 15,
-            width: '250px',
+            width: '200px',
           },
         }
       },

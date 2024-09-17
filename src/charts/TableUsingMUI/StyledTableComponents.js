@@ -207,8 +207,8 @@ export const ExpandedTableCell = styled(TableCell)(({ theme }) => ({
   border: `1px solid ${theme.palette.divider}`,
   fontSize: theme.typography.body2,
   overflow: 'auto',
-  whiteSpace: 'normal',
-  wordBreak: 'break-all',
+  whiteSpace: 'break-spaces',
+  wordBreak: 'word-break',
   wordWrap: 'break-word',
   flex: '1',
 
