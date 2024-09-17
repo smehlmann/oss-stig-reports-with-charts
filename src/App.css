@@ -121,6 +121,7 @@ div.MyApp {
 
 #emassDiv {
   margin-left: 5px;
+  width: 33%;
 }
 
 #emassNumsText {
@@ -223,4 +224,16 @@ td {
 
 td {
   padding: 0px 10px 0px 10px;
+}
+
+.MuiAutocomplete-option {
+  padding: 0px !important;
+  margin: 0px !important;
+  /*line-height: 1.0;*/
+  height: 25px;
+}
+
+#emassDropdown {
+  /*line-height: 0.8;
+  height: 20px;*/
 }
