@@ -7,13 +7,11 @@ import ReportColumns from "./ReportColumns.jsx";
 import { getAuth } from "../../store/index.js";
 import * as reportUtils from "../../reports/reportUtils.js";
 import ClipLoader from "react-spinners/ClipLoader";
-
 import * as DialogMessages from "./DialogMessages.jsx";
-
 import { IconButton, Alert, Dialog, DialogContent } from "@mui/material";
-
-import { FlashlightOffRounded, Info } from "@mui/icons-material";
+import { Info } from "@mui/icons-material";
 import Button from "@mui/material/Button";
+import SelectionDropdownList from "../dropdowns/SelectionDropdownList.js";
 
 const OssStigReportsTab = () => {
   const [apiResponse, setApiResponse] = useState([]);
@@ -34,6 +32,7 @@ const OssStigReportsTab = () => {
   const [disableNewReport, setDisableNewReport] = useState(true);
   const [disableCancelReport, setDisableCancelReport] = useState(true);
   const [disableRunReport, setDisableRunReport] = useState(true);
+  const [selectedEmassNum, setSelectedEmassNum] = useState([]);
 
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
@@ -46,6 +45,20 @@ const OssStigReportsTab = () => {
   const [open9, setOpen9] = useState(false);
   const [option, setOption] = useState("");
 
+  const emassNumsList = [
+    "12412",
+    "1878",
+    "1315",
+    "2008",
+    "7371",
+    "7373",
+    "7372",
+    "2874",
+    "1761",
+    "1446",
+  ];
+  const maxNumEmassSelections = 3;
+
   var auth = getAuth();
   const dispatch = useDispatch();
 
@@ -54,20 +67,37 @@ const OssStigReportsTab = () => {
     localStorage.clear();
   };
 
+  const handleEmassSelectionChange = (chosenEmass, emass) => {
+
+    var emassStr = '';
+    if(chosenEmass && chosenEmass.length > 0){
+      if(chosenEmass.length > maxNumEmassSelections){
+        alert("A maximim of " + maxNumEmassSelections + 'can be selected.');
+        return;
+      }
+      emassStr = chosenEmass.join(",")
+    }
+
+    console.log('eMASS: ' + emassStr);
+    setEmassNums(emassStr);
+    setSelectedEmassNum(chosenEmass);
+    console.log('eMASS numbers: ' + emassNums);
+  };
+
   // this function will be called when a radio button is checked
   const onRadioChange = (e) => {
     setReport(e.target.value);
     if (e.target.value !== "12" && e.target.value !== "14") {
       setShowEmassNums(true);
     }
-    if (e.target.value === "9" ){
+    if (e.target.value === "9") {
       setShowBenchmark(true);
     } else {
       setShowBenchmark(false);
     }
     if (e.target.value === "11") {
       setShowNumDaysOver(true);
-      alert('Report 6 may take an hour or more to complete.');
+      alert("Report 6 may take an hour or more to complete.");
     } else {
       setShowNumDaysOver(false);
     }
@@ -201,22 +231,22 @@ const OssStigReportsTab = () => {
       case "report2":
         setOpen2(false);
         break;
-        case "report3":
+      case "report3":
         setOpen3(false);
         break;
-        case "report4":
+      case "report4":
         setOpen4(false);
         break;
-        case "report5":
+      case "report5":
         setOpen5(false);
         break;
-        case "report6":
+      case "report6":
         setOpen6(false);
         break;
-        case "report8":
+      case "report8":
         setOpen8(false);
         break;
-        case "report9":
+      case "report9":
         setOpen9(false);
         break;
       default:
@@ -283,12 +313,10 @@ const OssStigReportsTab = () => {
               window.dispatchEvent(new Event("storage"));
             }
           } else {
-            if(report === '13')
-            {
+            if (report === "13") {
               setShowNoPinnedDataFound(true);
-            }
-            else{
-            setShowNoDataFound(true);
+            } else {
+              setShowNoDataFound(true);
             }
             setDisableCancelReport(true);
           }
@@ -565,7 +593,8 @@ const OssStigReportsTab = () => {
                   disabled={isButtonDisabled}
                 />
                 <span>
-                  6. Checks Not Updated in x Days (eMASS number(s) required)  <b>NOTE: may take an hour or more to complete.</b>
+                  6. Checks Not Updated in x Days (eMASS number(s) required){" "}
+                  <b>NOTE: may take an hour or more to complete.</b>
                 </span>
                 <IconButton
                   option="report6"
@@ -698,15 +727,17 @@ const OssStigReportsTab = () => {
                 <div id="emassDiv">
                   <label htmlFor="emassNumsText">
                     Required for reports 4, 5, 6, 8. Optional for all others.
-                    <br /> Enter eMASS Number(s) separated by commas:{" "}
+                    <br /> Select eMASS Number(s) from the dropdown list.:{" "}
                   </label>
-                  <input
-                    id="emassNumsText"
-                    type="text"
-                    value={emassNums}
-                    onChange={updateEmass}
-                    disabled={isButtonDisabled}
+                  <div id='emassDropdown'>
+                  <SelectionDropdownList
+                    targetProperty="emass"
+                    selectedOptions={selectedEmassNum}
+                    valueOptions={emassNumsList}
+                    onChange={handleEmassSelectionChange}
+                    selectAllOptionsFlag={false}
                   />
+                  </div>
                 </div>
               )}
               {showBenchmark && (
@@ -774,7 +805,7 @@ const OssStigReportsTab = () => {
               {showNoPinnedDataFound && (
                 <div className="title-div">
                   <strong className="title">
-                  "eMASS entered has no pinned revisions.
+                    "eMASS entered has no pinned revisions.
                   </strong>
                 </div>
               )}
