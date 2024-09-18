@@ -14,7 +14,6 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
     const headers = [
       { label: "Collection", key: "collectionName" },
       { label: "Asset", key: "asset" },
-      { label: "Device-Asset", key: "deviceType" },
       { label: "Primary Owner", key: "primOwner" },
       { label: "Sys Admin", key: "sysAdmin" },
       { label: "STIG Benchmark", key: "benchmarkId" },
@@ -172,7 +171,6 @@ function getRow(
   var rowData = {
     collectionName: collectionName,
     asset: assetName,
-    deviceType: collectionMetadata.device,
     primOwner: collectionMetadata.primOwner,
     sysAdmin: collectionMetadata.sysAdmin,
     benchmarkId: benchmarkID,
