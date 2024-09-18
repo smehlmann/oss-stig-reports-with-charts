@@ -429,12 +429,13 @@ function getMetadataByAsset(labelMap, labels) {
   var labelDesc = "";
 
   for (var iLabel = 0; iLabel < labels.length; iLabel++) {
-    var assetLabel = labels[iLabel].labelId;
-    if (!assetLabel) {
-      assetLabel = "";
+    //labelDesc = labels.data[iLabel].description;
+    var labelId = labels[iLabel].labelId;
+    labelDesc = labelMap.get(labelId);
+    if (!labelDesc) {
+      labelDesc = "";
     } else {
-      assetLabel = assetLabel.toUpperCase();
-      labelDesc = labelMap.get(labels[iLabel].labelId).toUpperCase();
+      labelDesc = labelDesc.toUpperCase();
 
       switch (labelDesc) {
         case "PRIMARY OWNER":
