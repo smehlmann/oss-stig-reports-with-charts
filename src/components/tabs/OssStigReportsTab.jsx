@@ -46,16 +46,16 @@ const OssStigReportsTab = () => {
   const [option, setOption] = useState("");
 
   const emassNumsList = [
-    "12412",
-    "1878",
-    "1315",
-    "2008",
-    "7371",
-    "7373",
-    "7372",
-    "2874",
-    "1761",
-    "1446",
+    "12412 (NDNSA)",
+    "1878 (ASI)",
+    "1315 (B3COI)",
+    "2008 (Enchilada)",
+    "7371 (NCCM-NW)",
+    "7373 (NCCM-S)",
+    "7372 (NCCM-W)",
+    "2874 (NERDS)",
+    "1761 (Unclass Core)",
+    "1446 (AIMTCIS)",
   ];
   const maxNumEmassSelections = 3;
 
@@ -75,7 +75,12 @@ const OssStigReportsTab = () => {
         alert("A maximim of " + maxNumEmassSelections + 'can be selected.');
         return;
       }
-      emassStr = chosenEmass.join(",")
+      for(var iChosen = 0; iChosen < chosenEmass.length; iChosen++){
+        var tmpStrs = chosenEmass[iChosen].split(' ');
+        emassStr = emassStr + tmpStrs[0] + ',';
+      }
+      //emassStr = chosenEmass.join(",")
+      emassStr = emassStr.replace(/,\s*$/, "");
     }
 
     console.log('eMASS: ' + emassStr);
