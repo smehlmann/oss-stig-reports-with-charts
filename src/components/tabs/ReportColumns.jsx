@@ -195,9 +195,6 @@ export default function ReportColumns({ index, item, selectedReport }) {
                         {item.asset}
                     </td>
                     <td>
-                        {item.deviceType}
-                    </td>
-                    <td>
                         {item.primOwner}
                     </td>
                     <td>
@@ -239,10 +236,16 @@ export default function ReportColumns({ index, item, selectedReport }) {
                         {item.benchmark}
                     </td>
                     <td>
+                        {item.groupId}
+                    </td>
+                    <td>
                         {item.latestRev}
                     </td>
                     <td>
                         {item.quarterVer}
+                    </td>
+                    <td>
+                        {item.result}
                     </td>
                     <td>
                         {item.detail}
