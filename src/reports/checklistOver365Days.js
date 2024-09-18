@@ -45,9 +45,6 @@ async function runChecklistOver365Days(auth, emassMap, numDaysOver) {
 
         labelMap.clear();
         labels.length = 0;
-
-        labelMap.clear();
-        labels.length = 0;
         labels = await reportGetters.getLabelsByCollection(auth, collectionId);
         for (var x = 0; x < labels.data.length; x++) {
           labelMap.set(labels.data[x].labelId, labels.data[x].description);
@@ -230,7 +227,7 @@ async function runChecklistOver365Days(auth, emassMap, numDaysOver) {
                     status,
                     statusDate,
                     checkedBy,
-                    labels,
+                    labels.data,
                     labelMap
                   );
                   rows.push(myData);
