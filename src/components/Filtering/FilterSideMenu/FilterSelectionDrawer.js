@@ -141,7 +141,7 @@ const FilterSelectionDrawer = ({ data = [] }) => {
         onClose={handleCloseDrawer}
         PaperProps={{
           sx: {
-            width: 300, // Set the width of the drawer
+            width: 350, // the width of the drawer
             padding: 2,
           },
         }}
@@ -202,6 +202,7 @@ const FilterSelectionDrawer = ({ data = [] }) => {
             selectedOptions={tempFilter.sysAdmin}
             onChange={handleTempFilterChange}
             selectAllOptionsFlag={true}
+            limitNumOfTags={true}
             multiSelect // Enabling multi-select
           />
         </Box>

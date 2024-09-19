@@ -11,7 +11,7 @@ valueOptions: all the values for our given property
 selectedOptions: the selection options user can choose from
 onChange: function that determines the behavior based on the selection
 selectAllOptionsFlag: determines if we include the "select all" option to selection options
-
+limitNumOfTags: true/false determines if we limit the number of tags for selected options
 */
 
 //styling for how it will appear
@@ -49,7 +49,6 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
   '& .MuiAutocomplete-listbox': {
     padding: 0, //remove padding between list items
     
-
   },
   '& .MuiAutocomplete-option': {
     padding: '2px 4px', //adjust padding to make the items closer
@@ -58,8 +57,9 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
   },
 }));
 
+/* Might need to make a useEffect but I will set prop 'limitTags' to binary true or false. If true, set limitTags in Autocomplete limitTags={2} */
 
-const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, onChange, selectAllOptionsFlag}) => {
+const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, onChange, selectAllOptionsFlag, limitNumOfTags}) => {
 
   // add "Select All" option based on selectAllOptionsFlag
   const optionsWithSelectAll = selectAllOptionsFlag 
@@ -86,7 +86,7 @@ const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, o
     >
       <CustomAutocomplete
         multiple
-        limitTags={2}
+        limitTags={limitNumOfTags ? 3 : undefined} //don't limit number of tags if false
         value={selectedOptions}
         onChange={handleOptionSelected}
         options={optionsWithSelectAll}
@@ -97,7 +97,7 @@ const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, o
           <li {...props}>
             <Checkbox
               checked={selected}
-              style={{ marginRight: 8 }}
+              style={{ marginRight: 4 }}
             />
             <ListItemText primary={option} />
           </li>
@@ -111,7 +111,7 @@ const SelectionDropdownList = ({targetProperty, selectedOptions, valueOptions, o
             }}
             sx={{
               borderRadius: '10px',
-              display: 'block',
+              display: 'contents',
             }}
           />
         )}

@@ -13,6 +13,13 @@ import { Info } from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import SelectionDropdownList from "../dropdowns/SelectionDropdownList.js";
 
+import {
+  emassNumsList,
+  maxNumEmassSelections,
+} from '../dropdowns/emassNumConstants.js';
+
+
+
 const OssStigReportsTab = () => {
   const [apiResponse, setApiResponse] = useState([]);
   const [fileData, setFileData] = useState("");
@@ -45,19 +52,19 @@ const OssStigReportsTab = () => {
   const [open9, setOpen9] = useState(false);
   const [option, setOption] = useState("");
 
-  const emassNumsList = [
-    "12412 (NDNSA)",
-    "1878 (ASI)",
-    "1315 (B3COI)",
-    "2008 (Enchilada)",
-    "7371 (NCCM-NW)",
-    "7373 (NCCM-S)",
-    "7372 (NCCM-W)",
-    "2874 (NERDS)",
-    "1761 (Unclass Core)",
-    "1446 (AIMTCIS)",
-  ];
-  const maxNumEmassSelections = 3;
+  // const emassNumsList = [
+  //   "12412 (NDNSA)",
+  //   "1878 (ASI)",
+  //   "1315 (B3COI)",
+  //   "2008 (Enchilada)",
+  //   "7371 (NCCM-NW)",
+  //   "7373 (NCCM-S)",
+  //   "7372 (NCCM-W)",
+  //   "2874 (NERDS)",
+  //   "1761 (Unclass Core)",
+  //   "1446 (AIMTCIS)",
+  // ];
+  // const maxNumEmassSelections = 3;
 
   var auth = getAuth();
   const dispatch = useDispatch();
@@ -741,6 +748,7 @@ const OssStigReportsTab = () => {
                     valueOptions={emassNumsList}
                     onChange={handleEmassSelectionChange}
                     selectAllOptionsFlag={false}
+                    limitNumOfTags={false}
                   />
                   </div>
                 </div>
