@@ -4,6 +4,7 @@ import DashboardTab from "./DashboardTab";
 import "./TabComponentStyles.css";
 import useLocalStorageListener from "../useLocalStorageListener.js";
 import * as Tabs from "@radix-ui/react-tabs";
+import { getReportData } from "../../store/";
 
 const TabsComponent = () => {
   const [activeTab, setActiveTab] = useState("tab1");
@@ -12,7 +13,8 @@ const TabsComponent = () => {
 
   useEffect(() => {
     // console.log("BarChartBuilder from useEffect");
-    if (localStorage.getItem("ossStigReport")) {
+    //if (localStorage.getItem("ossStigReport")) {
+      if (getReportData()) {
       setDisableDashboard(false);
     }
   }, []);
@@ -37,8 +39,12 @@ const TabsComponent = () => {
           />
         );
       } else {
-        if (localStorage.getItem("ossStigReport")) {
+        var myData = getReportData();
+        console.log(myData);
+        //if (localStorage.getItem("ossStigReport")) {
+        if(myData){
           //setStoredData(myData);
+          setStoredData(myData);
           console.log("storedData: " + storedData);
           if (
             selectedReport === "5" ||
@@ -54,9 +60,9 @@ const TabsComponent = () => {
         } else {
           setDisableDashboard(true);
         }
-        if (localStorage.getItem("ossStigReport")) {
+        /*if (localStorage.getItem("ossStigReport")) {
           setStoredData(localStorage.getItem("ossStigReport"));
-        }
+        }*/
       }
     }
   };
@@ -126,5 +132,6 @@ async function fetchReportData() {
     throw e;
   }
 }
+
 
 export default TabsComponent;
