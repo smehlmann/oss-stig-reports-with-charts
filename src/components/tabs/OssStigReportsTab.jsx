@@ -12,12 +12,10 @@ import { IconButton, Alert, Dialog, DialogContent } from "@mui/material";
 import { Info } from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import SelectionDropdownList from "../dropdowns/SelectionDropdownList.js";
-
 import {
   emassNumsList,
   maxNumEmassSelections,
 } from '../dropdowns/emassNumConstants.js';
-
 
 
 const OssStigReportsTab = () => {
@@ -51,20 +49,20 @@ const OssStigReportsTab = () => {
   const [open8, setOpen8] = useState(false);
   const [open9, setOpen9] = useState(false);
   const [option, setOption] = useState("");
-
-  // const emassNumsList = [
-  //   "12412 (NDNSA)",
-  //   "1878 (ASI)",
-  //   "1315 (B3COI)",
-  //   "2008 (Enchilada)",
-  //   "7371 (NCCM-NW)",
-  //   "7373 (NCCM-S)",
-  //   "7372 (NCCM-W)",
-  //   "2874 (NERDS)",
-  //   "1761 (Unclass Core)",
-  //   "1446 (AIMTCIS)",
-  // ];
-  // const maxNumEmassSelections = 3;
+ 
+  /*const emassNumsList = [
+    "12412 (NDNSA)",
+    "1878 (ASI)",
+    "1315 (B3COI)",
+    "2008 (Enchilada)",
+    "7371 (NCCM-NW)",
+    "7373 (NCCM-S)",
+    "7372 (NCCM-W)",
+    "2874 (NERDS)",
+    "1761 (Unclass Core)",
+    "1446 (AIMTCIS)",
+  ];
+  const maxNumEmassSelections = 3;*/
 
   var auth = getAuth();
   const dispatch = useDispatch();
@@ -75,25 +73,24 @@ const OssStigReportsTab = () => {
   };
 
   const handleEmassSelectionChange = (chosenEmass, emass) => {
-
-    var emassStr = '';
-    if(chosenEmass && chosenEmass.length > 0){
-      if(chosenEmass.length > maxNumEmassSelections){
-        alert("A maximim of " + maxNumEmassSelections + 'can be selected.');
+    var emassStr = "";
+    if (chosenEmass && chosenEmass.length > 0) {
+      if (chosenEmass.length > maxNumEmassSelections) {
+        alert("A maximim of " + maxNumEmassSelections + "can be selected.");
         return;
       }
-      for(var iChosen = 0; iChosen < chosenEmass.length; iChosen++){
-        var tmpStrs = chosenEmass[iChosen].split(' ');
-        emassStr = emassStr + tmpStrs[0] + ',';
+      for (var iChosen = 0; iChosen < chosenEmass.length; iChosen++) {
+        var tmpStrs = chosenEmass[iChosen].split(" ");
+        emassStr = emassStr + tmpStrs[0] + ",";
       }
       //emassStr = chosenEmass.join(",")
       emassStr = emassStr.replace(/,\s*$/, "");
     }
 
-    console.log('eMASS: ' + emassStr);
+    console.log("eMASS: " + emassStr);
     setEmassNums(emassStr);
     setSelectedEmassNum(chosenEmass);
-    console.log('eMASS numbers: ' + emassNums);
+    console.log("eMASS numbers: " + emassNums);
   };
 
   // this function will be called when a radio button is checked
@@ -321,7 +318,10 @@ const OssStigReportsTab = () => {
             if (reportData) {
               console.log("reportData found");
               localStorage.setItem("ossStigReport", JSON.stringify(data.rows));
+              
+              //var fileName = saveReportData(reportData);
               localStorage.setItem("selectedReport", report);
+              //localStorage.setItem("reportDataFile", fileName);
               window.dispatchEvent(new Event("storage"));
             }
           } else {
@@ -741,15 +741,15 @@ const OssStigReportsTab = () => {
                     Required for reports 4, 5, 6, 8. Optional for all others.
                     <br /> Select eMASS Number(s) from the dropdown list.:{" "}
                   </label>
-                  <div id='emassDropdown'>
-                  <SelectionDropdownList
-                    targetProperty="emass"
-                    selectedOptions={selectedEmassNum}
-                    valueOptions={emassNumsList}
-                    onChange={handleEmassSelectionChange}
-                    selectAllOptionsFlag={false}
-                    limitNumOfTags={false}
-                  />
+                  <div id="emassDropdown">
+                    <SelectionDropdownList
+                      targetProperty="emass"
+                      selectedOptions={selectedEmassNum}
+                      valueOptions={emassNumsList}
+                      onChange={handleEmassSelectionChange}
+                      selectAllOptionsFlag={false}
+                      limitNumOfTags={false}
+                    />
                   </div>
                 </div>
               )}
@@ -879,5 +879,6 @@ async function callAPI(auth, report, emassNums, numDaysOver, benchmark) {
 
   return rows;
 }
+
 
 export default OssStigReportsTab;
