@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "oidc-react";
 import { useDispatch } from "react-redux";
 import "./App.css";
-import * as GenerateReport from "./reports/GenerateReport.js";
 import { getAuth } from "./store/index.js";
 import axios from "axios";
 import "./Tabs.css";
@@ -12,8 +11,6 @@ import TabsComponent from './components/tabs/TabsComponent.jsx';
 
 function OssStigReports() {
   var auth = useAuth();
-  const idToken = auth.userData?.id_token;
-  // console.log(idToken);
 
   /*===============================================================*/
   /* Logic for refreshing token before it expires */
@@ -78,20 +75,6 @@ function OssStigReports() {
   }
 }
 
-async function callAPI(auth, report, emassNums, numDaysOver) {
-  //alert('callAPI report: ' + report);
-
-  var rows = await GenerateReport.GenerateReport(
-    auth,
-    report,
-    emassNums,
-    numDaysOver
-  );
-  //alert('calApi number of rows retruned: ' + rows.length);
-
-  return rows;
-}
-
 async function extendSession() {
   try {
     var storedAuth = getAuth();
@@ -117,7 +100,7 @@ async function extendSession() {
     //alert('returning resp')
     return resp;
   } catch (e) {
-    console.log(e.message);
+    console.log('extendSession: ' + e.message);
     console.log(e);
   }
 }
