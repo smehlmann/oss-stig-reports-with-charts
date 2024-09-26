@@ -21,15 +21,16 @@ async function getMetricsData(auth, myUrl) {
     //alert('returning resp')
     return resp;
   } catch (e) {
-    //console.log('Error in getMetricsData url: ' + myUrl);
+    console.log("Error in getMetricsData url: " + myUrl);
     console.log(e.message);
     var msg = e.message.toLowerCase();
     var errMsg = "401";
+    console.log("getMetricsData: msg: " + msg);
     if (!msg.includes(errMsg)) {
       return null;
     }
 
-    console.log("Get new token");
+    console.log("In catch. Get new token");
 
     storedAuth = getAuth();
     console.log("Access token in getMetricsData catch");
@@ -39,51 +40,21 @@ async function getMetricsData(auth, myUrl) {
     //accessToken = myAuth.userData?.access_token;
     //var refreshToken = myAuth.userData?.refresh_token
 
-    resp = await axios.get(myUrl, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    return resp;
-  }
-}
-
-async function getXMLMetricsData(auth, myUrl) {
-  //console.log(myUrl);
-
-  //const parser = new xml2js.Parser;
-
-  try {
-    const response = await axios.get(myUrl, {
-      headers: {
-        Authorization: `Bearer ${auth}`,
-      },
-    });
-
-    //var jsonResp;
-    //var xmlResp = response.body;
-    //console.log(xmlResp);
-    //parser.parseString(xmlResp, function (err, result) {
-    //console.log(result);
-    //console.log('Done');
-    //jsonResp = result;
-    //});
-    //return jsonResp;
-    return null;
-  } catch (e) {
-    console.log("Error in geXMLtMetricsData url: " + myUrl);
-    console.log(e.message);
-    console.log(e.message);
-    var msg = e.message.toLowerCase();
-    var errMsg = "response code 401";
-    if (!msg.includes(errMsg)) {
+    try {
+      resp = await axios.get(myUrl, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+    } catch (e2) {
+      console.log("getMetricsData: second try");
+      console.log(e2);
       return null;
     }
-    console.log("Get new token");
-  }
 
-  return null;
+    console.log("getMetricsData returning resp.");
+    return resp;
+  }
 }
 
 async function getCollections(auth) {
@@ -120,7 +91,8 @@ async function getCollectionByName(auth, collectionName) {
 
 async function getStigs(auth, collectionId) {
   //console.log('inGetStigs')
-  var myUrl = apiBase + "/collections/" + collectionId + "/stigs?projection=assets";
+  var myUrl =
+    apiBase + "/collections/" + collectionId + "/stigs?projection=assets";
   var stigs = getMetricsData(auth, myUrl);
   return stigs;
 }
