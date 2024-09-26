@@ -15,8 +15,7 @@ import SelectionDropdownList from "../dropdowns/SelectionDropdownList.js";
 import {
   emassNumsList,
   maxNumEmassSelections,
-} from '../dropdowns/emassNumConstants.js';
-
+} from "../dropdowns/emassNumConstants.js";
 
 const OssStigReportsTab = () => {
   const [apiResponse, setApiResponse] = useState([]);
@@ -49,7 +48,7 @@ const OssStigReportsTab = () => {
   const [open8, setOpen8] = useState(false);
   const [open9, setOpen9] = useState(false);
   const [option, setOption] = useState("");
- 
+
   /*const emassNumsList = [
     "12412 (NDNSA)",
     "1878 (ASI)",
@@ -318,7 +317,7 @@ const OssStigReportsTab = () => {
             if (reportData) {
               console.log("reportData found");
               localStorage.setItem("ossStigReport", JSON.stringify(data.rows));
-              
+
               //var fileName = saveReportData(reportData);
               localStorage.setItem("selectedReport", report);
               //localStorage.setItem("reportDataFile", fileName);
@@ -865,20 +864,23 @@ async function callAPI(auth, report, emassNums, numDaysOver, benchmark) {
 
   var rows;
 
-  if (report !== "14") {
-    rows = await GenerateReport.GenerateReport(
-      auth,
-      report,
-      emassNums,
-      numDaysOver,
-      benchmark
-    );
+  try {
+    if (report !== "14") {
+      rows = await GenerateReport.GenerateReport(
+        auth,
+        report,
+        emassNums,
+        numDaysOver,
+        benchmark
+      );
 
-    //alert('calApi number of rows retruned: ' + rows.length);
+      //alert('calApi number of rows retruned: ' + rows.length);
+    }
+  } catch (e) {
+    console.log("callAPI: " + e);
   }
 
   return rows;
 }
-
 
 export default OssStigReportsTab;
