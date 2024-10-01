@@ -20,6 +20,8 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
       { label: "Latest Revision", key: "latestRev" },
       { label: "Previous Revision", key: "prevRev" },
       { label: "Current Quarter STIG Version", key: "quarterVer" },
+      { label: "Assessed", key: "assessed" },
+      { label: "Submitted", key: "submitted" },
       { label: "Web or DB", key: "cklWebOrDatabase" },
     ];
 
@@ -74,7 +76,7 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
             auth,
             benchmarkId
           );
-          if(!revisionsData){
+          if (!revisionsData) {
             continue;
           }
           var revisions = revisionsData.data;
@@ -119,6 +121,8 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
               cklWebOrDatabase = metaData.cklWebOrDatabase;
             }
 
+            var assetMetrics = assets[iAssets].metrics;
+
             var myData = getRow(
               collectionName,
               labelMap,
@@ -128,7 +132,8 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
               benchmarkId,
               currentQuarter,
               assets[iAssets],
-              cklWebOrDatabase
+              cklWebOrDatabase,
+              assetMetrics
             );
 
             rows.push(myData);
@@ -154,13 +159,40 @@ function getRow(
   benchmarkID,
   currentQuarter,
   asset,
-  cklWebOrDatabase
+  cklWebOrDatabase,
+  metrics
 ) {
   const quarterVer = reportUtils.getVersionForQuarter(
     currentQuarter,
     latestRevDate,
     latestRev
   );
+
+  const numAssessments = metrics.assessments;
+  const numAssessed = metrics.assessed;
+  const numSubmitted = metrics.statuses.submitted.total;
+  const numAccepted = metrics.statuses.accepted.total;
+  const numRejected = metrics.statuses.rejected.total;
+
+  var avgAssessed = 0;
+  var avgSubmitted = 0;
+  //var avgAccepted = 0;
+  //var avgRejected = 0;
+  var temp = 0;
+
+  if (numAssessments) {
+    temp = (numAssessed / numAssessments) * 100;
+    avgAssessed = temp.toFixed(2);
+
+    temp = ((numSubmitted + numAccepted + numRejected) / numAssessments) * 100;
+    avgSubmitted = temp.toFixed(2);
+
+    /*temp = (numAccepted / numAssessments) * 100;
+    avgAccepted = temp.toFixed(2);
+
+    temp = (numRejected / numAssessments) * 100;
+    avgRejected = temp.toFixed(2);*/
+  }
 
   const assetName = asset.name;
   const collectionMetadata = reportUtils.getMetadataByAsset(
@@ -177,6 +209,8 @@ function getRow(
     latestRev: latestRev,
     prevRev: prevRev,
     quarterVer: quarterVer,
+    assessed: avgAssessed + "%",
+    submitted: avgSubmitted + "%",
     cklWebOrDatabase: cklWebOrDatabase,
   };
 
