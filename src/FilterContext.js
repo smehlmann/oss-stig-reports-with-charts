@@ -5,9 +5,6 @@
  
  */
 
-
-
-  
   import React, { createContext, useState, useContext } from 'react';
 
   const FilterContext = createContext();
@@ -25,23 +22,36 @@
     // Updates the filter object by adding or removing property-value pairs. 
     // newFilter = obj containing new filter key-value pair to be added/updated
     // source= only needed to clarify if we're using an expandable table
-    const updateFilter = (newFilter, source = null) => {
-     // console.log('Updating filter with:', newFilter);
+    const updateFilter = (newFilter, source = null, operator=null) => {
      setFilters(prevFilters => {
       const key = Object.keys(newFilter)[0];
       const value = newFilter[key];
-  
+      
+      //ensure previous filters is treated as an object
+      if (typeof prevFilters !== 'object' || prevFilters === null) {
+      return { [key]: value }; // Initialize with new filter if prevFilters is not valid
+      }
+      let updatedFilters = { ...prevFilters }; // Create a copy of prevFilters
+
       // console.log(`Current filters: ${JSON.stringify(prevFilters)}`);
       // console.log(`New filter: ${key}: ${value}`);
       // console.log('Previous filters:', prevFilters);
-      // console.log('Updating with:', key, ':', value);
 
+      if(source === 'dataGrid') {
+        newFilter.operator = operator;
+        updatedFilters[key] = {value, operator};
+        // console.log('Updating with:', key, ':', value, ' operator: ', operator );
+        // console.log('Updating filter with:', updatedFilters);
+        return updatedFilters;
+      }
       //executes logic only if working with expandable table
       if (source === 'expandableTable') {
         //updates filters directly by merging new filter with previous filters
         const updatedFilters = { ...prevFilters, ...newFilter };
         return updatedFilters;
       }
+   
+
 
        //determines the filtering logic for updating filter state when filter value is single value or array
   
@@ -86,6 +96,7 @@
       });
     };
 
+    
     const clearFilter = () => {
       setFilters({});
     };

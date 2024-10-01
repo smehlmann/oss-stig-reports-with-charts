@@ -92,6 +92,14 @@ const FilterSelectionDrawer = ({ data = [] }) => {
           return 'STIG Benchmark';
         case 'latestRev':
           return 'Latest Revision';
+        case 'assessed':
+          return 'Assessed Average';
+        case 'submitted':
+          return 'Submitted Average';
+        case 'accepted':
+          return 'Accepted Average';
+        case 'rejected':
+          return 'Rejected Average';
         default:
           return '';
       }

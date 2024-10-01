@@ -1,23 +1,9 @@
-import React, {useState, useMemo} from 'react';
+import React, {useState, useMemo, useEffect} from 'react';
 import { DataGrid, GridToolbar} from '@mui/x-data-grid';
 import { Box, styled } from "@mui/system";
 import { useFilter } from '../../FilterContext';
 import { getGridNumericOperators } from '@mui/x-data-grid';
 import DropdownInputValue from './DropdownInputValue';
-
-// // Define custom dropdown filter operators
-// const dropdownFilterOperator = {
-//   dropdown: {
-//     value: 'dropdown',
-//     getApplyFilterFn: (filterItem) => {
-//       if (!filterItem.value) return null;
-//       return ({ value }) => value === filterItem.value;
-//     },
-//     InputComponent: DropdownInputValue,
-//     getValueAsString: (value) => value || '',
-//   },
-// };
-
 const BoldHeader = styled('div')(({ theme }) => ({
   // fontSize: '18px', 
   fontFamily: 'Segoe UI',
@@ -121,11 +107,12 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
 }));
 
 
-function DataGridBuilder({ data, columns, onRowClick, filterModel,onFilterModelChange, onRowSelectionModelChange, rowSelectionModel}) {
+function DataGridBuilder({ data, columns, onRowClick, onFilterModelChange, onRowSelectionModelChange, rowSelectionModel}) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const {filter, updateFilter, removeFilterKey } = useFilter();
+  const [filterModel, setFilterModel] = useState({ items: [] });
 
-  const {updateFilter} = useFilter();
   // const [filterModel, setFilterModel] = useState({ items: [] });
   
   //handlers to change page and rows per page
@@ -136,6 +123,54 @@ function DataGridBuilder({ data, columns, onRowClick, filterModel,onFilterModelC
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  // Sync DataGrid filter model with global filters
+  useEffect(() => {
+    if (filter && Object.keys(filter).length > 0) {  // ensure filters is not null or undefined
+        const globalFilter = Object.keys(filter)
+            .filter((key) => ['assessed', 'submitted', 'accepted', 'rejected'].includes(key)) // filter for specific keys
+            .map((key) => ({
+                field: `avg${key.charAt(0).toUpperCase() + key.slice(1)}`, // E.g., 'accepted' -> 'avgAccepted'
+                operator: filter[key].operator || '', // adjust operator if needed
+                // value: String(filter[key]), // convert value to string
+                value: parseFloat(filter[key].value.toFixed(2)) // Round to 2 decimal places
+
+            }));
+        console.log("inside datagridbuilder input: ", globalFilter);
+        setFilterModel({ items: globalFilter });
+        
+    } else {
+        setFilterModel({ items: [] });  // clear the filter model if no filters
+    }
+}, [filter]);
+
+
+  // handle change of DataGrid filters
+  const handleFilterModelChange = (newFilterModel) => {
+    // Update global filter if any filter is removed/changed
+    const currentFilterFields = newFilterModel.items.map((item) => item.field);
+
+    // Remove filters that are no longer in DataGrid from global filter
+    Object.keys(filter).forEach((key) => {
+      const field = `avg${key.charAt(0).toUpperCase() + key.slice(1)}`;
+      if (!currentFilterFields.includes(field)) {
+        removeFilterKey(key);
+      }
+    });
+
+    // sync datagrid filter with the global filter if any new filters are added
+    newFilterModel.items.forEach((item) => {
+      const transformedField = item.field.slice(3); // 'avgAccepted' -> 'accepted'
+      const modifiedField = transformedField.charAt(0).toLowerCase() + transformedField.slice(1);
+
+      if (item.value !== undefined) {
+        updateFilter({ [modifiedField]: item.value }, 'dataGrid', item.operator);
+      }
+    });
+
+    setFilterModel(newFilterModel); //update DataGrid's local filter state
+  };
+
 
   // Configure columns with custom dropdown filter
   const updatedColumns = useMemo(
@@ -157,13 +192,16 @@ function DataGridBuilder({ data, columns, onRowClick, filterModel,onFilterModelC
     [columns]
   );
 
+
+
+
   return (
     <Box sx={{
       width: '100%',
       display: 'flex',
       height: '100%',
       // maxWidth: 'auto',
-      // maxHeight: '100%', // Ensure it doesn't grow beyond this height
+      // maxHeight: '100%',
       // overflow: 'hidden',
       overflowY: 'hidden',
 
@@ -194,8 +232,8 @@ function DataGridBuilder({ data, columns, onRowClick, filterModel,onFilterModelC
         disableSelectionOnClick
         onRowClick={onRowClick}
         hideFooter
-        // filterModel={filterModel}
-        // onFilterModelChange={onFilterModelChange }
+        filterModel={filterModel}
+        onFilterModelChange={handleFilterModelChange }
         components={{Toolbar: GridToolbar,}}
         // rowSelectionModel={rowSelectionModel}
       />
@@ -204,132 +242,4 @@ function DataGridBuilder({ data, columns, onRowClick, filterModel,onFilterModelC
 }
 
 export default DataGridBuilder;
-
-
-// import React, {useState, useMemo} from 'react';
-// import { DataGrid } from '@mui/x-data-grid';
-// import { Box, styled } from "@mui/system";
-// import TableCell from '@mui/material/TableCell';
-// import { useFilter } from '../../FilterContext';
-
-
-// const BoldHeader = styled('div')(({ theme }) => ({
-//   fontSize: '18px', 
-//   fontFamily: 'Segoe UI',
-//   fontWeight: '700',
-//   textWrap: 'wrap',
-//   textAlign: 'center',
-//   [theme.breakpoints.down('lg')]: {
-//     fontSize: '14px', // Font size for large screens and down
-//   },
-//   [theme.breakpoints.down('md')]: {
-//     fontSize: '12px', // Font size for medium screens and down
-//   },
-//   [theme.breakpoints.down('sm')]: {
-//     fontSize: '10px', // Font size for small screens and down
-//   },
-// }));
-
-// const CenterAlignedCell = styled(TableCell)({
-//   textAlign: 'center',
-// });
-
-// //created styled data grid:
-// const StyledDataGrid = styled(DataGrid) (({theme}) => ({
-//   "& .MuiDataGrid-root": {
-//     display: 'flex',
-//     // flex: '1',
-//     // width: "100%",
-//     // height: "100%",
-//    // border: "1px solid #e0e0e0",
-//     // marginTop: 0,
-//     // marginBottom: 0,
-    
-//   },
-//   "& .MuiDataGrid-cell": {
-//     borderBottom: "none",
-//     // color: "#00b4d8"
-//   },
-//   "& .name-column--cell": {
-//     color: theme.palette.primary.main,
-//   },
-
-//   "& .MuiDataGrid-columnHeader": {
-//     backgroundColor: theme.palette.secondary.light,
-//     // borderBottom: 'none',
-    
-//   },
-//   "& .MuiDataGrid-virtualScroller": {
-//     backgroundColor: theme.palette.background.paper,
-//   },
-//   "& .MuiDataGrid-footerContainer": {
-//     borderTop: "none",
-//     backgroundColor: theme.palette.secondary.light,
-//   },
-//   "& .MuiCheckbox-root": {
-//     color: `${theme.palette.secondary.main} !important`,
-//   },
-//   "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-//     color: `${theme.palette.text.primary} !important`,
-//   },
-// }));
-
-
-// function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange, rowSelectionModel}) {
-//   const [page, setPage] = useState(0);
-//   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-//   //handlers to change page and rows per page
-//   const handleChangePage = (event, newPage) => {
-//     setPage(newPage);
-//   };
-//   const handleChangeRowsPerPage = (event) => {
-//     setRowsPerPage(parseInt(event.target.value, 10));
-//     setPage(0);
-//   };
-
-//   return (
-//     <Box sx={{
-//       width: '100%',
-//       display: 'flex',
-//       maxHeight: '100%', // Ensure it doesn't grow beyond this height
-//       overflowY: 'auto', // Enable vertical scrolling
-//       margin: "0 auto",
-//       overflowX: "hidden",
-//       flex: '1',
-//     }}>
-      
-//       <StyledDataGrid
-//         rows={data}
-//         columns={columns.map((column) => ({
-//           ...column,
-//           headerAlign: 'center',
-//           align: 'center',
-//           renderHeader: (params) => (
-//             <BoldHeader>{params.colDef.headerName}</BoldHeader>
-//           ),
-//         }))}
-//         pageSize={rowsPerPage}
-//         onPageChange={handleChangePage}
-//         paginationMode="server"
-//         page={page}
-//         pagination
-//         rowCount={data.length}
-//         rowsPerPageOptions={[5, 10]}
-//         onPageSizeChange={handleChangeRowsPerPage}
-        
-//         // checkboxSelection
-//         disableSelectionOnClick
-//         onRowClick={onRowClick}
-//         // rowSelectionModel={rowSelectionModel}
-//       />
-//    </Box>
-//   );
-// }
-
-// export default DataGridBuilder;
-
-
-
-
 

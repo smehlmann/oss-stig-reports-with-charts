@@ -8,11 +8,11 @@ import DataGridBuilder from './DataGridBuilder';
 import ValueCountMap from "../../components/ValueCountMap.js";
 import { getGridNumericOperators } from '@mui/x-data-grid';
 import DropdownInputValue from './DropdownInputValue';
-import GetFilteredData from "../../components/Filtering/GetFilteredData.js";
+// import GetFilteredData from "../../components/Filtering/GetFilteredData.js";
 
 const renderProgressBarCell = (params) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', padding:'8px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', padding:'4px' }}>
       <Typography variant="body2" align="center">
         {numeral(params.value * 100).format('0.00')}%
       </Typography>
@@ -29,28 +29,34 @@ const renderProgressBarCell = (params) => {
 
 function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
   //useFilter contains 'filter' state and when it's updated
-  const { filter, updateFilter } = useFilter();
-  const [ setFilterModel] = useState({
+  const { updateFilter } = useFilter();
+  const [filterModel, setFilterModel] = useState({
     items: [],
   });
   const [averages, setAverages] = useState([]);
 
-  //gets the data when filter has been applied
-  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
+  // gets the data when filter has been applied
+  // const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
-  //stores the data filter has been applie
-  // const filteredData = useMemo(() => {
-  //   console.log('Filtering data with filter:', filter);
-  //   if (!filter || typeof filter !== 'object') {
-  //     console.log('No valid filter; returning unfiltered data.');
-  //     return data;
-  //   }
-  //   const result = data.filter(item => {
-  //     return Object.keys(filter).every(key => item[key] === filter[key]);
-  //   });
-  //   console.log('Filtered data:', result);
-  //   return result;
-  // }, [data, filter]);
+  
+  const filteredData = useMemo(() => {
+    return filterModel.items.reduce((filtered, filterItem) => {
+      switch (filterItem.columnField) {
+        case 'avgAssessed':
+          return filtered.filter(item => item.avgAssessed >= filterItem.value);
+        case 'avgSubmitted':
+          return filtered.filter(item => item.avgSubmitted >= filterItem.value);
+        case 'avgAccepted':
+          return filtered.filter(item => item.avgAccepted >= filterItem.value);
+        case 'avgRejected':
+          return filtered.filter(item => item.avgRejected >= filterItem.value);
+        default:
+          return filtered;
+      }
+    }, data);
+  }, [data, filterModel.items]);
+  
+  
 
 
   useEffect(() => {
@@ -136,7 +142,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
       
       setAverages(groupedAveragesArray);
     }
-  }, [filteredData, groupingColumn]);
+  }, [filteredData, groupingColumn, source]);
 
   const handleRowClick = (params) => {
     const selectedValue = params.row[groupingColumn]; 
@@ -162,25 +168,14 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
       wrap: true,
       flex: 1,
       type: 'number',
-      // renderCell: (params) => (
-      //   <div>
-      //     {numeral(params.value * 100).format('0.00')}%
-      //   </div>
-      // ),
       renderCell: renderProgressBarCell,
       filterOperators: operatorsForFiltering,
-      // renderCell: renderProgressBarCell,
     },
     {
       field: 'avgSubmitted',
       headerName: 'Avg of Submitted',
       flex: 1,
       type: 'number',
-      // renderCell: (params) => (
-      //   <div>
-      //     {numeral(params.value * 100).format('0.00')}%
-      //   </div>
-      // ),
       filterOperators: operatorsForFiltering,
 
       renderCell: renderProgressBarCell,
@@ -190,11 +185,6 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
       headerName: 'Avg of Accepted',
       flex: 1,
       type: 'number', // Set the type to 'number' for proper filtering
-      // renderCell: (params) => (
-      //   <div>
-      //     {numeral(params.value * 100).format('0.00')}%
-      //   </div>
-      // ),
       filterOperators: operatorsForFiltering,
       renderCell: renderProgressBarCell,
     },
@@ -203,11 +193,6 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
       headerName: 'Avg of Rejected',
       flex: 1,
       type: 'number',
-      // renderCell: (params) => (
-      //   <div>
-      //     {numeral(params.value * 100).format('0.00')}%
-      //   </div>
-      // ),
       filterOperators: operatorsForFiltering,
       renderCell: renderProgressBarCell,
     },
@@ -219,9 +204,6 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
       columns={tableColumns}
       onRowClick={handleRowClick}
       onFilterModelChange={setFilterModel}
-    
-
-      
     />
   );
 }
@@ -231,8 +213,6 @@ export default AveragesGroupedByColumn;
 
 /*
 function AveragesGroupedByColumn({ groupingColumn, data, targetColumns}) {
-
-
 OLD useEffect
   const targetColumnsToBeAveraged = useMemo(() => {
     const filteredColumns = targetColumns.filter(currColumn =>

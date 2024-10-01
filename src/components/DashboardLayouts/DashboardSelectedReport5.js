@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect} from "react";
 import { ThemeProvider, Box, Typography} from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import ChartCardComponent from "../Cards/ChartCardComponent";
@@ -34,17 +34,9 @@ const DashboardSelectedReport5 = ({ data, title }) => {
     return result;
   }, [filter, data, isWebOrDBIncluded]);
   
-
-  // const uniqueShortName = [...new Set(allShortNames)];
-
-  // const shortNameSet = uniqueShortName.map(value => ({
-  //   value: value,
-  // }));
-  // shortNameSet.forEach(item => {
-  //   console.log("item: ", item);
-  // });
-  
-  
+  // useEffect(() => {
+  //   console.log('Formatted Data:', filteredData);
+  // }, [filteredData]);
 
   return (
     <ThemeProvider theme={theme}>

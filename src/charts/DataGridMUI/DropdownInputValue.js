@@ -3,22 +3,36 @@ import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useFilter } from '../../FilterContext';
 
 
+
+/*
+Function to create and style the dropdown filters in the MUI data grid. 
+
+*/
 function DropdownInputValue(props) {
   const { item, applyValue, focusElementRef } = props;
   //get the updateFilter function from the FilterContext
   const { updateFilter } = useFilter(); 
 
+
+
   const handleChange = (event) => {
-    applyValue({ ...item, value: event.target.value });
+    const filterValue = parseFloat(event.target.value);
+    const { field, operator } = item;
+
+    //apply the value to the item (if necessary, depending on how applyValue works)
+    applyValue({ ...item, value: filterValue });
+
+    console.log("item: ", item);
+    //extract lowercased 4th character (ie. avgAccepted ---> accepted)
+    const transformedField = field.slice(3); // remove 'avg'
+    const modifiedField = transformedField.charAt(0).toLowerCase() + transformedField.slice(1);
+
+    
+    //update the filter context with the value being filtered by
+    updateFilter({ [modifiedField]: filterValue}, 'dataGrid', operator);
   };
 
-  // const handleChange = (event) => {
-  //   const newValue = event.target.value;
-  //   applyValue({ ...item, value: event.target.newValue });
-  //   //update FilterContext with the new filter value
-  //   console.log("newValue: ", newValue);
-  //   updateFilter({ [item.field]: newValue });
-  // };
+
 
   return (
     <FormControl sx={{ 
@@ -47,13 +61,13 @@ function DropdownInputValue(props) {
           },
           '& .MuiInput-underline:before': {
             borderBottom: '1px solid', // Custom underline styling
+            
           },
           '& .MuiInput-underline:after': {
             borderBottom: '2px solid', // Custom underline styling when focused
           },
         }}
       >
-        <MenuItem value=""><em>None</em></MenuItem>
         <MenuItem value="0.25">25%</MenuItem>
         <MenuItem value="0.50">50%</MenuItem>
         <MenuItem value="0.75">75%</MenuItem>
@@ -64,31 +78,3 @@ function DropdownInputValue(props) {
 }
 
 export default DropdownInputValue;
-
-
-  // const StyledFormControl = styled(FormControl)({
-  //   marginTop: 0,
-  //   marginBottom: 0,
-  //   minWidth: 120,
-  //   '& .MuiInputLabel-root': {
-  //     fontSize: '0.875rem',
-  //     marginTop: '0px', // Ensure label is vertically aligned
-  //   },
-  //   '& .MuiSelect-root': {
-  //     fontSize: '0.875rem',
-  //     padding: '8px 12px',
-  //   },
-  //   '& .MuiInputBase-root': {
-  //     padding: '0',
-  //     height: 'auto',
-  //   },
-  //   '& .MuiSelect-select': {
-  //     padding: '8px 12px', // Adjust padding to match
-  //   },
-  //   '& .MuiInput-underline:before': {
-  //     borderBottom: '1px solid rgba(0, 0, 0, 0.42)', // Match underline style
-  //   },
-  //   '& .MuiInput-underline:after': {
-  //     borderBottom: '2px solid #1976d2', // Match active underline style
-  //   },
-  // });
