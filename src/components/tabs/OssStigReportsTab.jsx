@@ -49,20 +49,6 @@ const OssStigReportsTab = () => {
   const [open9, setOpen9] = useState(false);
   const [option, setOption] = useState("");
 
-  /*const emassNumsList = [
-    "12412 (NDNSA)",
-    "1878 (ASI)",
-    "1315 (B3COI)",
-    "2008 (Enchilada)",
-    "7371 (NCCM-NW)",
-    "7373 (NCCM-S)",
-    "7372 (NCCM-W)",
-    "2874 (NERDS)",
-    "1761 (Unclass Core)",
-    "1446 (AIMTCIS)",
-  ];
-  const maxNumEmassSelections = 3;*/
-
   var auth = getAuth();
   const dispatch = useDispatch();
 
@@ -113,10 +99,16 @@ const OssStigReportsTab = () => {
     setDisableRunReport(false);
   };
 
-  const updateEmass = (event) => {
-    // 👇 Get input value from "event"
-    setEmassNums(event.target.value);
-  };
+  /*const handleTokenExpiring = () => {
+    console.log("Access token expiring event fired");
+    console.log(auth.userData);
+
+    // set the new auth value in the data store
+    dispatch({ type: "refresh", auth: auth });
+
+    extendSession();
+    //setAccessTokenId(auth.userData?.access_token);
+  };*/
 
   const updateBenchmark = (event) => {
     // 👇 Get input value from "event"
@@ -130,10 +122,12 @@ const OssStigReportsTab = () => {
 
   const newReport = (e) => {
     window.location.reload();
+    //handleTokenExpiring();
   };
 
   const cancelReport = (e) => {
     window.location.reload();
+    //handleTokenExpiring();
   };
 
   const handleInfoClick = (event) => {
@@ -142,85 +136,37 @@ const OssStigReportsTab = () => {
     //alert("Info icon clicked!");
     const option = event.currentTarget.attributes.option.nodeValue;
     setOption(option);
+    setOpen1(true);
+    setOpen2(false);
+    setOpen3(false);
+    setOpen4(false);
+    setOpen5(false);
+    setOpen6(false);
+    setOpen8(false);
+    setOpen9(false);
     switch (option) {
       case "report1":
         setOpen1(true);
-        setOpen2(false);
-        setOpen3(false);
-        setOpen4(false);
-        setOpen5(false);
-        setOpen6(false);
-        setOpen8(false);
-        setOpen9(false);
         break;
       case "report2":
-        setOpen1(false);
         setOpen2(true);
-        setOpen3(false);
-        setOpen4(false);
-        setOpen5(false);
-        setOpen6(false);
-        setOpen8(false);
-        setOpen9(false);
         break;
       case "report3":
-        setOpen1(false);
-        setOpen2(false);
         setOpen3(true);
-        setOpen4(false);
-        setOpen5(false);
-        setOpen6(false);
-        setOpen8(false);
-        setOpen9(false);
         break;
       case "report4":
-        setOpen1(false);
-        setOpen2(false);
-        setOpen3(false);
         setOpen4(true);
-        setOpen5(false);
-        setOpen6(false);
-        setOpen8(false);
-        setOpen9(false);
         break;
       case "report5":
-        setOpen1(false);
-        setOpen2(false);
-        setOpen3(false);
-        setOpen4(false);
         setOpen5(true);
-        setOpen6(false);
-        setOpen8(false);
-        setOpen9(false);
         break;
       case "report6":
-        setOpen1(false);
-        setOpen2(false);
-        setOpen3(false);
-        setOpen4(false);
-        setOpen5(false);
         setOpen6(true);
-        setOpen8(false);
-        setOpen9(false);
         break;
       case "report8":
-        setOpen1(false);
-        setOpen2(false);
-        setOpen3(false);
-        setOpen4(false);
-        setOpen5(false);
-        setOpen6(false);
         setOpen8(true);
-        setOpen9(false);
         break;
       case "report9":
-        setOpen1(false);
-        setOpen2(false);
-        setOpen3(false);
-        setOpen4(false);
-        setOpen5(false);
-        setOpen6(false);
-        setOpen8(false);
         setOpen9(true);
         break;
       default:
@@ -316,7 +262,7 @@ const OssStigReportsTab = () => {
             });
             if (reportData) {
               console.log("reportData found");
-              localStorage.setItem("ossStigReport", JSON.stringify(data.rows));
+              //localStorage.setItem("ossStigReport", JSON.stringify(data.rows));
 
               //var fileName = saveReportData(reportData);
               localStorage.setItem("selectedReport", report);
