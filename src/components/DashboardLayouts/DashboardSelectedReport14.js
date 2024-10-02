@@ -1,5 +1,6 @@
 import React, { useMemo} from "react";
-import {ThemeProvider,Typography, Box} from "@mui/material";
+
+import {ThemeProvider,Typography, Box, Button} from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/HistoricalDataTracker"
@@ -39,7 +40,7 @@ function getLatestDate(dateObject) {
 }
 
 const DashboardSelectedReport14 = ({ data, title}) => {
-  const { filter, isWebOrDBIncluded} = useFilter();
+  const { filter, clearFilter, isWebOrDBIncluded} = useFilter();
   
   //gets the data when filter is applied
   const filteredData = useMemo(() => {
@@ -51,7 +52,33 @@ const DashboardSelectedReport14 = ({ data, title}) => {
 
     return result;
   }, [filter, data, isWebOrDBIncluded]);
-  
+
+  //check if filteredData is not array or empty
+  if (!Array.isArray(filteredData) || filteredData.length === 0) {
+    return (
+      <ThemeProvider theme={theme}>
+        <DashboardRoot>
+          {/* Filter Bar */}
+          <Grid container spacing={{ xs: 2, s: 2, md: 2, lg: 2.5 }} sx={{ px: { lg: 5, xl: 15 } }}>
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <Box display="flex" justifyContent="space-between" alignItems='center'>
+                <Typography variant='h1'>{title}</Typography>
+                <Button variant='outlined' onClick={clearFilter}>
+                  Try Again
+                </Button>
+              </Box>
+              {/* Error Message */}
+              <Typography variant='h6' color='error'>
+                Error: Unable to load filters. Please try again.
+              </Typography>
+            </Grid>
+          </Grid>
+        </DashboardRoot>
+      </ThemeProvider>
+    );
+  }
+
+
   //group all data entries by their date
   const dataGroupedByDate = filteredData.reduce((accumulator, currentItem) => {
     //get groupingColumn value in our currentItem
@@ -70,6 +97,14 @@ const DashboardSelectedReport14 = ({ data, title}) => {
 
   //get values (entries from latest date)
   const dataFromLastPullDate = Object.values(latestDateObj)[0];
+
+  // useEffect(() => {
+  //   console.log('all data: ', filteredData);
+  //   console.log('dataFromLastPullDate: ', dataFromLastPullDate);
+    
+  // }, [filteredData, dataFromLastPullDate]);
+
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -115,6 +150,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
               />
             </ChartCardComponent>
           </Grid> 
+
 
           <Grid lg={12} sm={12} xl={12} xs={12}>
             <ChartCardComponent title = 'Historical Data'>

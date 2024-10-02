@@ -107,14 +107,13 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
 }));
 
 
-function DataGridBuilder({ data, columns, onRowClick, onFilterModelChange, onRowSelectionModelChange, rowSelectionModel}) {
+function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange, rowSelectionModel}) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const {filter, updateFilter, removeFilterKey } = useFilter();
+  const {filter, updateFilter } = useFilter();
   const [filterModel, setFilterModel] = useState({ items: [] });
 
-  // const [filterModel, setFilterModel] = useState({ items: [] });
-  
+
   //handlers to change page and rows per page
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -124,41 +123,34 @@ function DataGridBuilder({ data, columns, onRowClick, onFilterModelChange, onRow
     setPage(0);
   };
 
-  // Sync DataGrid filter model with global filters
+  // sync DataGrid filter model with global filters
   useEffect(() => {
     if (filter && Object.keys(filter).length > 0) {  // ensure filters is not null or undefined
-        const globalFilter = Object.keys(filter)
-            .filter((key) => ['assessed', 'submitted', 'accepted', 'rejected'].includes(key)) // filter for specific keys
-            .map((key) => ({
-                field: `avg${key.charAt(0).toUpperCase() + key.slice(1)}`, // E.g., 'accepted' -> 'avgAccepted'
-                operator: filter[key].operator || '', // adjust operator if needed
-                // value: String(filter[key]), // convert value to string
-                value: parseFloat(filter[key].value.toFixed(2)) // Round to 2 decimal places
+      const dataGridFilterContents = Object.keys(filter)
+        .filter((key) => ['assessed', 'submitted', 'accepted', 'rejected'].includes(key)) // filter for specific keys
+        .map((key) => ({
+            field: `avg${key.charAt(0).toUpperCase() + key.slice(1)}`, // E.g., 'accepted' -> 'avgAccepted'
+            operator: filter[key].operator || '', // adjust operator if needed
+            // value: String(filter[key]), // convert value to string
+            value: parseFloat(filter[key]) 
+      }));
+      
+      // console.log('global filter: ', filter);
 
-            }));
-        console.log("inside datagridbuilder input: ", globalFilter);
-        setFilterModel({ items: globalFilter });
-        
+      //apply the contents of global filter to data grid filter
+      setFilterModel({ items: dataGridFilterContents });
+
     } else {
-        setFilterModel({ items: [] });  // clear the filter model if no filters
+      //if global filter is undefined or empty, clear the items in the filter model
+      setFilterModel({items: [] });
     }
-}, [filter]);
+  }, [filter]);
 
-
-  // handle change of DataGrid filters
+  
+  // handle change of DataGrid filters so it syncs with the global filter context
   const handleFilterModelChange = (newFilterModel) => {
-    // Update global filter if any filter is removed/changed
-    const currentFilterFields = newFilterModel.items.map((item) => item.field);
 
-    // Remove filters that are no longer in DataGrid from global filter
-    Object.keys(filter).forEach((key) => {
-      const field = `avg${key.charAt(0).toUpperCase() + key.slice(1)}`;
-      if (!currentFilterFields.includes(field)) {
-        removeFilterKey(key);
-      }
-    });
-
-    // sync datagrid filter with the global filter if any new filters are added
+    // sync datagrid filter with the global filter if any new filters are added to global
     newFilterModel.items.forEach((item) => {
       const transformedField = item.field.slice(3); // 'avgAccepted' -> 'accepted'
       const modifiedField = transformedField.charAt(0).toLowerCase() + transformedField.slice(1);
@@ -167,7 +159,6 @@ function DataGridBuilder({ data, columns, onRowClick, onFilterModelChange, onRow
         updateFilter({ [modifiedField]: item.value }, 'dataGrid', item.operator);
       }
     });
-
     setFilterModel(newFilterModel); //update DataGrid's local filter state
   };
 
@@ -193,16 +184,11 @@ function DataGridBuilder({ data, columns, onRowClick, onFilterModelChange, onRow
   );
 
 
-
-
   return (
     <Box sx={{
       width: '100%',
       display: 'flex',
       height: '100%',
-      // maxWidth: 'auto',
-      // maxHeight: '100%',
-      // overflow: 'hidden',
       overflowY: 'hidden',
 
       flexDirection: 'column',
@@ -228,7 +214,6 @@ function DataGridBuilder({ data, columns, onRowClick, onFilterModelChange, onRow
         rowCount={data.length}
         rowsPerPageOptions={[5, 10]}
         onPageSizeChange={handleChangeRowsPerPage}
-        // checkboxSelection
         disableSelectionOnClick
         onRowClick={onRowClick}
         hideFooter

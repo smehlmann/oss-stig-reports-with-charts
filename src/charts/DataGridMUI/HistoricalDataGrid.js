@@ -29,7 +29,7 @@ const renderProgressBarCell = (params) => {
 function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
   //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
-  const [filterModel, setFilterModel] = useState({
+  const [setFilterModel] = useState({
     items: [],
   });
   const [averages, setAverages] = useState([]);
@@ -37,19 +37,6 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
   //gets the data when filter is applied
   const filteredData = useMemo(() => GetFilteredData(data, filter) || [], [filter, data]);
   
-  //stores the data filter has been applie
-  // const filteredData = useMemo(() => {
-  //   console.log('Filtering data with filter:', filter);
-  //   if (!filter || typeof filter !== 'object') {
-  //     console.log('No valid filter; returning unfiltered data.');
-  //     return data;
-  //   }
-  //   const result = data.filter(item => {
-  //     return Object.keys(filter).every(key => item[key] === filter[key]);
-  //   });
-  //   console.log('Filtered data:', result);
-  //   return result;
-  // }, [data, filter]);
 
 
   useEffect(() => {
@@ -200,7 +187,7 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
       data={averages} 
       columns={tableColumns}
       onRowClick={handleRowClick}
-      filterModel={filterModel}
+      // filterModel={filterModel}
       onFilterModelChange={setFilterModel}
     
     />

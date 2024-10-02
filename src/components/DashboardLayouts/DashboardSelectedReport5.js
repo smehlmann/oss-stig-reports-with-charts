@@ -59,7 +59,7 @@ const DashboardSelectedReport5 = ({ data, title }) => {
                 <StatisticsCardGroup data={filteredData} />
               </Box>
             </Grid>
-            
+
             {/* data grid */}
             <Grid lg={6} sm={6} xl={6} xs={12} >
               <TableGridCardComponent>

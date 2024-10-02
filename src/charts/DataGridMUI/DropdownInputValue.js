@@ -13,21 +13,21 @@ function DropdownInputValue(props) {
   //get the updateFilter function from the FilterContext
   const { updateFilter } = useFilter(); 
 
-
-
   const handleChange = (event) => {
     const filterValue = parseFloat(event.target.value);
+    // const filterValue = parseFloat(event.target.value);
+
     const { field, operator } = item;
 
     //apply the value to the item (if necessary, depending on how applyValue works)
     applyValue({ ...item, value: filterValue });
 
-    console.log("item: ", item);
+    
     //extract lowercased 4th character (ie. avgAccepted ---> accepted)
     const transformedField = field.slice(3); // remove 'avg'
     const modifiedField = transformedField.charAt(0).toLowerCase() + transformedField.slice(1);
 
-    
+    // console.log(`item = ${modifiedField}: {value: ${filterValue}, operator: ${operator}}`);
     //update the filter context with the value being filtered by
     updateFilter({ [modifiedField]: filterValue}, 'dataGrid', operator);
   };

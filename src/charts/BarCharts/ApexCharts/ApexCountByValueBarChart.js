@@ -13,6 +13,12 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
 
   //ValueCountMap -> count the number of times a value appears in the targetColumn
   const countMap = useMemo(() => ValueCountMap(filteredData, targetColumn), [filteredData, targetColumn]);
+  
+  // const countMap = filteredData.reduce((acc, entry) => {
+  //   const targetProperty =  entry[targetColumn]; // Handle missing shortName
+  //   acc[targetProperty] = (acc[targetProperty] || 0) + 1; // Increment count
+  //   return acc;
+  // }, {});
 
   const barLabels = useMemo(() => Object.keys(countMap), [countMap]); //labels = array of values in targetColumn
   const barValues = useMemo(() => Object.values(countMap), [countMap]); //array of number of times a label appears
@@ -49,6 +55,14 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
       );
     } else {
       return (
+      //   <div>
+      //   {barValues.map((val, index) => (
+      //   <div key={index}>
+      //     <body1>Name: {barLabels[index]} </body1><br></br>
+      //     <body2>Count: {val}</body2>
+      //     <hr />
+      //   </div>
+      // ))} 
         <ApexBarChartBuilder
           dataLabels={barLabels}
           dataValues={barValues}
@@ -58,6 +72,7 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
           yAxisHeader={yAxisTitle}
           onClick={handleBarClick}
         />
+        // </div>
       );
     }
   };

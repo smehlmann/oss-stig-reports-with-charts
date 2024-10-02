@@ -108,20 +108,20 @@ const FilterSelectionDrawer = ({ data = [] }) => {
   );
 
   //checks and handles if data is undefined
-  if (!Array.isArray(data)) {
-    return (
-      <Box
-        display='flex'
-        justifyContent='center'
-        alignItems='center'
-        height='100vh'
-      >
-        <Typography variant='h6' color='error'>
-          Error: Unable to load filters. Please try again.
-        </Typography>
-      </Box>
-    );
-  }
+  // if (!Array.isArray(data)) {
+  //   return (
+  //     <Box
+  //       display='flex'
+  //       justifyContent='center'
+  //       alignItems='center'
+  //       // height='100vh'
+  //     >
+  //       <Typography variant='h6' color='error'>
+  //         Error: Unable to load filters. Please try again.
+  //       </Typography>
+  //     </Box>
+  //   );
+  // }
 
   //gets list of options for sysAdmins and primOwners
   const sysAdminsList = [...new Set(data.map((item) => item.sysAdmin).filter((sysAdmin) => sysAdmin != null))];

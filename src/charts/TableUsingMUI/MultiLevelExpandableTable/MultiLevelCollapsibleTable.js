@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import MultiLevelTableBuilder from "./MultiLevelTableBuilder.js";
 import TableBody from '@mui/material/TableBody';
 // import { useFilter } from '../../../FilterContext.js';
@@ -11,6 +11,8 @@ import {
   ExpandedFirstLevelHeaderCell,
 } from '../StyledTableComponents.js';
 import NestedSecondLevelChildRow from "./NestedSecondLevelChildRow.js"
+import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
+import { useFilter } from "../../../FilterContext.js";
 
 //remove quotation marks around strings
 const formatString = (value) => {
@@ -25,6 +27,9 @@ function MultiLevelCollapsibleTable({ data }) {
   const theme = useTheme();
   const [searchText] = useState("");
   const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
+  const {filter} =  useFilter();
+  // gets the data when filter has been applied
+  // const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
   //checks if data is array of objects. If so, group by 'shortName' property.
   useEffect(() => {
@@ -58,7 +63,7 @@ function MultiLevelCollapsibleTable({ data }) {
     }catch (error) {
       console.error("error occurred in Expanded Report: ", error);
     }
-  }, [data]);
+  }, [ data]);
 
 
   //code responsible for creating childRows in expanded section

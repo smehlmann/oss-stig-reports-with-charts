@@ -8,7 +8,7 @@ import DataGridBuilder from './DataGridBuilder';
 import ValueCountMap from "../../components/ValueCountMap.js";
 import { getGridNumericOperators } from '@mui/x-data-grid';
 import DropdownInputValue from './DropdownInputValue';
-// import GetFilteredData from "../../components/Filtering/GetFilteredData.js";
+import GetFilteredData from "../../components/Filtering/GetFilteredData.js";
 
 const renderProgressBarCell = (params) => {
   return (
@@ -29,36 +29,16 @@ const renderProgressBarCell = (params) => {
 
 function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
   //useFilter contains 'filter' state and when it's updated
-  const { updateFilter } = useFilter();
-  const [filterModel, setFilterModel] = useState({
+  const { filter, updateFilter } = useFilter();
+  const [ setFilterModel] = useState({
     items: [],
   });
   const [averages, setAverages] = useState([]);
 
   // gets the data when filter has been applied
-  // const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
+  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
   
-  const filteredData = useMemo(() => {
-    return filterModel.items.reduce((filtered, filterItem) => {
-      switch (filterItem.columnField) {
-        case 'avgAssessed':
-          return filtered.filter(item => item.avgAssessed >= filterItem.value);
-        case 'avgSubmitted':
-          return filtered.filter(item => item.avgSubmitted >= filterItem.value);
-        case 'avgAccepted':
-          return filtered.filter(item => item.avgAccepted >= filterItem.value);
-        case 'avgRejected':
-          return filtered.filter(item => item.avgRejected >= filterItem.value);
-        default:
-          return filtered;
-      }
-    }, data);
-  }, [data, filterModel.items]);
-  
-  
-
-
   useEffect(() => {
     if (Array.isArray(filteredData) && filteredData) {
       //groups the filteredData by the groupingColumn by making an object whose keys=values in grouping column, values per key=array of records belonging to that group. currentItem = current item being processed. (ie. groupingColumn = code --> {'10': [all records belonging to code 10], ...}) 
@@ -144,6 +124,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
     }
   }, [filteredData, groupingColumn, source]);
 
+  //handles when user clicks on row -> data filtered by selected row
   const handleRowClick = (params) => {
     const selectedValue = params.row[groupingColumn]; 
     updateFilter({ [groupingColumn]: selectedValue });
@@ -155,6 +136,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
     ...op,
     InputComponent: DropdownInputValue,
   }));
+
   //headers for columns
   const tableColumns = [
     { field: groupingColumn , 

@@ -27,7 +27,7 @@
       const key = Object.keys(newFilter)[0];
       const value = newFilter[key];
       
-      //ensure previous filters is treated as an object
+      // ensure previous filters is treated as an object
       if (typeof prevFilters !== 'object' || prevFilters === null) {
       return { [key]: value }; // Initialize with new filter if prevFilters is not valid
       }
@@ -36,9 +36,11 @@
       // console.log(`Current filters: ${JSON.stringify(prevFilters)}`);
       // console.log(`New filter: ${key}: ${value}`);
       // console.log('Previous filters:', prevFilters);
+      // console.log('updatedFilters at the start: ', updatedFilters);
 
       if(source === 'dataGrid') {
         newFilter.operator = operator;
+      
         updatedFilters[key] = {value, operator};
         // console.log('Updating with:', key, ':', value, ' operator: ', operator );
         // console.log('Updating filter with:', updatedFilters);
@@ -46,13 +48,13 @@
       }
       //executes logic only if working with expandable table
       if (source === 'expandableTable') {
+        // console.log('Updating with Expandable Table: ', key, ':', value);
+
         //updates filters directly by merging new filter with previous filters
         const updatedFilters = { ...prevFilters, ...newFilter };
         return updatedFilters;
       }
    
-
-
        //determines the filtering logic for updating filter state when filter value is single value or array
   
       //retrieves current value of filter for a given key from prevFilters
@@ -74,13 +76,15 @@
           return { ...prevFilters, [key]: [value] };
         }
       } else if (Array.isArray(value)) {
-        // if new value is an array, use it directly
+        // if new value is an array, use it directly (treat as if value is not array. ie. key: value)
+        // console.log(`In else-if ${key}: ${value}`)
         return { ...prevFilters, [key]: value };
       } else if (existingValue === value) {
         // remove if new value is the same as the existing value
         const { [key]: removed, ...rest } = prevFilters;
         return rest;
-      } else {
+      } 
+      else {
         //add or update key with new value
         return { ...prevFilters, [key]: value };
       }
