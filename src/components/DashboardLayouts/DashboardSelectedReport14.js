@@ -98,12 +98,6 @@ const DashboardSelectedReport14 = ({ data, title}) => {
   //get values (entries from latest date)
   const dataFromLastPullDate = Object.values(latestDateObj)[0];
 
-  // useEffect(() => {
-  //   console.log('all data: ', filteredData);
-  //   console.log('dataFromLastPullDate: ', dataFromLastPullDate);
-    
-  // }, [filteredData, dataFromLastPullDate]);
-
 
 
   return (

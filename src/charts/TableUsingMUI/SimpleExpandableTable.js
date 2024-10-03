@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo} from "react";
 import ExpandableTableBuilder from "./ExpandableTableBuilder";
 import TableBody from '@mui/material/TableBody';
 import { useFilter } from '../../FilterContext';
@@ -10,7 +10,7 @@ import {
   ExpandedFirstLevelHeaderCell,
   ExpandedTableCell,
 } from './StyledTableComponents';
-
+import GetFilteredData from "../../components/Filtering/GetFilteredData";
 
 //format sysAdmin and primOwner to remove quotation marks
 const formatString = (value) => {
@@ -24,13 +24,16 @@ function SimpleExpandableTable({ parentRowColumn, childRows, expandedSectionHead
   const { updateFilter, clearFilter} = useFilter();
   const [searchText] = useState("");
   const [parentRows, setParentRows] = useState([]);
-
+  const {filter} =  useFilter();
+  
+  // gets the data when filter has been applied
+  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
   //checks if data is array of objects. If so, group by 'parentRow' property dynamically
   useEffect(() => {
     try {
-      if (Array.isArray(data) && data.length > 0) {
+      if (Array.isArray(filteredData) && filteredData.length > 0) {
         //group all of the data by the value in the 'parentRow' variable 
-        const dataGroupedByBenchmarks = data.reduce((accumulator, currentValue) => {
+        const dataGroupedByBenchmarks = filteredData.reduce((accumulator, currentValue) => {
           if (!accumulator[currentValue[parentRowColumn]]) {
             accumulator[currentValue[parentRowColumn]] = [];
           }        
@@ -47,17 +50,21 @@ function SimpleExpandableTable({ parentRowColumn, childRows, expandedSectionHead
           return accumulator;
         }, {});
 
-      //parentRows display 'benchmark' value, and childRows are content for each 'benchmarkId' value
-      const parentRows = Object.entries(dataGroupedByBenchmarks).map(([row, childRows]) => ({
-        row,
-        childRows
-      }));
-      setParentRows(parentRows);
-      } else { console.error("Data is not array or empty: ", data)}
-    }catch (error) {
+        //parentRows display 'benchmark' value, and childRows are content for each 'benchmarkId' value
+        const parentRows = Object.entries(dataGroupedByBenchmarks).map(([row, childRows]) => ({
+          row,
+          childRows
+        }));
+
+        setParentRows(parentRows);
+        
+      } else { 
+        setParentRows([]);
+      }
+    } catch (error) {
       console.error("error occurred in Expanded Report: ", error);
     }
-  }, [data, parentRowColumn, childRows]);
+  }, [filteredData, parentRowColumn, childRows]);
 
   //function to get number of childrows (needed for table pagination)
   const getFilteredChildRowsCount = (parentRowObject, searchText) => {

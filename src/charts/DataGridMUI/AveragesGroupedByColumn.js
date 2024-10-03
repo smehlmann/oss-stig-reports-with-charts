@@ -98,7 +98,6 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
         const avgAccepted = acceptedProductSum/totalChecksPerCode;
         const avgRejected = rejectedProductSum/totalChecksPerCode;
 
-
         //for each grouping value, store avgs in acc under each groupingVal
         acc[groupingValue] = {
           id: groupingValue,

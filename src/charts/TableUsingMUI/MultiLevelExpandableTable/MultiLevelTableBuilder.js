@@ -169,8 +169,7 @@ function Row({ parentRow, columns, renderChildRow}) {
   );
 }
 
-export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterProperty, updateFilter, clearFilter, }) => {
-
+export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterProperty, updateFilter}) => {
   return (
     <StyledTableContainer>
       <StyledTable aria-label="collapsible table">

@@ -75,7 +75,7 @@ if (filter && filter !== null && Object.keys(filter).length > 0) {
   );
 
   //return the filtered data or an empty array if no matches were found
-  return filteredData.length > 0 ? filteredData : []; //always return an array
+  return filteredData.length > 0 ? filteredData : []; 
 }
 
 //return original data if no filters are applied

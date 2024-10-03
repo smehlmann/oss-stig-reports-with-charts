@@ -28,48 +28,52 @@ function MultiLevelCollapsibleTable({ data }) {
   const [searchText] = useState("");
   const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
   const {filter} =  useFilter();
+  
   // gets the data when filter has been applied
-  // const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
+  const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
   //checks if data is array of objects. If so, group by 'shortName' property.
   useEffect(() => {
     try {
-      if (Array.isArray(data) && data.length > 0) {
-      const dataGroupedByShortName = data.reduce((accumulator, currentValue) => {
-        //the accumulator is an object whose properties (or keys)= the values for shortName. 
-        if (!accumulator[currentValue.shortName]) { 
-          accumulator[currentValue.shortName] = [];  //each property is assigned empty array  
-        }  //ie. accumulator = {'B3COI': [], 'NCCM-S':[]...}
-        //populates the empty array associated with a given key
-        accumulator[currentValue.shortName].push({
-          asset: currentValue.asset,
-          sysAdmin: formatString(currentValue.sysAdmin),
-          primOwner: formatString(currentValue.primOwner),
-          accepted: currentValue.accepted,
-          benchmarks: currentValue.benchmarks
-        });
-        //ie. accumulator:{"B3COI": [{asset: val1, sysAdmin: val2, primOwner: val3, accepted: val4}, {..}], 'NCCM'...}
-        return accumulator;
-      }, {});
+      if (Array.isArray(filteredData) && filteredData.length > 0) {
+        const dataGroupedByShortName = filteredData.reduce((accumulator, currentValue) => {
+          //the accumulator is an object whose properties (or keys)= the values for shortName. 
+          if (!accumulator[currentValue.shortName]) { 
+            accumulator[currentValue.shortName] = [];  //each property is assigned empty array  
+          }  //ie. accumulator = {'B3COI': [], 'NCCM-S':[]...}
+          //populates the empty array associated with a given key
+          accumulator[currentValue.shortName].push({
+            asset: currentValue.asset,
+            sysAdmin: formatString(currentValue.sysAdmin),
+            primOwner: formatString(currentValue.primOwner),
+            accepted: currentValue.accepted,
+            benchmarks: currentValue.benchmarks
+          });
+          //ie. accumulator:{"B3COI": [{asset: val1, sysAdmin: val2, primOwner: val3, accepted: val4}, {..}], 'NCCM'...}
+          return accumulator;
+        }, {});
 
-      //parentRows is an array of objects where each object has 2 properties (or keys): shortName and childRows. shortName is what everything is grouped by, and the childRows are an array of objects {asset:__, sysAdmin:__, primOwner:__, accepted:__} associated with the shortName value. 
-      const parentRows = Object.entries(dataGroupedByShortName).map(([shortName, childRows]) => ({
-        shortName,
-        childRows
-      }));
-      setParentRows(parentRows);
+        //parentRows is an array of objects where each object has 2 properties (or keys): shortName and childRows. shortName is what everything is grouped by, and the childRows are an array of objects {asset:__, sysAdmin:__, primOwner:__, accepted:__} associated with the shortName value. 
+        const parentRows = Object.entries(dataGroupedByShortName).map(([shortName, childRows]) => ({
+          shortName,
+          childRows
+        }));
+      
+        setParentRows(parentRows);
 
-      } else { console.error("Data is not array or empty: ", data)}
-    }catch (error) {
+      } else { 
+        setParentRows([]);
+      }
+    } catch (error) {
       console.error("error occurred in Expanded Report: ", error);
     }
-  }, [ data]);
+  }, [ filteredData, filter]);
 
 
   //code responsible for creating childRows in expanded section
-  const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
-    //filter child rows based on text in searchbar
-    const filteredChildRows = parentRow.childRows.filter((childRow) => {
+  const renderChildRow = (parentRow, page, rowsPerPage, searchText) => {
+    //filter child rows based on text in searchbar in expanded Section
+    const childRowsFilteredByTextInput = parentRow.childRows.filter((childRow) => { //childRowsFilteredByTextInput
       //filtering specifically for accepted column
       const searchValue = searchText.toLowerCase();
       const searchValueAsNumber = parseFloat(searchValue);
@@ -88,11 +92,11 @@ function MultiLevelCollapsibleTable({ data }) {
     
     });
 
-    if (filteredChildRows.length === 0) {
+    if (childRowsFilteredByTextInput.length === 0) {
       return null;
     }
 
-    const displayedRows = filteredChildRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    const displayedRows = childRowsFilteredByTextInput.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
    
     return (

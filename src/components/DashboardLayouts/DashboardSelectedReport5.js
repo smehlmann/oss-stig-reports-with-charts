@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect} from "react";
+import React, { useMemo} from "react";
 import { ThemeProvider, Box, Typography} from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import ChartCardComponent from "../Cards/ChartCardComponent";

@@ -6,7 +6,7 @@ import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
 import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
 
 const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
-  const { filter, updateFilter } = useFilter();
+  const { filter, updateFilter, removeFilterKey } = useFilter();
 
   //gets the data when filter is applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
@@ -23,15 +23,15 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
   const barLabels = useMemo(() => Object.keys(countMap), [countMap]); //labels = array of values in targetColumn
   const barValues = useMemo(() => Object.values(countMap), [countMap]); //array of number of times a label appears
 
-  //updates the filter criteria based on user's click
+  //updates the filter criteria based on user's clicking on one of the bars
   const handleBarClick = (event, chartContext, config) => {
     const categoryLabels = config.w.globals.labels || config.w.globals.categories;
     const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;
-      if (selectedValue) {
+    if (selectedValue) {
       // Check if the selected value is already in the filter
       if (filter[targetColumn] === selectedValue) {
         // Remove the filter
-        updateFilter({ [targetColumn]: undefined });
+        removeFilterKey(targetColumn);
       } else {
         // Add the filter
         updateFilter({ [targetColumn]: selectedValue });
