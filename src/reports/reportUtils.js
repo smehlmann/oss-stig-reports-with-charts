@@ -1,23 +1,23 @@
 var quarters = [
   {
     name: "Q1",
-    startDate: "10/1/2023",
-    endDate: "12/31/2023",
+    startDate: "10/1/2024",
+    endDate: "12/31/2024",
   },
   {
     name: "Q2",
-    startDate: "1/1/2024",
-    endDate: "3/31/2024",
+    startDate: "1/1/2025",
+    endDate: "3/31/2025",
   },
   {
     name: "Q3",
-    startDate: "4/1/2024",
-    endDate: "6/30/2024",
+    startDate: "4/1/2025",
+    endDate: "6/30/2025",
   },
   {
     name: "Q4",
-    startDate: "7/1/2024",
-    endDate: "9/30/2024",
+    startDate: "7/1/2025",
+    endDate: "9/30/2025",
   },
 ];
 
