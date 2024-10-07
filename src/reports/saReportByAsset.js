@@ -35,6 +35,7 @@ async function runSAReportByAsset(auth, inEmassNums, emassMap) {
       { label: "CAT2", key: "cat2" },
       { label: "CAT1", key: "cat1" },
       { label: "Web or DB", key: "cklWebOrDatabase" },
+      { label: "Delinquent", key: "delinquent" },
       { label: "Checks", key: "checks" },
     ];
 
@@ -268,10 +269,14 @@ function getRow(
   var avgAccepted = 0;
   var avgRejected = 0;
   var temp = 0;
+  var delinquent = 'No';
 
   if (numAssessments) {
     temp = (numAssessed / numAssessments) * 100;
     avgAssessed = temp.toFixed(2);
+    if(temp < 100.00){
+      delinquent = 'Yes';
+    }
 
     temp = ((numSubmitted + numAccepted + numRejected) / numAssessments) * 100;
     avgSubmitted = temp.toFixed(2);
@@ -314,6 +319,7 @@ function getRow(
     cat2: sumOfCat2,
     cat1: sumOfCat1,
     cklWebOrDatabase: cklWebOrDatabase,
+    delinquent: delinquent,
     checks: totalChecks,
   };
 
