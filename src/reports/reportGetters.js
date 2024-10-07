@@ -25,8 +25,9 @@ async function getMetricsData(auth, myUrl) {
     console.log(e.message);
     var msg = e.message.toLowerCase();
     var errMsg = "401";
+    var errMsg2 = '500';
     console.log("getMetricsData: msg: " + msg);
-    if (!msg.includes(errMsg)) {
+    if (!msg.includes(errMsg)  && !msg.includes(errMsg2)) {
       return null;
     }
 
