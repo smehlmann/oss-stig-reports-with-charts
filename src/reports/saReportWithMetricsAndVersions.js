@@ -2,6 +2,8 @@ import * as reportGetters from "./reportGetters.js";
 import * as reportUtils from "./reportUtils.js";
 
 async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
+
+  var rows = [];
   try {
     console.log(
       `runSAReportWithMetricsAndVersions: Requesting STIG Manager Collections`
@@ -9,7 +11,6 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
 
     var labels = [];
     let labelMap = new Map();
-    var rows = [];
 
     const headers = [
       { label: "Collection", key: "collectionName" },
@@ -22,6 +23,7 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
       { label: "Current Quarter STIG Version", key: "quarterVer" },
       { label: "Assessed", key: "assessed" },
       { label: "Submitted", key: "submitted" },
+      { label: "Checks", key: "checks" },
       { label: "Web or DB", key: "cklWebOrDatabase" },
     ];
 
@@ -137,6 +139,7 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
             );
 
             rows.push(myData);
+            console.log(rows.length);
           } // end for each asset
         } // end for each stig
       } // end for each collection
@@ -147,6 +150,7 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
     return returnData;
   } catch (e) {
     console.log(e);
+    console.log(rows.length);
   }
 }
 
@@ -176,6 +180,7 @@ function getRow(
 
   var avgAssessed = 0;
   var avgSubmitted = 0;
+  var checks = numAssessments;
   //var avgAccepted = 0;
   //var avgRejected = 0;
   var temp = 0;
@@ -211,6 +216,7 @@ function getRow(
     quarterVer: quarterVer,
     assessed: avgAssessed + "%",
     submitted: avgSubmitted + "%",
+    checks: checks,
     cklWebOrDatabase: cklWebOrDatabase,
   };
 
