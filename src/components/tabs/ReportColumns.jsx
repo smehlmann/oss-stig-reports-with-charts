@@ -145,6 +145,9 @@ export default function ReportColumns({ index, item, selectedReport }) {
                     <td>
                         {item.cklWebOrDatabase}
                     </td>
+                    <td>
+                        {item.delinquent}
+                    </td>
                 </tr>
             );
         case '7':
@@ -217,6 +220,9 @@ export default function ReportColumns({ index, item, selectedReport }) {
                     </td>
                     <td>
                         {item.submitted}
+                    </td>
+                    <td>
+                        {item.checks}
                     </td>
                     <td>
                         {item.cklWebOrDatabase}
