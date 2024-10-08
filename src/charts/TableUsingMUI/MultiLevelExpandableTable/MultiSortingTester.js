@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import MultiLevelTableBuilder from "./MultiLevelTableBuilder.js";
 import TableBody from '@mui/material/TableBody';
-// import { useFilter } from '../../../FilterContext.js';
 import {useTheme} from "../../../theme.js"
 // import { useTheme } from '@mui/material/styles';
 import {
@@ -23,7 +22,8 @@ const formatString = (value) => {
   return value;
 };
 
-function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeaders, secondLevelChildRowHeaders, data}) {
+
+function MultiSortingTester({ parentRowColumn, firstLevelChildRowHeaders, secondLevelChildRowHeaders, data}) {
   // const [open, setOpen] = useState(false);
   const theme = useTheme();
   const [searchText] = useState("");
@@ -53,6 +53,8 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
       const valueA = headerToPropertyMap[sortField] ? a[headerToPropertyMap[sortField]] : undefined;
       const valueB = headerToPropertyMap[sortField] ? b[headerToPropertyMap[sortField]] : undefined;
       
+    
+
       // Handle missing values
       if (valueA === undefined && valueB === undefined) return 0; // Both are missing, considered equal
       if (valueA === undefined) return 1; // Place missing values last
@@ -203,7 +205,8 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
     />
   );
 }
-export default MultiLevelCollapsibleTable;
+
+export default MultiSortingTester;
 
 
 //  //code responsible for creating childRows in expanded section

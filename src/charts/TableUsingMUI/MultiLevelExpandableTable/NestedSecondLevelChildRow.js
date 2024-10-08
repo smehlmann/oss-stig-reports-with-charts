@@ -40,7 +40,7 @@ function NestedSecondLevelChildRow({ childRow }) {
     setPage(0);
   };
 
-
+//second-level-child-row
   const filteredBenchmarks = childRow.benchmarks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   return (
     <>
@@ -60,8 +60,8 @@ function NestedSecondLevelChildRow({ childRow }) {
 
       {/* display second-level child (third level down)*/}
       {open && childRow.benchmarks && (
-        <StyledTableRow className='second-level-child-row'>
-          <ExpandedContentCell colSpan={4} sx={{ backgroundColor: '#EAEAEA' }}> 
+        <StyledTableRow>
+          <ExpandedContentCell colSpan={4} sx={{ backgroundColor: '#EAEAEA' }}> {/* area around table */}
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 0.5 }}>
                 <StyledChildTableContainer>
@@ -73,7 +73,7 @@ function NestedSecondLevelChildRow({ childRow }) {
                     </ExpandedTableHead>
                     <TableBody>
                       {filteredBenchmarks.map((benchmark, index) => (
-                        <StyledTableRow key={index} className="second-child-row">
+                        <StyledTableRow key={index} className="second-level-child-row">
                           <ExpandedTableCell>{benchmark}</ExpandedTableCell>
                         </StyledTableRow>
                       ))}

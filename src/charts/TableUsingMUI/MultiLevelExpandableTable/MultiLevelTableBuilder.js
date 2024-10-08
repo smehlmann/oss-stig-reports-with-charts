@@ -170,17 +170,62 @@ function Row({ parentRow, columns, renderChildRow}) {
 }
 
 export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterProperty, updateFilter}) => {
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+  // Sorting logic
+  const sortedRows = React.useMemo(() => {
+    if (sortConfig.key) {
+      return [...rows].sort((a, b) => {
+        const aValue = a[sortConfig.key];
+        const bValue = b[sortConfig.key];
+        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+    return rows;
+  }, [rows, sortConfig]);
+
+  const handleSortRequest = (columnId) => {
+    setSortConfig((prevSortConfig) => {
+      // Toggle between ascending and descending
+      const newDirection =
+        prevSortConfig.key === columnId && prevSortConfig.direction === 'asc'
+          ? 'desc'
+          : 'asc';
+      return { key: columnId, direction: newDirection };
+    });
+  };
   return (
     <StyledTableContainer>
       <StyledTable aria-label="collapsible table">
         <StyledTableHead>
-          <TableRow sx={{ "& th": { border: 'none'} }}>
+          <TableRow sx={{ '& th': { border: 'none' } }}>
             {columns.map((header, index) => (
               <React.Fragment key={header.id}>
-                {index === 0 && <StyledHeaderCell>{header.label}</StyledHeaderCell>}
-                {index !== 0 && (
-                  <StyledHeaderCell key={header.id} align={header.align}>
+                {index === 0 && (
+                  <StyledHeaderCell
+                    onClick={() => handleSortRequest(header.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     {header.label}
+                    {/* Add icon to indicate sort direction */}
+                    {sortConfig.key === header.id && (
+                      sortConfig.direction === 'asc' ? ' ▲' : ' ▼'
+                    )}
+                  </StyledHeaderCell>
+                )}
+                {index !== 0 && (
+                  <StyledHeaderCell
+                    key={header.id}
+                    align={header.align}
+                    onClick={() => handleSortRequest(header.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {header.label}
+                    {sortConfig.key === header.id && (
+                      sortConfig.direction === 'asc' ? ' ▲' : ' ▼'
+                    )}
                   </StyledHeaderCell>
                 )}
               </React.Fragment>
@@ -188,7 +233,7 @@ export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterPr
           </TableRow>
         </StyledTableHead>
         <TableBody>
-          {rows.map((row) => (
+          {sortedRows.map((row) => (
             <Row
               key={row.id}
               parentRow={row}
@@ -200,6 +245,37 @@ export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterPr
       </StyledTable>
     </StyledTableContainer>
   );
+  
+  // return (
+  //   <StyledTableContainer>
+  //     <StyledTable aria-label="collapsible table">
+  //       <StyledTableHead>
+  //         <TableRow sx={{ "& th": { border: 'none'} }}>
+  //           {columns.map((header, index) => (
+  //             <React.Fragment key={header.id}>
+  //               {index === 0 && <StyledHeaderCell>{header.label}</StyledHeaderCell>}
+  //               {index !== 0 && (
+  //                 <StyledHeaderCell key={header.id} align={header.align}>
+  //                   {header.label}
+  //                 </StyledHeaderCell>
+  //               )}
+  //             </React.Fragment>
+  //           ))}
+  //         </TableRow>
+  //       </StyledTableHead>
+  //       <TableBody>
+  //         {rows.map((row) => (
+  //           <Row
+  //             key={row.id}
+  //             parentRow={row}
+  //             columns={columns}
+  //             renderChildRow={renderChildRow}
+  //           />
+  //         ))}
+  //       </TableBody>
+  //     </StyledTable>
+  //   </StyledTableContainer>
+  // );
 };
 export default MultiLevelTableBuilder;
 

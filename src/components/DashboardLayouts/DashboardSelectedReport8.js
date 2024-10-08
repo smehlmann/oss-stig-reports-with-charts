@@ -1,9 +1,9 @@
 import React, { useMemo,} from "react";
 import {ThemeProvider,Box, Typography } from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
-// import ApexDonutCountChart from "../../charts/DonutCharts/ApexCharts/ApexDonutCountChart.js"
+import TwoPropsGetAvgs from "../../charts/BarCharts/ApexCharts/TwoPropsGetAvgs.js";
 import SimpleExpandableTable from "../../charts/TableUsingMUI/SimpleExpandableTable";
-import ChartCardComponent from "../Cards/ChartCardComponent";
+import HorizontalCardComponent from "../Cards/HorizontalCardComponent";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import theme from "../../theme";
 // import StatisticsCardGroup from "../StatisticsCardsGroup.js";
@@ -46,12 +46,13 @@ const DashboardSelectedReport5 = ({ data, title }) => {
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <Box display="flex" justifyContent="space-between">
               <Typography variant='h1'> {title} </Typography>
+              
               <FilterSelectionDrawer data={filteredData} />
               </Box>
             </Grid> 
             
-            <Grid lg={12} sm={12} xl={12} xs={12}>
-              <ChartCardComponent title = 'Assets by STIG Benchmark'>
+            <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
+              <HorizontalCardComponent title = 'Assets by STIG Benchmark'>
                 <ApexCountByValueBarChart
                   targetColumn="benchmarkId"
                   isHorizontal={true}
@@ -59,7 +60,20 @@ const DashboardSelectedReport5 = ({ data, title }) => {
                   yAxisTitle="STIG Benchmark"
                   data={filteredData}
                 />
-              </ChartCardComponent>
+              </HorizontalCardComponent>
+            </Grid>
+
+            <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
+              <HorizontalCardComponent title = 'Assets by STIG Benchmark'>
+                <TwoPropsGetAvgs
+                  labelColumn="benchmarkId"
+                  valueColumn="submitted"
+                  isHorizontal={true}
+                  xAxisTitle="Average Submitted (%)"
+                  yAxisTitle="STIG Benchmark"
+                  data={filteredData}
+                />
+              </HorizontalCardComponent>
             </Grid>
         
             <Grid lg={12} sm={12} xl={12} xs={12}>

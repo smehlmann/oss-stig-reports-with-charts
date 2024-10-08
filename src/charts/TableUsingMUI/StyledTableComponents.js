@@ -7,6 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableCell from "@mui/material/TableCell";
 import Table from "@mui/material/Table";
 import TextField from '@mui/material/TextField';
+import { TableSortLabel} from '@mui/material';
 
 
 ///SearchbarContainer
@@ -107,7 +108,7 @@ export const StyledHeaderCell = styled(TableCell)(({ theme }) => ({
   border: 'none'
 }));
 
-//parent rows
+
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:hover": {
     backgroundColor: theme.palette.action.selected,
@@ -116,12 +117,44 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:first-of-type": {
     border: 'none', 
   },
+  //
   "&.first-level-child-row": {
     border: 'none', 
+    backgroundColor: '#ffffff', 
+    "&:nth-of-type(even)": {
+      backgroundColor: '#eeeffc', // alternating color
+    },
   },
   "&.second-level-child-row": {
     border: 'none', 
+    backgroundColor: '#ffffff', 
+    "&:nth-of-type(even)": {
+      backgroundColor: '#eeeffc', // alternating color
+    },
   } 
+}));
+
+
+
+export const StyledTableSortLabel = styled(TableSortLabel)(({ theme }) => ({
+  "&.first-level-child-sort": {
+    color: '#FFF', // default text color
+    "&.MuiTableSortLabel-active": {
+      color: theme.palette.primary.light, // when sort is active
+      "& .MuiTableSortLabel-icon": {
+        color: theme.palette.primary.light, // icon color when sort is active
+      }
+    },
+    "&:hover": {
+      color: theme.palette.primary, // when hovered over
+      "& .MuiTableSortLabel-icon": {
+        color: '#FFF', // icon color on hover
+      }
+    },
+  },
+  "&.second-level-child-sort": {
+    // Add your styles for the second level here
+  }
 }));
 
 //normal table cell, basically outermost rows (controls text)
@@ -138,7 +171,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 /* EXPANDED TABLE COMPONENTS */
-//expanded section 
+//expanded section (area around table in expanded section)
 export const ExpandedContentCell = styled(TableCell)(({ theme }) => ({
   textAlign: 'left',
   border: `1px solid ${theme.palette.divider}`,
@@ -182,6 +215,7 @@ export const ExpandedFirstLevelHeaderCell = styled(TableCell)(({ theme }) => ({
     color: theme.palette.text.primary,
   },
 }));
+
 
 
 //in MULTILEVEL: cells in header for second table in expanded section

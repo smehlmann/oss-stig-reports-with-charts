@@ -6,7 +6,7 @@ import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
 import StatisticsCardGroup from "../Cards/StatisticsCardsGroup.js";
-import FromTwoPropertiesBarChart from "../../charts/BarCharts/ApexCharts/FromTwoPropertiesBarChart";
+import TwoPropsCountByValues from "../../charts/BarCharts/ApexCharts/TwoPropsCountByValues.js";
 import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
@@ -45,13 +45,13 @@ const DashboardSelectedReport7 = ({ data, title }) => {
 
             <Grid lg={6} sm={6} xl={6} xs={12}>
               <ChartCardComponent title = "Assets by Package">
-              <FromTwoPropertiesBarChart
+              <TwoPropsCountByValues
                   labelColumn="acronym"
                   valueColumn = "asset"
                   isHorizontal={true}
                   xAxisTitle="Number of Assets"
                   yAxisTitle= "Acronym"
-                  data={data}
+                  data={filteredData}
                 />
               </ChartCardComponent>
             </Grid>
@@ -60,7 +60,7 @@ const DashboardSelectedReport7 = ({ data, title }) => {
               <TableGridCardComponent>
                 <AveragesGroupedByColumn 
                   groupingColumn = 'emass'
-                  data={data} 
+                  data={filteredData} 
                   source='report7'
                 />
               </TableGridCardComponent>

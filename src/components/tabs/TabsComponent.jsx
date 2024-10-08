@@ -41,7 +41,6 @@ const TabsComponent = () => {
       } else {
         var myData = getReportData();
         console.log(myData);
-        //if (localStorage.getItem("ossStigReport")) {
         if(myData){
           //setStoredData(myData);
           setStoredData(myData);

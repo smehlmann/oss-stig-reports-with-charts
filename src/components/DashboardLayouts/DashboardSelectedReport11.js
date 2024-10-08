@@ -1,6 +1,8 @@
 import React, { useMemo} from "react";
 import {ThemeProvider,Typography, Box} from "@mui/material";
+import HorizontalCardComponent from "../Cards/HorizontalCardComponent";
 import ChartCardComponent from "../Cards/ChartCardComponent";
+
 import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
@@ -11,10 +13,10 @@ import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDr
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import SimpleExpandableTable from "../../charts/TableUsingMUI/SimpleExpandableTable";
 import { format } from 'date-fns';
+import GroupedBarChart from "../../charts/BarCharts/ApexCharts/GoupedBarChart";
 
 
 /* Displays report option 6. Checks Not Updated in x Days (eMASS number(s) required)  */
-
 
 //formats date objects to strings
 const formatDate = (date) => {
@@ -37,12 +39,9 @@ const DashboardSelectedReport11 = ({ title, data }) => {
   }, [filter, data, isWebOrDBIncluded]);
 
 
-
-
   filteredData.forEach(obj => {
     obj.modifiedDate = formatDate(obj.modifiedDate);
   })
-
 
 
 
@@ -70,9 +69,10 @@ const DashboardSelectedReport11 = ({ title, data }) => {
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ChartCardComponent title = 'Assets by STIG Benchmark'>
-                <ApexCountByValueBarChart
+                <GroupedBarChart
                   targetColumn="benchmark"
                   isHorizontal={true}
+                  columnDataIsGroupedBy="status"
                   xAxisTitle="Number of Assets"
                   yAxisTitle= "STIG Benchmark"
                   data={filteredData}

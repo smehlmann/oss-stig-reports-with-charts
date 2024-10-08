@@ -4,20 +4,52 @@ import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
 import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
 import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
+import GroupedChartBuilder from "./GroupedChartBuilder.js";
 
-const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
+
+const GroupedBarChart = ({ targetColumn, columnDataIsGroupedBy, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
   const { filter, updateFilter, removeFilterKey } = useFilter();
 
   //gets the data when filter is applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
-  //ValueCountMap -> count the number of times a value appears in the targetColumn
-  const countMap = useMemo(() => ValueCountMap(filteredData, targetColumn), [filteredData, targetColumn]);
-  
+  // ValueCountMap -> count the number of times a value appears in the targetColumn grouped by columnDataIsGroupedBy
+  const countMap = useMemo(() => {
+    const map = {};
+    filteredData.forEach(item => {
+      const targetValue = item[targetColumn];
+      const statusValue = item[columnDataIsGroupedBy];
 
-  const barLabels = useMemo(() => Object.keys(countMap), [countMap]); //labels = array of values in targetColumn
-  const barValues = useMemo(() => Object.values(countMap), [countMap]); //array of number of times a label appears
+      if (!map[targetValue]) {
+        map[targetValue] = { saved: 0, submitted: 0, null: 0 };
+      }
 
+      if (statusValue === "saved") {
+        map[targetValue].saved += 1;
+      } else if (statusValue === "submitted") {
+        map[targetValue].submitted += 1;
+      } else {
+        map[targetValue].null += 1;
+      }
+    });
+    return map;
+  }, [filteredData, targetColumn, columnDataIsGroupedBy]);
+
+  const barLabels = Object.keys(countMap); // Labels = array of values in targetColumn
+  const seriesData = [
+    {
+      name: "Saved",
+      data: barLabels.map(label => countMap[label]?.saved || 0)
+    },
+    {
+      name: "Submitted",
+      data: barLabels.map(label => countMap[label]?.submitted || 0)
+    },
+    {
+      name: "Null",
+      data: barLabels.map(label => countMap[label]?.null || 0)
+    }
+  ];
   //updates the filter criteria based on user's clicking on one of the bars
   const handleBarClick = (event, chartContext, config) => {
     const categoryLabels = config.w.globals.labels || config.w.globals.categories;
@@ -38,9 +70,9 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
   const renderChart = () => {
     if (isHorizontal) {
       return (
-        <HorizontalBarChartBuilder
+        <GroupedChartBuilder
           dataLabels={barLabels}
-          dataValues={barValues}
+          series={seriesData}
           title={chartTitle}
           isHorizontal={isHorizontal}
           xAxisHeader={xAxisTitle}
@@ -60,7 +92,7 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
       // ))} 
         <ApexBarChartBuilder
           dataLabels={barLabels}
-          dataValues={barValues}
+          series={seriesData}
           title={chartTitle}
           isHorizontal={isHorizontal}
           xAxisHeader={xAxisTitle}
@@ -76,36 +108,4 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
   return <>{renderChart()}</>;
 };
 
-export default ApexCountByValueBarChart;
-
-
-/*
-const ApexStandardBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
-  const { filter } = useFilter();
-  
-  const filteredData = useMemo(() => {
-    if (Object.keys(filter).length > 0) {
-      return data.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
-    }
-    return data;
-  }, [filter, data]);
-
-  const countMap = useMemo(() => ValueCountMap(filteredData, targetColumn), [filteredData, targetColumn]);
-  const barLabels = useMemo(() => Object.keys(countMap), [countMap]);
-  const barValues = useMemo(() => Object.values(countMap), [countMap]);
-
-  return (
-    <ApexBarChartBuilder
-      dataLabels={barLabels}
-      dataValues={barValues}
-      title={chartTitle}
-      isHorizontal={isHorizontal}
-      xAxisHeader={xAxisTitle}
-      yAxisHeader={yAxisTitle}
-      rawData={filteredData} // Pass the raw filtered data
-    />
-  );
-};
-
-export default ApexStandardBarChart;
-*/
+export default GroupedBarChart;

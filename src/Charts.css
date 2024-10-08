@@ -153,14 +153,14 @@
     /* background-color: #323447; */
     
   }
-  .chart-container .apex-chart{
-    width: 80% !important; /*chart canvas takes full width within the container */
-    height: auto !important; /* adjust its height proportionally */
+  /* .chart-container .apex-chart{
+    width: 80% !important; 
+    height: auto !important; 
     margin-left: auto;
     margin-right: auto;
-    /* background-color: #323447; */
+    background-color: #323447;
     
-  }
+  } */
   
   .doughnut-chart-container canvas {
     width: 30%; /* Ensure the chart canvas takes full width within the container */

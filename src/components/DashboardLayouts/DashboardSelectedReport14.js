@@ -1,6 +1,6 @@
 import React, { useMemo} from "react";
 
-import {ThemeProvider,Typography, Box, Button} from "@mui/material";
+import {ThemeProvider,Typography, Box} from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/HistoricalDataTracker"
@@ -15,6 +15,8 @@ import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
+import MultiSortingTester from "../../charts/TableUsingMUI/MultiLevelExpandableTable/MultiSortingTester.js";
+
 
 /*
 Grid spacing is split into 12 parts:
@@ -40,7 +42,7 @@ function getLatestDate(dateObject) {
 }
 
 const DashboardSelectedReport14 = ({ data, title}) => {
-  const { filter, clearFilter, isWebOrDBIncluded} = useFilter();
+  const { filter, isWebOrDBIncluded} = useFilter();
   
   //gets the data when filter is applied
   const filteredData = useMemo(() => {
@@ -63,15 +65,50 @@ const DashboardSelectedReport14 = ({ data, title}) => {
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <Box display="flex" justifyContent="space-between" alignItems='center'>
                 <Typography variant='h1'>{title}</Typography>
-                <Button variant='outlined' onClick={clearFilter}>
-                  Try Again
-                </Button>
+                <FilterSelectionDrawer data={filteredData} />
               </Box>
-              {/* Error Message */}
-              <Typography variant='h6' color='error'>
-                Error: Unable to load filters. Please try again.
-              </Typography>
             </Grid>
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <StatisticsCardGroup data={filteredData} />
+            </Grid>
+            <Grid lg={8} md={8} sm={12} xl={6} xs={12}>
+              <TableGridCardComponent>
+                <HistoricalDataGrid 
+                  groupingColumn = 'code'
+                  data={filteredData} 
+                  targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", "checks", "datePulled"]} 
+                />
+              </TableGridCardComponent>
+            </Grid>
+            <Grid lg={4} md={4} sm={12} xl={6} xs={12}>
+              <ChartCardComponent title = "Assets by Packages">
+                <ApexCountByValueBarChart
+                  targetColumn="shortName"
+                  isHorizontal={false}
+                  xAxisTitle="Package Name"
+                  yAxisTitle= "Number of Assets"
+                  data={filteredData}
+                />
+              </ChartCardComponent>
+            </Grid> 
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <ChartCardComponent title = 'Historical Data'>
+                <HistoricalDataTracker
+                  groupingColumn="datePulled"
+                  targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
+                  xAxisTitle="Date"s
+                  yAxisTitle= "Completion (%)"
+                  data={filteredData}
+                />
+              </ChartCardComponent>
+            </Grid> 
+
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <ExpandableTableCardComponent>
+                <MultiLevelCollapsibleTable data={filteredData}/>
+              </ExpandableTableCardComponent>
+            </Grid> 
+            
           </Grid>
         </DashboardRoot>
       </ThemeProvider>
@@ -97,7 +134,6 @@ const DashboardSelectedReport14 = ({ data, title}) => {
 
   //get values (entries from latest date)
   const dataFromLastPullDate = Object.values(latestDateObj)[0];
-
 
 
   return (
@@ -151,18 +187,24 @@ const DashboardSelectedReport14 = ({ data, title}) => {
               <HistoricalDataTracker
                 groupingColumn="datePulled"
                 targetColumns={["assessed", "submitted", "accepted", "rejected"]} 
-                xAxisTitle="Date"s
+                xAxisTitle="Date"
                 yAxisTitle= "Completion (%)"
                 data={filteredData}
               />
             </ChartCardComponent>
           </Grid> 
 
-          <Grid lg={12} sm={12} xl={12} xs={12}>
-            <ExpandableTableCardComponent>
-              <MultiLevelCollapsibleTable data={dataFromLastPullDate}/>
-            </ExpandableTableCardComponent>
-          </Grid> 
+
+            <Grid lg={12} sm={12} xl={12} xs={12}>
+              <ExpandableTableCardComponent>
+                <MultiLevelCollapsibleTable 
+                  parentRowColumn = "shortName"
+                  firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Accepted %']}
+                  secondLevelChildRowHeaders = {['benchmarks']}
+                  data={filteredData}
+                />
+              </ExpandableTableCardComponent>
+            </Grid> 
 
         </Grid> 
       </DashboardRoot>
