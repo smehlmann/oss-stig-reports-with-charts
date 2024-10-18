@@ -1,9 +1,8 @@
 import React, { useMemo,} from "react";
 import {ThemeProvider,Box, Typography } from "@mui/material";
-import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
-import TwoPropsGetAvgs from "../../charts/BarCharts/ApexCharts/TwoPropsGetAvgs.js";
+// import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import SimpleExpandableTable from "../../charts/TableUsingMUI/SimpleExpandableTable";
-import HorizontalCardComponent from "../Cards/HorizontalCardComponent";
+import HorizontalBarChartCard from "../Cards/HorizontalBarChartCard.js";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import theme from "../../theme";
 // import StatisticsCardGroup from "../StatisticsCardsGroup.js";
@@ -12,6 +11,9 @@ import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
+import GroupedOrStackedBar from "../../charts/BarCharts/ApexCharts/GroupedOrStackedBar.js";
+import GroupedAveragesBar from "../../charts/BarCharts/ApexCharts/GroupedAveragesBar.js";
+
 /*
  Displays report option 4. STIG Benchmark Version Deltas (eMASS number(s) required)
 */
@@ -30,6 +32,8 @@ const DashboardSelectedReport5 = ({ data, title }) => {
 
     return result;
   }, [filter, data, isWebOrDBIncluded]);
+
+
   
 
   return (
@@ -38,7 +42,7 @@ const DashboardSelectedReport5 = ({ data, title }) => {
         <DashboardRoot>
 
           <Grid container 
-            spacing={{xs:2, s:2, md:3, lg:3}}
+            spacing={{xs:2, s:2, md:2.5, lg:2.5}}
             sx={{
               px: { lg: 5, xl: 15 }, //padding-left and padding-right for lg and xl screens
             }}
@@ -46,36 +50,43 @@ const DashboardSelectedReport5 = ({ data, title }) => {
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <Box display="flex" justifyContent="space-between">
               <Typography variant='h1'> {title} </Typography>
-              
               <FilterSelectionDrawer data={filteredData} />
               </Box>
             </Grid> 
-            
+
+          
             <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
-              <HorizontalCardComponent title = 'Assets by STIG Benchmark'>
-                <ApexCountByValueBarChart
-                  targetColumn="benchmarkId"
+              <HorizontalBarChartCard title = 'Assets by STIG Benchmark'>
+                <GroupedOrStackedBar
+                  groupByColumn="benchmarkId"
+                  breakdownColumn = "latestRev"
+                  showDataLabels = {true}
                   isHorizontal={true}
+                  isStackedBarChart={true}
                   xAxisTitle="Number of Assets"
-                  yAxisTitle="STIG Benchmark"
+                  yAxisTitle= "STIG Benchmark"
                   data={filteredData}
                 />
-              </HorizontalCardComponent>
-            </Grid>
+              </HorizontalBarChartCard>
+            </Grid> 
+
 
             <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
-              <HorizontalCardComponent title = 'Assets by STIG Benchmark'>
-                <TwoPropsGetAvgs
-                  labelColumn="benchmarkId"
-                  valueColumn="submitted"
+              <HorizontalBarChartCard title = 'Assets by STIG Benchmark'>
+                <GroupedAveragesBar
+                  groupByColumn='benchmarkId'
+                  breakdownColumns={['asessed', 'submitted']}
+                  showDataLabels={false}
+                  dataLabelsArePercentages = {true}
                   isHorizontal={true}
-                  xAxisTitle="Average Submitted (%)"
-                  yAxisTitle="STIG Benchmark"
+                  isStackedBarChart={false}
+                  xAxisTitle="Number of Assets"
+                  yAxisTitle= "STIG Benchmark"
                   data={filteredData}
                 />
-              </HorizontalCardComponent>
+              </HorizontalBarChartCard>
             </Grid>
-        
+
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
                 {/* <Report8BenchmarksExpanded data={filteredData}/> */}
@@ -89,8 +100,6 @@ const DashboardSelectedReport5 = ({ data, title }) => {
                 />
               </ExpandableTableCardComponent>
             </Grid>
-            
-
           </Grid> 
         </DashboardRoot>
       {/* </FilterProvider> */}

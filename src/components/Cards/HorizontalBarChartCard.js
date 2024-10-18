@@ -2,10 +2,11 @@
 import React from 'react';
 import { Card, CardHeader, CardContent, styled  } from '@mui/material';
 
+//card that contains a horizontal bar chart. 
 
 const StyledCard = styled(Card)(({ theme }) => ({
   // height: '100%', 
-  height: '450px',
+  height: '475px',
   display: 'flex',
   flexDirection: 'column',
   boxShadow: theme.shadows[3],
@@ -41,14 +42,13 @@ const CustomCardContent = styled(CardContent)(({ theme }) => ({
   justifyContent: "center",
   alignItems: 'center',
   overflowY:'auto',
-  oveflowX:'hidden',
   // overflowY: 'auto',
   '&:last-child': {
     paddingBottom: '0px',
   }
 }));
 
-const HorizontalCardComponent = ({ title, children }) => {
+const HorizontalBarChartCard = ({ title, children }) => {
   return (
     <StyledCard>
       <CustomCardHeader title={title} />
@@ -59,4 +59,4 @@ const HorizontalCardComponent = ({ title, children }) => {
   );
 };
 
-export default HorizontalCardComponent;
+export default HorizontalBarChartCard;

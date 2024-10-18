@@ -177,38 +177,73 @@ function Row({ parentRow, columns, renderChildRow, childRowCount, filterProperty
   );
 }
 
-export const ExpandableTableBuilder = ({ rows, columns, renderChildRow, childRowCount, filterProperty }) => (
-  <StyledTableContainer>
-    <StyledTable aria-label="collapsible table">
-      <StyledTableHead>
-        <TableRow sx={{ "& th": { border: 'none'} }}>
-          {columns.map((header, index) => (
-            <React.Fragment key={header.id}>
-              {index === 0 && <StyledHeaderCell>{header.label}</StyledHeaderCell>}
-              {index !== 0 && (
-                <StyledHeaderCell key={header.id} align={header.align}>
-                  {header.label}
-                </StyledHeaderCell>
-              )}
-            </React.Fragment>
+export const ExpandableTableBuilder = ({ rows, columns, renderChildRow, childRowCount, filterProperty }) => {
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+  //sorting logic
+  const sortedRows = React.useMemo(() => {
+    if (sortConfig.key) {
+      return [...rows].sort((a, b) => {
+        const aValue = a[sortConfig.key];
+        const bValue = b[sortConfig.key];
+        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+    return rows;
+  }, [rows, sortConfig]);
+
+  const handleSortRequest = (columnId) => {
+    setSortConfig((prevSortConfig) => {
+      //toggle between descending or ascending values
+      const newDirection =
+        prevSortConfig.key === columnId && prevSortConfig.direction === 'asc'
+          ? 'desc'
+          : 'asc';
+      return { key: columnId, direction: newDirection };
+    });
+  };
+  return (
+    <StyledTableContainer>
+      <StyledTable aria-label="collapsible table">
+        <StyledTableHead>
+          <TableRow sx={{ "& th": { border: 'none'} }}>
+            {columns.map((header, index) => (
+              <React.Fragment key={header.id}>
+                {index === 0 && (
+                  <StyledHeaderCell
+                    key={header.id}
+                    align={header.align}
+                    onClick={() => handleSortRequest(header.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {header.label}
+                    {sortConfig.key === header.id && (
+                      sortConfig.direction === 'asc' ? ' ▲' : ' ▼'
+                    )}
+                  </StyledHeaderCell>
+                )}
+              </React.Fragment>
+            ))}
+          </TableRow>
+        </StyledTableHead>
+        <TableBody>
+          {sortedRows.map((row) => (
+            <Row
+              key={row.id}
+              parentRow={row}
+              columns={columns}
+              renderChildRow={renderChildRow}
+              filterProperty={filterProperty}
+              childRowCount={childRowCount}            
+            />
           ))}
-        </TableRow>
-      </StyledTableHead>
-      <TableBody>
-        {rows.map((row) => (
-          <Row
-            key={row.id}
-            parentRow={row}
-            columns={columns}
-            renderChildRow={renderChildRow}
-            filterProperty={filterProperty}
-            childRowCount={childRowCount}            
-          />
-        ))}
-      </TableBody>
-    </StyledTable>
-  </StyledTableContainer>
-);
+        </TableBody>
+      </StyledTable>
+    </StyledTableContainer>
+  );
+};
 export default ExpandableTableBuilder;
 
 

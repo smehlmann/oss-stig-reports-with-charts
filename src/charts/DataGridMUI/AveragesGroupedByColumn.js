@@ -38,7 +38,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
   // gets the data when filter has been applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
-  
+
   useEffect(() => {
     if (Array.isArray(filteredData) && filteredData) {
       //groups the filteredData by the groupingColumn by making an object whose keys=values in grouping column, values per key=array of records belonging to that group. currentItem = current item being processed. (ie. groupingColumn = code --> {'10': [all records belonging to code 10], ...}) 
@@ -68,7 +68,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
         let rejectedProductSum = 0;
         let assetCount = 0;
         let totalChecksPerCode = 0; //will store the total checks per code
-
+        let delinquentCount = 0;
         //for each entry in dataPerGroup
         dataPerGroup.forEach(item => {
           //accesses nested object (codeVal: entries)- and extracts product properties from said object and assigns them corresponding variables 
@@ -85,12 +85,22 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
             assetCount = Object.values(countMap)[0];
           }
 
-          //for each entry in my value array, calculate the checks[i] * assessed[i] and push it to assessedProducts array. 
+
+          // console.log("delinquentMap: ", delinquentMap);
+          // delinquentCount 
+
+          //for each entry in my value array, calculate the checks[i] * assessed[i] and push it to assessedProductSum array. 
           assessedProductSum += (checks * (assessed || 0));
           submittedProductSum += (checks * (submitted || 0));
           acceptedProductSum += (checks * (accepted || 0));
           rejectedProductSum += (checks * (rejected || 0));
         });
+
+        //get count where 'delinquent' value = 'Yes'
+        delinquentCount = dataPerGroup.filter(
+          item => item['delinquent'] === 'Yes'
+        ).length;
+
 
         //calculate the averages (ProductSum/totalChecksPerCode)
         const avgAssessed = assessedProductSum/totalChecksPerCode;
@@ -103,6 +113,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
           id: groupingValue,
           groupingColumn: groupingValue,
           assetCount,
+          delinquentCount,
           avgAssessed,
           avgSubmitted,
           avgAccepted,
@@ -118,12 +129,12 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
           ...groupedAverages[groupingValue]
         };
       });
-      
       setAverages(groupedAveragesArray);
     }
   }, [filteredData, groupingColumn, source]);
 
-  //handles when user clicks on row -> data filtered by selected row
+  // handles when user clicks on row -> data filtered by selected row
+ 
   const handleRowClick = (params) => {
     const selectedValue = params.row[groupingColumn]; 
     updateFilter({ [groupingColumn]: selectedValue });
@@ -143,6 +154,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
       flex: 1 
     },
     { field: 'assetCount', headerName: 'Asset Count', flex: 1, type: 'number' },
+    { field: 'delinquentCount', headerName: 'Delinquent Count', flex: 1, type: 'number' },
     {
       field: 'avgAssessed',
       headerName: 'Avg of Assessed',

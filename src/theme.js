@@ -19,7 +19,7 @@ const theme = createTheme({
       // light: '#757de8',
       // dark: '#002984',
       main: '#3048FF',
-      light: '#6476FF',
+      light: '#8190ff',
       dark: '#0000cb',
       contrastText: '#fff',
     },
@@ -172,6 +172,10 @@ const palette = [
 ];
 */
 
+//Potential color palette with a lot of colors:
+// ['#33A8C7', '#52E3E1','#A0E426', '#FDF148', '#FFAB00', '#F77976', '#F050AE', '#D883FF', '#9336FD']
+
+
 //maybe bg = #303060 
 //current bg = #323447
 
@@ -179,18 +183,4 @@ const palette = [
 //maybe hover or emphasis color: #A8C0FF
 //maybe title or something depending on bg: #000090,   
 //maybe title or something depending on bg: #181860 
-
-// const hoverPalette = [
-//   "#112959",
-//   "#153f67",
-//   "#1a5674",
-//   "#207480",
-//   "#28837b",
-//   "#318e77",
-//   "#3a9871",
-//   "#4c9e7b",
-//   "#5fa180",
-//   "#6fa18c",
-// ];
-
 

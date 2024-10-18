@@ -3,7 +3,7 @@ import { Card,  styled,   } from '@mui/material';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   // height: '100%',
-  height: '450px',
+  height: '475px',
   display: 'flex',
   flexDirection: 'column',
   boxShadow: theme.shadows[3],

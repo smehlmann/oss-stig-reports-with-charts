@@ -32,13 +32,12 @@ function SimpleExpandableTable({ parentRowColumn, childRows, expandedSectionHead
   const [sortDirection, setSortDirection] = useState('asc'); // or 'desc'
   const [sortField, setSortField] = useState(''); // field to sort by
 
-  // Sorting function
+  //function to sort in values in childRow by ascending/descending order
   const sortChildRows = (rows) => {
     if (!sortField) return rows;
-    // console.log("rows: ", rows);
-  
-    // console.log('sortField: ', sortField);
-  
+    // console.log("rows: ", rows);  
+
+    //maps column headers to their actual property names
     const headerToPropertyMap = {
       'Asset': 'asset',
       'Primary Owner': 'primOwner',
@@ -47,32 +46,52 @@ function SimpleExpandableTable({ parentRowColumn, childRows, expandedSectionHead
       'Benchmarks': 'benchmarks',
       'Collection': 'collection',
       'Latest Revision': 'latestRev',
-      'Current Quarter STIG': 'quarterVer'
+      'Current Quarter STIG': 'quarterVer',
+      'Revision': 'revision',
+      'Group ID': 'groupId',
+      'Result': 'result',
+      'Status': 'status',
+      'Modified Date': 'modifiedDate',
+      'Modified By': 'modifiedBy'
   };
   
     return [...rows].sort((a, b) => {
+
+      //will get property name after mapping, then retrieve value from row in row[headerToPropertyMap[sortField]]
       const valueA = headerToPropertyMap[sortField] ? a[headerToPropertyMap[sortField]] : undefined;
       const valueB = headerToPropertyMap[sortField] ? b[headerToPropertyMap[sortField]] : undefined;
     
-      // Handle missing values
-      if (valueA === undefined && valueB === undefined) return 0; // Both are missing, considered equal
-      if (valueA === undefined) return 1; // Place missing values last
-      if (valueB === undefined) return -1; // Place missing values last
+      // console.log("Type of valueA:", typeof valueA, valueA instanceof Date ? 'Date' : '');
+
+      
+      // handle missing values
+      if (valueA === undefined && valueB === undefined) return 0; // both values being compared are missing, considered equal
+      if (valueA === undefined) return 1; //place missing values missing values last
+      if (valueB === undefined) return -1; //place missing values last
   
-  
-      // Check if values are strings
+
+      //check if values in column are strings
       if (typeof valueA === 'string' && typeof valueB === 'string') {
-        // Alphabetical sort for strings
+        //sort strings in alphabetical order
         return sortDirection === 'asc'
           ? valueA.localeCompare(valueB)
           : valueB.localeCompare(valueA);
       }
   
-      // Check if values are numbers
+      //if values are floats/numbers, sort in numerical order
       if (typeof valueA === 'number' && typeof valueB === 'number') {
         return sortDirection === 'asc'
           ? valueA - valueB
           : valueB - valueA;
+      }
+
+      //if values are dates, sort by most recent date
+      if (valueA instanceof Date && valueB instanceof Date) {
+        console.log("Type of valueA:", typeof valueA, valueA instanceof Date ? 'Date' : '');
+        //sort by most recent
+        return sortDirection === 'asc'
+          ? valueA.getTime() - valueB.getTime()
+          : valueB.getTime() - valueA.getTime();
       }
   
       // In case the values are not comparable (null, undefined, etc.)
@@ -191,8 +210,6 @@ function SimpleExpandableTable({ parentRowColumn, childRows, expandedSectionHead
     const sortedChildRows = sortChildRows(filteredChildRows);
     const displayedChildRows = sortedChildRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-
-
     const handleSort = (headerName) => {
       const isAsc = sortField === headerName && sortDirection === 'asc';
       setSortDirection(isAsc ? 'desc' : 'asc');
@@ -232,8 +249,6 @@ function SimpleExpandableTable({ parentRowColumn, childRows, expandedSectionHead
       </>
     );
   };
-
-
 
 
   const columnHeaders = [

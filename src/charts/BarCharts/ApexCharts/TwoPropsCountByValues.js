@@ -18,7 +18,7 @@ const ValueSumMap = (data, targetColumn, valueColumn) => {
   }, {});
 };
 
-const TwoPropsGetAvgs = ({ labelColumn, valueColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
+const TwoPropsCountByValues = ({ labelColumn, valueColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
   const { filter, updateFilter } = useFilter();
 
   //gets the data when filter is applied
@@ -92,6 +92,6 @@ const TwoPropsGetAvgs = ({ labelColumn, valueColumn, isHorizontal, chartTitle, x
 };
 
 
-export default TwoPropsGetAvgs;
+export default TwoPropsCountByValues;
 
 

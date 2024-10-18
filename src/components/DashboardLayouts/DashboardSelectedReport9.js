@@ -33,7 +33,7 @@ const DashboardSelectedReport9 = ({ title, data }) => {
       {/* <FilterProvider> */}
         <DashboardRoot>
           <Grid container 
-            spacing={{xs:2, s:2, md:3, lg:3}}
+            spacing={{xs:2, s:2, md:2.5, lg:2.5}}
             sx={{
               px: { lg: 5, xl: 15 }, //padding-left and padding-right for lg and xl screens
             }}

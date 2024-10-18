@@ -25,7 +25,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 
 // renders a row in the table; manages expanded (open) and non-expanded state,
-function Row({ parentRow, columns, renderChildRow}) {
+function Row({ parentRow, columns, renderChildRow, childRowCount}) {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -77,7 +77,6 @@ function Row({ parentRow, columns, renderChildRow}) {
       return newOpen;
     });
   };
-
 
   return (
     //renders parent row
@@ -135,20 +134,7 @@ function Row({ parentRow, columns, renderChildRow}) {
                         rowsPerPageOptions={[5, 10, 15]}
                         component="div"
 
-                        count={parentRow.childRows.filter(childRow => {
-                          const searchValue = searchText.toLowerCase();
-                          const searchValueAsNumber = parseFloat(searchValue);
-  
-                          const formattedAccepted = (childRow.accepted * 100).toFixed(2);
-                          const acceptedMatches = formattedAccepted.startsWith(searchValue) || childRow.accepted.toString().includes(searchValueAsNumber.toString());
-  
-                          return (
-                            childRow.asset.toLowerCase().includes(searchValue) ||
-                            childRow.sysAdmin.toLowerCase().includes(searchValue) ||
-                            childRow.primOwner.toLowerCase().includes(searchValue) ||
-                            acceptedMatches
-                          );
-                        }).length}
+                        count={childRowCount}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -169,10 +155,10 @@ function Row({ parentRow, columns, renderChildRow}) {
   );
 }
 
-export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterProperty, updateFilter}) => {
+export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterProperty, childRowCount}) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
-  // Sorting logic
+  //sorting logic
   const sortedRows = React.useMemo(() => {
     if (sortConfig.key) {
       return [...rows].sort((a, b) => {
@@ -188,7 +174,7 @@ export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterPr
 
   const handleSortRequest = (columnId) => {
     setSortConfig((prevSortConfig) => {
-      // Toggle between ascending and descending
+      //toggle between descending or ascending values
       const newDirection =
         prevSortConfig.key === columnId && prevSortConfig.direction === 'asc'
           ? 'desc'
@@ -215,19 +201,6 @@ export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterPr
                     )}
                   </StyledHeaderCell>
                 )}
-                {index !== 0 && (
-                  <StyledHeaderCell
-                    key={header.id}
-                    align={header.align}
-                    onClick={() => handleSortRequest(header.id)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {header.label}
-                    {sortConfig.key === header.id && (
-                      sortConfig.direction === 'asc' ? ' ▲' : ' ▼'
-                    )}
-                  </StyledHeaderCell>
-                )}
               </React.Fragment>
             ))}
           </TableRow>
@@ -239,6 +212,7 @@ export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterPr
               parentRow={row}
               columns={columns}
               renderChildRow={renderChildRow}
+              childRowCount={childRowCount}
             />
           ))}
         </TableBody>

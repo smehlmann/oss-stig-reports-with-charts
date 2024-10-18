@@ -29,7 +29,7 @@ const DashboardSelectedReport7 = ({ data, title }) => {
         <DashboardRoot>
           {/*Filter Bar*/}
           <Grid container 
-            spacing={{xs:2, s:2, md:3, lg:3}}
+            spacing={{xs:2, s:2, md:2.5, lg:2.5}}
             sx={{px: {lg:5, xl: 10}}}
           >
             <Grid lg={12} sm={12} xl={12} xs={12}>

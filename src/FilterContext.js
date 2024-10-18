@@ -19,6 +19,10 @@
     //keeps track of switch's on/off status
     const [isWebOrDBIncluded, setIsWebOrDBIncluded] = useState(true); //state for the switch
 
+    //keeps track of Delinquent switch's on/off status
+    const [isDelinquent, setDelinquent] = useState(false); //default: shows all entries 
+
+
     // Updates the filter object by adding or removing property-value pairs. 
     // newFilter = obj containing new filter key-value pair to be added/updated
     // source= only needed to clarify if we're using an expandable table
@@ -29,9 +33,9 @@
       
       // ensure previous filters is treated as an object
       if (typeof prevFilters !== 'object' || prevFilters === null) {
-      return { [key]: value }; // Initialize with new filter if prevFilters is not valid
+      return { [key]: value }; //initialize with new filter if prevFilters is not valid
       }
-      let updatedFilters = { ...prevFilters }; // Create a copy of prevFilters
+      let updatedFilters = { ...prevFilters }; //copy of previous filter
 
       // console.log(`Current filters: ${JSON.stringify(prevFilters)}`);
       // console.log(`New filter: ${key}: ${value}`);
@@ -80,7 +84,7 @@
         // console.log(`In else-if ${key}: ${value}`)
         return { ...prevFilters, [key]: value };
       } else if (existingValue === value) {
-        // remove if new value is the same as the existing value
+        // remove if new value is the same as the existing value (remove redundant filters)
         const { [key]: removed, ...rest } = prevFilters;
         return rest;
       } 
@@ -88,7 +92,6 @@
         //add or update key with new value
         return { ...prevFilters, [key]: value };
       }
-      
      });
     };
 
@@ -110,12 +113,25 @@
       setIsWebOrDBIncluded(isChecked);
     };
 
+    //updates the isDelinquent state when switch is toggled
+    const toggleDelinquentFilter = (isChecked) => {
+      setDelinquent(isChecked);
+    };
 
     
   
     return (
       //provides 'filter' state and 'updateFilter' to all components nested in FilterProvider
-      <FilterContext.Provider value={{ filter, updateFilter, removeFilterKey, clearFilter, isWebOrDBIncluded, toggleWebOrDBFilter }}>
+      <FilterContext.Provider value={{ 
+          filter, 
+          updateFilter, 
+          removeFilterKey, 
+          clearFilter, 
+          isWebOrDBIncluded, 
+          toggleWebOrDBFilter,
+          isDelinquent,
+          toggleDelinquentFilter 
+      }}>
         {children}
       </FilterContext.Provider>
     );

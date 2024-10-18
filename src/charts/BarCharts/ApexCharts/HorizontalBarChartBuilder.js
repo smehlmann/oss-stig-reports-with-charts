@@ -1,5 +1,4 @@
 import React, { useMemo, useEffect, useState, useCallback } from "react";
-import { useMediaQuery } from '@mui/material';
 
 // import { palette } from "../../palette.js";
 import { useTheme } from "../../../theme.js"

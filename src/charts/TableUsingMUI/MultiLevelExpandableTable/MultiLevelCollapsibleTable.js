@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import MultiLevelTableBuilder from "./MultiLevelTableBuilder.js";
 import TableBody from '@mui/material/TableBody';
 // import { useFilter } from '../../../FilterContext.js';
-import {useTheme} from "../../../theme.js"
+// import {useTheme} from "../../../theme.js"
 // import { useTheme } from '@mui/material/styles';
 import {
   StyledTable,
@@ -25,7 +25,7 @@ const formatString = (value) => {
 
 function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeaders, secondLevelChildRowHeaders, data}) {
   // const [open, setOpen] = useState(false);
-  const theme = useTheme();
+  // const theme = useTheme();
   const [searchText] = useState("");
   const [parentRows, setParentRows] = useState([]); //parentRows = actual variable that holds state, and setParentRows=updates state variable based on action.
   const {filter} =  useFilter();
@@ -37,17 +37,16 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
  // Sorting function
   const sortChildRows = (rows) => {
     if (!sortField) return rows;
-    // console.log("rows: ", rows);
-
-    // console.log('sortField: ', sortField);
 
     const headerToPropertyMap = {
       'Asset': 'asset',
       'Primary Owner': 'primOwner',
       'System Admin' : 'sysAdmin',
+      'Assessed %': 'assessed',
+      'Submitted %': 'submitted',
       'Accepted %': 'accepted',
       'Benchmarks': 'benchmarks'
-  };
+    };
 
     return [...rows].sort((a, b) => {
       const valueA = headerToPropertyMap[sortField] ? a[headerToPropertyMap[sortField]] : undefined;
@@ -74,7 +73,7 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
           : valueB - valueA;
       }
 
-      // In case the values are not comparable (null, undefined, etc.)
+      //in case the values are not comparable (null, undefined, etc.)
       return 0;
     });
   };
@@ -96,6 +95,8 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
             asset: currentValue.asset,
             sysAdmin: formatString(currentValue.sysAdmin),
             primOwner: formatString(currentValue.primOwner),
+            assessed: currentValue.assessed,
+            submitted: currentValue.submitted,
             accepted: currentValue.accepted,
             benchmarks: currentValue.benchmarks
           });
@@ -122,7 +123,35 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
     }
   }, [parentRowColumn, filteredData, filter]);
 
+  //function to get number of childrows (needed for table pagination)
+  const getFilteredChildRowsCount = (parentRowObject, searchText) => {
+    return parentRowObject.childRows.filter((childRow) => {
+      const searchValue = searchText.toLowerCase();
+      //search averages in user form (ie. user types in 100 for 100%)
+      const searchValueAsNumber = parseFloat(searchValue);
+      
+      const formattedAssessed = (childRow.assessed * 100).toFixed(2)
+        .startsWith(searchValue) || childRow.assessed.toString()
+        .includes(searchValueAsNumber.toString());
 
+      const formattedSubmitted = (childRow.submitted*100).toFixed(2)
+        .startsWith(searchValue) || childRow.submitted.toString()
+        .includes(searchValueAsNumber.toString());
+        
+      const formattedAccepted = (childRow.accepted * 100).toFixed(2)
+        .startsWith(searchValue) || childRow.accepted.toString()
+        .includes(searchValueAsNumber.toString());
+
+      return (
+        //set to lowercase for searchability 
+        childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
+        childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
+        childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
+        formattedAssessed || formattedSubmitted || formattedAccepted
+        );
+    }).length;
+  };
+  
 
   //code responsible for creating childRows in expanded section
   const renderChildRow = (parentRow, page, rowsPerPage, searchText) => {
@@ -131,28 +160,38 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
       //filtering specifically for accepted column
       const searchValue = searchText.toLowerCase();
 
-      // console.log('The type for searchValue: ', typeof searchValue);
+      //search averages in user form (ie. user types in 100 for 100%)
       const searchValueAsNumber = parseFloat(searchValue);
+     
+      const formattedAssessed = (childRow.assessed * 100).toFixed(2)
+        .startsWith(searchValue) || childRow.assessed.toString()
+        .includes(searchValueAsNumber.toString());
+        
+      const formattedSubmitted = (childRow.submitted*100).toFixed(2)
+        .startsWith(searchValue) || childRow.submitted.toString()
+        .includes(searchValueAsNumber.toString());
+        
+      const formattedAccepted = (childRow.accepted * 100).toFixed(2)
+        .startsWith(searchValue) || childRow.accepted.toString()
+        .includes(searchValueAsNumber.toString());
 
-      const formattedAccepted = (childRow.accepted * 100).toFixed(2);
-      const acceptedMatches = formattedAccepted.startsWith(searchValue) || childRow.accepted.toString().includes(searchValueAsNumber.toString());
-      
       return (
       //set to lowercase for searchability 
       childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
       childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
       childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
-      acceptedMatches
+      formattedAssessed || formattedSubmitted || formattedAccepted
       );
-    
-
     });
-    if (childRowsFilteredByTextInput.length === 0) {
+
+    const sortedChildRows = sortChildRows(childRowsFilteredByTextInput);
+
+    if (sortedChildRows.length === 0) {
       return null;
     }
 
     // Sort the filtered rows
-    const sortedChildRows = sortChildRows(childRowsFilteredByTextInput);
+
     const displayedRows = sortedChildRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
     const handleSort = (headerName) => {
@@ -164,7 +203,7 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
     return (
       <StyledChildTableContainer sx={{ margin: 1 }}>
         <StyledTable size="small" aria-label="child table">
-          <ExpandedTableHead sx={{ border: 'none', backgroundColor: theme.palette.secondary.main}}>
+          <ExpandedTableHead sx={{ border: 'none'}}>
             {/* create headers using firstLevelChildRowHeaders */}
             {firstLevelChildRowHeaders.map((headerName, index) => (
               <ExpandedFirstLevelHeaderCell key={index}>
@@ -189,6 +228,9 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
     );
   };
 
+  const filteredChildRowsCount = parentRows.map(parentRow => getFilteredChildRowsCount(parentRow, searchText));
+
+
   const mainColumnHeader = [
     { id: 'shortName', label: 'Packages' }
   ];
@@ -199,63 +241,10 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
       columns={mainColumnHeader} 
       renderChildRow={renderChildRow} 
       searchText={searchText}
+      childRowCount = {filteredChildRowsCount}
       filterProperty="shortName"
     />
   );
 }
 export default MultiLevelCollapsibleTable;
 
-
-//  //code responsible for creating childRows in expanded section
-//  const renderChildRow = (parentRow, page, rowsPerPage, searchText ) => {
-//   const filteredChildRows = parentRow.childRows.filter(
-//     (childRow) => 
-
-//     //set to lowercase for searchability 
-//     (childRow.asset.toLowerCase().includes(searchText.toLowerCase()) ||
-//     childRow.sysAdmin.toLowerCase().includes(searchText.toLowerCase()) ||
-//     childRow.primOwner.toLowerCase().includes(searchText.toLowerCase()) ||
-//     childRow.accepted.toString().includes(searchText)
-//     )
-//   );
-
-//   if (filteredChildRows.length === 0) {
-//     return null;
-//   }
-
-//   const displayedRows = filteredChildRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
-//   //update state with filtered dat
-
-//   return (
-//     <StyledChildTableContainer sx={{ margin: 1 }}>
-//       <StyledTable size="small" aria-label="child table">
-//         <ExpandedTableHead sx={{ border: 'none'}}>
-//           <StyledTableRow>
-//             <ExpandedFirstLevelHeaderCell>Asset</ExpandedFirstLevelHeaderCell>
-//             <ExpandedFirstLevelHeaderCell >Sys Admin</ExpandedFirstLevelHeaderCell>
-//             <ExpandedFirstLevelHeaderCell >Primary Owner</ExpandedFirstLevelHeaderCell>
-//             <ExpandedFirstLevelHeaderCell >Accepted %</ExpandedFirstLevelHeaderCell>
-//           </StyledTableRow>
-//         </ExpandedTableHead>
-//         {/* <TableBody>
-//           {displayedRows.map((childRow, index) => (
-//             <StyledTableRow key={index} className="child-row">
-//               <ExpandedTableCell>{childRow.asset}</ExpandedTableCell>
-//               <ExpandedTableCell>{childRow.sysAdmin}</ExpandedTableCell>
-//               <ExpandedTableCell>{childRow.primOwner}</ExpandedTableCell>
-//               <ExpandedTableCell>
-//                 {percentageFormatterObject.formatter(childRow.accepted)}
-//               </ExpandedTableCell>
-//             </StyledTableRow>
-//           ))}
-//         </TableBody> */}
-//         <TableBody>
-//           {displayedRows.map((childRow, index) => (
-//               <NestedChildRow key={index} childRow={childRow} />
-//             ))}
-//         </TableBody>
-//       </StyledTable>
-//     </StyledChildTableContainer>
-//   );
-// };

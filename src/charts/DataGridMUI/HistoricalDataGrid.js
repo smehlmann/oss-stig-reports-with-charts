@@ -67,6 +67,7 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
         let assetCount = 0;
         let totalChecksPerCode = 0; //will store the total checks per code
         let pullDate = new Date();
+        let delinquentCount = 0;
 
         //for each entry in dataPerGroup
         dataPerGroup.forEach(item => {
@@ -89,6 +90,11 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
           acceptedProductSum += (checks * (accepted || 0));
           rejectedProductSum += (checks * (rejected || 0));
         });
+        
+        //get count where 'delinquent' value = 'Yes'
+        delinquentCount = dataPerGroup.filter(
+          item => item['delinquent'] === 'Yes'
+        ).length;
 
         //calculate the averages (ProductSum/totalChecksPerCode)
         const avgAssessed = assessedProductSum/totalChecksPerCode;
@@ -102,6 +108,7 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
           groupingColumn: groupingValue,
           pullDate,
           assetCount,
+          delinquentCount,
           avgAssessed,
           avgSubmitted,
           avgAccepted,
@@ -144,7 +151,8 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
       headerName: groupingColumn.charAt(0).toUpperCase() + groupingColumn.slice(1) , 
       flex: 1 
     },
-    { field: 'assetCount', headerName: 'Asset Count', flex: 1, type: 'number' },
+    { field: 'assetCount', headerName: 'Asset Count', type: 'number' },
+    { field: 'delinquentCount', headerName: 'Delinquent Count', type: 'number' },
     { field: 'pullDate', headerName: 'Date Pulled', flex: 1, type: 'date' },
     {
       field: 'avgAssessed',

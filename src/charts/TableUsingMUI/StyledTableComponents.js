@@ -122,7 +122,7 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 'none', 
     backgroundColor: '#ffffff', 
     "&:nth-of-type(even)": {
-      backgroundColor: '#eeeffc', // alternating color
+      backgroundColor: '#eeeffc', // alternating color for each rows
     },
   },
   "&.second-level-child-row": {
@@ -138,12 +138,13 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export const StyledTableSortLabel = styled(TableSortLabel)(({ theme }) => ({
   "&.first-level-child-sort": {
+    "& .MuiTableSortLabel-icon": {
+      color: '#e8e8f2', // icon color when sort is active
+    },
     color: '#FFF', // default text color
     "&.MuiTableSortLabel-active": {
-      color: theme.palette.primary.light, // when sort is active
-      "& .MuiTableSortLabel-icon": {
-        color: theme.palette.primary.light, // icon color when sort is active
-      }
+      color: theme.palette.primary.main, // when sort is active
+      
     },
     "&:hover": {
       color: theme.palette.primary, // when hovered over
@@ -193,8 +194,7 @@ export const StyledChildTableContainer = styled(Paper)(({ theme }) => ({
 
 //Header in expanded section
 export  const ExpandedTableHead= styled(TableHead)(({ theme }) => ({
-  // backgroundColor: theme.palette.secondary.light,
-  backgroundColor: theme.palette.secondary.main,
+  // backgroundColor: theme.palette.secondary.main,
   border: 'none',
   alignItems: 'center',
   whiteSpace: 'normal',
@@ -207,11 +207,12 @@ export const ExpandedFirstLevelHeaderCell = styled(TableCell)(({ theme }) => ({
   borderTop: 'none',
   borderLeft: 'none',
   borderRight: 'none',
+  backgroundColor: theme.palette.secondary.main,
   fontSize: theme.typography.h5.fontSize,
   fontWeight: 'bold',
   alignItems: 'center',
   "&:hover": {
-    backgroundColor:  theme.palette.secondary.light,
+    backgroundColor:  '#423d90',
     color: theme.palette.text.primary,
   },
 }));

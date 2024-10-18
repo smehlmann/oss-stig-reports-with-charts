@@ -54,6 +54,12 @@ function NestedSecondLevelChildRow({ childRow }) {
         <ExpandedTableCell>{childRow.sysAdmin}</ExpandedTableCell>
         <ExpandedTableCell>{childRow.primOwner}</ExpandedTableCell>
         <ExpandedTableCell>
+          {percentageFormatterObject.formatter(childRow.assessed)}
+        </ExpandedTableCell>
+        <ExpandedTableCell>
+          {percentageFormatterObject.formatter(childRow.submitted)}
+        </ExpandedTableCell>
+        <ExpandedTableCell>
           {percentageFormatterObject.formatter(childRow.accepted)}
         </ExpandedTableCell>
       </StyledTableRow>

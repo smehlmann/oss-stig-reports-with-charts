@@ -11,8 +11,7 @@ This function works by looking at the contents in the array in the filterContext
 // }
 // export default GetFilteredData;
 
-function GetFilteredData(data, filter) {
-
+function GetFilteredData(data, filter, source = '') {
 //check if data is valid (not null, undefined, or not an array)
 // if (!data || !Array.isArray(data)) {
 //   return []; // Return an empty array if data is invalid
@@ -56,7 +55,7 @@ if (filter && filter !== null && Object.keys(filter).length > 0) {
       } else if (Array.isArray(filterValue)) {
         //when filterValue is an array (e.g., from a dropdown with multiple selections)
         const itemValue = item[key]; // Get item value for the current key
-
+        
         //if item's value exists as an array (multi-select scenario)
         if (Array.isArray(itemValue)) {
           //at least one value in filterValue matches itemValue (intersection)
@@ -65,12 +64,12 @@ if (filter && filter !== null && Object.keys(filter).length > 0) {
           //check if itemValue is in filterValue
           return filterValue.includes(itemValue);
         }
-
       } else {
         //compare itemValue directly with filterValue (single-value filter)
         const itemValue = item[key];
         return itemValue === filterValue;
       }
+      
     })
   );
 
@@ -83,6 +82,8 @@ return data;
 }
 
 export default GetFilteredData;
+
+
 
 /*
 

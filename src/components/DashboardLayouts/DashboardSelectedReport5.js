@@ -31,18 +31,20 @@ const DashboardSelectedReport5 = ({ data, title }) => {
       result = result.filter(item => !item.cklWebOrDatabase);
     }
 
+    //only displays those where delinquent = 'yes' 
+    // if (!isDelinquent) {
+    //   result = result.filter(item => item.delinquent === 'Yes');
+    // }
+
     return result;
-  }, [filter, data, isWebOrDBIncluded]);
+  }, [filter, data, isWebOrDBIncluded, ]);
   
-  // useEffect(() => {
-  //   console.log('Formatted Data:', filteredData);
-  // }, [filteredData]);
 
   return (
     <ThemeProvider theme={theme}>
         <DashboardRoot>
           <Grid container 
-            spacing={{xs:2, s:2, md:3, lg:3}}
+            spacing={{xs:2, s:2, md:2.5, lg:2.5}}
             sx={{
               px: { lg: 5, xl: 15 }, // Padding-left and padding-right for lg and xl screens
             }}
@@ -50,28 +52,28 @@ const DashboardSelectedReport5 = ({ data, title }) => {
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <Box display='inline-flex' justifyContent="space-between" sx={{ width:'100%'}} >
                 <Typography variant='h1'>{title}</Typography> 
-                <FilterSelectionDrawer data={filteredData} />
+                <FilterSelectionDrawer data={filteredData} source='report5'/>
               </Box>
             </Grid>
 
             <Grid lg={12} md={12} xl={12} xs={12}>
               <Box> 
-                <StatisticsCardGroup data={filteredData} />
+                <StatisticsCardGroup data={filteredData} source='report5' />
               </Box>
             </Grid>
 
             {/* data grid */}
-            <Grid lg={6} sm={6} xl={6} xs={12} >
+            <Grid lg={8} sm={8} xl={6} xs={12} >
               <TableGridCardComponent>
                 <AveragesGroupedByColumn 
                   groupingColumn = 'code'
                   data={filteredData} 
-                  targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", "checks"]} 
+                  targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", "checks", "delinquent"]} 
                 />
               </TableGridCardComponent>
             </Grid>
-            
-            <Grid lg={6} sm={6} xl={6} xs={12}>
+
+            <Grid lg={4} sm={4} xl={6} xs={12}>
               <ChartCardComponent title = "Assets by Package">
                 <ApexCountByValueBarChart
                   targetColumn="shortName"
@@ -85,9 +87,14 @@ const DashboardSelectedReport5 = ({ data, title }) => {
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
-                <MultiLevelCollapsibleTable data={filteredData}/>
+                <MultiLevelCollapsibleTable 
+                  parentRowColumn = "shortName"
+                  firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Assessed %', 'Submitted %', 'Accepted %']}
+                  secondLevelChildRowHeaders = {['benchmarks']}
+                  data={filteredData}
+                />
               </ExpandableTableCardComponent>
-            </Grid> 
+            </Grid>
 
           </Grid> 
         </DashboardRoot>

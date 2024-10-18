@@ -15,7 +15,6 @@ import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
-import MultiSortingTester from "../../charts/TableUsingMUI/MultiLevelExpandableTable/MultiSortingTester.js";
 
 
 /*
@@ -48,6 +47,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
   const filteredData = useMemo(() => {
     let result = GetFilteredData(data, filter);
 
+    //removes items where cklWebOrDatabase
     if (!isWebOrDBIncluded) {
       result = result.filter(item => !item.cklWebOrDatabase);
     }
@@ -134,29 +134,31 @@ const DashboardSelectedReport14 = ({ data, title}) => {
 
   //get values (entries from latest date)
   const dataFromLastPullDate = Object.values(latestDateObj)[0];
+  
 
 
+  
   return (
     <ThemeProvider theme={theme}>
     {/* <FilterProvider> */}
       <DashboardRoot>
         {/*Filter Bar*/}
         <Grid container
-          spacing={{xs:2, s:2, md:2, lg:2.5}}
+          spacing={{xs:2, s:2.5, md:2.5, lg:2.5}}
           sx={{
-            px: { lg: 5, xl: 15 }, // Padding-left and padding-right for lg and xl screens
+            px: { lg: 4, xl: 15}, //padding-left and padding-right for lg and xl screens
           }}
         >
 
           <Grid lg={12} sm={12} xl={12} xs={12}>
             <Box display="flex" justifyContent="space-between" alignItems='center'>
               <Typography variant='h1'> {title} </Typography>
-              <FilterSelectionDrawer data={dataFromLastPullDate} />
+              <FilterSelectionDrawer data={dataFromLastPullDate} source='report14' />
             </Box>
           </Grid>
           
           <Grid lg={12} sm={12} xl={12} xs={12}>
-            <StatisticsCardGroup data={dataFromLastPullDate} />
+            <StatisticsCardGroup data={dataFromLastPullDate} source='report14' />
           </Grid>
 
           <Grid lg={8} md={8} sm={12} xl={6} xs={12}>
@@ -164,10 +166,10 @@ const DashboardSelectedReport14 = ({ data, title}) => {
               <HistoricalDataGrid 
                 groupingColumn = 'code'
                 data={dataFromLastPullDate} 
-                targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", "checks", "datePulled"]} 
+                targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", "checks", "datePulled", "delinquent"]} 
               />
             </TableGridCardComponent>
-          </Grid>
+          </Grid>    
           
           <Grid lg={4} md={4} sm={12} xl={6} xs={12}>
             <ChartCardComponent title = "Assets by Packages">
@@ -195,16 +197,16 @@ const DashboardSelectedReport14 = ({ data, title}) => {
           </Grid> 
 
 
-            <Grid lg={12} sm={12} xl={12} xs={12}>
-              <ExpandableTableCardComponent>
-                <MultiLevelCollapsibleTable 
-                  parentRowColumn = "shortName"
-                  firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Accepted %']}
-                  secondLevelChildRowHeaders = {['benchmarks']}
-                  data={filteredData}
-                />
-              </ExpandableTableCardComponent>
-            </Grid> 
+          <Grid lg={12} sm={12} xl={12} xs={12}>
+            <ExpandableTableCardComponent>
+              <MultiLevelCollapsibleTable 
+                parentRowColumn = "shortName"
+                firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Accepted %']}
+                secondLevelChildRowHeaders = {['benchmarks']}
+                data={filteredData}
+              />
+            </ExpandableTableCardComponent>
+          </Grid> 
 
         </Grid> 
       </DashboardRoot>
