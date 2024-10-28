@@ -46,7 +46,7 @@ const getCardBackgroundColor = (metricname) => {
     case 'Delinquents':
       return '#98E1DC';
     default:
-      return '#ffffff'; // Default background color if none match
+      return '#ffffff'; // default bg
   }
 };
 
@@ -68,11 +68,13 @@ const MainMetricValue = styled(Typography)(({ theme }) => ({
   fontSize: theme.typography.h2.fontSize,
   fontWeight: 700,
   alignItems: 'left',
+  color: '#2A2A2A', //light mode primary
+
 }));
 
 const Title = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
-  color: theme.palette.text.secondary,
+  color: '#3E3E3E', //light mode secondary
 }));
 
 const StyledIconContainer = styled(Avatar)(({ theme }) => ({
@@ -82,6 +84,7 @@ const StyledIconContainer = styled(Avatar)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  color: '#ffffff',
 
   boxShadow: theme.shadows[3],
 }));
@@ -111,7 +114,7 @@ const getIcon = (metricname) => {
 
 const CaptionText = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
-  color: theme.palette.text.secondary,
+  color: '#3E3E3E',
   display: 'flex',
   alignItems: 'center',
 }));

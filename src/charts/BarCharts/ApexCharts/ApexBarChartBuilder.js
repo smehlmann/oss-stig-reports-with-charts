@@ -140,7 +140,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
     },
     plotOptions: {
       bar: {
-        borderRadius: 4,
+        borderRadius: 6,
         horizontal: isHorizontal,
         columnWidth: "34%",
         colors: {

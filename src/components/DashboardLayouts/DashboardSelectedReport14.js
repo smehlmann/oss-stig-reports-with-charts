@@ -1,11 +1,11 @@
 import React, { useMemo} from "react";
 
-import {ThemeProvider,Typography, Box} from "@mui/material";
+import {ThemeProvider, Typography, Box} from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/HistoricalDataTracker"
 import ChartCardComponent from "../Cards/ChartCardComponent";
-import theme from "../../theme";
+import {darkTheme, theme} from '../../theme.js';
 import {  useFilter } from "../../FilterContext";
 import MultiLevelCollapsibleTable from "../../charts/TableUsingMUI/MultiLevelExpandableTable/MultiLevelCollapsibleTable.js";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
@@ -15,6 +15,7 @@ import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
+
 
 
 /*
@@ -55,6 +56,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
     return result;
   }, [filter, data, isWebOrDBIncluded]);
 
+
   //check if filteredData is not array or empty
   if (!Array.isArray(filteredData) || filteredData.length === 0) {
     return (
@@ -71,6 +73,8 @@ const DashboardSelectedReport14 = ({ data, title}) => {
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <StatisticsCardGroup data={filteredData} />
             </Grid>
+
+
             <Grid lg={8} md={8} sm={12} xl={6} xs={12}>
               <TableGridCardComponent>
                 <HistoricalDataGrid 
@@ -105,9 +109,16 @@ const DashboardSelectedReport14 = ({ data, title}) => {
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
-                <MultiLevelCollapsibleTable data={filteredData}/>
+                <MultiLevelCollapsibleTable 
+                  parentRowColumn = "shortName"
+                  firstLevelChildRows = {['asset', 'sysAdmin', 'primOwner', 'assessed', 'submitted', 'accepted']}
+                  firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Assessed %', 'Submitted %', 'Accepted %']}
+                  secondLevelChildRows = {['benchmarks']}
+                  secondLevelChildRowHeaders = {['benchmarks']}
+                  data={filteredData}
+                />
               </ExpandableTableCardComponent>
-            </Grid> 
+            </Grid>
             
           </Grid>
         </DashboardRoot>
@@ -201,7 +212,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
             <ExpandableTableCardComponent>
               <MultiLevelCollapsibleTable 
                 parentRowColumn = "shortName"
-                firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Accepted %']}
+                firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Assessed %', 'Submitted %', 'Accepted %']}
                 secondLevelChildRowHeaders = {['benchmarks']}
                 data={filteredData}
               />

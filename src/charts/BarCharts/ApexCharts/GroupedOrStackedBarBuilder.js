@@ -22,7 +22,6 @@ const GroupedOrStackedBarBuilder = ({
     if (dataLabelsArePercentages) {
       //format the value using the percentage formatter
       return getPercentageFormatterObject().formatter(value);
-      
     } 
     //dataValues are not percentages, return raw value
     return value;
@@ -44,7 +43,7 @@ const GroupedOrStackedBarBuilder = ({
     (label) => {
       switch (label) {
         case 'Average Assessed':
-          return theme.palette.assessed;
+          return '#acb5df';
         case 'Average Submitted':
           return theme.palette.submitted;
         case 'Average Accepted':
@@ -91,7 +90,7 @@ const GroupedOrStackedBarBuilder = ({
       },
       yaxis: {
         title: { text: yAxisHeader, 
-          style: axisTitleStyle, offsetX: -2
+          style: axisTitleStyle, offsetX: 2
         },
         labels: {
           maxWidth: 430,
@@ -184,7 +183,7 @@ const GroupedOrStackedBarBuilder = ({
   const chartHeight = Math.max(400, dataLabels.length * 26); //each row is 26px in height
 
   return (
-    <div className="apex-chart" style={{ height: '100%', width: '100%', paddingRight: '2px' }}>
+    <div className="apex-chart" style={{ height: '100%', width: '100%',  }}>
       <ReactApexChart options={options} series={series} type="bar" height={chartHeight} />
     </div>
   );

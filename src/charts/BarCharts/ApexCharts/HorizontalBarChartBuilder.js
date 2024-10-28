@@ -10,7 +10,7 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
 
   //default axis title style
   const axisTitleStyle = useMemo(() => ({
-    // fontSize: '14px',
+    fontSize: '14px',
     fontFamily: 'Segoe UI',
     fontWeight: '500',
     margin: '0',
@@ -139,7 +139,7 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
     
     plotOptions: {
       bar: {
-        borderRadius: 4,
+        borderRadius: 6,
         horizontal: isHorizontal,
         distributed: true, 
         barHeight: '70%'
@@ -156,121 +156,121 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
       left: 400,
     },
     
-   responsive : [
-      {
-        breakpoint: 1520,
-        options: {
-          enableToolbar: true,
-          yaxis: {
-            labels: {
-              formatter: function (value) {
-                if (formatLabelToPercentage) {
-                  return formatLabelToPercentage.formatter(value);
-                }
-                return value;
-              },
-              style: {
-                fontSize: '10px',
-              },
-            },
-            title: {
-              style: {
-                fontSize: '10px',
-              },
-            },
-          },
-          grid: {
-            left: 400,
+  //  responsive : [
+  //     {
+  //       breakpoint: 1520,
+  //       options: {
+  //         enableToolbar: true,
+  //         yaxis: {
+  //           labels: {
+  //             formatter: function (value) {
+  //               if (formatLabelToPercentage) {
+  //                 return formatLabelToPercentage.formatter(value);
+  //               }
+  //               return value;
+  //             },
+  //             style: {
+  //               fontSize: '10px',
+  //             },
+  //           },
+  //           title: {
+  //             style: {
+  //               fontSize: '10px',
+  //             },
+  //           },
+  //         },
+  //         grid: {
+  //           left: 400,
 
-          },
-        },
-      },
-      {
-        breakpoint: 1280,
-        options: {
-          enableToolbar: true,
-          xaxis: {
-            labels: {
-              style: {
-                fontSize: '11px',
-              },
-            },
-            title: {
-              style: {
-                fontSize: '11px',
-              },
-            },
-          },
-          yaxis: {
-            labels: {
-              formatter: function (value) {
-                if (formatLabelToPercentage) {
-                  return formatLabelToPercentage.formatter(value);
-                }
-                return value;
-              },
-              style: {
-                fontSize: '11px',
-              },
+  //         },
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 1280,
+  //       options: {
+  //         enableToolbar: true,
+  //         xaxis: {
+  //           labels: {
+  //             style: {
+  //               fontSize: '11px',
+  //             },
+  //           },
+  //           title: {
+  //             style: {
+  //               fontSize: '11px',
+  //             },
+  //           },
+  //         },
+  //         yaxis: {
+  //           labels: {
+  //             formatter: function (value) {
+  //               if (formatLabelToPercentage) {
+  //                 return formatLabelToPercentage.formatter(value);
+  //               }
+  //               return value;
+  //             },
+  //             style: {
+  //               fontSize: '11px',
+  //             },
               
-            },
-            title: {
-              style: {
-                text: yAxisHeader,
-                fontSize: '12px',
-              },
-            },
-          },
-          // grid: {
-          //   left: 400,
-          //   opacity: 0.8,
-          //   padding: {
-          //   }
-          // },
-        },
-      },
-      {
-        breakpoint: 800,
-        options: {
-          enableToolbar: true,
-          xaxis: {
-            labels: {
-              style: {
-                fontSize: '8px',
-              },
-            },
-            title: {
-              style: {
-                fontSize: '10px',
-              },
-            },
-          },
-          yaxis: {
-            labels: {
-              style: {
-                fontSize: '8px',
-              },
-            },
-            title: {
-              style: {
-                text: yAxisHeader,
-                fontSize: '8px',
-              },
-            },
-          },
-          title: {
-            style: {
-              fontSize: '15px',
-            },
-          },
-          // grid: {
-          //   left: 400,
-          //   opacity: 0.5,
-          // },
-        },
-      },
+  //           },
+  //           title: {
+  //             style: {
+  //               text: yAxisHeader,
+  //               fontSize: '12px',
+  //             },
+  //           },
+  //         },
+  //         // grid: {
+  //         //   left: 400,
+  //         //   opacity: 0.8,
+  //         //   padding: {
+  //         //   }
+  //         // },
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 800,
+  //       options: {
+  //         enableToolbar: true,
+  //         xaxis: {
+  //           labels: {
+  //             style: {
+  //               fontSize: '8px',
+  //             },
+  //           },
+  //           title: {
+  //             style: {
+  //               fontSize: '10px',
+  //             },
+  //           },
+  //         },
+  //         yaxis: {
+  //           labels: {
+  //             style: {
+  //               fontSize: '8px',
+  //             },
+  //           },
+  //           title: {
+  //             style: {
+  //               text: yAxisHeader,
+  //               fontSize: '8px',
+  //             },
+  //           },
+  //         },
+  //         title: {
+  //           style: {
+  //             fontSize: '15px',
+  //           },
+  //         },
+  //         // grid: {
+  //         //   left: 400,
+  //         //   opacity: 0.5,
+  //         // },
+  //       },
+  //     },
       
-    ],
+  //   ],
   });
 
   
@@ -323,7 +323,7 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
   
 
   // const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg')); // Check if screen width is 1400px or more
-  const chartHeight = Math.max(400, dataLabels.length * 18); //ensures that each row in chart is 18px in height
+  const chartHeight = Math.max(400, dataLabels.length * 24); //ensures that each row in chart is 24px in height
   // const height = isLargeScreen ? `${chartHeight}px` : '100%'; // Set height based on screen width
   
   // console.log(chartHeight);

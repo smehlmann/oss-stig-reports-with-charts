@@ -153,8 +153,162 @@ const theme = createTheme({
 
 export default theme;
 
+const darkTheme = createTheme({
+  palette: {
+    primary: {
+      // main: '#3f51b5',
+      // light: '#757de8',
+      // dark: '#002984',
+      main: '#3048FF',
+      light: '#8190ff',
+      dark: '#0000cb',
+      contrastText: '#fff',
+    },
+    secondary: {
+      main: '#6060a8',
+      light: '#bcbbf4',  // #9fa1cc
+      dark: '#322a79',
+      contrastText: '#fff',
+    },
+    background: {
+      default: '#0c0c28',
+      paper: '#212141',
+    },
+    text: {
+      // primary: '#333333',
+      primary: '#f9f9f9',
+      secondary: '#f3f3f3',
+    },
+    action: {
+      selected: '#6a749d',
+      hover: '#424a79',
+      hoverExpandedSection: '#c2c6d6',
+    },
+    assessed: '#4f5b8a', // Darker variation of the original color
+    submitted: '#6a8c5d', // Darker green to fit with the dark theme
+    accepted: '#5b8d69', // Darker shade of green
+    rejected: '#b35b4a', // A darker shade of red for better visibility
+    cat3: '#4f5b8a', // Use a darker variation
+    cat2: '#b58c50', // Darker yellow to maintain contrast
+    cat1: '#b35b4a', // Similar darker red shade as the 'rejected' color
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      extendedMd: 1078,
+      lg: 1280,
+      extendedLg: 1400,
+      xl: 1920,
+      
+    },
+  },
+  typography: {
+    fontFamily: 'Segoe UI, Arial, sans-serif',
+    h1: { 
+      fontSize: '2.5rem', // about 40 px
+      fontWeight: 800,
+      letterSpacing: '-0.01562em',
+      color: '#ffffff',
+    },
+    h2: { 
+      fontSize: '2rem', //about 32 px
+      fontWeight: 700,
+      letterSpacing: '-0.00833em',
+      color: '#ffffff',
+    },
+    h3: { 
+      fontSize: '1.75rem', //about 28px
+      fontWeight: 500,
+      letterSpacing: '0em',
+      color: '#ffffff',
+    },
+    h4: { 
+      fontSize: '1.5rem', //about 24px
+      fontWeight: 500,
+      letterSpacing: '0.00735em',
+      color: '#ffffff',
+    },
+    h5: { 
+      fontSize: '1.25rem', //roughly 20px
+      fontWeight: 500,
+      letterSpacing: '0em',
+      color: '#ffffff',
+    },
+    h6: { 
+      fontSize: '1rem', //about 16px
+      fontWeight: 500,
+      letterSpacing: '0.0075em',
+      color: '#ffffff',
+    },
+    body1: { 
+      fontSize: '1rem', //about 16px
+      fontWeight: 400,
+      letterSpacing: '0.00938em',
+      color: '#ffffff',
+    },
+    body2: { 
+      fontSize: '0.875rem', //about 14px
+      fontWeight: 400,
+      letterSpacing: '0.01071em',
+      color: '#ffffff',
+    },
+    button: {
+      fontSize: '0.875rem',
+      fontWeight: 500,
+      letterSpacing: '0.02857em',
+      textTransform: 'uppercase',
+    },
+    caption: {
+      fontSize: '0.75rem',
+      fontWeight: 400,
+      letterSpacing: '0.03333em',
+      color: '#ffffff',
+      
+    },
+    overline: {
+      fontSize: '0.75rem',
+      fontWeight: 400,
+      letterSpacing: '0.08333em',
+      textTransform: 'uppercase',
+    },
+    spacing: 2,  // was 8
+  },
+
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: '10px',
+          textTransform: 'none',
+          fontSize: '0.875rem',
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          padding: '5px 10px',
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: '8px',
+        },
+      },
+    },
+  },
+});
+
+
+
+
+
 //export hook 
-export { useTheme, palette };
+export { useTheme, palette, theme, darkTheme};
 
 /*
 from logo

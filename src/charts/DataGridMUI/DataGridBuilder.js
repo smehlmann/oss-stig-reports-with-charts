@@ -29,6 +29,7 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     display: 'flex',
     border: 'none',
     
+    
   },
   //Text in table cells
   "& .MuiDataGrid-cell": {
@@ -36,8 +37,12 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     whiteSpace: 'normal', // Allow text wrapping
     wordBreak: 'break-word',
   },
+  "& .MuiDataGrid-row:last-of-type .MuiDataGrid-cell": {
+    borderBottom: "none", // Remove the bottom border on the last row
+  },
   "& .MuiDataGrid-footerContainer": {
     borderTop: "none",
+    borderBottom: 'none',
     backgroundColor: theme.palette.secondary.light,
   },
   "& .MuiCheckbox-root": {
@@ -50,10 +55,7 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   "& .MuiDataGrid-scrollbarFiller--header": {
     backgroundColor: theme.palette.secondary.light
   }, 
-  //fills in space between scrollbar and columnHeader
-  // "& .MuiDataGrid-filler": {
-  //   backgroundColor: theme.palette.secondary.light
-  // },
+
   "& .MuiDataGrid-columnHeaders": { //targets entire header row
     backgroundColor: theme.palette.secondary.light,
   },
@@ -190,8 +192,8 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
       display: 'flex',
       height: '100%',
       overflowY: 'hidden',
-
       flexDirection: 'column',
+      
     }}>
       
       <StyledDataGrid
@@ -221,6 +223,7 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
         onFilterModelChange={handleFilterModelChange }
         components={{Toolbar: GridToolbar,}}
         // rowSelectionModel={rowSelectionModel}
+        sx={{borderRadius: 3}}
       />
     </Box>
   );

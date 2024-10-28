@@ -1,6 +1,6 @@
 // import React, { useMemo } from "react";
 
-import React, { useMemo} from "react";
+import React, { useMemo, useEffect} from "react";
 
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 // import ValueCountMap from "../../../components/ValueCountMap.js";
@@ -130,27 +130,41 @@ const updatedSeries = useMemo(() => {
 
 
 
-// useEffect(() => {
-//   console.log('filter: ', filter);
-//   console.log('countMap: ', countMap);
-//   // console.log('values in countMap: ', Object.values(countMap));
+useEffect(() => {
+  // console.log('filter: ', filter);
+  // console.log('countMap: ', countMap);
+  // // console.log('values in countMap: ', Object.values(countMap));
 
-//   console.log('updatedSeries: ', updatedSeries);
-// }, [filter,]);
+  // console.log('updatedSeries: ', updatedSeries);
+}, [filter,]);
 
 
   //updates the filter criteria based on user's clicking on one of the bars
   const handleBarClick = (event, chartContext, config) => {
-    const categoryLabels = config.w.globals.labels 
-    const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;
-    if (selectedValue) {
-      // check if the selected value is already in the filter
-      if (filter[groupByColumn] === selectedValue) {
-        // remove the filter
+
+    const groupingColumns = config.w.globals.labels
+    const selectedGroupingColumn = groupingColumns ? groupingColumns[config.dataPointIndex] : null;
+    const seriesName = config.seriesIndex !== undefined ? chartContext.w.config.series[config.seriesIndex].name : null
+
+    if (selectedGroupingColumn && seriesName) {
+      //create new filter object on selected groupByColumn and series
+      const newFilter = {
+        [groupByColumn]: selectedGroupingColumn,
+        [breakdownColumn]: seriesName === 'null' ? '': seriesName,
+      }
+
+      //check for duplicate items in filter
+      const isFilterAlreadyApplied = 
+      filter[groupByColumn] === selectedGroupingColumn && 
+      filter[breakdownColumn] === seriesName;
+
+      //remove duplicate filters
+      if (isFilterAlreadyApplied) {
         removeFilterKey(groupByColumn);
+        removeFilterKey(breakdownColumn);
       } else {
-        // Add the filter
-        updateFilter({ [groupByColumn]: selectedValue });
+        //update filter to include both groupByColumn and breakdown values
+        updateFilter(newFilter);
       }
     }
   };

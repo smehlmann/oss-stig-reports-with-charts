@@ -15,15 +15,9 @@ import NestedSecondLevelChildRow from "./NestedSecondLevelChildRow.js"
 import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
 import { useFilter } from "../../../FilterContext.js";
 
-//remove quotation marks around strings
-const formatString = (value) => {
-  if (typeof value === 'string') {
-    return value.replace(/^"|"$/g, ''); // Remove leading and trailing quotes
-  }
-  return value;
-};
 
-function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeaders, secondLevelChildRowHeaders, data}) {
+
+function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRows, secondLevelChildRows, firstLevelChildRowHeaders, secondLevelChildRowHeaders, data}) {
   // const [open, setOpen] = useState(false);
   // const theme = useTheme();
   const [searchText] = useState("");
@@ -81,7 +75,7 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
   // gets the data when filter has been applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
-  //checks if data is array of objects. If so, group by 'shortName' property.
+  // checks if data is array of objects. If so, group by 'shortName' property.
   useEffect(() => {
     try {
       if (Array.isArray(filteredData) && filteredData.length > 0) {
@@ -93,8 +87,8 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
           //populates the empty array associated with a given key
           accumulator[currentValue[parentRowColumn]].push({
             asset: currentValue.asset,
-            sysAdmin: formatString(currentValue.sysAdmin),
-            primOwner: formatString(currentValue.primOwner),
+            sysAdmin: currentValue.sysAdmin,
+            primOwner: currentValue.primOwner,
             assessed: currentValue.assessed,
             submitted: currentValue.submitted,
             accepted: currentValue.accepted,
@@ -106,7 +100,6 @@ function MultiLevelCollapsibleTable({  parentRowColumn, firstLevelChildRowHeader
         }, {});
 
         
-
         //parentRows is an array of objects where each object has 2 properties (or keys): shortName and childRows. shortName is what everything is grouped by, and the childRows are an array of objects {asset:__, sysAdmin:__, primOwner:__, accepted:__} associated with the shortName value. 
         const parentRows = Object.entries(dataGroupedByShortName).map(([shortName, childRows]) => ({
           shortName,

@@ -67,7 +67,7 @@ function NestedSecondLevelChildRow({ childRow }) {
       {/* display second-level child (third level down)*/}
       {open && childRow.benchmarks && (
         <StyledTableRow>
-          <ExpandedContentCell colSpan={4} sx={{ backgroundColor: '#EAEAEA' }}> {/* area around table */}
+          <ExpandedContentCell colSpan={6} sx={{ backgroundColor: '#EAEAEA' }}> {/* area around table */}
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 0.5 }}>
                 <StyledChildTableContainer>

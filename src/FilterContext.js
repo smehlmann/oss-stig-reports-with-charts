@@ -23,19 +23,18 @@
     const [isDelinquent, setDelinquent] = useState(false); //default: shows all entries 
 
 
-    // Updates the filter object by adding or removing property-value pairs. 
+    // updates the filter object by adding or removing property-value pairs. 
     // newFilter = obj containing new filter key-value pair to be added/updated
     // source= only needed to clarify if we're using an expandable table
+  
     const updateFilter = (newFilter, source = null, operator=null) => {
      setFilters(prevFilters => {
-      const key = Object.keys(newFilter)[0];
-      const value = newFilter[key];
-      
+
       // ensure previous filters is treated as an object
       if (typeof prevFilters !== 'object' || prevFilters === null) {
-      return { [key]: value }; //initialize with new filter if prevFilters is not valid
-      }
-      let updatedFilters = { ...prevFilters }; //copy of previous filter
+        return { ...newFilter }; // Initialize with new filter if prevFilters is not valid
+      } 
+      let updatedFilters = { ...prevFilters}; //copy of previous filter
 
       // console.log(`Current filters: ${JSON.stringify(prevFilters)}`);
       // console.log(`New filter: ${key}: ${value}`);
@@ -43,55 +42,57 @@
       // console.log('updatedFilters at the start: ', updatedFilters);
 
       if(source === 'dataGrid') {
-        newFilter.operator = operator;
-      
-        updatedFilters[key] = {value, operator};
+        //apply operator to all keys in new filter
+        Object.keys(newFilter).forEach(key => {
+          updatedFilters[key] = {
+            value: newFilter[key],
+            operator: operator
+          };
+        })
         // console.log('Updating with:', key, ':', value, ' operator: ', operator );
         // console.log('Updating filter with:', updatedFilters);
         return updatedFilters;
       }
       //executes logic only if working with expandable table
       if (source === 'expandableTable') {
-        // console.log('Updating with Expandable Table: ', key, ':', value);
-
         //updates filters directly by merging new filter with previous filters
         const updatedFilters = { ...prevFilters, ...newFilter };
         return updatedFilters;
       }
-   
+
        //determines the filtering logic for updating filter state when filter value is single value or array
   
       //retrieves current value of filter for a given key from prevFilters
       const existingValue = prevFilters;      
+    
+      //iterate over all keys in new filter
+      Object.keys(newFilter).forEach(key => {
+        const value = newFilter[key]; //value at given key in newFilter
+        const existingValue = prevFilters[key]; //value in our current filter
 
-      //double-click logic: Remove the entire key-value pair if the value already exists
-      if (prevFilters[key] === value || (Array.isArray(existingValue) && existingValue.includes(value))) {
-        const { [key]: removed, ...rest } = prevFilters; //remove the key-value pair
-        return rest; // return the rest of the filters without the removed key
-      }
-      //if current filter value (existingValue) and new filter value (value) are arrays
-      if (Array.isArray(existingValue)) {
-        if (Array.isArray(value)) {
-          //merge arrays if both existing and new values are arrays
-          const updatedArray = [...new Set([...existingValue, ...value])];
-          return { ...prevFilters, [key]: updatedArray };
+
+        //double-click logic: Remove the entire key-value pair if the value already exists
+        if (existingValue === value || (Array.isArray(existingValue) && existingValue.includes(value))) {
+          const { [key]: removed, ...rest } = updatedFilters;
+          updatedFilters = rest; // Remove the key-value pair
+        } else if (Array.isArray(existingValue)) { 
+          //if existingValue is an array
+          if (Array.isArray(value)) {
+            //merge arrays if both existing and new values are arrays
+            updatedFilters[key] = [...new Set([...existingValue, ...value])];
+          } else {
+            //replace existing array with a new single value
+            updatedFilters[key] = [value];
+          }
+        } else if (Array.isArray(value)) {
+          //if new value is an array, access value directly
+          updatedFilters[key] = value;
         } else {
-          //replace existing array with a new single value
-          return { ...prevFilters, [key]: [value] };
+          // add/update key with new value
+          updatedFilters[key] = value;
         }
-      } else if (Array.isArray(value)) {
-        // if new value is an array, use it directly (treat as if value is not array. ie. key: value)
-        // console.log(`In else-if ${key}: ${value}`)
-        return { ...prevFilters, [key]: value };
-      } else if (existingValue === value) {
-        // remove if new value is the same as the existing value (remove redundant filters)
-        const { [key]: removed, ...rest } = prevFilters;
-        return rest;
-      } 
-      else {
-        //add or update key with new value
-        return { ...prevFilters, [key]: value };
-      }
+      });
+      return updatedFilters;
      });
     };
 

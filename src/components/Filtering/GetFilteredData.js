@@ -13,9 +13,9 @@ This function works by looking at the contents in the array in the filterContext
 
 function GetFilteredData(data, filter, source = '') {
 //check if data is valid (not null, undefined, or not an array)
-// if (!data || !Array.isArray(data)) {
-//   return []; // Return an empty array if data is invalid
-// }
+if (!data || !Array.isArray(data)) {
+  return []; // Return an empty array if data is invalid
+}
 
 //check if filter is valid and has keys to filter by
 if (filter && filter !== null && Object.keys(filter).length > 0) {
@@ -86,16 +86,6 @@ export default GetFilteredData;
 
 
 /*
-
-
-
-
-
-
-
-
-
-
         // //check if filterValue is an object with with 'operator' and 'value' (for data)
         // if (typeof filterValue === 'object' && filterValue !== null) {
           

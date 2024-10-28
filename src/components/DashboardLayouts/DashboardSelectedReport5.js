@@ -89,7 +89,9 @@ const DashboardSelectedReport5 = ({ data, title }) => {
               <ExpandableTableCardComponent>
                 <MultiLevelCollapsibleTable 
                   parentRowColumn = "shortName"
+                  firstLevelChildRows = {['asset', 'sysAdmin', 'primOwner', 'assessed', 'submitted', 'accepted']}
                   firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Assessed %', 'Submitted %', 'Accepted %']}
+                  secondLevelChildRows = {['benchmarks']}
                   secondLevelChildRowHeaders = {['benchmarks']}
                   data={filteredData}
                 />

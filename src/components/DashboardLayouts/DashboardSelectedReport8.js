@@ -5,14 +5,13 @@ import SimpleExpandableTable from "../../charts/TableUsingMUI/SimpleExpandableTa
 import HorizontalBarChartCard from "../Cards/HorizontalBarChartCard.js";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import theme from "../../theme";
-// import StatisticsCardGroup from "../StatisticsCardsGroup.js";
 import {  useFilter } from "../../FilterContext";
 import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
-import GroupedOrStackedBar from "../../charts/BarCharts/ApexCharts/GroupedOrStackedBar.js";
 import GroupedAveragesBar from "../../charts/BarCharts/ApexCharts/GroupedAveragesBar.js";
+import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart.js";
 
 /*
  Displays report option 4. STIG Benchmark Version Deltas (eMASS number(s) required)
@@ -57,19 +56,15 @@ const DashboardSelectedReport5 = ({ data, title }) => {
           
             <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
               <HorizontalBarChartCard title = 'Assets by STIG Benchmark'>
-                <GroupedOrStackedBar
-                  groupByColumn="benchmarkId"
-                  breakdownColumn = "latestRev"
-                  showDataLabels = {true}
+               <ApexCountByValueBarChart
+                  targetColumn="benchmarkId"
                   isHorizontal={true}
-                  isStackedBarChart={true}
                   xAxisTitle="Number of Assets"
                   yAxisTitle= "STIG Benchmark"
                   data={filteredData}
                 />
               </HorizontalBarChartCard>
             </Grid> 
-
 
             <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
               <HorizontalBarChartCard title = 'Assets by STIG Benchmark'>
