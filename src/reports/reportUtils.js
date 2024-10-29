@@ -656,6 +656,30 @@ async function getAssetEmassMapForUnassigned(assets) {
   return unassignedAssets;
 }
 
+function getLastTouched(metrics){
+
+  var maxTouchTs = metrics.maxTouchTs;
+    var touchDate = new Date(maxTouchTs);
+    var today = new Date();
+    var timeDiff = today - touchDate;
+    var diffInHours = timeDiff / (1000 * 3600);
+    var diffInDays = timeDiff / (1000 * 3600 * 24);
+    var lastTouched = "";
+    var touched;
+
+    // set lastTouched to either hours or days
+    if (diffInDays < 1) {
+        touched = Math.round(diffInHours);
+        lastTouched = touched + ' h';
+    }
+    else {
+        touched = Math.round(diffInDays);
+        lastTouched = touched.toString() + ' d';
+    }
+
+    return lastTouched;
+}
+
 export {
   getCollectionsByEmassNumber,
   getCurrentQuarter,
@@ -674,4 +698,5 @@ export {
   getAssetEmassMapForUnassigned,
   formatCsvString,
   getAssetMetadata,
+  getLastTouched
 };
