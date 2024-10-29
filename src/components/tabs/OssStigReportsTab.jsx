@@ -701,7 +701,7 @@ const OssStigReportsTab = () => {
               {showBenchmark && (
                 <div id="benchmarkDiv">
                   <label htmlFor="benchmarkText">
-                    <br /> Optional: Enter Benchmark ID:{" "}
+                    <br /> Optional: Enter Benchmark ID (case sensitive):{" "}
                   </label>
                   <input
                     id="benchmarkText"
