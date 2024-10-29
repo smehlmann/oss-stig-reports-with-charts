@@ -21,6 +21,7 @@ async function runSAReportWithMetricsAndVersions(auth, emassMap, benchmark) {
       { label: "Latest Revision", key: "latestRev" },
       { label: "Previous Revision", key: "prevRev" },
       { label: "Current Quarter STIG Version", key: "quarterVer" },
+      { label: 'Last Touched', key: 'lastTouched' },
       { label: "Assessed", key: "assessed" },
       { label: "Submitted", key: "submitted" },
       { label: "Checks", key: "checks" },
@@ -181,8 +182,6 @@ function getRow(
   var avgAssessed = 0;
   var avgSubmitted = 0;
   var checks = numAssessments;
-  //var avgAccepted = 0;
-  //var avgRejected = 0;
   var temp = 0;
 
   if (numAssessments) {
@@ -191,13 +190,9 @@ function getRow(
 
     temp = ((numSubmitted + numAccepted + numRejected) / numAssessments) * 100;
     avgSubmitted = temp.toFixed(2);
-
-    /*temp = (numAccepted / numAssessments) * 100;
-    avgAccepted = temp.toFixed(2);
-
-    temp = (numRejected / numAssessments) * 100;
-    avgRejected = temp.toFixed(2);*/
   }
+
+  const lastTouched = reportUtils.getLastTouched(metrics);
 
   const assetName = asset.name;
   const collectionMetadata = reportUtils.getMetadataByAsset(
@@ -214,6 +209,7 @@ function getRow(
     latestRev: latestRev,
     prevRev: prevRev,
     quarterVer: quarterVer,
+    lastTouched: lastTouched,
     assessed: avgAssessed + "%",
     submitted: avgSubmitted + "%",
     checks: checks,
