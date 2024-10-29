@@ -216,6 +216,9 @@ export default function ReportColumns({ index, item, selectedReport }) {
                         {item.quarterVer}
                     </td>
                     <td>
+                        {item.lastTouched}
+                    </td>
+                    <td>
                         {item.assessed}
                     </td>
                     <td>
