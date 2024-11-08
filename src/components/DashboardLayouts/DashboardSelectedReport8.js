@@ -1,7 +1,6 @@
 import React, { useMemo,} from "react";
 import {ThemeProvider,Box, Typography } from "@mui/material";
-// import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
-import SimpleExpandableTable from "../../charts/TableUsingMUI/SimpleExpandableTable";
+import TwoLevelTableDataFormatter from "../../charts/ExpandableTables/TwoLevelTable/TwoLevelTableDataFormatter";
 import HorizontalBarChartCard from "../Cards/HorizontalBarChartCard.js";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import theme from "../../theme";
@@ -12,6 +11,8 @@ import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
 import GroupedAveragesBar from "../../charts/BarCharts/ApexCharts/GroupedAveragesBar.js";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart.js";
+// import GroupedOrStackedBar from "../../charts/BarCharts/ApexCharts/GroupedOrStackedBar";
+
 
 /*
  Displays report option 4. STIG Benchmark Version Deltas (eMASS number(s) required)
@@ -53,7 +54,7 @@ const DashboardSelectedReport5 = ({ data, title }) => {
               </Box>
             </Grid> 
 
-          
+            {/* displays horizontal bar chart */}
             <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
               <HorizontalBarChartCard title = 'Assets by STIG Benchmark'>
                <ApexCountByValueBarChart
@@ -66,12 +67,28 @@ const DashboardSelectedReport5 = ({ data, title }) => {
               </HorizontalBarChartCard>
             </Grid> 
 
+
+            {/* <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
+              <HorizontalBarChartCard title = 'Assets by STIG Benchmark'>
+               <GroupedOrStackedBar
+                  groupByColumn="benchmarkId"
+                  breakdownColumn="sysAdmin"
+                  isHorizontal={true}
+                  isStackedBarChart={true}
+                  xAxisTitle="Number of Assets"
+                  yAxisTitle= "STIG Benchmark"
+                  data={filteredData}
+                />
+              </HorizontalBarChartCard>
+            </Grid>  */}
+
+
             <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
               <HorizontalBarChartCard title = 'Assets by STIG Benchmark'>
                 <GroupedAveragesBar
                   groupByColumn='benchmarkId'
-                  breakdownColumns={['asessed', 'submitted']}
-                  showDataLabels={false}
+                  breakdownColumns={['assessed', 'submitted']}
+                  showLabelsOnBars={false}
                   dataLabelsArePercentages = {true}
                   isHorizontal={true}
                   isStackedBarChart={false}
@@ -85,7 +102,7 @@ const DashboardSelectedReport5 = ({ data, title }) => {
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
                 {/* <Report8BenchmarksExpanded data={filteredData}/> */}
-                <SimpleExpandableTable 
+                <TwoLevelTableDataFormatter
                   parentRowColumn="benchmarkId"
                   childRows={["collectionName", "asset", "sysAdmin", "primOwner", "latestRev", 
                     "quarterVer"]} 

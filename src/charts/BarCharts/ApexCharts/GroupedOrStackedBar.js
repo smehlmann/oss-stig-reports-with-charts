@@ -1,17 +1,14 @@
 // import React, { useMemo } from "react";
 
 import React, { useMemo, useEffect} from "react";
-
-import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 // import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
 import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
-// import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
 import GroupedOrStackedBarBuilder from "./GroupedOrStackedBarBuilder.js";
 // import ValueCountMap from "../../../components/ValueCountMap.js";
 
 
-const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, showDataLabels, isHorizontal, isStackedBarChart, chartTitle, xAxisTitle, yAxisTitle, data }) => {
+const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, showLabelsOnBars, isHorizontal, isStackedBarChart, xAxisTitle, yAxisTitle, data }) => {
   
   const { filter, updateFilter, removeFilterKey } = useFilter();
 
@@ -169,49 +166,18 @@ useEffect(() => {
     }
   };
 
-  //function to render the appropriate chart based on orientation
-  const renderChart = () => {
-    if (isHorizontal) {
-      return (
-        <GroupedOrStackedBarBuilder
-          dataLabels={barLabels}
-          series={updatedSeries}
-          title={chartTitle}
-          showDataLabels={showDataLabels}
-          isHorizontal={isHorizontal}
-          isStackedBarChart={isStackedBarChart}
-          xAxisHeader={xAxisTitle}
-          yAxisHeader={yAxisTitle}
-          onClick={handleBarClick}
-        />
-      );
-    } else {
-      return (
-      //   <div>
-      //   {barValues.map((val, index) => (
-      //   <div key={index}>
-      //     <body1>Name: {barLabels[index]} </body1><br></br>
-      //     <body2>Count: {val}</body2>
-      //     <hr />
-      //   </div>
-      // ))} 
-        <ApexBarChartBuilder
-          dataLabels={barLabels}
-          series={updatedSeries}
-          showDataLabels={showDataLabels}
-          title={chartTitle}
-          isHorizontal={isHorizontal}
-          xAxisHeader={xAxisTitle}
-          yAxisHeader={yAxisTitle}
-          onClick={handleBarClick}
-        />
-        // </div>
-      );
-    }
-  };
-
-  // Return the chart
-  return <>{renderChart()}</>;
+  return (
+    <GroupedOrStackedBarBuilder
+      dataLabels={barLabels}
+      series={updatedSeries}
+      showLabelsOnBars={showLabelsOnBars}
+      isHorizontal={isHorizontal}
+      isStackedBarChart={isStackedBarChart}
+      xAxisHeader={xAxisTitle}
+      yAxisHeader={yAxisTitle}
+      onClick={handleBarClick}
+    />
+  );
 };
 
 export default GroupedOrStackedBar;

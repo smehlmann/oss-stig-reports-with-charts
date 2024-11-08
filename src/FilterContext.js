@@ -63,7 +63,7 @@
        //determines the filtering logic for updating filter state when filter value is single value or array
   
       //retrieves current value of filter for a given key from prevFilters
-      const existingValue = prevFilters;      
+      // const existingValue = prevFilters;      
     
       //iterate over all keys in new filter
       Object.keys(newFilter).forEach(key => {

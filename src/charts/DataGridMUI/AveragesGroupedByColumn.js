@@ -27,13 +27,24 @@ const renderProgressBarCell = (params) => {
   );
 };
 
-function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
+function AveragesGroupedByColumn({ groupingColumn, data, targetColumns, source=[] }) {
   //useFilter contains 'filter' state and when it's updated
   const { filter, updateFilter } = useFilter();
   const [ setFilterModel] = useState({
     items: [],
   });
   const [averages, setAverages] = useState([]);
+
+  //returns the columns where we calculate averages
+  const columnsToCalculateAvg = useMemo(() => {
+    const filteredColumns = targetColumns.filter(currColumn =>
+      currColumn === 'assessed' ||
+      currColumn === 'submitted' ||
+      currColumn === 'accepted' ||
+      currColumn === 'rejected'
+    );
+    return filteredColumns;
+  }, [targetColumns]);
 
   // gets the data when filter has been applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
@@ -42,7 +53,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
   useEffect(() => {
     if (Array.isArray(filteredData) && filteredData) {
       //groups the filteredData by the groupingColumn by making an object whose keys=values in grouping column, values per key=array of records belonging to that group. currentItem = current item being processed. (ie. groupingColumn = code --> {'10': [all records belonging to code 10], ...}) 
-      const dataGroupedByCode = filteredData.reduce((accumulator, currentItem) => {
+      const aggregatedData = filteredData.reduce((accumulator, currentItem) => {
         //get groupingColumn value in our currentItem
         const groupingValue = currentItem[groupingColumn];
         //if groupingValue exists as key in accumulator
@@ -55,83 +66,75 @@ function AveragesGroupedByColumn({ groupingColumn, data, source=[] }) {
         return accumulator; //returns {key1:[...], key2:[...], ...}
       }, {});
       
-      // console.log("grouped by code: ", dataGroupedByCode);
       /*large object where we have {codeValue: {assessedProdSum:_, submittedProdSum:[],...}, codeValue2:{...}, }
       groupingVal is codeVal, dataPerGroup is array of entries where key=codeValue
       acc stores the calculated sum of products for each entry within the array of entries grouped by the groupingColumn (ie. products of entries in the values array from dataGroupedByCode)
-      basically [groupingValue, dataPerGroup] destructures entries of dataGroupedByCode into {grouingVal: dataPerGroup}
+      basically [groupingValue, dataPerGroup] destructures entries of dataGroupedByCode into {groupingVal: dataPerGroup}
       */
-      let groupedAverages = Object.entries(dataGroupedByCode).reduce((acc, [groupingValue, dataPerGroup]) => {
-        let assessedProductSum = 0; //contains (checks[i]*assessed[i])
-        let submittedProductSum = 0;
-        let acceptedProductSum = 0;
-        let rejectedProductSum = 0;
+      let groupedAverages = Object.entries(aggregatedData).reduce((acc, [groupingValue, dataPerGroup]) => {
+        let productSums = []; //stores the cumulative sum of products for each targetColumn; ie. {assessed: sum( checks[i]*assessed[i] ), ...}
         let assetCount = 0;
-        let totalChecksPerCode = 0; //will store the total checks per code
+        let checksPerGroup = 0;
         let delinquentCount = 0;
-        //for each entry in dataPerGroup
+        
+        //initialize each targetColumn's sum to in productSums
+        targetColumns.forEach(column => {
+          productSums[column] = 0;
+        })
+
+
+        //iterate over each item within a group to calculate totalChecksPerGroup and sum of products (productSums) for each targetColumn
         dataPerGroup.forEach(item => {
-          //accesses nested object (codeVal: entries)- and extracts product properties from said object and assigns them corresponding variables 
-          const { checks, assessed, submitted, accepted, rejected, asset} = item;
+          const assetPerItem = item.asset;
+          const checksInItem = item.checks;
+          checksPerGroup += checksInItem;
 
-          //sum of checks for each code
-          totalChecksPerCode +=checks;
-
-          //get the number of unique assets
+          //get assetCounts for
           if(source === 'report7') {
-            assetCount +=asset;
+            assetCount +=assetPerItem;
           }else {
-            const countMap = ValueCountMap(dataPerGroup, asset);
+            const countMap = ValueCountMap(dataPerGroup, assetPerItem);
             assetCount = Object.values(countMap)[0];
           }
 
-
-          // console.log("delinquentMap: ", delinquentMap);
-          // delinquentCount 
-
-          //for each entry in my value array, calculate the checks[i] * assessed[i] and push it to assessedProductSum array. 
-          assessedProductSum += (checks * (assessed || 0));
-          submittedProductSum += (checks * (submitted || 0));
-          acceptedProductSum += (checks * (accepted || 0));
-          rejectedProductSum += (checks * (rejected || 0));
+          /* 
+          calculates cumulative product for each targetColumn within each group
+          ie. for each entry in my value array, calculate the checks[i] * assessed[i] and add it to totalSums[assessed].  */
+          targetColumns.forEach(targetColumn => {
+            productSums[targetColumn] += checksInItem * (item[targetColumn] || 0);
+          });
         });
 
-        //get count where 'delinquent' value = 'Yes'
-        delinquentCount = dataPerGroup.filter(
-          item => item['delinquent'] === 'Yes'
-        ).length;
+        //calculate averages for appropriate targetColumns
+        const averages = {};
 
+        //for each targetColumn, a new key is created (ie.avgAssessed) and get value = productSums['assessed']/totalChecksPerGroup 
+        targetColumns.forEach(targetColumn => {
+          //if column = 'assessed', 'submitted'...
+          if(columnsToCalculateAvg.includes(targetColumn)) {
+            averages[`avg${targetColumn.charAt(0).toUpperCase() + targetColumn.slice(1)}`] = productSums[targetColumn] / checksPerGroup;
+          } //ie. averages={avgAssessed: (totalSums['assessed']/totalChecksPerGroup)}
+          else if(targetColumn === 'delinquent') {
+            delinquentCount = dataPerGroup.filter(item => item['delinquent'] === 'Yes'
+            ).length;
+          }
+        })
 
-        //calculate the averages (ProductSum/totalChecksPerCode)
-        const avgAssessed = assessedProductSum/totalChecksPerCode;
-        const avgSubmitted = submittedProductSum/totalChecksPerCode;
-        const avgAccepted = acceptedProductSum/totalChecksPerCode;
-        const avgRejected = rejectedProductSum/totalChecksPerCode;
-
-        //for each grouping value, store avgs in acc under each groupingVal
-        acc[groupingValue] = {
+        //add groupingValue and averages to acc
+        acc.push({
           id: groupingValue,
-          groupingColumn: groupingValue,
+          [groupingColumn]: groupingValue,
           assetCount,
           delinquentCount,
-          avgAssessed,
-          avgSubmitted,
-          avgAccepted,
-          avgRejected,
-        };
+          ...averages,
+        });
+        
         return acc; //final accumulator = groupedAverages
-      }, {});
+      }, []);
 
-      //convert groupedProducts object to array
-      const groupedAveragesArray = Object.keys(groupedAverages).map(groupingValue => {
-        return {
-          [groupingColumn]: groupingValue,
-          ...groupedAverages[groupingValue]
-        };
-      });
-      setAverages(groupedAveragesArray);
+      setAverages(groupedAverages);
     }
-  }, [filteredData, groupingColumn, source]);
+  }, [filteredData, groupingColumn, source, columnsToCalculateAvg, targetColumns]);
 
   // handles when user clicks on row -> data filtered by selected row
  

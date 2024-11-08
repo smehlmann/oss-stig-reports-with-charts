@@ -46,8 +46,8 @@ const DashboardSelectedReport7 = ({ data, title }) => {
             <Grid lg={6} sm={6} xl={6} xs={12}>
               <ChartCardComponent title = "Assets by Package">
               <TwoPropsCountByValues
-                  labelColumn="acronym"
-                  valueColumn = "asset"
+                  categoryField="acronym"
+                  metricField = "asset"
                   isHorizontal={true}
                   xAxisTitle="Number of Assets"
                   yAxisTitle= "Acronym"

@@ -28,8 +28,6 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   "& .MuiDataGrid-root": {
     display: 'flex',
     border: 'none',
-    
-    
   },
   //Text in table cells
   "& .MuiDataGrid-cell": {
@@ -109,7 +107,7 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
 }));
 
 
-function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange, rowSelectionModel}) {
+function DataGridBuilder({ data, columns, onRowClick}) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const {filter, updateFilter } = useFilter();
@@ -137,8 +135,6 @@ function DataGridBuilder({ data, columns, onRowClick, onRowSelectionModelChange,
             value: parseFloat(filter[key]) 
       }));
       
-      // console.log('global filter: ', filter);
-
       //apply the contents of global filter to data grid filter
       setFilterModel({ items: dataGridFilterContents });
 

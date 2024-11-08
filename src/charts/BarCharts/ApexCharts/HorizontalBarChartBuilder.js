@@ -129,7 +129,6 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
             if (formatLabelToPercentage) {
               return formatLabelToPercentage.formatter(value);
             }
-            console.log('value in formatter: ', value);
             return value;
           },
           
@@ -155,122 +154,6 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
     grid: {
       left: 400,
     },
-    
-  //  responsive : [
-  //     {
-  //       breakpoint: 1520,
-  //       options: {
-  //         enableToolbar: true,
-  //         yaxis: {
-  //           labels: {
-  //             formatter: function (value) {
-  //               if (formatLabelToPercentage) {
-  //                 return formatLabelToPercentage.formatter(value);
-  //               }
-  //               return value;
-  //             },
-  //             style: {
-  //               fontSize: '10px',
-  //             },
-  //           },
-  //           title: {
-  //             style: {
-  //               fontSize: '10px',
-  //             },
-  //           },
-  //         },
-  //         grid: {
-  //           left: 400,
-
-  //         },
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 1280,
-  //       options: {
-  //         enableToolbar: true,
-  //         xaxis: {
-  //           labels: {
-  //             style: {
-  //               fontSize: '11px',
-  //             },
-  //           },
-  //           title: {
-  //             style: {
-  //               fontSize: '11px',
-  //             },
-  //           },
-  //         },
-  //         yaxis: {
-  //           labels: {
-  //             formatter: function (value) {
-  //               if (formatLabelToPercentage) {
-  //                 return formatLabelToPercentage.formatter(value);
-  //               }
-  //               return value;
-  //             },
-  //             style: {
-  //               fontSize: '11px',
-  //             },
-              
-  //           },
-  //           title: {
-  //             style: {
-  //               text: yAxisHeader,
-  //               fontSize: '12px',
-  //             },
-  //           },
-  //         },
-  //         // grid: {
-  //         //   left: 400,
-  //         //   opacity: 0.8,
-  //         //   padding: {
-  //         //   }
-  //         // },
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 800,
-  //       options: {
-  //         enableToolbar: true,
-  //         xaxis: {
-  //           labels: {
-  //             style: {
-  //               fontSize: '8px',
-  //             },
-  //           },
-  //           title: {
-  //             style: {
-  //               fontSize: '10px',
-  //             },
-  //           },
-  //         },
-  //         yaxis: {
-  //           labels: {
-  //             style: {
-  //               fontSize: '8px',
-  //             },
-  //           },
-  //           title: {
-  //             style: {
-  //               text: yAxisHeader,
-  //               fontSize: '8px',
-  //             },
-  //           },
-  //         },
-  //         title: {
-  //           style: {
-  //             fontSize: '15px',
-  //           },
-  //         },
-  //         // grid: {
-  //         //   left: 400,
-  //         //   opacity: 0.5,
-  //         // },
-  //       },
-  //     },
-      
-  //   ],
   });
 
   

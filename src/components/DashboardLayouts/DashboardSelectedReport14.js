@@ -5,9 +5,9 @@ import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCoun
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/HistoricalDataTracker"
 import ChartCardComponent from "../Cards/ChartCardComponent";
-import {darkTheme, theme} from '../../theme.js';
+import { theme} from '../../theme.js';
 import {  useFilter } from "../../FilterContext";
-import MultiLevelCollapsibleTable from "../../charts/TableUsingMUI/MultiLevelExpandableTable/MultiLevelCollapsibleTable.js";
+import MultiLevelTableDataFormatter from "../../charts/ExpandableTables/MultiLevelExpandableTable/MultiLevelTableDataFormatter.js";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import StatisticsCardGroup from "../Cards/StatisticsCardsGroup.js";
 import HistoricalDataGrid from "../../charts/DataGridMUI/HistoricalDataGrid";
@@ -80,7 +80,8 @@ const DashboardSelectedReport14 = ({ data, title}) => {
                 <HistoricalDataGrid 
                   groupingColumn = 'code'
                   data={filteredData} 
-                  targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", "checks", "datePulled"]} 
+                  // targetColumns={["datePulled", "asset", "delinquent", "assessed", "submitted", "accepted", "rejected", "checks"]} 
+                  targetColumns={[ "assessed", "submitted", "accepted", "rejected", "checks"]} 
                 />
               </TableGridCardComponent>
             </Grid>
@@ -109,12 +110,12 @@ const DashboardSelectedReport14 = ({ data, title}) => {
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
-                <MultiLevelCollapsibleTable 
+                <MultiLevelTableDataFormatter 
                   parentRowColumn = "shortName"
                   firstLevelChildRows = {['asset', 'sysAdmin', 'primOwner', 'assessed', 'submitted', 'accepted']}
                   firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Assessed %', 'Submitted %', 'Accepted %']}
                   secondLevelChildRows = {['benchmarks']}
-                  secondLevelChildRowHeaders = {['benchmarks']}
+                  secondLevelChildRowHeaders = {['Benchmarks']}
                   data={filteredData}
                 />
               </ExpandableTableCardComponent>
@@ -125,7 +126,6 @@ const DashboardSelectedReport14 = ({ data, title}) => {
       </ThemeProvider>
     );
   }
-
 
   //group all data entries by their date
   const dataGroupedByDate = filteredData.reduce((accumulator, currentItem) => {
@@ -145,9 +145,6 @@ const DashboardSelectedReport14 = ({ data, title}) => {
 
   //get values (entries from latest date)
   const dataFromLastPullDate = Object.values(latestDateObj)[0];
-  
-
-
   
   return (
     <ThemeProvider theme={theme}>
@@ -177,10 +174,10 @@ const DashboardSelectedReport14 = ({ data, title}) => {
               <HistoricalDataGrid 
                 groupingColumn = 'code'
                 data={dataFromLastPullDate} 
-                targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", "checks", "datePulled", "delinquent"]} 
+                targetColumns={["datePulled", "asset", "delinquent", "assessed", "submitted", "accepted", "rejected" ]} 
               />
             </TableGridCardComponent>
-          </Grid>    
+          </Grid>     
           
           <Grid lg={4} md={4} sm={12} xl={6} xs={12}>
             <ChartCardComponent title = "Assets by Packages">
@@ -205,14 +202,16 @@ const DashboardSelectedReport14 = ({ data, title}) => {
                 data={filteredData}
               />
             </ChartCardComponent>
-          </Grid> 
+          </Grid>  
 
 
           <Grid lg={12} sm={12} xl={12} xs={12}>
             <ExpandableTableCardComponent>
-              <MultiLevelCollapsibleTable 
+              <MultiLevelTableDataFormatter 
                 parentRowColumn = "shortName"
+                firstLevelChildRows = {['asset', 'sysAdmin', 'primOwner', 'assessed', 'submitted', 'accepted']}
                 firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Assessed %', 'Submitted %', 'Accepted %']}
+                secondLevelChildRows = {['benchmarks']}
                 secondLevelChildRowHeaders = {['benchmarks']}
                 data={filteredData}
               />

@@ -7,7 +7,7 @@ const GroupedOrStackedBarBuilder = ({
   series,
   dataLabels,
   dataLabelsArePercentages,
-  showDataLabels,
+  showLabelsOnBars,
   isHorizontal,
   isStackedBarChart,
   xAxisHeader,
@@ -33,8 +33,9 @@ const GroupedOrStackedBarBuilder = ({
       fontSize: '14px',
       fontFamily: 'Segoe UI',
       fontWeight: '600',
-      margin: '0',
+      margin: 0,
       textAlign: 'center',
+      
     }),
     []
   );
@@ -83,17 +84,25 @@ const GroupedOrStackedBarBuilder = ({
       },
       xaxis: {
         categories: dataLabels,
-        title: { text: xAxisHeader },
+        title: { text: xAxisHeader, style: axisTitleStyle },
         labels: {
           formatter: dataLabelFormatter,
         },
       },
       yaxis: {
         title: { text: yAxisHeader, 
-          style: axisTitleStyle, offsetX: 2
+          style: axisTitleStyle, 
+          // offsetX: 2,
         },
         labels: {
           maxWidth: 430,
+          offsetX: 6,
+          style: {
+            fontFamily: 'Segoe UI, Arial, sans-serif',
+            fontWeight: 400,
+            fontSize: '12px',
+            cssClass: 'apexcharts-yaxis-label',
+          }
         },
       },
       tooltip: {
@@ -132,7 +141,7 @@ const GroupedOrStackedBarBuilder = ({
         left: 400,
       },
       dataLabels: {
-        enabled: showDataLabels,
+        enabled: showLabelsOnBars,
         labels: {
           formatter: function (value) {
             if (formatLabelToPercentage) {
@@ -177,8 +186,9 @@ const GroupedOrStackedBarBuilder = ({
         // }
       },
     }),
-    [dataLabels, isHorizontal, xAxisHeader, showDataLabels, yAxisHeader, onClick, axisTitleStyle, formatLabelToPercentage, isStackedBarChart, barColors, dataLabelFormatter]
+    [dataLabels, isHorizontal, xAxisHeader, showLabelsOnBars, yAxisHeader, onClick, axisTitleStyle, formatLabelToPercentage, isStackedBarChart, barColors, dataLabelFormatter]
   );
+
 
   const chartHeight = Math.max(400, dataLabels.length * 26); //each row is 26px in height
 

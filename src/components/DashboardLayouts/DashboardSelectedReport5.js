@@ -7,7 +7,7 @@ import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent"
 import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
 import StatisticsCardGroup from "../Cards/StatisticsCardsGroup.js";
-import MultiLevelCollapsibleTable from "../../charts/TableUsingMUI/MultiLevelExpandableTable/MultiLevelCollapsibleTable";
+import MultiLevelTableDataFormatter from "../../charts/ExpandableTables/MultiLevelExpandableTable/MultiLevelTableDataFormatter.js";
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
 import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
@@ -87,12 +87,12 @@ const DashboardSelectedReport5 = ({ data, title }) => {
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
-                <MultiLevelCollapsibleTable 
+                <MultiLevelTableDataFormatter 
                   parentRowColumn = "shortName"
                   firstLevelChildRows = {['asset', 'sysAdmin', 'primOwner', 'assessed', 'submitted', 'accepted']}
                   firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Assessed %', 'Submitted %', 'Accepted %']}
                   secondLevelChildRows = {['benchmarks']}
-                  secondLevelChildRowHeaders = {['benchmarks']}
+                  secondLevelChildRowHeaders = {['Benchmarks']}
                   data={filteredData}
                 />
               </ExpandableTableCardComponent>

@@ -41,7 +41,6 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
         <HorizontalBarChartBuilder
           dataLabels={barLabels}
           dataValues={barValues}
-          title={chartTitle}
           isHorizontal={isHorizontal}
           xAxisHeader={xAxisTitle}
           yAxisHeader={yAxisTitle}

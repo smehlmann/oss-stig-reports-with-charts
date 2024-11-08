@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-// import { Chart } from "chart.js/auto";
 import ValueCountMap from "../../../components/ValueCountMap.js";
 // import PieChartBuilder from "./PieChartBuilder.js";
 import ApexDonutChartBuilder from "./ApexDonutChartBuilder.js";

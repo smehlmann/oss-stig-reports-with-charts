@@ -5,43 +5,45 @@ import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
 import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
 import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
 
-const ValueSumMap = (data, targetColumn, valueColumn) => {
+//calculates the total of vlaues in the specified numeric field for each unique category in targetColumn
+const ValueSumMap = (data, targetColumn, numericalField) => {
   return data.reduce((acc, item) => {
-    const key = item[targetColumn];
-    const value = item[valueColumn];
-
+    const key = item[targetColumn]; //category of current item
+    const value = item[numericalField]; //numerical for current item
+    //if category not in accumulator, initialize it
     if (!acc[key]) {
       acc[key] = 0;
     }
+    //add current item's value to the sum for this category
     acc[key] += value;
     return acc;
   }, {});
 };
 
-const TwoPropsCountByValues = ({ labelColumn, valueColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
+const TwoPropsCountByValues = ({ categoryField, metricField, isHorizontal, xAxisTitle, yAxisTitle, data }) => {
   const { filter, updateFilter } = useFilter();
 
   //gets the data when filter is applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
-  const sumMap = useMemo(() => ValueSumMap(filteredData, labelColumn, valueColumn), [filteredData, labelColumn, valueColumn]);
+  //gets the sum of numbers for each item in the categoryField
+  const sumMap = useMemo(() => ValueSumMap(filteredData, categoryField, metricField), [filteredData, categoryField, metricField]);
   const barLabels = useMemo(() => Object.keys(sumMap), [sumMap]);
   const barValues = useMemo(() => Object.values(sumMap), [sumMap]);
 
-  console.log(sumMap);
-  // updates the filter criteria based on user's click
+  //updates the filter criteria based on user's click
   const handleBarClick = (event, chartContext, config) => {
     const categoryLabels = config.w.globals.labels || config.w.globals.categories;
     const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;
 
     if (selectedValue) {
-      // Check if the selected value is already in the filter
-      if (filter[labelColumn] === selectedValue) {
-        // Remove the filter
-        updateFilter({ [labelColumn]: undefined });
+      //check if the selected value is already in the filter
+      if (filter[categoryField] === selectedValue) {
+        //remove from the filter
+        updateFilter({ [categoryField]: undefined });
       } else {
-        // Add the filter
-        updateFilter({ [labelColumn]: selectedValue });
+        //add to the filter
+        updateFilter({ [categoryField]: selectedValue });
       }
     }
   };
@@ -55,7 +57,6 @@ const TwoPropsCountByValues = ({ labelColumn, valueColumn, isHorizontal, chartTi
         <HorizontalBarChartBuilder
           dataLabels={barLabels}
           dataValues={barValues}
-          title={chartTitle}
           isHorizontal={isHorizontal}
           xAxisHeader={xAxisTitle}
           yAxisHeader={yAxisTitle}
@@ -65,18 +66,9 @@ const TwoPropsCountByValues = ({ labelColumn, valueColumn, isHorizontal, chartTi
       );
     } else {
       return (
-      //   <div>
-      //   {barValues.map((val, index) => (
-      //   <div key={index}>
-      //     <body1>Name: {barLabels[index]} </body1><br></br>
-      //     <body2>Count: {val}</body2>
-      //     <hr />
-      //   </div>
-      // ))} 
         <ApexBarChartBuilder
           dataLabels={barLabels}
           dataValues={barValues}
-          title={chartTitle}
           isHorizontal={isHorizontal}
           xAxisHeader={xAxisTitle}
           yAxisHeader={yAxisTitle}

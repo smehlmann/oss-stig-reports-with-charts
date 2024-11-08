@@ -12,7 +12,7 @@ import {
   ExpandedTableCell,
   ExpandedContentCell,
   Expanded2ndLevelHeaderCell,
-} from '../StyledTableComponents.js';
+} from '../RenderingLogic/StyledTableComponents.js';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -21,7 +21,7 @@ import Box from '@mui/material/Box';
 
 
 //handles rendering for 2nd-level child row (row containing Benchmarks)
-function NestedSecondLevelChildRow({ childRow }) {
+function SecondLevelChildRenderer({ childRow, key, firstLevelChildRows, secondLevelChildRows, secondLevelChildRowHeaders}) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
@@ -29,6 +29,7 @@ function NestedSecondLevelChildRow({ childRow }) {
   //handles pagination and page switching
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  
   const handleToggleOpen = () => {
     setOpen(!open);
   };
@@ -41,31 +42,29 @@ function NestedSecondLevelChildRow({ childRow }) {
   };
 
 //second-level-child-row
-  const filteredBenchmarks = childRow.benchmarks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const filteredBenchmarks = childRow[secondLevelChildRows].slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   return (
     <>
-      <StyledTableRow className="first-level-child-row">
-        <ExpandedTableCell>
+      <StyledTableRow key={key}>
+          {firstLevelChildRows.map((key, keyInObjIndex) => (
+        <ExpandedTableCell key={keyInObjIndex}>
+         {/* render IconButton for first column */}
+         {keyInObjIndex === 0 && (
           <IconButton onClick={handleToggleOpen}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            {open 
+              ? <KeyboardArrowUpIcon /> 
+              : <KeyboardArrowDownIcon />
+            }
           </IconButton>
-          {childRow.asset}
+         )}
+          {percentageFormatterObject.formatter(childRow[key])} 
         </ExpandedTableCell>
-        <ExpandedTableCell>{childRow.sysAdmin}</ExpandedTableCell>
-        <ExpandedTableCell>{childRow.primOwner}</ExpandedTableCell>
-        <ExpandedTableCell>
-          {percentageFormatterObject.formatter(childRow.assessed)}
-        </ExpandedTableCell>
-        <ExpandedTableCell>
-          {percentageFormatterObject.formatter(childRow.submitted)}
-        </ExpandedTableCell>
-        <ExpandedTableCell>
-          {percentageFormatterObject.formatter(childRow.accepted)}
-        </ExpandedTableCell>
+      ))}
       </StyledTableRow>
 
+
       {/* display second-level child (third level down)*/}
-      {open && childRow.benchmarks && (
+      {open && childRow[secondLevelChildRows] && (
         <StyledTableRow>
           <ExpandedContentCell colSpan={6} sx={{ backgroundColor: '#EAEAEA' }}> {/* area around table */}
             <Collapse in={open} timeout="auto" unmountOnExit>
@@ -73,14 +72,20 @@ function NestedSecondLevelChildRow({ childRow }) {
                 <StyledChildTableContainer>
                   <StyledTable size="small" aria-label="benchmarks table">
                     <ExpandedTableHead sx={{ backgroundColor: theme.palette.secondary.dark}}>
-                      <StyledTableRow>
-                        <Expanded2ndLevelHeaderCell>Benchmarks</Expanded2ndLevelHeaderCell>
-                      </StyledTableRow>
+                        {secondLevelChildRowHeaders.map((headerName, index ) => (
+                        <Expanded2ndLevelHeaderCell key={index}> 
+                            {headerName}
+                        </Expanded2ndLevelHeaderCell>
+                      ))} 
                     </ExpandedTableHead>
                     <TableBody>
                       {filteredBenchmarks.map((benchmark, index) => (
                         <StyledTableRow key={index} className="second-level-child-row">
-                          <ExpandedTableCell>{benchmark}</ExpandedTableCell>
+                          {secondLevelChildRows.map((key, keyInObjIndex) => (
+                            <ExpandedTableCell key={keyInObjIndex}> 
+                              {benchmark} 
+                            </ExpandedTableCell>
+                          ))}
                         </StyledTableRow>
                       ))}
                     </TableBody>
@@ -103,4 +108,4 @@ function NestedSecondLevelChildRow({ childRow }) {
     </>
   );
 };
-export default NestedSecondLevelChildRow;
+export default SecondLevelChildRenderer;

@@ -16,7 +16,7 @@ const ApexBarAvgChart = ({ targetColumns, isHorizontal, xAxisTitle, yAxisTitle, 
   //gets the data when filter is applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
   
-  //keeps track of averages for each column 
+  //keeps track of averages for each column (NO LONGER USED. NEEDS UPDATING)
   const averageMap = useMemo(() => PropertyAvgMap(filteredData, targetColumns), [filteredData, targetColumns]);
 
   //capitalize first letter of the donutLabels

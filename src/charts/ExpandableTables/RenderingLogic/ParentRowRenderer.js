@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import TablePagination from '@mui/material/TablePagination';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -11,31 +9,23 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useFilter } from '../../../FilterContext';
 
 import {
-  StyledTableContainer,
   StyledTableRow,
-  StyledTableHead,
-  StyledHeaderCell,
   StyledTableCell,
-  StyledTable,
   ExpandedContentCell,
   SearchBarContainer,
   SearchTextField,
-} from '../StyledTableComponents';
+} from './StyledTableComponents';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 
-// renders a row in the table; manages expanded (open) and non-expanded state,
-function Row({ parentRow, columns, renderChildRow, childRowCount}) {
+// renders a row in the table; manages expanded (open) and non-expanded state
+function ParentRowRenderer({ parentRow, columns, renderChildRow, childRowCount, filterProperty }) {
+
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchText, setSearchText] = useState("");
   const { filter, updateFilter, removeFilterKey } = useFilter();
-
-
-  // const listItems = columns.map((item) => (
-  //   <li key={item.id}> </li>
-  // ));
   
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -51,7 +41,7 @@ function Row({ parentRow, columns, renderChildRow, childRowCount}) {
     setPage(0); // Reset page to 0 on search
   };
 
-  const handleToggleOpen = () => {
+  const handleToggleOpen = (key) => {
     setOpen((prevOpen) => {
       const newOpen = !prevOpen; //set state of open to opposite of previous state
   
@@ -59,8 +49,10 @@ function Row({ parentRow, columns, renderChildRow, childRowCount}) {
       if (newOpen) {
         //checks if parentRow is valid
         if (parentRow && Object.keys(parentRow).length > 0) {
-          const key = Object.keys(parentRow)[0];
-          const value = parentRow[key];
+
+          const key = filterProperty ? filterProperty : Object.keys(parentRow)[0];
+          const value = parentRow.row ? parentRow.row : parentRow[key];
+
           //extracts first key-value pair from parentRow and updates the filter with key-value pair,specifying source
           updateFilter({ [key]: value }, 'expandableTable');
         } else {
@@ -70,8 +62,8 @@ function Row({ parentRow, columns, renderChildRow, childRowCount}) {
       //table row is collapsed, remove it from filter.
       else {
         if (Object.keys(filter).length > 0) {
-          const key = Object.keys(parentRow)[0];
-          removeFilterKey(key);
+          // const key = Object.keys(parentRow)[0];
+          removeFilterKey(filterProperty);
         } 
       }
       return newOpen;
@@ -87,7 +79,8 @@ function Row({ parentRow, columns, renderChildRow, childRowCount}) {
           <IconButton onClick={handleToggleOpen}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-          {parentRow[columns[0].id]}
+            {/* {parentRow[columns[0].id]} */}
+            {parentRow.row ? parentRow.row : parentRow[columns[0].id]}
         </StyledTableCell>
         {columns.slice(1).map((column) => (
           <StyledTableCell key={column.id} align={column.align}>
@@ -133,7 +126,6 @@ function Row({ parentRow, columns, renderChildRow, childRowCount}) {
                       <TablePagination
                         rowsPerPageOptions={[5, 10, 15]}
                         component="div"
-
                         count={childRowCount}
                         rowsPerPage={rowsPerPage}
                         page={page}
@@ -155,127 +147,5 @@ function Row({ parentRow, columns, renderChildRow, childRowCount}) {
   );
 }
 
-export const MultiLevelTableBuilder = ({ rows, columns, renderChildRow, filterProperty, childRowCount}) => {
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+export default ParentRowRenderer;
 
-  //sorting logic
-  const sortedRows = React.useMemo(() => {
-    if (sortConfig.key) {
-      return [...rows].sort((a, b) => {
-        const aValue = a[sortConfig.key];
-        const bValue = b[sortConfig.key];
-        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
-        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
-        return 0;
-      });
-    }
-    return rows;
-  }, [rows, sortConfig]);
-
-  const handleSortRequest = (columnId) => {
-    setSortConfig((prevSortConfig) => {
-      //toggle between descending or ascending values
-      const newDirection =
-        prevSortConfig.key === columnId && prevSortConfig.direction === 'asc'
-          ? 'desc'
-          : 'asc';
-      return { key: columnId, direction: newDirection };
-    });
-  };
-  return (
-    <StyledTableContainer>
-      <StyledTable aria-label="collapsible table">
-        <StyledTableHead>
-          <TableRow sx={{ '& th': { border: 'none' } }}>
-            {columns.map((header, index) => (
-              <React.Fragment key={header.id}>
-                {index === 0 && (
-                  <StyledHeaderCell
-                    onClick={() => handleSortRequest(header.id)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {header.label}
-                    {/* Add icon to indicate sort direction */}
-                    {sortConfig.key === header.id && (
-                      sortConfig.direction === 'asc' ? ' ▲' : ' ▼'
-                    )}
-                  </StyledHeaderCell>
-                )}
-              </React.Fragment>
-            ))}
-          </TableRow>
-        </StyledTableHead>
-        <TableBody>
-          {sortedRows.map((row) => (
-            <Row
-              key={row.id}
-              parentRow={row}
-              columns={columns}
-              renderChildRow={renderChildRow}
-              childRowCount={childRowCount}
-            />
-          ))}
-        </TableBody>
-      </StyledTable>
-    </StyledTableContainer>
-  );
-  
-  // return (
-  //   <StyledTableContainer>
-  //     <StyledTable aria-label="collapsible table">
-  //       <StyledTableHead>
-  //         <TableRow sx={{ "& th": { border: 'none'} }}>
-  //           {columns.map((header, index) => (
-  //             <React.Fragment key={header.id}>
-  //               {index === 0 && <StyledHeaderCell>{header.label}</StyledHeaderCell>}
-  //               {index !== 0 && (
-  //                 <StyledHeaderCell key={header.id} align={header.align}>
-  //                   {header.label}
-  //                 </StyledHeaderCell>
-  //               )}
-  //             </React.Fragment>
-  //           ))}
-  //         </TableRow>
-  //       </StyledTableHead>
-  //       <TableBody>
-  //         {rows.map((row) => (
-  //           <Row
-  //             key={row.id}
-  //             parentRow={row}
-  //             columns={columns}
-  //             renderChildRow={renderChildRow}
-  //           />
-  //         ))}
-  //       </TableBody>
-  //     </StyledTable>
-  //   </StyledTableContainer>
-  // );
-};
-export default MultiLevelTableBuilder;
-
-//  responsible for filtering other visualizations when row expanded
-  // const handleToggleOpen = () => {
-  //   setOpen((prevOpen) => {
-  //     const newOpen = !prevOpen;
-  //     if (newOpen && !filter) {
-  //       // Update filter based on the parent row
-  //       console.log('Table opened and filter is empty');
-  //       console.log('Parent row:', parentRow);
-  //       updateFilter({ [filterProperty]: parentRow[filterProperty] });
-  //     } else if (newOpen && filter) {
-
-  //       console.log('Table opened and filter is not empty');
-  //       console.log('Parent row:', parentRow);
-  //        // Add to the filter object and open the row
-  //     updateFilter(prevFilter => ({
-  //       ...prevFilter,
-  //       [filterProperty]: parentRow[filterProperty],
-  //     }));
-  //     }
-  //     else {
-  //       // Clear filter if collapsing the row
-  //       clearFilter();
-  //     }
-  //     return newOpen;
-  //   });
-  // };

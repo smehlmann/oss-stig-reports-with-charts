@@ -54,17 +54,17 @@ function DropdownInputValue(props) {
             padding: '4.5px 0px',
           },
           '& .MuiInputBase-root': {
-            padding: '0px 0px', // Adjust padding to align with MUI DataGrid
+            padding: '0px 0px', //padding to align with MUI DataGrid
           },
           '& .MuiFormControl-root': {
             margin: 0,
           },
           '& .MuiInput-underline:before': {
-            borderBottom: '1px solid', // Custom underline styling
+            borderBottom: '1px solid', // underline styling
             
           },
           '& .MuiInput-underline:after': {
-            borderBottom: '2px solid', // Custom underline styling when focused
+            borderBottom: '2px solid', // underline styling when focused
           },
         }}
       >

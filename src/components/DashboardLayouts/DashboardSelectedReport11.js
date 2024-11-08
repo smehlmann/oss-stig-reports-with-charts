@@ -1,7 +1,6 @@
 import React, { useMemo} from "react";
 import {ThemeProvider,Typography, Box} from "@mui/material";
 import ChartCardComponent from "../Cards/ChartCardComponent";
-
 import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
@@ -9,10 +8,9 @@ import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
-import SimpleExpandableTable from "../../charts/TableUsingMUI/SimpleExpandableTable";
+import TwoLevelTableDataFormatter from "../../charts/ExpandableTables/TwoLevelTable/TwoLevelTableDataFormatter";
 import { format } from 'date-fns';
 import GroupedOrStackedBar from "../../charts/BarCharts/ApexCharts/GroupedOrStackedBar";
-// import HorizontalBarChartCard  from "../Cards/HorizontalBarChartCard";
 
 
 
@@ -86,7 +84,7 @@ const DashboardSelectedReport11 = ({ title, data }) => {
                   
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
-                <SimpleExpandableTable 
+                <TwoLevelTableDataFormatter 
                   parentRowColumn="benchmark"
                   childRows={["asset", "primOwner", "sysAdmin", "revision", "groupId", 
                     "result", "status","modifiedDate", "modifiedBy"]} 

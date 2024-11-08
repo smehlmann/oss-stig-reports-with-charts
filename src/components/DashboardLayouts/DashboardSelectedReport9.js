@@ -9,7 +9,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
-import SimpleExpandableTable from "../../charts/TableUsingMUI/SimpleExpandableTable.js";
+import TwoLevelTableDataFormatter from "../../charts/ExpandableTables/TwoLevelTable/TwoLevelTableDataFormatter.js";
 
 /* Displays report option 5.Open Result Finding Metrics (eMASS number(s) required)  */
 
@@ -67,7 +67,7 @@ const DashboardSelectedReport9 = ({ title, data }) => {
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
-                <SimpleExpandableTable
+                <TwoLevelTableDataFormatter
                   parentRowColumn="benchmark"
                   childRows={["asset", "latestRev", "quarterVer", "status", "detail", "comment"]} 
                   expandedSectionHeaders={['Asset', 'Latest Revision', 'Current Quarter STIG', 'Status', 'Detail', 'Comment']}
