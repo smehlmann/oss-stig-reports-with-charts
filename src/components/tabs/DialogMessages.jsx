@@ -61,6 +61,13 @@ const Report9DialogMessage = () => {
   )
 }
 
+const Report10DialogMessage = () => {
+
+  return (
+  <p>Displays the average percentages of assessed, submitted, accepted, and rejected by printer collection.</p>
+  )
+}
+
 export {
     Report1DialogMessage,
     Report2DialogMessage,
@@ -70,6 +77,7 @@ export {
     Report6DialogMessage,
     Report7DialogMessage,
     Report8DialogMessage,
-    Report9DialogMessage
+    Report9DialogMessage,
+    Report10DialogMessage
 };
 

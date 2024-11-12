@@ -47,6 +47,7 @@ const OssStigReportsTab = () => {
   //const [open7, setOpen7] = useState(false);
   const [open8, setOpen8] = useState(false);
   const [open9, setOpen9] = useState(false);
+  const [open10, setOpen10] = useState(false);
   const [option, setOption] = useState("");
 
   var auth = getAuth();
@@ -81,7 +82,7 @@ const OssStigReportsTab = () => {
   // this function will be called when a radio button is checked
   const onRadioChange = (e) => {
     setReport(e.target.value);
-    if (e.target.value !== "12" && e.target.value !== "14") {
+    if (e.target.value !== "12" && e.target.value !== "14"  && e.target.value !== "15") {
       setShowEmassNums(true);
     }
     if (e.target.value === "9") {
@@ -98,17 +99,6 @@ const OssStigReportsTab = () => {
 
     setDisableRunReport(false);
   };
-
-  /*const handleTokenExpiring = () => {
-    console.log("Access token expiring event fired");
-    console.log(auth.userData);
-
-    // set the new auth value in the data store
-    dispatch({ type: "refresh", auth: auth });
-
-    extendSession();
-    //setAccessTokenId(auth.userData?.access_token);
-  };*/
 
   const updateBenchmark = (event) => {
     // 👇 Get input value from "event"
@@ -136,7 +126,7 @@ const OssStigReportsTab = () => {
     //alert("Info icon clicked!");
     const option = event.currentTarget.attributes.option.nodeValue;
     setOption(option);
-    setOpen1(true);
+    setOpen1(false);
     setOpen2(false);
     setOpen3(false);
     setOpen4(false);
@@ -144,6 +134,7 @@ const OssStigReportsTab = () => {
     setOpen6(false);
     setOpen8(false);
     setOpen9(false);
+    setOpen10(false);
     switch (option) {
       case "report1":
         setOpen1(true);
@@ -168,6 +159,9 @@ const OssStigReportsTab = () => {
         break;
       case "report9":
         setOpen9(true);
+        break;
+      case "report10":
+        setOpen10(true);
         break;
       default:
     }
@@ -202,6 +196,9 @@ const OssStigReportsTab = () => {
         break;
       case "report9":
         setOpen9(false);
+        break;
+      case "report10":
+        setOpen10(false);
         break;
       default:
     }
@@ -679,11 +676,56 @@ const OssStigReportsTab = () => {
                 </Dialog>
               </label>
               <br />
+              <label>
+                <input
+                  type="radio"
+                  value="15"
+                  checked={report === "15"}
+                  onChange={onRadioChange}
+                  disabled={isButtonDisabled}
+                />
+                <span>9. Unclass Core Printers Metrics</span>
+                <IconButton
+                  option="report10"
+                  onClick={handleInfoClick}
+                  size="small"
+                  style={{ marginLeft: 4 }}
+                >
+                  <Info fontSize="small" />
+                </IconButton>
+                <Dialog
+                  open={open10}
+                  onClose={handleInfoClose}
+                  fullWidth
+                  maxWidth="md"
+                  PaperProps={{
+                    sx: {
+                      position: "absolute",
+                      top: 0,
+                      margin: 5,
+                    },
+                  }}
+                >
+                  <DialogContent>
+                    <Alert
+                      onClose={handleInfoClose}
+                      severity="info"
+                      sx={{ width: "100%" }}
+                    >
+                      <DialogMessages.Report10DialogMessage />
+                    </Alert>
+                    <Button onClick={handleInfoClose} color="primary">
+                      Close
+                    </Button>
+                  </DialogContent>
+                </Dialog>
+              </label>
+              <br />
               <br />
               {showEmassNum && (
                 <div id="emassDiv">
                   <label htmlFor="emassNumsText">
-                    Required for reports 4, 5, 6, 8. Optional for all others.
+                    Required for reports 4, 5, 6. Optional for all others.
                     <br /> Select eMASS Number(s) from the dropdown list.:{" "}
                   </label>
                   <div id="emassDropdown">
