@@ -9,10 +9,17 @@ import * as saReportByLabelAndEmass from "./saReportByLabelAndEmass.js";
 import * as checklistOver365Days from "./checklistOver365Days.js";
 import * as unidentifiedPackages from "./unidentifiedPackages.js";
 import * as pinnedReport from "./pinnedReport.js";
+import * as saReportByPrinter from "./saReportByPrinters.js";
 import * as reportGetters from "./reportGetters.js";
 import * as reportUtils from "./reportUtils.js";
 
-async function GenerateReport(auth, selection, inEmassNums, numDaysOver, benchmark) {
+async function GenerateReport(
+  auth,
+  selection,
+  inEmassNums,
+  numDaysOver,
+  benchmark
+) {
   var rows = [];
   var collections = [];
 
@@ -64,9 +71,7 @@ async function GenerateReport(auth, selection, inEmassNums, numDaysOver, benchma
         );
         break;
       case "5":
-        console.log(
-          "Run 2. Asset Mewtrics"
-        );
+        console.log("Run 2. Asset Mewtrics");
         rows = await saReportByAsset.runSAReportByAsset(
           auth,
           emassNums,
@@ -131,6 +136,15 @@ async function GenerateReport(auth, selection, inEmassNums, numDaysOver, benchma
         // run 7. Pinned Report
         console.log("Run 8. Pinned Report");
         rows = await pinnedReport.runPinnedReport(auth, emassMap);
+        break;
+      case "15":
+        // run 7. Pinned Report
+        console.log("Run 9. Asset Metrics for Printers");
+        rows = await saReportByPrinter.runSAReportByAssetPrintersOnly(
+          auth,
+          emassNums,
+          emassMap
+        );
         break;
       default:
         alert("You must provide a valid report option.");
