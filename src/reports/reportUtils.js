@@ -333,6 +333,7 @@ function getMetadata(labelMap, metrics) {
     rmfAction: "",
     isso: "",
     other: "",
+    department: ""
   };
 
   const labels = metrics.labels;
@@ -384,6 +385,9 @@ function getMetadata(labelMap, metrics) {
           case "ASSET TYPE":
             collectionMetadata.device = collectionMetadata.device + name + ";";
             break;
+            case "DEPARTMENT":
+            collectionMetadata.department = collectionMetadata.department + name + ";";
+            break;
           default:
             break;
         }
@@ -407,6 +411,7 @@ function getMetadata(labelMap, metrics) {
     collectionMetadata.isso = collectionMetadata.isso.replace(/;$/, "");
     collectionMetadata.other = collectionMetadata.other.replace(/;$/, "");
     collectionMetadata.device = collectionMetadata.device.replace(/;$/, "");
+    collectionMetadata.department = collectionMetadata.department.replace(/;$/, "");
 
     return collectionMetadata;
   } catch (e) {
