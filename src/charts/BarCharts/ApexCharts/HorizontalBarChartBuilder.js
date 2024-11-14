@@ -70,7 +70,34 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
       },
     },
     dataLabels: {
-      enabled: false,
+      labels: {
+        formatter: function (value) {
+          if (formatLabelToPercentage) {
+            return formatLabelToPercentage.formatter(value);
+          }
+          return value;
+        },
+      },
+      style: {
+        fontFamily: 'Segoe UI',
+        colors: ['#283249'], //background color 
+      },
+      background: {
+        enabled: true,
+        foreColor: '#ffffff',
+        padding: 4,
+        borderRadius: 4,
+        borderWidth: 0,
+        borderColor: '#283249',
+        opacity: 0.9,
+      },
+      dropShadow: {
+        enabled: true,
+        top: 1,
+        left: 1,
+        blur: 1,
+        opacity: 0.7,
+      },
     },
     xaxis: {
       // tickPlacement: 'on',

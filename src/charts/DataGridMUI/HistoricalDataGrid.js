@@ -9,6 +9,7 @@ import {  getGridNumericOperators } from '@mui/x-data-grid';
 import DropdownInputValue from './DropdownInputValue';
 import GetFilteredData from "../../components/Filtering/GetFilteredData.js";
 
+/*Not being used anymore! */
 const renderProgressBarCell = (params) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', padding:'8px' }}>
@@ -73,9 +74,6 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
     let groupedAverages = Object.entries(aggregatedData).reduce((acc, [groupingValue, dataPerGroup]) => {
       const productSums = []; //store cumulative sum of products for each targetColumn
       let checksPerGroup = 0;
-      let assetCount = 0;
-      let delinquentCount = 0;
-      let latestDatePulled = new Date();
 
       //initializes each targetColumn's sum to 0 in productSums
       targetColumns.forEach(column => {
@@ -87,13 +85,6 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
         const checksInItem = item.checks;
         checksPerGroup += checksInItem;
 
-        //number of assets
-        const countMap = ValueCountMap(dataPerGroup, item['asset']);
-        assetCount = Object.values(countMap)[0];
-        
-        if(item['datePulled']) {
-          latestDatePulled = item['datePulled'];
-        }
         /* 
         calculates cumulative product for each targetColumn within each group
         ie. for each entry in my value array, calculate the checks[i] * assessed[i] and add it to totalSums[assessed].  */
@@ -110,20 +101,12 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
         if(columnsToCalculateAvg.includes(targetColumn)) {
           averages[`avg${targetColumn.charAt(0).toUpperCase() + targetColumn.slice(1)}`] = productSums[targetColumn] / checksPerGroup;
         }  //ie. averages={avgAssessed: (totalSums['assessed']/totalChecksPerGroup)}
-        else if (targetColumn === 'delinquent') { 
-          delinquentCount = dataPerGroup.filter(
-            item => item['delinquent'] === 'Yes'
-          ).length;
-        }
       })
 
      //add groupingValue and averages to acc
       acc.push({
         id: groupingValue,
         [groupingColumn]: groupingValue,
-        assetCount,
-        delinquentCount,
-        latestDatePulled,
         ...averages,
       });
 
@@ -153,9 +136,6 @@ function HistoricalDataGrid({ groupingColumn, data, targetColumns }) {
       headerName: groupingColumn.charAt(0).toUpperCase() + groupingColumn.slice(1) , 
       flex: 1 
     },
-    { field: 'assetCount', headerName: 'Asset Count', type: 'number' },
-    { field: 'delinquentCount', headerName: 'Delinquent Count', type: 'number' },
-    { field: 'latestDatePulled', headerName: 'Date Pulled', flex: 1, type: 'date' },
     {
       field: 'avgAssessed',
       headerName: 'Avg of Assessed',

@@ -4,6 +4,9 @@ import { useFilter } from "../../../FilterContext.js";
 import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
 import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
 import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
+import Box from '@mui/material/Box';
+import ValueCountMap from "../../../components/ValueCountMap.js";
+
 
 //calculates the total of vlaues in the specified numeric field for each unique category in targetColumn
 const ValueSumMap = (data, targetColumn, numericalField) => {
@@ -20,14 +23,21 @@ const ValueSumMap = (data, targetColumn, numericalField) => {
   }, {});
 };
 
-const TwoPropsCountByValues = ({ categoryField, metricField, isHorizontal, xAxisTitle, yAxisTitle, data }) => {
+const TwoPropsCountByValues = ({ categoryField, metricField, isHorizontal, xAxisTitle, yAxisTitle, data, source='' }) => {
   const { filter, updateFilter } = useFilter();
 
   //gets the data when filter is applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
+  
   //gets the sum of numbers for each item in the categoryField
-  const sumMap = useMemo(() => ValueSumMap(filteredData, categoryField, metricField), [filteredData, categoryField, metricField]);
+  const sumMap = useMemo(
+    () => (source === 'report9' 
+      ? ValueCountMap(filteredData, categoryField, metricField) 
+      : ValueSumMap(filteredData, categoryField, metricField)),
+    [filteredData, categoryField, metricField, source]
+  );
+
   const barLabels = useMemo(() => Object.keys(sumMap), [sumMap]);
   const barValues = useMemo(() => Object.values(sumMap), [sumMap]);
 
@@ -47,6 +57,31 @@ const TwoPropsCountByValues = ({ categoryField, metricField, isHorizontal, xAxis
       }
     }
   };
+  const renderObject = (obj) => (
+    <ul>
+      {Object.entries(obj).map(([key, value]) => (
+        <li key={key}>
+          <strong>{key}:</strong>{" "}
+          {Array.isArray(value) ? (
+            <ul>
+              {value.map((item, index) => (
+                <li key={index}>{item}</li> // render each item in the array as a list item
+              ))}
+            </ul>
+          ) : (
+            <span>{value}</span> // render the value as-is if it's not an array
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+  
+  const labels = barLabels.map((d) => (
+    <li key={d}> {d}</li>
+  ));
+  const values = barValues.map((d) => (
+    <li key={d}> {d}</li>
+  ));
 
   const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
 
@@ -66,6 +101,7 @@ const TwoPropsCountByValues = ({ categoryField, metricField, isHorizontal, xAxis
       );
     } else {
       return (
+
         <ApexBarChartBuilder
           dataLabels={barLabels}
           dataValues={barValues}
@@ -74,7 +110,8 @@ const TwoPropsCountByValues = ({ categoryField, metricField, isHorizontal, xAxis
           yAxisHeader={yAxisTitle}
           onClick={handleBarClick}
         />
-        // </div>
+
+
       );
     }
   };

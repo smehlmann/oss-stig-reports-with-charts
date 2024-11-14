@@ -32,6 +32,9 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
   const [tempFilter, setTempFilter] = useState({
     sysAdmin: [],
     primOwner: [],
+    emass: [],
+    code: [],
+    benchmarkId: [], 
     isWebOrDBIncluded: isWebOrDBIncluded,
     isDelinquent: isDelinquent
   });
@@ -48,11 +51,19 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
   //clears all items from filter and all chips from dropdown lists
   const handleClearAll = () => {
     setClearSelectionsTrigger(!clearDropdownSelectionsTrigger);
-    setTempFilter({ sysAdmin: [], primOwner: [], isWebOrDBIncluded: true, isDelinquent: false });
+    setTempFilter({ 
+      sysAdmin: [], 
+      primOwner: [],
+      emass: [],
+      code: [],
+      benchmarkId: [],
+      isWebOrDBIncluded: true, 
+      isDelinquent: false 
+    });
     clearFilter();
   };
 
-  // Update temporary filter state when a dropdown is changed
+  // update temporary filter state when a dropdown is changed
   const handleTempFilterChange = (newValue, key) => {
     setTempFilter((prev) => ({ ...prev, [key]: newValue })); 
   };
@@ -60,14 +71,22 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
 
   //when the apply button is clicked, apply the temp filters to the global filter
   const handleApplyFilters = () => {
-    //add filters ONLY if they have non-empty values
+    //add filters ONLY if they have non-empty values in dropdowns
     if(tempFilter.sysAdmin.length > 0) {
       updateFilter({sysAdmin: tempFilter.sysAdmin});
     }
     if(tempFilter.primOwner.length> 0) {
       updateFilter({primOwner: tempFilter.primOwner});
     }
-
+    if(tempFilter.emass.length> 0) {
+      updateFilter({emass: tempFilter.emass});
+    }
+    if(tempFilter.code.length> 0) {
+      updateFilter({code: tempFilter.code});
+    }
+    if(tempFilter.benchmarkId.length> 0) {
+      updateFilter({benchmarkId: tempFilter.benchmarkId});
+    }
     //handle web/db assets 
     if(!tempFilter.isWebOrDBIncluded) {
       updateFilter({ cklWebOrDatabase: true })
@@ -128,275 +147,502 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
   );
 
 
-  //gets list of options for sysAdmins and primOwners
+ //gets list of options in dropdowns
   const sysAdminsList = [...new Set(data.map((item) => item.sysAdmin).filter((sysAdmin) => sysAdmin != null))];
   const primOwnersList = [...new Set(data.map((item) => item.primOwner).filter((primOwner) => primOwner != null))];
+  const emassNumsList = [...new Set(
+    data
+    .map((item) => (item.emass !== undefined ? item.emass : null))
+    .filter((emass) => emass != null)
+  )];
+
+  const codeList = [...new Set(
+    data
+    .map((item) => (item.code !== undefined ? item.code : null))
+    .filter((code) => code != null)
+  )];
+  const benchmarkIdList = [... new Set(
+    data
+    .map((item) => (item.benchmarkId !== undefined ? item.benchmarkId : null))
+    .filter((benchmarkId) => benchmarkId != null)
+  )]
+
+
 
   const renderSideBar = () => {
     //if the source = 'report5' or 'report2'
-    if(source === 'report5' || source === 'report14') {
-      return (
-        <>
-          {/* Button to open Drawer */}
-          <Box display='flex' justifyContent='flex-end' sx={theme.typography.button}>
-            <Button
-              variant='contained'
+    return (
+      <>
+        {/* button to open Drawer */}
+        <Box display='flex' justifyContent='flex-end' sx={theme.typography.button}>
+          <Button
+            variant='contained'
+            color='primary'
+            startIcon={<FilterAlt />}
+            onClick={handleOpenDrawer}
+            sx={{ boxShadow: theme.shadows[3] }}
+          >
+            <Typography variant='h5'>Filter</Typography>
+          </Button>
+        </Box>
+  
+        {/* drawer itself */}
+        <Drawer
+          anchor='right'
+          open={isDrawerOpen}
+          onClose={handleCloseDrawer}
+          PaperProps={{
+            sx: {
+              width: 350, // the width of the drawer
+              padding: 2,
+              overflow: 'scroll'
+            },
+          }}
+        >
+          {/* header */}
+          <Box display='flex' justifyContent='space-between' alignItems='center'>
+            <Box sx={theme.typography.h3}>Filters</Box>
+            <IconButton size='small' onClick={handleCloseDrawer}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+  
+          <Divider  sx={{ my: 2, mb: 0 }} />
+  
+          {/* toggle Web/DB Assets */}
+          <Box display='flex' justifyContent='space-between' sx={{ mt:1, mb: 1, alignItems: 'center' }}>
+            <Box sx={theme.typography.h5}>Include DB/Web</Box>
+            <FilterSwitch
+              checked={isWebOrDBIncluded}
+              onChange={(event) => toggleWebOrDBFilter(event.target.checked)}
+              sx={{ marginLeft: 'auto' }}
               color='primary'
-              startIcon={<FilterAlt />}
-              onClick={handleOpenDrawer}
-              sx={{ boxShadow: theme.shadows[3] }}
-            >
-              <Typography variant='h5'>Filter</Typography>
+            />
+          </Box>
+  
+          <Divider />
+  
+          {/* toggle isDelinquent Assets */}
+          <Box display='flex' justifyContent='space-between' sx={{ mt: 1, mb: 1, alignItems: 'center' }}>
+            <Box sx={theme.typography.h5}>Show Only Delinquents</Box>
+            <FilterSwitch
+              checked={tempFilter.isDelinquent}
+              onChange={(event) =>  handleTempFilterChange(event.target.checked, 'isDelinquent')}
+              sx={{ marginLeft: 'auto' }}
+              color='primary'
+            />
+          </Box>
+  
+          <Divider />
+  
+          {/* chips to show when filter is applied */}
+          <Box sx={{ mt: 1, mb: 1 }}>
+            <Box sx={theme.typography.h5}>Applied Filters</Box>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0.5, mb:0.5}}>
+              {Object.keys(filter).length > 0 ? (
+                Object.keys(filter).map((key) => (
+                  <Chip
+                    key={key}
+                    color='primary'
+                    label={getChipLabel(key)}
+                    onDelete={() => removeFilterKey(key)}
+                  />
+                ))
+              ) : (
+                <Typography variant='body2'>No filters applied</Typography>
+              )}
+            </Box>
+          </Box>
+  
+          <Divider />
+  
+          {/* filter by sysAdmin */}
+          <Box
+            display='flex'
+            sx={{ flexWrap: 'wrap', gap: 1, mt: 1, mb: 1 }}
+          >
+            <Box sx={theme.typography.h5}>System Admin</Box>
+            <SelectionDropdownList
+              targetProperty='sysAdmin'
+              valueOptions={sysAdminsList}
+              selectedOptions={tempFilter.sysAdmin}
+              onChange={handleTempFilterChange}
+              selectAllOptionsFlag={true}
+              limitNumOfTags={true}
+              multiSelect 
+              source='filterDrawer'
+            />
+          </Box>
+  
+          <Divider sx={{ my: 1, mb: 0 }} />
+  
+          {/* filter by primOwner */}
+          <Box
+            display='flex'
+            sx={{ flexWrap: 'wrap', gap: 1, mt: 1, mb: 1 }}
+          >
+            <Box sx={theme.typography.h5}>Primary Owner</Box>
+            <SelectionDropdownList
+              targetProperty='primOwner'
+              valueOptions={primOwnersList}
+              selectedOptions={tempFilter.primOwner}
+              onChange={handleTempFilterChange}
+              selectAllOptionsFlag={true}
+              multiSelect 
+              source='filterDrawer'
+            />
+          </Box>
+
+          <Divider sx={{ my: 1, mb: 0 }} />
+          
+          {/*emass numbers */}
+          <Box
+            display='flex'
+            sx={{ flexWrap: 'wrap', gap: 1, mt: 1, mb: 1 }}
+          >
+            <Box sx={theme.typography.h5}> 
+              eMASS Number
+            </Box>
+            <SelectionDropdownList
+              targetProperty="emass"
+              valueOptions={emassNumsList}
+              selectedOptions={tempFilter.emass}
+              onChange={handleTempFilterChange}
+              selectAllOptionsFlag={true}
+              multiSelect 
+              source='filterDrawer'
+            />
+          </Box>
+   
+          {source === "report4" && (
+            <> {/*allows both elements to be grouped together under conditional rendering */}
+              <Divider sx={{ my: 1, mb: 0 }} />
+              <Box
+                display='flex'
+                sx={{ flexWrap: 'wrap', gap: 1, mt: 1, mb: 1 }}
+              >
+                <Box sx={theme.typography.h5}> 
+                  Benchmarks
+                </Box>
+                <SelectionDropdownList
+                  targetProperty="benchmarkId"
+                  valueOptions={benchmarkIdList}
+                  selectedOptions={tempFilter.benchmarkId}
+                  onChange={handleTempFilterChange}
+                  selectAllOptionsFlag={true}
+                  multiSelect 
+                  source='filterDrawer'
+                />
+              </Box>
+            </>
+          )}
+  
+          <Divider sx={{ my: 1, mb: 2 }} />
+  
+          {/* clears all filters*/}
+          <Box display="flex" justifyContent="space-between" sx={{ mb: 2}}>
+            <Button variant='outlined' onClick={handleClearAll}>
+              Clear All
+            </Button>
+            <Button variant="contained" onClick={handleApplyFilters} sx={{ backgroundColor: theme.palette.primary.dark}}>
+              Apply
             </Button>
           </Box>
-    
-          {/* Drawer itself */}
-          <Drawer
-            anchor='right'
-            open={isDrawerOpen}
-            onClose={handleCloseDrawer}
-            PaperProps={{
-              sx: {
-                width: 350, // the width of the drawer
-                padding: 2,
-              },
-            }}
-          >
-            {/* Header */}
-            <Box display='flex' justifyContent='space-between' alignItems='center'>
-              <Box sx={theme.typography.h3}>Filters</Box>
-              <IconButton size='small' onClick={handleCloseDrawer}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-    
-            <Divider sx={{ my: 2 }} />
-    
-            {/* Toggle Web/DB Assets */}
-            <Box display='flex' justifyContent='space-between' sx={{ mt: 1, mb: 2, alignItems: 'center' }}>
-              <Box sx={theme.typography.h5}>Include DB/Web</Box>
-              <FilterSwitch
-                checked={isWebOrDBIncluded}
-                onChange={(event) => toggleWebOrDBFilter(event.target.checked)}
-                sx={{ marginLeft: 'auto' }}
-                color='primary'
-              />
-            </Box>
-    
-            <Divider sx={{ my: 1 }} />
-
-            {/* Toggle isDelinquent Assets */}
-            <Box display='flex' justifyContent='space-between' sx={{ mt: 1, mb: 2, alignItems: 'center' }}>
-              <Box sx={theme.typography.h5}>Show Only Delinquents</Box>
-              <FilterSwitch
-                checked={tempFilter.isDelinquent}
-                onChange={(event) =>  handleTempFilterChange(event.target.checked, 'isDelinquent')}
-                sx={{ marginLeft: 'auto' }}
-                color='primary'
-              />
-            </Box>
-
-            <Divider sx={{ my: 1 }} />
-    
-            {/* Chips to show when filter is applied */}
-            <Box sx={{ mt: 2, mb: 2 }}>
-              <Box sx={theme.typography.h5}>Applied Filters</Box>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0.5 }}>
-                {Object.keys(filter).length > 0 ? (
-                  Object.keys(filter).map((key) => (
-                    <Chip
-                      key={key}
-                      color='primary'
-                      label={getChipLabel(key)}
-                      onDelete={() => removeFilterKey(key)}
-                    />
-                  ))
-                ) : (
-                  <Typography variant='body2'>No filters applied</Typography>
-                )}
-              </Box>
-            </Box>
-    
-            <Divider sx={{ my: 1 }} />
-    
-            {/* Filter by sysAdmin */}
-            <Box
-              display='flex'
-              sx={{ flexWrap: 'wrap', gap: 1, mt: 2, mb: 2 }}
-            >
-              <Box sx={theme.typography.h5}>System Admin</Box>
-              <SelectionDropdownList
-                targetProperty='sysAdmin'
-                valueOptions={sysAdminsList}
-                selectedOptions={tempFilter.sysAdmin}
-                onChange={handleTempFilterChange}
-                selectAllOptionsFlag={true}
-                limitNumOfTags={true}
-                multiSelect // Enabling multi-select
-              />
-            </Box>
-    
-            <Divider sx={{ my: 1 }} />
-    
-            {/* Filter by primOwner */}
-            <Box
-              display='flex'
-              sx={{ flexWrap: 'wrap', gap: 1, mt: 2, mb: 2 }}
-            >
-              <Box sx={theme.typography.h5}>Primary Owner</Box>
-              <SelectionDropdownList
-                targetProperty='primOwner'
-                valueOptions={primOwnersList}
-                selectedOptions={tempFilter.primOwner}
-                onChange={handleTempFilterChange}
-                selectAllOptionsFlag={true}
-                multiSelect // Enabling multi-select
-              />
-            </Box>
-    
-            <Divider sx={{ my: 2 }} />
-    
-            {/* Clears all filters*/}
-            <Box display="flex" justifyContent="space-between">
-              <Button variant='outlined' onClick={handleClearAll}>
-                Clear All
-              </Button>
-              <Button variant="contained" onClick={handleApplyFilters} sx={{ backgroundColor: theme.palette.primary.dark}}>
-                Apply
-              </Button>
-            </Box>
-          </Drawer>
-        </>
-      );
-    }
-    else {
-      return (
-        <>
-          {/* Button to open Drawer */}
-          <Box display='flex' justifyContent='flex-end' sx={theme.typography.button}>
-            <Button
-              variant='contained'
-              color='primary'
-              startIcon={<FilterAlt />}
-              onClick={handleOpenDrawer}
-              sx={{ boxShadow: theme.shadows[3] }}
-            >
-              <Typography variant='h5'>Filter</Typography>
-            </Button>
-          </Box>
-    
-          {/* Drawer itself */}
-          <Drawer
-            anchor='right'
-            open={isDrawerOpen}
-            onClose={handleCloseDrawer}
-            PaperProps={{
-              sx: {
-                width: 350, // the width of the drawer
-                padding: 2,
-              },
-            }}
-          >
-            {/* Header */}
-            <Box display='flex' justifyContent='space-between' alignItems='center'>
-              <Box sx={theme.typography.h3}>Filters</Box>
-              <IconButton size='small' onClick={handleCloseDrawer}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-    
-            <Divider sx={{ my: 2 }} />
-    
-            {/* Toggle Web/DB Assets */}
-            <Box display='flex' justifyContent='space-between' sx={{ mt: 1, mb: 2, alignItems: 'center' }}>
-              <Box sx={theme.typography.h5}>Include DB/Web</Box>
-              <FilterSwitch
-                checked={isWebOrDBIncluded}
-                onChange={(event) => toggleWebOrDBFilter(event.target.checked)}
-                sx={{ marginLeft: 'auto' }}
-                color='primary'
-              />
-            </Box>
-    
-            <Divider sx={{ my: 1 }} />
-    
-            {/* Chips to show when filter is applied */}
-            <Box sx={{ mt: 2, mb: 2 }}>
-              <Box sx={theme.typography.h5}>Applied Filters</Box>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0.5 }}>
-                {Object.keys(filter).length > 0 ? (
-                  Object.keys(filter).map((key) => (
-                    <Chip
-                      key={key}
-                      color='primary'
-                      label={getChipLabel(key)}
-                      onDelete={() => removeFilterKey(key)}
-                    />
-                  ))
-                ) : (
-                  <Typography variant='body2'>No filters applied</Typography>
-                )}
-              </Box>
-            </Box>
-    
-            <Divider sx={{ my: 1 }} />
-    
-            {/* Filter by sysAdmin */}
-            <Box
-              display='flex'
-              sx={{ flexWrap: 'wrap', gap: 1, mt: 2, mb: 2 }}
-            >
-              <Box sx={theme.typography.h5}>System Admin</Box>
-              <SelectionDropdownList
-                targetProperty='sysAdmin'
-                valueOptions={sysAdminsList}
-                selectedOptions={tempFilter.sysAdmin}
-                onChange={handleTempFilterChange}
-                selectAllOptionsFlag={true}
-                limitNumOfTags={true}
-                multiSelect // Enabling multi-select
-              />
-            </Box>
-    
-            <Divider sx={{ my: 1 }} />
-    
-            {/* Filter by primOwner */}
-            <Box
-              display='flex'
-              sx={{ flexWrap: 'wrap', gap: 1, mt: 2, mb: 2 }}
-            >
-              <Box sx={theme.typography.h5}>Primary Owner</Box>
-              <SelectionDropdownList
-                targetProperty='primOwner'
-                valueOptions={primOwnersList}
-                selectedOptions={tempFilter.primOwner}
-                onChange={handleTempFilterChange}
-                selectAllOptionsFlag={true}
-                multiSelect // Enabling multi-select
-              />
-            </Box>
-    
-            <Divider sx={{ my: 2 }} />
-    
-            {/* Clears all filters*/}
-            <Box display="flex" justifyContent="space-between">
-              <Button variant='outlined' onClick={handleClearAll}>
-                Clear All
-              </Button>
-              <Button variant="contained" onClick={handleApplyFilters} sx={{ backgroundColor: theme.palette.primary.dark}}>
-                Apply
-              </Button>
-            </Box>
-          </Drawer>
-        </>
-      );
-    }
+        </Drawer>
+      </>
+    );
   };
 
-  //return sidebar based on source
+
+
   return <>{renderSideBar()}</>;
 
+
+ // // display an array of items
   
+  // const ArrayPrinter = (items) => {
+  //   return (
+  //     <div>
+  //       {items.map((item, index) => (
+  //         <p key={index}> {item} </p>
+  //       ))}
+  //     </div>  
+  //   )
+  // };
+
+  // return (
+  //   <div> 
+  //     <p>emass {ArrayPrinter(emassNumsList)} </p> <br />
+  //     <p>code: {ArrayPrinter(codeList)} </p> <br />
+  //     <p>benchmarks: {ArrayPrinter(benchmarkIdList)}</p>
+    
+  //   </div>
+  // );
+
+
 };
 
 export default FilterSelectionDrawer;
+
+
+
+  // const renderSideBar = () => {
+  //   //if the source = 'report5' or 'report2'
+  //   if(source === 'report5' || source === 'report14') {
+  //     return (
+  //       <>
+  //         {/* button to open Drawer */}
+  //         <Box display='flex' justifyContent='flex-end' sx={theme.typography.button}>
+  //           <Button
+  //             variant='contained'
+  //             color='primary'
+  //             startIcon={<FilterAlt />}
+  //             onClick={handleOpenDrawer}
+  //             sx={{ boxShadow: theme.shadows[3] }}
+  //           >
+  //             <Typography variant='h5'>Filter</Typography>
+  //           </Button>
+  //         </Box>
+    
+  //         {/* drawer itself */}
+  //         <Drawer
+  //           anchor='right'
+  //           open={isDrawerOpen}
+  //           onClose={handleCloseDrawer}
+  //           PaperProps={{
+  //             sx: {
+  //               width: 350, // the width of the drawer
+  //               padding: 2,
+  //             },
+  //           }}
+  //         >
+  //           {/* header */}
+  //           <Box display='flex' justifyContent='space-between' alignItems='center'>
+  //             <Box sx={theme.typography.h3}>Filters</Box>
+  //             <IconButton size='small' onClick={handleCloseDrawer}>
+  //               <CloseIcon />
+  //             </IconButton>
+  //           </Box>
+    
+  //           <Divider  sx={{ my: 2, mb: 0 }} />
+    
+  //           {/* toggle Web/DB Assets */}
+  //           <Box display='flex' justifyContent='space-between' sx={{ mt:1, mb: 1, alignItems: 'center' }}>
+  //             <Box sx={theme.typography.h5}>Include DB/Web</Box>
+  //             <FilterSwitch
+  //               checked={isWebOrDBIncluded}
+  //               onChange={(event) => toggleWebOrDBFilter(event.target.checked)}
+  //               sx={{ marginLeft: 'auto' }}
+  //               color='primary'
+  //             />
+  //           </Box>
+    
+  //           <Divider />
+
+  //           {/* toggle isDelinquent Assets */}
+  //           <Box display='flex' justifyContent='space-between' sx={{ mt: 1, mb: 1, alignItems: 'center' }}>
+  //             <Box sx={theme.typography.h5}>Show Only Delinquents</Box>
+  //             <FilterSwitch
+  //               checked={tempFilter.isDelinquent}
+  //               onChange={(event) =>  handleTempFilterChange(event.target.checked, 'isDelinquent')}
+  //               sx={{ marginLeft: 'auto' }}
+  //               color='primary'
+  //             />
+  //           </Box>
+
+  //           <Divider />
+    
+  //           {/* chips to show when filter is applied */}
+  //           <Box sx={{ mt: 1, mb: 1 }}>
+  //             <Box sx={theme.typography.h5}>Applied Filters</Box>
+  //             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0.5, mb:0.5}}>
+  //               {Object.keys(filter).length > 0 ? (
+  //                 Object.keys(filter).map((key) => (
+  //                   <Chip
+  //                     key={key}
+  //                     color='primary'
+  //                     label={getChipLabel(key)}
+  //                     onDelete={() => removeFilterKey(key)}
+  //                   />
+  //                 ))
+  //               ) : (
+  //                 <Typography variant='body2'>No filters applied</Typography>
+  //               )}
+  //             </Box>
+  //           </Box>
+    
+  //           <Divider />
+    
+  //           {/* filter by sysAdmin */}
+  //           <Box
+  //             display='flex'
+  //             sx={{ flexWrap: 'wrap', gap: 1, mt: 1, mb: 1 }}
+  //           >
+  //             <Box sx={theme.typography.h5}>System Admin</Box>
+  //             <SelectionDropdownList
+  //               targetProperty='sysAdmin'
+  //               valueOptions={sysAdminsList}
+  //               selectedOptions={tempFilter.sysAdmin}
+  //               onChange={handleTempFilterChange}
+  //               selectAllOptionsFlag={true}
+  //               limitNumOfTags={true}
+  //               multiSelect // Enabling multi-select
+  //             />
+  //           </Box>
+    
+  //           <Divider sx={{ my: 1, mb: 0 }} />
+    
+  //           {/* filter by primOwner */}
+  //           <Box
+  //             display='flex'
+  //             sx={{ flexWrap: 'wrap', gap: 1, mt: 1, mb: 1 }}
+  //           >
+  //             <Box sx={theme.typography.h5}>Primary Owner</Box>
+  //             <SelectionDropdownList
+  //               targetProperty='primOwner'
+  //               valueOptions={primOwnersList}
+  //               selectedOptions={tempFilter.primOwner}
+  //               onChange={handleTempFilterChange}
+  //               selectAllOptionsFlag={true}
+  //               multiSelect // Enabling multi-select
+  //             />
+  //           </Box>
+    
+  //           <Divider sx={{ my: 1, mb: 2 }} />
+    
+  //           {/* clears all filters*/}
+  //           <Box display="flex" justifyContent="space-between">
+  //             <Button variant='outlined' onClick={handleClearAll}>
+  //               Clear All
+  //             </Button>
+  //             <Button variant="contained" onClick={handleApplyFilters} sx={{ backgroundColor: theme.palette.primary.dark}}>
+  //               Apply
+  //             </Button>
+  //           </Box>
+  //         </Drawer>
+  //       </>
+  //     );
+  //   }
+  //   else {
+  //     return (
+  //       <>
+  //         {/* button to open Drawer */}
+  //         <Box display='flex' justifyContent='flex-end' sx={theme.typography.button}>
+  //           <Button
+  //             variant='contained'
+  //             color='primary'
+  //             startIcon={<FilterAlt />}
+  //             onClick={handleOpenDrawer}
+  //             sx={{ boxShadow: theme.shadows[3] }}
+  //           >
+  //             <Typography variant='h5'>Filter</Typography>
+  //           </Button>
+  //         </Box>
+    
+  //         {/* drawer itself */}
+  //         <Drawer
+  //           anchor='right'
+  //           open={isDrawerOpen}
+  //           onClose={handleCloseDrawer}
+  //           PaperProps={{
+  //             sx: {
+  //               width: 350, // the width of the drawer
+  //               padding: 2,
+  //             },
+  //           }}
+  //         >
+  //           {/* header */}
+  //           <Box display='flex' justifyContent='space-between' alignItems='center'>
+  //             <Box sx={theme.typography.h3}>Filters</Box>
+  //             <IconButton size='small' onClick={handleCloseDrawer}>
+  //               <CloseIcon />
+  //             </IconButton>
+  //           </Box>
+    
+  //           <Divider sx={{ my: 2 }} />
+    
+  //           {/* toggle Web/DB Assets */}
+  //           <Box display='flex' justifyContent='space-between' sx={{ mt: 1, mb: 2, alignItems: 'center' }}>
+  //             <Box sx={theme.typography.h5}>Include DB/Web</Box>
+  //             <FilterSwitch
+  //               checked={isWebOrDBIncluded}
+  //               onChange={(event) => toggleWebOrDBFilter(event.target.checked)}
+  //               sx={{ marginLeft: 'auto' }}
+  //               color='primary'
+  //             />
+  //           </Box>
+    
+  //           <Divider sx={{ my: 1 }} />
+    
+  //           {/* chips to show filters applied */}
+  //           <Box sx={{ mt: 2, mb: 2 }}>
+  //             <Box sx={theme.typography.h5}>Applied Filters</Box>
+  //             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0.5 }}>
+  //               {Object.keys(filter).length > 0 ? (
+  //                 Object.keys(filter).map((key) => (
+  //                   <Chip
+  //                     key={key}
+  //                     color='primary'
+  //                     label={getChipLabel(key)}
+  //                     onDelete={() => removeFilterKey(key)}
+  //                   />
+  //                 ))
+  //               ) : (
+  //                 <Typography variant='body2'>No filters applied</Typography>
+  //               )}
+  //             </Box>
+  //           </Box>
+    
+  //           <Divider sx={{ my: 1 }} />
+    
+  //           {/* filter by sysAdmin */}
+  //           <Box
+  //             display='flex'
+  //             sx={{ flexWrap: 'wrap', gap: 1, mt: 2, mb: 2 }}
+  //           >
+  //             <Box sx={theme.typography.h5}>System Admin</Box>
+  //             <SelectionDropdownList
+  //               targetProperty='sysAdmin'
+  //               valueOptions={sysAdminsList}
+  //               selectedOptions={tempFilter.sysAdmin}
+  //               onChange={handleTempFilterChange}
+  //               selectAllOptionsFlag={true}
+  //               limitNumOfTags={true}
+  //               multiSelect // Enabling multi-select
+  //             />
+  //           </Box>
+    
+  //           <Divider sx={{ my: 1 }} />
+    
+  //           {/* filter by primOwner */}
+  //           <Box
+  //             display='flex'
+  //             sx={{ flexWrap: 'wrap', gap: 1, mt: 2, mb: 2 }}
+  //           >
+  //             <Box sx={theme.typography.h5}>Primary Owner</Box>
+  //             <SelectionDropdownList
+  //               targetProperty='primOwner'
+  //               valueOptions={primOwnersList}
+  //               selectedOptions={tempFilter.primOwner}
+  //               onChange={handleTempFilterChange}
+  //               selectAllOptionsFlag={true}
+  //               multiSelect // Enabling multi-select
+  //             />
+  //           </Box>
+    
+  //           <Divider sx={{ my: 2 }} />
+    
+  //           {/* clear all filters*/}
+  //           <Box display="flex" justifyContent="space-between">
+  //             <Button variant='outlined' onClick={handleClearAll}>
+  //               Clear All
+  //             </Button>
+  //             <Button variant="contained" onClick={handleApplyFilters} sx={{ backgroundColor: theme.palette.primary.dark}}>
+  //               Apply
+  //             </Button>
+  //           </Box>
+  //         </Drawer>
+  //       </>
+  //     );
+  //   }
+  // };

@@ -1,5 +1,4 @@
 import React, { useMemo} from "react";
-
 import {ThemeProvider, Typography, Box} from "@mui/material";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
@@ -10,23 +9,14 @@ import {  useFilter } from "../../FilterContext";
 import MultiLevelTableDataFormatter from "../../charts/ExpandableTables/MultiLevelExpandableTable/MultiLevelTableDataFormatter.js";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import StatisticsCardGroup from "../Cards/StatisticsCardsGroup.js";
-import HistoricalDataGrid from "../../charts/DataGridMUI/HistoricalDataGrid";
+// import HistoricalDataGrid from "../../charts/DataGridMUI/HistoricalDataGrid";
 import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
+import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn.js";
 
-
-
-/*
-Grid spacing is split into 12 parts:
-  For evenly spaced cards:
-  
-  {3} = 4 cards in row (each is 1/4 of section)
-  {4} = 3 cards in row (each is 1/3 of section)
-  {6} = 2 cards in row (each is 1/2 of section)
-  {12} = 1 card in row (takes up whole section)
-*/
+/* Displays report option 8. Historical Data */
 
 function getLatestDate(dateObject) {
   let maxDate = null;
@@ -77,11 +67,11 @@ const DashboardSelectedReport14 = ({ data, title}) => {
 
             <Grid lg={8} md={8} sm={12} xl={6} xs={12}>
               <TableGridCardComponent>
-                <HistoricalDataGrid 
+                <AveragesGroupedByColumn 
                   groupingColumn = 'code'
                   data={filteredData} 
-                  // targetColumns={["datePulled", "asset", "delinquent", "assessed", "submitted", "accepted", "rejected", "checks"]} 
                   targetColumns={[ "assessed", "submitted", "accepted", "rejected", "checks"]} 
+                  source='report14'
                 />
               </TableGridCardComponent>
             </Grid>
@@ -148,7 +138,6 @@ const DashboardSelectedReport14 = ({ data, title}) => {
   
   return (
     <ThemeProvider theme={theme}>
-    {/* <FilterProvider> */}
       <DashboardRoot>
         {/*Filter Bar*/}
         <Grid container
@@ -161,7 +150,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
           <Grid lg={12} sm={12} xl={12} xs={12}>
             <Box display="flex" justifyContent="space-between" alignItems='center'>
               <Typography variant='h1'> {title} </Typography>
-              <FilterSelectionDrawer data={dataFromLastPullDate} source='report14' />
+              <FilterSelectionDrawer data={filteredData} source='report14' />
             </Box>
           </Grid>
           
@@ -169,17 +158,18 @@ const DashboardSelectedReport14 = ({ data, title}) => {
             <StatisticsCardGroup data={dataFromLastPullDate} source='report14' />
           </Grid>
 
-          <Grid lg={8} md={8} sm={12} xl={6} xs={12}>
+          <Grid lg={6} md={6} sm={12} xl={6} xs={12}>
             <TableGridCardComponent>
-              <HistoricalDataGrid 
+              <AveragesGroupedByColumn 
                 groupingColumn = 'code'
                 data={dataFromLastPullDate} 
-                targetColumns={["datePulled", "asset", "delinquent", "assessed", "submitted", "accepted", "rejected" ]} 
+                targetColumns={["assessed", "submitted", "accepted", "rejected" ]} 
+                source='report14'
               />
             </TableGridCardComponent>
           </Grid>     
           
-          <Grid lg={4} md={4} sm={12} xl={6} xs={12}>
+          <Grid lg={6} md={6} sm={6} xl={6} xs={12}>
             <ChartCardComponent title = "Assets by Packages">
               <ApexCountByValueBarChart
                 targetColumn="shortName"

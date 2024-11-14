@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo} from "react";
-import TwoLevelTableRenderer from "./TwoLevelTableRenderer";
+// import TwoLevelTableRenderer from "./TwoLevelTableRenderer";
 import TableBody from '@mui/material/TableBody';
 import useSortableData from "../hooks/useSortableData";
 import { useFilter } from '../../../FilterContext';
@@ -13,7 +13,7 @@ import {
   StyledTableSortLabel
 } from '../RenderingLogic/StyledTableComponents';
 import GetFilteredData from "../../../components/Filtering/GetFilteredData";
-
+import FlexibleTableRenderer from "../RenderingLogic/FlexibleTableRenderer";
 
 
 function TwoLevelTableDataFormatter({ parentRowColumn, childRows, expandedSectionHeaders, data }) {
@@ -135,7 +135,7 @@ function TwoLevelTableDataFormatter({ parentRowColumn, childRows, expandedSectio
 
 
   return (
-    <TwoLevelTableRenderer 
+    <FlexibleTableRenderer 
       rows={parentRows} 
       columns={columnHeaders} 
       renderChildRow={renderChildRow} 

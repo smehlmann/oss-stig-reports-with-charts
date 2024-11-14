@@ -396,25 +396,6 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
       - The `MultiLevelTableRenderer component is passed.
     </details>
 
-
-<!-- tablerenderer -->
-  - <details>
-    <summary><strong> MultiLevelTableRenderer </strong></summary>
-    <strong>Purpose:</strong> renders the main structure of the multi-level table, including the expand/collapse functionality for each row level.
-
-    - **Component Props:**
-      - `rows`: data for each parentRow
-      - `columns`: the `mainColumnHeader` that is the ID and and label for the top-level header (header above the `parentRows`)
-      - `renderChildRow`: contains logic to render and display the childRows
-      - `childRowCount`: total count of child rows, needed for pagination
-    - **Sorting:**
-      - Uses custom sort `useSortableData` hook to sort `rows` based on a selected column (`sortFild`), direction (`sortDirection`), and `handleSort` function.
-      - `sortChildRows`: a function that sorts child rows based on the specified criteria and returns `sortedChidlRows`, which is then used to render the rows in a sorted order
-    - **Rendering:**
-      - Table Headers: maps through `columns` to render each column header. If the header is sortable, it displays an icon indicating the current sort direction and calls `handleSort` when header is clicked.
-      - Table Body: maps through `sortedChildRows`, rendering each row using the `ParentRowRenderer` component. 
-    </details>
-
 <!-- nested2ndChild -->
   - <details>
       <summary><strong> SecondLevelChildRenderer </strong></summary>
@@ -482,26 +463,6 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
     - **Table Rendering:**:
     </details>
 
-<!-- TwoTable renderer -->
-  - <details>
-    <summary><strong> TwoTableRenderer </strong></summary>
-    <strong>Purpose:</strong> renders the main structure of the two-level table, including the expand/collapse functionality for each row level.
-
-    - **Component Props:**
-      - `rows`: data for each parentRow
-      - `columns`: the `mainColumnHeader` that is the ID and and label for the top-level header (header above the `parentRows`)
-      - `renderChildRow`: contains logic to render and display the childRows
-      - `filterProperty`: property that is being filtered (also known as the parentRowColumn)
-      - `childRowCount`: total count of child rows, needed for pagination
-    - **Sorting:**
-      - Uses custom sort `useSortableData` hook to sort `rows` based on a selected column (`sortFild`), direction (`sortDirection`), and `handleSort` function.
-      - `sortChildRows`: a function that sorts child rows based on the specified criteria and returns `sortedChidlRows`, which is then used to render the rows in a sorted order
-    - **Rendering:**
-      - Table Headers: maps through `columns` to render each column header. If the header is sortable, it displays an icon indicating the current sort direction and calls `handleSort` when header is clicked.
-      - Table Body: maps through `sortedChildRows`, rendering each row using the `ParentRowRenderer` component. 
-    </details>
-
-    <!-- -->
 
 </details>
 
@@ -539,6 +500,25 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
     <summary><strong> StyledTableComponents</strong></summary>
     <strong> Purpose:</strong> contains custom styling to control the appearance of various components like <code>TableRow</code>, <code>TableBody</code>, <code>TextField</code> and other components used in the expandable tables. 
     </details>
+    
+<!-- flexibleTableRenderer-->
+  - <details>
+    <summary><strong> FlexibleTableRenderer </strong></summary>
+    <strong>Purpose:</strong> renders the base structure of the table, including the expand/collapse functionality for each row level.
+
+    - **Component Props:**
+      - `rows`: data for each parentRow
+      - `columns`: the `mainColumnHeader` that is the ID and and label for the top-level header (header above the `parentRows`)
+      - `renderChildRow`: contains logic to render and display the childRows
+      - `filterProperty`: property that is being filtered (also known as the parentRowColumn)
+      - `childRowCount`: total count of child rows, needed for pagination
+    - **Sorting:**
+      - Uses custom sort `useSortableData` hook to sort `rows` based on a selected column (`sortFild`), direction (`sortDirection`), and `handleSort` function.
+      - `sortChildRows`: a function that sorts child rows based on the specified criteria and returns `sortedChidlRows`, which is then used to render the rows in a sorted order
+    - **Rendering:**
+      - Table Headers: maps through `columns` to render each column header. If the header is sortable, it displays an icon indicating the current sort direction and calls `handleSort` when header is clicked.
+      - Table Body: maps through `sortedChildRows`, rendering each row using the `ParentRowRenderer` component. 
+    </details>
 
 <!-- parentRowRenderer-->
  -  <details>
@@ -567,6 +547,7 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
         - the `renderChildRow` function that displays the child rows (mini-table) based on the parent row, `page`, `rowsPerPage`, and `searchText`.
         - `TablePagination` controls the pagination for child rows, including `handleChangePage` and `handleChangeRowsPerPage` to manage the page and rows per page. 
     </details>
+
 
 </details>
 

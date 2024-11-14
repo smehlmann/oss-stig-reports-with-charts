@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useState} from 'react';
-import {Grid} from '@mui/material';
+import {Grid, useMediaQuery} from '@mui/material';
 import StatisticsCardComponent from './StatisticsCardComponent';
 import ValueCountMap from '../ValueCountMap';
 import numeral from 'numeral';
@@ -54,7 +54,7 @@ const StatisticsCardGroup = ({data = [], source='' }) => {
         avgSubmitted,
         avgAccepted,
         avgRejected,
-        checks, // Keep checks for later aggregation
+        checks, // keep checks for later aggregation
       };
     }); // creates an array of objects wherein each object contains an id, avgs and checks
 
@@ -99,11 +99,23 @@ const StatisticsCardGroup = ({data = [], source='' }) => {
     }
   }, [safeData, source]);
 
+  //use custom breakpoint for screens less than 1512px with delinquent card
+  const isBreakPointForDelinquentCard= useMediaQuery('(max-width: 1512px)');
+  //override grid properties with delinquent card
+  const getGridPropsWithDelinquentCard = () => {
+    //if screen is less than 1512px apply custom grid sizes
+    if(isBreakPointForDelinquentCard) {
+      return { lg: 4, extendedLg: 4,  xl: 2, sm: 6, xs: 12 };
+    } else {
+      return { lg: 4, extendedLg: 2, xl: 2, sm: 6, xs: 12 }; 
+    }
+  };
+
   const renderCardGroup =() => {
     if(source ==='report14' || source==='report5') {
       return (
         <Grid container spacing={2.5}>
-          <Grid item lg={4} extendedLg={2} md={4} sm={6} xl={2} xs={12}>
+          <Grid item {...getGridPropsWithDelinquentCard()}>
             <StatisticsCardComponent 
               metricValue={assetCount}
               metricDisplayedName="Assets"
@@ -111,7 +123,7 @@ const StatisticsCardGroup = ({data = [], source='' }) => {
             />
           </Grid>
 
-          <Grid item lg={4} extendedLg={2} md={4} sm={6} xl={2} xs={12}>
+          <Grid item {...getGridPropsWithDelinquentCard()}>
             <StatisticsCardComponent 
               metricValue={delinquentCount}
               metricDisplayedName="Delinquents"
@@ -119,7 +131,7 @@ const StatisticsCardGroup = ({data = [], source='' }) => {
             />
           </Grid>
 
-          <Grid item lg={4} extendedLg={2} md={4} sm={6} xl={2} xs={12}>
+          <Grid item {...getGridPropsWithDelinquentCard()}>
             <StatisticsCardComponent 
               metricValue={
                 (averages[0]?.avgAssessed || 0) <= 1 
@@ -131,21 +143,21 @@ const StatisticsCardGroup = ({data = [], source='' }) => {
             />
           </Grid>
 
-          <Grid item lg={4} extendedLg={2} md={4} sm={6} xl={2} xs={12}>
+          <Grid item {...getGridPropsWithDelinquentCard()}>
             <StatisticsCardComponent 
               metricValue={cat1Sum}
               metricDisplayedName="CAT1"
               measurement="Total"
             />
           </Grid>
-          <Grid item lg={4} extendedLg={2} md={4} sm={6} xl={2} xs={12}>
+          <Grid item {...getGridPropsWithDelinquentCard()}>
             <StatisticsCardComponent 
               metricValue={cat2Sum}
               metricDisplayedName="CAT2"
               measurement="Total"
             />
           </Grid>
-          <Grid item lg={4} extendedLg={2} md={4} sm={6} xl={2} xs={12}>
+          <Grid item {...getGridPropsWithDelinquentCard()}>
             <StatisticsCardComponent 
               metricValue={cat3Sum}
               metricDisplayedName="CAT3"

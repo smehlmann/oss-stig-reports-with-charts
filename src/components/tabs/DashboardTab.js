@@ -8,6 +8,7 @@ import DashboardSelectedReport8 from "../DashboardLayouts/DashboardSelectedRepor
 import DashboardSelectedReport9 from "../DashboardLayouts/DashboardSelectedReport9";
 import DashboardSelectedReport14 from "../DashboardLayouts/DashboardSelectedReport14";
 import DashboardSelectedReport11 from "../DashboardLayouts/DashboardSelectedReport11";
+import DashboardSelectedReport15 from "../DashboardLayouts/DashboardSelectedReport15";
 import { parseISO } from 'date-fns';
 import "./DashboardTab.css"
 /* Include statement to handle how data is parsed based on the report selected*/
@@ -168,24 +169,13 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
       return <DashboardSelectedReport11 data={formattedData} title='Checks Not Updated in x Days' handleClick={handleClick} />
     case '14':
       return <DashboardSelectedReport14 data={formattedData} title='Historical Data' handleClick={handleClick} />
+    case '15':
+      return <DashboardSelectedReport15 data={formattedData} title='Printer Collection Dashboard (?)' handleClick={handleClick}/>
     default:
       return null
   }    
 };
 
 export default DashboardTab;
-
-/*
-const DashboardTab = ({reportData}) => {
-  
-  //parse data from string to array
-  let parsedData = typeof reportData == 'string' ? JSON.parse(reportData): reportData;
-  console.log('reportData: ' + parsedData);
-
-  return <DashboardLayout data={parsedData} />;
-};
-
-export default DashboardTab;
-*/
 
 

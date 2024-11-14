@@ -45,11 +45,6 @@ const DashboardSelectedReport11 = ({ title, data }) => {
   })
 
 
-
-  // useEffect(() => {
-  //   console.log('Formatted Data:', filteredData);
-  // }, [filteredData]);
-
   return (
     <ThemeProvider theme={theme}>
       {/* <FilterProvider> */}
@@ -64,7 +59,7 @@ const DashboardSelectedReport11 = ({ title, data }) => {
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <Box display="flex" justifyContent="space-between">
               <Typography variant='h1'> {title} </Typography>
-              <FilterSelectionDrawer data={filteredData} />
+              <FilterSelectionDrawer data={filteredData} source= 'report11'/>
               </Box>
             </Grid> 
 

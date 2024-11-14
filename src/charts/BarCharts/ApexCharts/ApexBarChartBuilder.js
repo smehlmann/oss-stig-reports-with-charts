@@ -78,7 +78,34 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
       },
     },
     dataLabels: {
-      enabled: false,
+      labels: {
+        formatter: function (value) {
+          if (formatLabelToPercentage) {
+            return formatLabelToPercentage.formatter(value);
+          }
+          return value;
+        },
+      },
+      style: {
+        fontFamily: 'Segoe UI',
+        colors: ['#283249'], //background color 
+      },
+      background: {
+        enabled: true,
+        foreColor: '#ffffff',
+        padding: 4,
+        borderRadius: 4,
+        borderWidth: 0,
+        borderColor: '#283249',
+        opacity: 0.8,
+      },
+      dropShadow: {
+        enabled: true,
+        top: 1,
+        left: 1,
+        blur: 1,
+        opacity: 0.7,
+      },
     },
     xaxis: {
       // tickPlacement: 'on',
@@ -88,6 +115,13 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
         text: xAxisHeader,
         style: axisTitleStyle,
       },
+      labels: {
+        style: {
+          fontFamily: 'Segoe UI, Arial, sans-serif',
+          fontWeight: 400,
+          cssClass: 'apexcharts-yaxis-label',
+        },
+      }, //labels
       tickAmount: dataValues.length > 5 ? undefined : dataValues.length, // set tickAmount based on data length
     },
     yaxis: {
@@ -110,7 +144,6 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
           cssClass: 'apexcharts-yaxis-label',
         },
       }, //labels
-
     },
     tooltip: {
       enabled: true,
@@ -232,9 +265,6 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
     ],
   });
 
-  // useEffect(() => {
-  //   setSeries([{ name: xAxisHeader, data: dataValues, colors: barColors}]);
-  // }, [dataValues, xAxisHeader, barColors ]);
 
   //update series data when dataValues, dataLabels, or getColorForLabel change
   useEffect(() => { 

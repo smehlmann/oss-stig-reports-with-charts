@@ -59,8 +59,9 @@ const DashboardSelectedReport7 = ({ data, title }) => {
             <Grid lg={6} sm={6} xl={6} xs={12}>
               <TableGridCardComponent>
                 <AveragesGroupedByColumn 
-                  groupingColumn = 'emass'
+                  groupingColumn = "emass"
                   data={filteredData} 
+                  targetColumns={["assessed", "submitted", "accepted", "rejected", "checks", "emass"]} 
                   source='report7'
                 />
               </TableGridCardComponent>

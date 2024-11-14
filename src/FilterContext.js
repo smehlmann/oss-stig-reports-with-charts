@@ -124,14 +124,14 @@
     return (
       //provides 'filter' state and 'updateFilter' to all components nested in FilterProvider
       <FilterContext.Provider value={{ 
-          filter, 
-          updateFilter, 
-          removeFilterKey, 
-          clearFilter, 
-          isWebOrDBIncluded, 
-          toggleWebOrDBFilter,
-          isDelinquent,
-          toggleDelinquentFilter 
+        filter: filter || {},
+        updateFilter, 
+        removeFilterKey, 
+        clearFilter, 
+        isWebOrDBIncluded, 
+        toggleWebOrDBFilter,
+        isDelinquent,
+        toggleDelinquentFilter 
       }}>
         {children}
       </FilterContext.Provider>

@@ -1,6 +1,6 @@
 import React, { useMemo} from "react";
 import { ThemeProvider, Box, Typography} from "@mui/material";
-import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
+import TwoPropsCountByValues from "../../charts/BarCharts/ApexCharts/TwoPropsCountByValues";
 import ChartCardComponent from "../Cards/ChartCardComponent";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
@@ -15,10 +15,10 @@ import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
 
 /*
- Displays report option 2. Asset Metrics
+ Displays report option 9. Unclass Core Printers Metrics
 */
 
-const DashboardSelectedReport5 = ({ data, title }) => {
+const DashboardSelectedReport15 = ({ data, title }) => {
 
   const { filter, isWebOrDBIncluded} = useFilter();
   
@@ -31,15 +31,9 @@ const DashboardSelectedReport5 = ({ data, title }) => {
       result = result.filter(item => !item.cklWebOrDatabase);
     }
 
-    //only displays those where delinquent = 'yes' 
-    // if (!isDelinquent) {
-    //   result = result.filter(item => item.delinquent === 'Yes');
-    // }
-
     return result;
   }, [filter, data, isWebOrDBIncluded, ]);
   
-
   return (
     <ThemeProvider theme={theme}>
         <DashboardRoot>
@@ -52,39 +46,41 @@ const DashboardSelectedReport5 = ({ data, title }) => {
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <Box display='inline-flex' justifyContent="space-between" sx={{ width:'100%'}} >
                 <Typography variant='h1'>{title}</Typography> 
-                <FilterSelectionDrawer data={filteredData} source='report5'/>
+                <FilterSelectionDrawer data={filteredData} source='report15'/>
               </Box>
             </Grid>
 
             <Grid lg={12} md={12} xl={12} xs={12}>
               <Box> 
-                <StatisticsCardGroup data={filteredData} source='report5' />
+                <StatisticsCardGroup data={filteredData} source='report15' />
               </Box>
+            </Grid>
+
+            <Grid lg={4} sm={4} xl={6} xs={12}>
+              <ChartCardComponent title = "Assets by Package">
+                <TwoPropsCountByValues
+                  categoryField="department"
+                  metricField="asset"
+                  isHorizontal={false}
+                  xAxisTitle="Department"
+                  yAxisTitle= "Number of Assets"
+                  data={filteredData}
+                />
+              </ChartCardComponent>
             </Grid>
 
             {/* data grid */}
             <Grid lg={8} sm={8} xl={6} xs={12} >
               <TableGridCardComponent>
                 <AveragesGroupedByColumn 
-                  groupingColumn = 'code'
+                  groupingColumn = 'department'
                   data={filteredData} 
                   targetColumns={["assessed", "submitted", "accepted", "rejected", "asset", "checks", "delinquent"]} 
-                  source='report5'
                 />
               </TableGridCardComponent>
             </Grid>
 
-            <Grid lg={4} sm={4} xl={6} xs={12}>
-              <ChartCardComponent title = "Assets by Package">
-                <ApexCountByValueBarChart
-                  targetColumn="shortName"
-                  isHorizontal={false}
-                  xAxisTitle="Package Name"
-                  yAxisTitle= "Number of Assets"
-                  data={filteredData}
-                />
-              </ChartCardComponent>
-            </Grid>
+
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
@@ -102,7 +98,8 @@ const DashboardSelectedReport5 = ({ data, title }) => {
           </Grid> 
         </DashboardRoot>
     </ThemeProvider>
+
   );
 };
 
-export default DashboardSelectedReport5;
+export default DashboardSelectedReport15;

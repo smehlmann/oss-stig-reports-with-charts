@@ -9,11 +9,11 @@ import {
   StyledTableHead,
   StyledHeaderCell,
   StyledTable,
-} from '../RenderingLogic/StyledTableComponents';
-import ParentRowRenderer from '../RenderingLogic/ParentRowRenderer';
+} from './StyledTableComponents';
+import ParentRowRenderer from './ParentRowRenderer';
 
 
-const TwoLevelTableRenderer = ({ rows, columns, renderChildRow, childRowCount, filterProperty }) => {
+const FlexibleTableRenderer = ({ rows, columns, renderChildRow, childRowCount, filterProperty }) => {
   const {sortField, sortDirection, handleSort, sortData} = useSortableData();
 
   //function to sort childRows
@@ -38,7 +38,7 @@ const TwoLevelTableRenderer = ({ rows, columns, renderChildRow, childRowCount, f
                   >
                     {header.label}
                     { sortField === header.id && (
-                      sortDirection === 'asc' ? ' ▲' : ' ▼'
+                      sortDirection === 'asc' 
                     )}
                   </StyledHeaderCell>
                 )}
@@ -62,5 +62,5 @@ const TwoLevelTableRenderer = ({ rows, columns, renderChildRow, childRowCount, f
     </StyledTableContainer>
   );
 };
-export default TwoLevelTableRenderer;
+export default FlexibleTableRenderer;
 

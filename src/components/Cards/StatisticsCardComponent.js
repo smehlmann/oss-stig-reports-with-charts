@@ -42,7 +42,7 @@ const getCardBackgroundColor = (metricname) => {
     case 'Assets':
       return '#ead7cd';
     case 'Overall Assessed':
-      return '#bdabe0';
+      return '#d9cfed';
     case 'Delinquents':
       return '#98E1DC';
     default:
@@ -65,7 +65,7 @@ const CustomGridContainer = styled(Grid)(({ theme }) => ({
 }));
 
 const MainMetricValue = styled(Typography)(({ theme }) => ({
-  fontSize: theme.typography.h2.fontSize,
+  fontSize: theme.typography.h3.fontSize,
   fontWeight: 700,
   alignItems: 'left',
   color: '#2A2A2A', //light mode primary
@@ -114,7 +114,7 @@ const getIcon = (metricname) => {
 
 const CaptionText = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
-  color: '#3E3E3E',
+  color: theme.palette.text.secondary,
   display: 'flex',
   alignItems: 'center',
 }));

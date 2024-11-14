@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import MultiLevelTableRenderer from "./MultiLevelTableRenderer.js";
 import TableBody from '@mui/material/TableBody';
 // import { useFilter } from '../../../FilterContext.js';
 // import {useTheme} from "../../../theme.js"
@@ -15,7 +14,8 @@ import {
 import SecondLevelChildRenderer from "./SecondLevelChildRenderer.js"
 import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
 import { useFilter } from "../../../FilterContext.js";
-import TwoLevelTableRenderer from "../TwoLevelTable/TwoLevelTableRenderer.js";
+import FlexibleTableRenderer from "../RenderingLogic/FlexibleTableRenderer.js";
+
 
 function MultiLevelTableDataFormatter({ parentRowColumn, firstLevelChildRows, secondLevelChildRows, firstLevelChildRowHeaders, secondLevelChildRowHeaders, data}) {
   // const theme = useTheme();
@@ -184,7 +184,7 @@ function MultiLevelTableDataFormatter({ parentRowColumn, firstLevelChildRows, se
   ];
 
   return (
-    <TwoLevelTableRenderer 
+    <FlexibleTableRenderer 
       rows={parentRows} 
       columns={mainColumnHeader} 
       renderChildRow={renderChildRow} 

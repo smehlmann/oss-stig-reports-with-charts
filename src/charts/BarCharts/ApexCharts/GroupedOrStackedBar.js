@@ -90,50 +90,16 @@ const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, showLabelsOnBars,
   });
 }, [countMap]);
 
-/*
-const updatedSeries = useMemo(() => {
-  // Step 1: Extract unique statuses (keys) from the first entry in countMap
-  const uniqueStatuses = new Set();
-  Object.values(countMap).forEach(entry => {
-    Object.keys(entry).forEach(status => {
-      uniqueStatuses.add(status);
-    });
-  });
-
-  // Convert the Set to an Array for easier manipulation
-  const statusesArray = Array.from(uniqueStatuses);
-
-  // Step 2: Build the series data
-  return statusesArray.map(status => {
-    const groups = []; // Array to store group labels where the count is non-zero
-    const data = Object.keys(countMap).map(groupingId => {
-      const count = countMap[groupingId][status] || 0;
-      if (count > 0) {
-        // If the count is non-zero, add the groupingId to the groups array
-        groups.push(groupingId);
-      }
-      return count;
-    });
-
-    return {
-      name: status,
-      group: groups, // Add the groups array to the series object
-      data: data,
-    };
-  });
-}, [countMap]);
-
-*/
 
 
 
-useEffect(() => {
-  // console.log('filter: ', filter);
-  // console.log('countMap: ', countMap);
-  // // console.log('values in countMap: ', Object.values(countMap));
+// useEffect(() => {
+//   // console.log('filter: ', filter);
+//   // console.log('countMap: ', countMap);
+//   // // console.log('values in countMap: ', Object.values(countMap));
 
-  // console.log('updatedSeries: ', updatedSeries);
-}, [filter,]);
+//   // console.log('updatedSeries: ', updatedSeries);
+// }, [filter,]);
 
 
   //updates the filter criteria based on user's clicking on one of the bars

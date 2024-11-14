@@ -33,9 +33,6 @@ const DashboardSelectedReport5 = ({ data, title }) => {
     return result;
   }, [filter, data, isWebOrDBIncluded]);
 
-
-  
-
   return (
     <ThemeProvider theme={theme}>
       {/* <FilterProvider> */}
@@ -50,7 +47,7 @@ const DashboardSelectedReport5 = ({ data, title }) => {
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <Box display="flex" justifyContent="space-between">
               <Typography variant='h1'> {title} </Typography>
-              <FilterSelectionDrawer data={filteredData} />
+              <FilterSelectionDrawer data={filteredData} source ='report8'/>
               </Box>
             </Grid> 
 
@@ -66,22 +63,6 @@ const DashboardSelectedReport5 = ({ data, title }) => {
                 />
               </HorizontalBarChartCard>
             </Grid> 
-
-
-            {/* <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
-              <HorizontalBarChartCard title = 'Assets by STIG Benchmark'>
-               <GroupedOrStackedBar
-                  groupByColumn="benchmarkId"
-                  breakdownColumn="sysAdmin"
-                  isHorizontal={true}
-                  isStackedBarChart={true}
-                  xAxisTitle="Number of Assets"
-                  yAxisTitle= "STIG Benchmark"
-                  data={filteredData}
-                />
-              </HorizontalBarChartCard>
-            </Grid>  */}
-
 
             <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
               <HorizontalBarChartCard title = 'Assets by STIG Benchmark'>
