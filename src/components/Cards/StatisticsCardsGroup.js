@@ -93,7 +93,7 @@ const StatisticsCardGroup = ({data = [], source='' }) => {
   }, [safeData, source]);
 
   const delinquentCount = useMemo(() => {
-    if (source ==='report5' || source === 'report14') {
+    if (source ==='report5' || source === 'report14' || source==='report15' ) {
       const trueDelinquents = safeData.filter(item => item['delinquent'] === 'Yes');
       return trueDelinquents.length;
     }
@@ -112,7 +112,7 @@ const StatisticsCardGroup = ({data = [], source='' }) => {
   };
 
   const renderCardGroup =() => {
-    if(source ==='report14' || source==='report5') {
+    if(source ==='report14' || source==='report5' || source==='report15') {
       return (
         <Grid container spacing={2.5}>
           <Grid item {...getGridPropsWithDelinquentCard()}>

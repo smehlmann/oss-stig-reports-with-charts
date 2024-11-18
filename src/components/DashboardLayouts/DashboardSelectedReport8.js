@@ -11,7 +11,6 @@ import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
 import GroupedAveragesBar from "../../charts/BarCharts/ApexCharts/GroupedAveragesBar.js";
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart.js";
-// import GroupedOrStackedBar from "../../charts/BarCharts/ApexCharts/GroupedOrStackedBar";
 
 
 /*
@@ -35,7 +34,6 @@ const DashboardSelectedReport5 = ({ data, title }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <FilterProvider> */}
         <DashboardRoot>
 
           <Grid container 
@@ -82,7 +80,6 @@ const DashboardSelectedReport5 = ({ data, title }) => {
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
-                {/* <Report8BenchmarksExpanded data={filteredData}/> */}
                 <TwoLevelTableDataFormatter
                   parentRowColumn="benchmarkId"
                   childRows={["collectionName", "asset", "sysAdmin", "primOwner", "latestRev", 
@@ -95,7 +92,6 @@ const DashboardSelectedReport5 = ({ data, title }) => {
             </Grid>
           </Grid> 
         </DashboardRoot>
-      {/* </FilterProvider> */}
     </ThemeProvider>
   );
 };

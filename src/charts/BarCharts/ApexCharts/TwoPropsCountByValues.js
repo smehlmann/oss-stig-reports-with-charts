@@ -2,11 +2,9 @@ import React, { useMemo } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import { useFilter } from "../../../FilterContext.js";
 import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
-import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
+// import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
 import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
-import Box from '@mui/material/Box';
 import ValueCountMap from "../../../components/ValueCountMap.js";
-
 
 //calculates the total of vlaues in the specified numeric field for each unique category in targetColumn
 const ValueSumMap = (data, targetColumn, numericalField) => {
@@ -32,7 +30,7 @@ const TwoPropsCountByValues = ({ categoryField, metricField, isHorizontal, xAxis
   
   //gets the sum of numbers for each item in the categoryField
   const sumMap = useMemo(
-    () => (source === 'report9' 
+    () => ((source === 'report9' || source==='report15' )
       ? ValueCountMap(filteredData, categoryField, metricField) 
       : ValueSumMap(filteredData, categoryField, metricField)),
     [filteredData, categoryField, metricField, source]
@@ -57,63 +55,21 @@ const TwoPropsCountByValues = ({ categoryField, metricField, isHorizontal, xAxis
       }
     }
   };
-  const renderObject = (obj) => (
-    <ul>
-      {Object.entries(obj).map(([key, value]) => (
-        <li key={key}>
-          <strong>{key}:</strong>{" "}
-          {Array.isArray(value) ? (
-            <ul>
-              {value.map((item, index) => (
-                <li key={index}>{item}</li> // render each item in the array as a list item
-              ))}
-            </ul>
-          ) : (
-            <span>{value}</span> // render the value as-is if it's not an array
-          )}
-        </li>
-      ))}
-    </ul>
-  );
-  
-  const labels = barLabels.map((d) => (
-    <li key={d}> {d}</li>
-  ));
-  const values = barValues.map((d) => (
-    <li key={d}> {d}</li>
-  ));
 
   const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
 
   //function to render the appropriate chart based on orientation
   const renderChart = () => {
-    if (isHorizontal) { //if isHorizontal = true
-      return (
-        <HorizontalBarChartBuilder
-          dataLabels={barLabels}
-          dataValues={barValues}
-          isHorizontal={isHorizontal}
-          xAxisHeader={xAxisTitle}
-          yAxisHeader={yAxisTitle}
-          onClick={handleBarClick}
-          formatLabelToPercentage = {percentageFormatterObject}
-        />
-      );
-    } else {
-      return (
-
-        <ApexBarChartBuilder
-          dataLabels={barLabels}
-          dataValues={barValues}
-          isHorizontal={isHorizontal}
-          xAxisHeader={xAxisTitle}
-          yAxisHeader={yAxisTitle}
-          onClick={handleBarClick}
-        />
-
-
-      );
-    }
+    return (
+      <ApexBarChartBuilder
+        dataLabels={barLabels}
+        dataValues={barValues}
+        isHorizontal={isHorizontal}
+        xAxisHeader={xAxisTitle}
+        yAxisHeader={yAxisTitle}
+        onClick={handleBarClick}
+      />
+    );
   };
 
   // Return the chart

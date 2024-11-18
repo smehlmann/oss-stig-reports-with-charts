@@ -34,6 +34,7 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     borderBottom: "none",
     whiteSpace: 'normal', // Allow text wrapping
     wordBreak: 'break-word',
+    fontSize: '14px',
   },
   "& .MuiDataGrid-row:last-of-type .MuiDataGrid-cell": {
     borderBottom: "none", // Remove the bottom border on the last row

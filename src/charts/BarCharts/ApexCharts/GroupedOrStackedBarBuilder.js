@@ -88,6 +88,12 @@ const GroupedOrStackedBarBuilder = ({
         labels: {
           formatter: dataLabelFormatter,
         },
+        style: {
+          fontFamily: 'Segoe UI, Arial, sans-serif',
+          fontWeight: 400,
+          fontSize: '14px',
+          cssClass: 'apexcharts-xaxis-label',
+        }
       },
       yaxis: {
         title: { text: yAxisHeader, 
@@ -100,7 +106,7 @@ const GroupedOrStackedBarBuilder = ({
           style: {
             fontFamily: 'Segoe UI, Arial, sans-serif',
             fontWeight: 400,
-            fontSize: '12px',
+            fontSize: '14px',
             cssClass: 'apexcharts-yaxis-label',
           }
         },

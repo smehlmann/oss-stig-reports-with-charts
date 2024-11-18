@@ -62,7 +62,6 @@ const HistoricalDataTracker = ({ groupingColumn, targetColumns, chartTitle, xAxi
     }
   }, [targetColumns, filteredData, groupingColumn]);
 
-    // console.log("averages: ", averages);
 
   const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
 
@@ -96,8 +95,8 @@ const HistoricalDataTracker = ({ groupingColumn, targetColumns, chartTitle, xAxi
       series: [
         { name: 'Avg Assessed', data: avgAssessedData },
         { name: 'Avg Submitted', data: avgSubmittedData },
-        { name: 'Avg Accepted', data: avgAcceptedData },
-        { name: 'Avg Rejected', data: avgRejectedData }
+        // { name: 'Avg Accepted', data: avgAcceptedData },
+        // { name: 'Avg Rejected', data: avgRejectedData }
       ]
     };
   };

@@ -10,7 +10,7 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
 
   //default axis title style
   const axisTitleStyle = useMemo(() => ({
-    fontSize: '14px',
+    fontSize: '16px',
     fontFamily: 'Segoe UI',
     fontWeight: '500',
     margin: '0',
@@ -181,6 +181,101 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
     grid: {
       left: 400,
     },
+    // responsive: [
+    //   {
+    //     breakpoint: 1950,
+    //     options: {
+    //       enableToolbar: true,
+    //       xaxis: {
+    //         labels: {
+    //           style: {
+    //             fontSize: '13px',
+    //           },
+    //         },
+    //         title: {
+    //           style: {
+    //             fontSize: '14px',
+    //           },
+    //         },
+    //       },
+    //       yaxis: {
+    //         labels: {
+    //           style: {
+    //             fontSize: '13px',
+    //           },
+    //         },
+    //         title: {
+    //           style: {
+    //             text: yAxisHeader,
+    //             fontSize: '14px',
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    //   {
+    //     breakpoint: 1540,
+    //     options: {
+    //       enableToolbar: true,
+    //       xaxis: {
+    //         labels: {
+    //           style: {
+    //             fontSize: '13px',
+    //           },
+    //         },
+    //         title: {
+    //           style: {
+    //             fontSize: '14px',
+    //           },
+    //         },
+    //       },
+    //       yaxis: {
+    //         labels: {
+    //           style: {
+    //             fontSize: '13px',
+    //           },
+    //         },
+    //         title: {
+    //           style: {
+    //             text: yAxisHeader,
+    //             fontSize: '14px',
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    //   {
+    //     breakpoint: 600,
+    //     options: {
+    //       enableToolbar: true,
+    //       xaxis: {
+    //         labels: {
+    //           style: {
+    //             fontSize: '8px',
+    //           },
+    //         },
+    //         title: {
+    //           style: {
+    //             fontSize: '10px',
+    //           },
+    //         },
+    //       },
+    //       yaxis: {
+    //         labels: {
+    //           style: {
+    //             fontSize: '8px',
+    //           },
+    //         },
+    //         title: {
+    //           style: {
+    //             text: yAxisHeader,
+    //             fontSize: '10px',
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // ],
   });
 
   
@@ -219,7 +314,7 @@ const HorizontalBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxis
           style: {
             fontFamily: 'Segoe UI, Arial, sans-serif',
             fontWeight: 400,
-            fontSize: '12px',
+            fontSize: '14px',
             cssClass: 'apexcharts-yaxis-label',
             paddingBottom: 20,
 

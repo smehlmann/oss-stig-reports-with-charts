@@ -1,6 +1,5 @@
 import React, { useMemo} from "react";
 import {ThemeProvider, Typography, Box} from "@mui/material";
-import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TableGridCardComponent from "../Cards/TableGridCardComponent";
 import HistoricalDataTracker from "../../charts/LineCharts/ApexCharts/HistoricalDataTracker"
 import ChartCardComponent from "../Cards/ChartCardComponent";
@@ -9,12 +8,13 @@ import {  useFilter } from "../../FilterContext";
 import MultiLevelTableDataFormatter from "../../charts/ExpandableTables/MultiLevelExpandableTable/MultiLevelTableDataFormatter.js";
 import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent";
 import StatisticsCardGroup from "../Cards/StatisticsCardsGroup.js";
-// import HistoricalDataGrid from "../../charts/DataGridMUI/HistoricalDataGrid";
 import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn.js";
+import GroupedOrStackedBar from "../../charts/BarCharts/ApexCharts/GroupedOrStackedBar";
+
 
 /* Displays report option 8. Historical Data */
 
@@ -47,6 +47,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
   }, [filter, data, isWebOrDBIncluded]);
 
 
+
   //check if filteredData is not array or empty
   if (!Array.isArray(filteredData) || filteredData.length === 0) {
     return (
@@ -77,15 +78,18 @@ const DashboardSelectedReport14 = ({ data, title}) => {
             </Grid>
             <Grid lg={4} md={4} sm={12} xl={6} xs={12}>
               <ChartCardComponent title = "Assets by Packages">
-                <ApexCountByValueBarChart
-                  targetColumn="shortName"
-                  isHorizontal={false}
-                  xAxisTitle="Package Name"
-                  yAxisTitle= "Number of Assets"
+                <GroupedOrStackedBar
+                  groupByColumn="collection"
+                  breakdownColumn="code"
+                  isHorizontal={true}
+                  isStackedBarChart={true}
+                  xAxisTitle="Number of Assets"
+                  yAxisTitle= "Package Name"
                   data={filteredData}
                 />
               </ChartCardComponent>
             </Grid> 
+
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ChartCardComponent title = 'Historical Data'>
                 <HistoricalDataTracker
@@ -171,16 +175,17 @@ const DashboardSelectedReport14 = ({ data, title}) => {
           
           <Grid lg={6} md={6} sm={6} xl={6} xs={12}>
             <ChartCardComponent title = "Assets by Packages">
-              <ApexCountByValueBarChart
-                targetColumn="shortName"
+              <GroupedOrStackedBar
+                groupByColumn="shortName"
+                breakdownColumn="code"
                 isHorizontal={false}
+                isStackedBarChart={true}
                 xAxisTitle="Package Name"
                 yAxisTitle= "Number of Assets"
                 data={dataFromLastPullDate}
               />
             </ChartCardComponent>
           </Grid> 
-
 
           <Grid lg={12} sm={12} xl={12} xs={12}>
             <ChartCardComponent title = 'Historical Data'>

@@ -16,8 +16,6 @@ import GroupedOrStackedBar from "../../charts/BarCharts/ApexCharts/GroupedOrStac
 
 /* Displays report option 6. Checks Not Updated in x Days (eMASS number(s) required)  */
 
-//CHECK WITH EMASS 7372 (BIG ONE) to see if we need to use HorizontalBarChartCard
-
 
 //formats date objects to strings
 const formatDate = (date) => {

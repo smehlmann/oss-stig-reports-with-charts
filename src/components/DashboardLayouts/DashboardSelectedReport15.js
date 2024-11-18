@@ -7,12 +7,12 @@ import ExpandableTableCardComponent from "../Cards/ExpandableTableCardComponent"
 import theme from "../../theme";
 import {  useFilter } from "../../FilterContext";
 import StatisticsCardGroup from "../Cards/StatisticsCardsGroup.js";
-import MultiLevelTableDataFormatter from "../../charts/ExpandableTables/MultiLevelExpandableTable/MultiLevelTableDataFormatter.js";
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn";
 import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js"; 
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
+import TwoLevelTableDataFormatter from "../../charts/ExpandableTables/TwoLevelTable/TwoLevelTableDataFormatter";
 
 /*
  Displays report option 9. Unclass Core Printers Metrics
@@ -33,6 +33,8 @@ const DashboardSelectedReport15 = ({ data, title }) => {
 
     return result;
   }, [filter, data, isWebOrDBIncluded, ]);
+
+  console.log('filteredData: ', filteredData[0]);
   
   return (
     <ThemeProvider theme={theme}>
@@ -56,7 +58,7 @@ const DashboardSelectedReport15 = ({ data, title }) => {
               </Box>
             </Grid>
 
-            <Grid lg={4} sm={4} xl={6} xs={12}>
+            <Grid lg={6} sm={6} xl={6} xs={12}>
               <ChartCardComponent title = "Assets by Package">
                 <TwoPropsCountByValues
                   categoryField="department"
@@ -64,13 +66,14 @@ const DashboardSelectedReport15 = ({ data, title }) => {
                   isHorizontal={false}
                   xAxisTitle="Department"
                   yAxisTitle= "Number of Assets"
+                  source='report15'
                   data={filteredData}
                 />
               </ChartCardComponent>
             </Grid>
 
             {/* data grid */}
-            <Grid lg={8} sm={8} xl={6} xs={12} >
+            <Grid lg={6} sm={6} xl={6} xs={12} >
               <TableGridCardComponent>
                 <AveragesGroupedByColumn 
                   groupingColumn = 'department'
@@ -80,16 +83,13 @@ const DashboardSelectedReport15 = ({ data, title }) => {
               </TableGridCardComponent>
             </Grid>
 
-
-
+            
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <ExpandableTableCardComponent>
-                <MultiLevelTableDataFormatter 
+                <TwoLevelTableDataFormatter 
                   parentRowColumn = "shortName"
-                  firstLevelChildRows = {['asset', 'sysAdmin', 'primOwner', 'assessed', 'submitted', 'accepted']}
-                  firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Assessed %', 'Submitted %', 'Accepted %']}
-                  secondLevelChildRows = {['benchmarks']}
-                  secondLevelChildRowHeaders = {['Benchmarks']}
+                  childRows = {['asset', 'sysAdmin', 'primOwner', 'assessed', 'submitted', 'accepted']}
+                  expandedSectionHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Assessed %', 'Submitted %', 'Accepted %']}
                   data={filteredData}
                 />
               </ExpandableTableCardComponent>

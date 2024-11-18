@@ -12,7 +12,8 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
     fontSize: '14px',
     fontFamily: 'Segoe UI',
     fontWeight: '500',
-    margin: '0',
+    marginBottom: '8px',
+    // margin: '0',
     textAlign: 'center',
   }), []);
   
@@ -21,30 +22,37 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
   const getColorForLabel = useCallback(
     (label) => {
       switch (label) {
-        case "Assessed":
+        case 'Assessed':
           return theme.palette.assessed;
-        case "Submitted":
+        case 'Submitted':
           return theme.palette.submitted;
-        case "Accepted":
+        case 'Accepted':
           return theme.palette.accepted;
-        case "Rejected":
+        case 'Rejected':
           return theme.palette.rejected;
         default:
           return theme.palette.primary.main;
       }
     },
-    [theme.palette],
+    [theme.palette]
   );
 
-  //combine data values with their corresponding colors:
-  const seriesData = dataValues.map((value, index)=> ({
+  // Combine data values with their corresponding labels
+  const seriesData = dataValues.map((value, index) => ({
     x: dataLabels[index],
-    y: value
+    y: value,
   }));
 
-  const [series, setSeries] = useState([{ name: xAxisHeader, data: seriesData }]);
-  //map dataLabels to colors
-  const barColors = useMemo(() => dataLabels.map(label => getColorForLabel(label)), [dataLabels, getColorForLabel]);
+  const [series, setSeries] = useState([
+    { name: xAxisHeader, data: seriesData },
+  ]);
+
+  const barColors = useMemo(
+    () => dataLabels.map((label) => getColorForLabel(label)),
+    [dataLabels, getColorForLabel]
+  );
+
+  // Base options with dynamic orientation adjustments
   const [options, setOptions] = useState({
     chart: {
       type: 'bar',
@@ -52,28 +60,17 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
       width: '100%',
       justifyContent:'center',
       alignItems: 'center',
-      events: {
-        dataPointSelection: (event, chartContext, config) => {
-          // console.log("Data Point Selected: ", config);
-          // console.log("Selected Data Labels: ", dataLabels);
-          onClick(event, chartContext, config);
-        },
-      },
       toolbar: {
         show: true,
-        offsetX: 0,
-        offsetY: 0,
         tools: {
           download: true,
           selection: true,
           zoom: true,
-          zoomin: true,
-          zoomout: true,
-          pan: true,
-          reset: true,
         },
-        zoom: {
-          enabled: true,
+      },
+      events: {
+        dataPointSelection: (event, chartContext, config) => {
+          onClick?.(event, chartContext, config);
         },
       },
     },
@@ -97,7 +94,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
         borderRadius: 4,
         borderWidth: 0,
         borderColor: '#283249',
-        opacity: 0.8,
+        opacity: 0.9,
       },
       dropShadow: {
         enabled: true,
@@ -108,42 +105,55 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
       },
     },
     xaxis: {
-      // tickPlacement: 'on',
-      type: 'category',
-      categories: dataLabels,
+      type: isHorizontal ? 'numeric' : 'category',
+      ...(!isHorizontal && {
+        categories: dataLabels, 
+      }),
       title: {
         text: xAxisHeader,
         style: axisTitleStyle,
       },
       labels: {
+        formatter: function (value) {
+          return formatLabelToPercentage ? formatLabelToPercentage.formatter(value) : value;
+        },
         style: {
+          fontSize: '14px',
           fontFamily: 'Segoe UI, Arial, sans-serif',
           fontWeight: 400,
-          cssClass: 'apexcharts-yaxis-label',
+          cssClass: 'apexcharts-xaxis-label',
         },
-      }, //labels
-      tickAmount: dataValues.length > 5 ? undefined : dataValues.length, // set tickAmount based on data length
+      },
+      tickAmount: dataValues.length > 4 ? undefined : dataValues.length,
     },
     yaxis: {
+      type: isHorizontal ? 'category' : 'numeric',
+      ...(isHorizontal && {
+        categories: dataLabels, 
+      }),
       title: {
         text: yAxisHeader,
         style: axisTitleStyle,
       },
       labels: {
-        //if values are decimals, format as %
         formatter: function (value) {
-          if (formatLabelToPercentage) {
-            return formatLabelToPercentage.formatter(value);
-          }
-          return value;
+          return formatLabelToPercentage
+            ? formatLabelToPercentage.formatter(value)
+            : value;
         },
+        ...(isHorizontal && {
+          offsetX: 15, // horizontal positioning of labels
+          offsetY: 20, // vertical positioning of labels
+        }),
         style: {
-          // fontSize: '12px',
           fontFamily: 'Segoe UI, Arial, sans-serif',
           fontWeight: 400,
-          cssClass: 'apexcharts-yaxis-label',
         },
-      }, //labels
+      },
+    },
+    
+    fill: {
+      opacity: 1,
     },
     tooltip: {
       enabled: true,
@@ -166,143 +176,89 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, isHorizontal, xAxisHeader
           },
           
         },
-        title: {
-          formatter: () => ""
-        }
       },
     },
     plotOptions: {
       bar: {
         borderRadius: 6,
         horizontal: isHorizontal,
-        columnWidth: "34%",
+        columnWidth: '34%',
         colors: {
           backgroundBarOpacity: 1,
-          opacity: 1, 
+          opacity: 1,
         },
       },
-      enableToolbar: true,
     },
-    fill: {
-      opacity: 1 
-    },
+    colors: barColors,
+    //adjust grid area if horizontal chart
+    ...(isHorizontal && {
+      grid: {
+        left: 400,
+      }
+    }),
     legend: {
       show: false,
     },
-    responsive: [
-      {
-        breakpoint: 1300,
-        options: {
-          enableToolbar: true,
-          xaxis: {
-            labels: {
-              style: {
-                fontSize: '11px',
-              },
-            },
-            title: {
-              style: {
-                fontSize: '15px',
-              },
-            },
-          },
-          yaxis: {
-            labels: {
-              style: {
-                fontSize: '11px',
-              },
-            },
-            title: {
-              style: {
-                text: yAxisHeader,
-                fontSize: '12px',
-              },
-            },
-          },
-          title: {
-            style: {
-              fontSize: '20px',
-            },
-          },
-        },
-      },
-      {
-        breakpoint: 600,
-        options: {
-          enableToolbar: true,
-          xaxis: {
-            labels: {
-              style: {
-                fontSize: '8px',
-              },
-            },
-            title: {
-              style: {
-                fontSize: '10px',
-              },
-            },
-          },
-          yaxis: {
-            labels: {
-              style: {
-                fontSize: '8px',
-              },
-            },
-            title: {
-              style: {
-                text: yAxisHeader,
-                fontSize: '10px',
-              },
-            },
-          },
-          title: {
-            style: {
-              fontSize: '15px',
-            },
-          },
-        },
-      },
-    ],
+
   });
 
-
-  //update series data when dataValues, dataLabels, or getColorForLabel change
-  useEffect(() => { 
+  // Update series and options on prop changes
+  useEffect(() => {
     const updatedSeriesData = dataValues.map((value, index) => ({
       x: dataLabels[index],
       y: value,
-      fillColor: getColorForLabel(dataLabels[index])
+      fillColor: getColorForLabel(dataLabels[index]),
     }));
     setSeries([{ name: xAxisHeader, data: updatedSeriesData }]);
-  }, [dataValues, dataLabels, getColorForLabel, xAxisHeader]);
+  }, [dataLabels, dataValues, getColorForLabel, isHorizontal, xAxisHeader, yAxisHeader]);
 
- //update options when dataLabels, xAxisHeader, yAxisHeader, axisTitleStyle, or barColors change
   useEffect(() => {
-    setOptions((prevOptions) => ({
-      ...prevOptions,
+    setOptions((prev) => ({
+      ...prev,
       xaxis: {
-        ...prevOptions.xaxis,
-        categories: dataLabels,
-        title: {
-          text: xAxisHeader,
-          style: axisTitleStyle,
-        },
+        ...prev.xaxis,
+        type: isHorizontal ? 'numeric' : 'category',
+        ...(!isHorizontal && {
+          categories: dataLabels, 
+        }),
+        title: { text: xAxisHeader, style: axisTitleStyle },
       },
       yaxis: {
-        ...prevOptions.yaxis,
+        ...prev.yaxis,
         title: {
-          text: yAxisHeader,
-          style: axisTitleStyle,
+          text: yAxisHeader, style: axisTitleStyle 
         },
+        //if isHorizontal is true
+        ...(isHorizontal && {
+          labels: {
+            maxWidth: '50%', //enough to fully display labels
+            offsetX: 3,
+            
+            style: {
+              fontFamily: 'Segoe UI, Arial, sans-serif',
+              fontWeight: 400,
+              fontSize: '14px',
+              cssClass: 'apexcharts-yaxis-label',
+              paddingBottom: 20,
+            },
+          }
+        })
       },
-     colors: barColors,
+      colors: barColors,
     }));
-    // console.log("Options Updated: ", dataLabels, xAxisHeader, yAxisHeader);
-  }, [dataLabels, xAxisHeader, yAxisHeader, axisTitleStyle,barColors]);
+  }, [dataLabels, dataValues, axisTitleStyle, barColors, isHorizontal, xAxisHeader, yAxisHeader]);
 
+
+  const chartHeight = Math.max(400, dataLabels.length * 24); //ensures that each row in chart is 24px in height
+  
   return (
-    <div className="apex-chart" style={{ height: '100%', width: '100%', margin: "0"}}>
-      <ReactApexChart options={options} series={series} type="bar" height='100%' />
+    <div className="apex-chart" style={{ height: '100%', width: '100%' }}>
+      <ReactApexChart 
+        options={options} 
+        series={series} 
+        type="bar" 
+        height={isHorizontal ? chartHeight : "100%"} 
+/>
     </div>
   );
 };

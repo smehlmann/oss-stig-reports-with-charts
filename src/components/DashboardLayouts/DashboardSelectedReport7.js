@@ -10,7 +10,8 @@ import TwoPropsCountByValues from "../../charts/BarCharts/ApexCharts/TwoPropsCou
 import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
-import FilterBar from "../Filtering/FilterBar.js";
+// import FilterBar from "../Filtering/FilterBar.js";
+import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
 
 /*
  Displays report option 3. RMF Package Asset Count 
@@ -25,19 +26,17 @@ const DashboardSelectedReport7 = ({ data, title }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <FilterProvider> */}
         <DashboardRoot>
-          {/*Filter Bar*/}
           <Grid container 
             spacing={{xs:2, s:2, md:2.5, lg:2.5}}
             sx={{px: {lg:5, xl: 10}}}
           >
             <Grid lg={12} sm={12} xl={12} xs={12}>
-              <Box display='inline-flex' justifyContent="space-between" sx={{ width:'100%'}} >
-                <Typography variant='h1'> {title} </Typography>
-                <FilterBar data={filteredData}/>
+              <Box display="flex" justifyContent="space-between">
+              <Typography variant='h1'> {title} </Typography>
+              <FilterSelectionDrawer data={filteredData} source ='report7'/>
               </Box>
-            </Grid>
+            </Grid> 
             
             <Grid lg={12} sm={12} xl={12} xs={12}>
               <StatisticsCardGroup source='report7' data={filteredData} />
@@ -69,7 +68,6 @@ const DashboardSelectedReport7 = ({ data, title }) => {
 
           </Grid> 
         </DashboardRoot>
-      {/* </FilterProvider> */}
     </ThemeProvider>
   );
 };

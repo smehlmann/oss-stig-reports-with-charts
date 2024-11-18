@@ -11,7 +11,7 @@ import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDr
 import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart";
 import TwoLevelTableDataFormatter from "../../charts/ExpandableTables/TwoLevelTable/TwoLevelTableDataFormatter.js";
 import TwoPropsCountByValues from "../../charts/BarCharts/ApexCharts/TwoPropsCountByValues.js";
-
+import HorizontalBarChartCard from "../Cards/HorizontalBarChartCard.js";
 
 /* Displays report option 5.Open Result Finding Metrics (eMASS number(s) required)  */
 
@@ -52,7 +52,7 @@ const DashboardSelectedReport9 = ({ title, data }) => {
             </Grid> 
             
             <Grid lg={6} sm={12} xl={6} xs={12}>
-              <ChartCardComponent title = 'Assets by STIG Benchmark'>
+              <HorizontalBarChartCard title = 'Assets by STIG Benchmark'>
                 <ApexCountByValueBarChart
                   targetColumn="benchmark"
                   isHorizontal={true}
@@ -60,7 +60,7 @@ const DashboardSelectedReport9 = ({ title, data }) => {
                   yAxisTitle= "STIG Benchmark"
                   data={filteredData}
                 />
-              </ChartCardComponent>
+              </HorizontalBarChartCard>
             </Grid>
             
 

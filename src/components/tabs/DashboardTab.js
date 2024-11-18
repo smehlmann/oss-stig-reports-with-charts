@@ -170,7 +170,7 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
     case '14':
       return <DashboardSelectedReport14 data={formattedData} title='Historical Data' handleClick={handleClick} />
     case '15':
-      return <DashboardSelectedReport15 data={formattedData} title='Printer Collection Dashboard (?)' handleClick={handleClick}/>
+      return <DashboardSelectedReport15 data={formattedData} title='Unclass Core Printers Metrics' handleClick={handleClick}/>
     default:
       return null
   }    

@@ -3,7 +3,7 @@ import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
 import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
-import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
+// import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
 
 const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
   const { filter, updateFilter, removeFilterKey } = useFilter();
@@ -36,39 +36,19 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
 
   //function to render the appropriate chart based on orientation
   const renderChart = () => {
-    if (isHorizontal) {
-      return (
-        <HorizontalBarChartBuilder
-          dataLabels={barLabels}
-          dataValues={barValues}
-          isHorizontal={isHorizontal}
-          xAxisHeader={xAxisTitle}
-          yAxisHeader={yAxisTitle}
-          onClick={handleBarClick}
-        />
-      );
-    } else {
-      return (
-      //   <div>
-      //   {barValues.map((val, index) => (
-      //   <div key={index}>
-      //     <body1>Name: {barLabels[index]} </body1><br></br>
-      //     <body2>Count: {val}</body2>
-      //     <hr />
-      //   </div>
-      // ))} 
-        <ApexBarChartBuilder
-          dataLabels={barLabels}
-          dataValues={barValues}
-          title={chartTitle}
-          isHorizontal={isHorizontal}
-          xAxisHeader={xAxisTitle}
-          yAxisHeader={yAxisTitle}
-          onClick={handleBarClick}
-        />
-        // </div>
-      );
-    }
+    return (
+      <ApexBarChartBuilder
+        dataLabels={barLabels}
+        dataValues={barValues}
+        title={chartTitle}
+        isHorizontal={isHorizontal}
+        xAxisHeader={xAxisTitle}
+        yAxisHeader={yAxisTitle}
+        onClick={handleBarClick}
+      />
+
+    );
+
   };
 
   // Return the chart
