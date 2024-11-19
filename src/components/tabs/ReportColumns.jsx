@@ -103,6 +103,7 @@ export default function ReportColumns({ index, item, selectedReport }) {
       return (
         <tr key={index}>
           <td>{item.collectionName}</td>
+          <td>{item.code}</td>
           <td>{item.asset}</td>
           <td>{item.primOwner}</td>
           <td>{item.sysAdmin}</td>
