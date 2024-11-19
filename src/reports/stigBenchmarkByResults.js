@@ -8,6 +8,7 @@ async function runStigBenchmarkByResults(auth, emassMap, benchmark) {
 
   const headers = [
     { label: "Collection", key: "collectionName" },
+    { label: "Code", key: "code" },
     { label: "Asset", key: "asset" },
     { label: "Primary Owner", key: "primOwner" },
     { label: "Sys Admin", key: "sysAdmin" },
@@ -32,6 +33,7 @@ async function runStigBenchmarkByResults(auth, emassMap, benchmark) {
       // Get assets for each collection
       for (var i = 0; i < collections.length; i++) {
         var collectionName = collections[i].name;
+        var code = collections[i].metadata.Code;
         var collectionId = collections[i].collectionId;
         console.log(
           "collection " + i + " " + collectionName + " ID: " + collectionId
@@ -170,6 +172,7 @@ async function runStigBenchmarkByResults(auth, emassMap, benchmark) {
 
                   var myData = getRow(
                     collectionName,
+                    code,
                     benchmarkId,
                     currentQuarter,
                     latestRevDate,
@@ -205,6 +208,7 @@ async function runStigBenchmarkByResults(auth, emassMap, benchmark) {
 
 function getRow(
   collectionName,
+  code,
   benchmarkId,
   currentQuarter,
   latestRevDate,
@@ -229,6 +233,7 @@ function getRow(
 
   var row = {
     collectionName: collectionName,
+    code: code,
     asset: assetName,
     primOwner: collectionMetadata.primOwner,
     sysAdmin: collectionMetadata.sysAdmin,
