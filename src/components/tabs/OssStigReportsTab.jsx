@@ -722,7 +722,7 @@ const OssStigReportsTab = () => {
               </label>
               <br />
               <br />
-              {showEmassNum && (
+              {showEmassNum && report !== '14' && report !== '15' &&(
                 <div id="emassDiv">
                   <label htmlFor="emassNumsText">
                     Required for reports 4, 5, 6. Optional for all others.
