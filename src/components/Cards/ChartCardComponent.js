@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { Card, CardHeader, CardContent, styled  } from '@mui/material';
-
+import { Card, CardHeader, CardContent, styled } from '@mui/material';
+// import CollapseButtonWrapper from './CollapseButtonWrapper'
+import CollapsibleCard from "./CollapsibleCard";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   // height: '100%', 
@@ -17,12 +18,16 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
-  paddingBottom: '0',
+  paddingBottom: theme.spacing(1),
+  backgroundColor: theme.palette.secondary.light,
+  alignItems: 'center', //vertically center
+  
   '& .MuiCardHeader-title': {
-    textAlign: 'center',
-    fontSize: '1.5rem',
+    textAlign: 'left',
+    fontSize: theme.typography.h4.fontSize,
+    fontWeight: 'bold',
     fontFamily: 'Segoe UI',
-    fontWeight: '900',
+    lineHeight: 1.2, //ensures proper alignment of text
   },
   '& .MuiCardHeader-content': {
     paddingBottom: '0', //remove padding from the content element if needed
@@ -43,19 +48,21 @@ const CustomCardContent = styled(CardContent)(({ theme }) => ({
   alignItems: 'center',
   // overflow:'visible',
   overflow: 'clip',
-  // '&:last-child': {
-  //   paddingBottom: '0px',
-  // }
+  '&:last-child': {
+    paddingBottom: 0, // Ensures no extra padding at the bottom
+  },
 }));
 
 const ChartCardComponent = ({ title, children }) => {
+  
   return (
-    <StyledCard>
-      <CustomCardHeader title={title} />
-      <CustomCardContent>
-        {children}
-      </CustomCardContent>
-    </StyledCard>
+    <CollapsibleCard
+      title = {title}
+      HeaderComponent={CustomCardHeader}
+      ContentComponent={CustomCardContent}
+    >
+      {children}
+    </CollapsibleCard>
   );
 };
 

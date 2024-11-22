@@ -32,7 +32,7 @@
 
       // ensure previous filters is treated as an object
       if (typeof prevFilters !== 'object' || prevFilters === null) {
-        return { ...newFilter }; // Initialize with new filter if prevFilters is not valid
+        return { ...newFilter }; // initialize with new filter if prevFilters is not valid
       } 
       let updatedFilters = { ...prevFilters}; //copy of previous filter
 
@@ -68,13 +68,13 @@
       //iterate over all keys in new filter
       Object.keys(newFilter).forEach(key => {
         const value = newFilter[key]; //value at given key in newFilter
-        const existingValue = prevFilters[key]; //value in our current filter
+        const existingValue = prevFilters[key] || []; //value in our current filter
 
 
         //double-click logic: Remove the entire key-value pair if the value already exists
         if (existingValue === value || (Array.isArray(existingValue) && existingValue.includes(value))) {
           const { [key]: removed, ...rest } = updatedFilters;
-          updatedFilters = rest; // Remove the key-value pair
+          updatedFilters = rest; // remove the key-value pair
         } else if (Array.isArray(existingValue)) { 
           //if existingValue is an array
           if (Array.isArray(value)) {

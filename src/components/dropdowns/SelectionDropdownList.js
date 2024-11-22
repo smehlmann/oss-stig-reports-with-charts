@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect} from 'react';
 import { Box, Autocomplete, TextField, Checkbox, ListItemText } from '@mui/material';
 import { styled, alpha } from "@mui/system";
 
@@ -89,33 +89,42 @@ const FilterDrawerAutoComplete = styled(Autocomplete)(({ theme }) => ({
   },
   //adjust spacing between dropdown items
   '& .MuiAutocomplete-listbox': {
-    padding: 0, //remove padding between list items
+    padding: 0, // padding between list items
+    maxHeight: '300px', //limit dropdown height
+    overflowY: 'auto',
     
   },
   '& .MuiAutocomplete-option': {
-    padding: '2px 4px', //adjust padding to make the items closer
-    minHeight: 'auto', //can also reduce the height
-    backgroundColor:'#8855ff',
+    padding: '2px 8px', // Adjust padding to make the items closer
+    minHeight: 'auto', // Can also reduce the height
+    // whiteSpace: 'normal', // Allow text to wrap onto the next line
+    // wordBreak: 'break-word', // Break words if necessary to prevent overflow
   },
 }));
 
 
 const SelectionDropdownList = ({source='', targetProperty, selectedOptions, valueOptions, onChange, selectAllOptionsFlag, limitNumOfTags}) => {
 
-  // add "Select All" option based on selectAllOptionsFlag
-  const optionsWithSelectAll = selectAllOptionsFlag 
-    ? ['Select All', ...valueOptions] 
-    : valueOptions;
+  //// add "Select All" option based on selectAllOptionsFlag
+  const optionsWithSelectAll = 
+    selectAllOptionsFlag 
+      ? [{ display: 'Select All', raw: 'Select All' }, ...valueOptions] 
+      : valueOptions;
+
   //when the selected options changes (ie new value is added or removed)
   const handleOptionSelected = (event, newValue) => {
-    //select everything
-   if (newValue.includes('Select All')) {
-   onChange(valueOptions, targetProperty); //select all the values
-   }
-   else {
-    onChange(newValue, targetProperty); //new set of selected value(s) after user selects or de-selects option
-   }
-  };
+    // Check if "Select All" was selected
+    if (newValue.some(option => option.raw === 'Select All')) {
+      onChange(valueOptions, targetProperty); // Select all values
+    } else {
+      onChange(newValue, targetProperty); // Pass selected options
+    }
+  }
+
+  useEffect(() => {
+
+  }, [valueOptions]);
+
 
   const renderAutocompleteFromSource = () => 
   {
@@ -128,15 +137,30 @@ const SelectionDropdownList = ({source='', targetProperty, selectedOptions, valu
           onChange={handleOptionSelected}
           options={optionsWithSelectAll}
           disableCloseOnSelect
-          getOptionLabel={(option) => option || ''}
+          getOptionLabel={(option) => typeof option === 'object' && option !== null ? option.display : option || ''}
           //render list of values to choose from
           renderOption={(props, option, { selected }) => (
-            <li {...props}>
+            <li {...props}
+              style={{minWidth: 'max-content',}}
+            >
               <Checkbox
                 checked={selected}
                 style={{ marginRight: 4 }}
               />
-              <ListItemText primary={option} />
+              <ListItemText 
+                primary={typeof option === 'object' ? option.display : option} 
+                primaryTypographyProps={{
+                  style: {
+                    whiteSpace: 'normal', //wrapping
+                    wordWrap: 'break-word',
+                    wordBreak: 'break-word', //break words if necessary to prevent overflow
+                    lineHeight: '1.5', // set line height to avoid tight wrapping 
+                    alignItems: 'center',
+
+                  },
+                }}
+              />
+              
             </li>
           )}
           renderInput={(params) => (
@@ -152,7 +176,11 @@ const SelectionDropdownList = ({source='', targetProperty, selectedOptions, valu
               }}
             />
           )}
-          isOptionEqualToValue={(option, value) => option === value}
+          isOptionEqualToValue={(option, value) =>
+            typeof option === 'object' && typeof value === 'object'
+              ? option.raw === value.raw
+              : option === value
+          }
           noOptionsText="No options"
         />
       );

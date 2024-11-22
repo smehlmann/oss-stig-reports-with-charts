@@ -57,15 +57,6 @@ const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, showLabelsOnBars,
 
   const barLabels = Object.keys(countMap); //labels = array of values in groupByColumn
 
-
-  // // generate the series data dynamically based on unique statuses
-  // const seriesData = getUniqueValuesInColumn(filteredData,breakdownColumn).map(status => ({
-  //   name: status === '' ? "null" : status,  // Label empty string as 'null'
-  //   //for each label in barLabels, checks if there is a corresponding count in the countMap for the groupingColumn value.
-  //   data: barLabels.map(label => countMap[label]?.[status === '' ? 'null' : status] || 0)
-  // }));
-
-
 //transform countMap to the required series format for the chart
  const updatedSeries = useMemo(() => {
   //extract unique statuses (keys) from the first entry in countMap
@@ -90,16 +81,6 @@ const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, showLabelsOnBars,
   });
 }, [countMap]);
 
-
-
-
-// useEffect(() => {
-//   // console.log('filter: ', filter);
-//   // console.log('countMap: ', countMap);
-//   // // console.log('values in countMap: ', Object.values(countMap));
-
-//   // console.log('updatedSeries: ', updatedSeries);
-// }, [filter,]);
 
 
   //updates the filter criteria based on user's clicking on one of the bars
@@ -142,6 +123,7 @@ const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, showLabelsOnBars,
       xAxisHeader={xAxisTitle}
       yAxisHeader={yAxisTitle}
       onClick={handleBarClick}
+      tooltipLabelPrefix ={breakdownColumn}
     />
   );
 };

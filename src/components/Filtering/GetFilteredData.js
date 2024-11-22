@@ -16,6 +16,15 @@ if (filter && filter !== null && Object.keys(filter).length > 0) {
     Object.keys(filter).every(key => {
       const filterValue = filter[key]; // Value associated with current filter's key (property)
 
+      //special handling for date filtering
+      if (key === 'datePulled' && Array.isArray(filterValue)) {
+        const itemDate = new Date(item[key]);
+        return filterValue.some(dateFilter => {
+          const filterDate = new Date(dateFilter);
+          // Implement precise date comparison logic
+          return itemDate.toDateString() === filterDate.toDateString();
+        });
+      }
       //check if filterValue is an object (containing 'operator' and 'value')
       if (typeof filterValue === 'object' && filterValue !== null && !Array.isArray(filterValue)) {
         const operator = filterValue.operator;

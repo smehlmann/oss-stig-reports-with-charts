@@ -3,15 +3,14 @@ import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import ValueCountMap from "../../../components/ValueCountMap.js";
 import { useFilter } from "../../../FilterContext.js";
 import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
-// import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
 
-const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxisTitle, yAxisTitle, data }) => {
+const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, dataLabelsArePercentages, xAxisTitle, yAxisTitle, data }) => {
   const { filter, updateFilter, removeFilterKey } = useFilter();
 
   //gets the data when filter is applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
-  //ValueCountMap -> count the number of times a value appears in the targetColumn
+  //valuemap -> count the number of times a value appears in the targetColumn
   const countMap = useMemo(() => ValueCountMap(filteredData, targetColumn), [filteredData, targetColumn]);
   
 
@@ -40,7 +39,8 @@ const ApexCountByValueBarChart = ({ targetColumn, isHorizontal, chartTitle, xAxi
       <ApexBarChartBuilder
         dataLabels={barLabels}
         dataValues={barValues}
-        title={chartTitle}
+        dataLabelsArePercentages={dataLabelsArePercentages}
+        tooltipLabelPrefix={barLabels}
         isHorizontal={isHorizontal}
         xAxisHeader={xAxisTitle}
         yAxisHeader={yAxisTitle}

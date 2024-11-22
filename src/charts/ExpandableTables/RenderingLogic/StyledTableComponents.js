@@ -95,7 +95,8 @@ export const StyledTableHead = styled(TableHead)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.light,
   display: 'flex',
   height: "55px",
-  margineft: '0',
+  // margineft: '0',
+  paddingLeft: 10,
   alignItems: 'center',
   border: 'none',
   width: '100%',
@@ -103,7 +104,7 @@ export const StyledTableHead = styled(TableHead)(({ theme }) => ({
 
 //actual cells in the header row (text)
 export const StyledHeaderCell = styled(TableCell)(({ theme }) => ({
-  fontSize: theme.typography.h3.fontSize,
+  fontSize: theme.typography.h4.fontSize,
   fontWeight: 'bold',
   border: 'none'
 }));

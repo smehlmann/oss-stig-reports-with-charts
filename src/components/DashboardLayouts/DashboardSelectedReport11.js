@@ -62,7 +62,7 @@ const DashboardSelectedReport11 = ({ title, data }) => {
             </Grid> 
 
             <Grid lg={12} sm={12} xl={12} xs={12}>
-              <ChartCardComponent title = 'Assets by STIG Benchmark'>
+              <ChartCardComponent title = 'Assets by STIG Benchmark and Status'>
                 <GroupedOrStackedBar
                   groupByColumn="benchmark"
                   breakdownColumn="status"

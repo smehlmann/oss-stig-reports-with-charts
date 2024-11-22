@@ -63,11 +63,11 @@ const DashboardSelectedReport5 = ({ data, title }) => {
             </Grid> 
 
             <Grid lg={6} extendedLg={6} sm={12} md={12} xl={6} xs={12}>
-              <HorizontalBarChartCard title = 'Assets by STIG Benchmark'>
+              <HorizontalBarChartCard title = 'STIG Benchmark by Completion'>
                 <GroupedAveragesBar
                   groupByColumn='benchmarkId'
                   breakdownColumns={['assessed', 'submitted']}
-                  showLabelsOnBars={false}
+                  showLabelsOnBars={true}
                   dataLabelsArePercentages = {true}
                   isHorizontal={true}
                   isStackedBarChart={false}

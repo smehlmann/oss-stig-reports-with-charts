@@ -6,7 +6,7 @@ import { useFilter } from '../../../FilterContext';
 import { useTheme } from '@mui/system';
 import SelectionDropdownList from '../../dropdowns/SelectionDropdownList';
 import { FilterSwitch } from './FilterSwitch';
-import { data } from 'jquery';
+// import { data } from 'jquery';
 import useDropdownOptions from '../../dropdowns/useDropdownOptions';
 import {SectionTitle, ToggleSectionContainer, DropdownSectionContainer, ButtonContainer, ApplyButton, ClearAllButton} from './FilterUIComponents';
 
@@ -21,7 +21,6 @@ We have 2 "filter" objects:
 
   When the "Apply" button is selected, all the contents of temp filter will be added to the global filter and applied to the dashboard.
 */
-
 
 
 const FilterSelectionDrawer = ({ data = [], source='' }) => {
@@ -65,6 +64,7 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
       datePulled:[],
       benchmarkId: [],
       department: [], 
+      benchmark: [],
       isWebOrDBIncluded: true, 
       isDelinquent: false 
     });
@@ -80,10 +80,17 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
   //when the apply button is clicked, apply the temp filters to the global filter
   const handleApplyFilters = () => {
     //add filters ONLY if they have non-empty values in dropdowns
-    const filterKeys = ["sysAdmin", "primOwner", "emass", "code", "datePulled", "benchmarkId", "department"];
+    const filterKeys = ["sysAdmin", "primOwner", "emass", "code", "datePulled", "benchmarkId", "benchmark", "department"];
     filterKeys.forEach(key => {
-      if (tempFilter[key] && tempFilter[key].length > 0) {
-        updateFilter({ [key]: tempFilter[key] });
+      if (tempFilter[key] &&  tempFilter[key].length > 0) {
+        if( key === 'datePulled') {
+          const dateValue = tempFilter[key].map(item => item.raw); //extract value from raw property
+          console.log('date to be filtered by: ', typeof dateValue);
+          updateFilter({ [key]: dateValue}); 
+        } else {
+          console.log('non-date: ', tempFilter[key]);
+          updateFilter({ [key]: tempFilter[key] });
+        }
       } else {
         removeFilterKey(key);
       }
@@ -143,6 +150,8 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
           return 'Only Delinquents';
         case 'department':
           return 'Department';
+        case 'datePulled':
+          return 'Date';
         default:
           return '';
       }
@@ -150,17 +159,17 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
     []
   );
 
- ////gets list of options in dropdowns
+ //gets list of options in dropdowns
   const sysAdminOptions = useDropdownOptions(data, 'sysAdmin');
   const primOwnerOptions = useDropdownOptions(data, 'primOwner');
-  const emassOptions = useDropdownOptions(data, 'emass');
+  const emassOptions = useDropdownOptions(data, 'emass');  
   const codeOptions = useDropdownOptions(data, 'code');
-  const dateOptions = useDropdownOptions(data, 'datePulled');
   const benchmarkIdOptions = useDropdownOptions(data, 'benchmarkId');
   const departmentOptions = useDropdownOptions(data, 'department');
+  const dateOptions = useDropdownOptions(data, 'datePulled');
+  const benchmarkOptions = useDropdownOptions(data, 'benchmark');
 
   const renderSideBar = () => {
-    //if the source = 'report5' or 'report2'
     return (
       <>
         {/* button to open Drawer */}
@@ -183,7 +192,7 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
           onClose={handleCloseDrawer}
           PaperProps={{
             sx: {
-              width: 350, // the width of the drawer
+              width: 375, // the width of the drawer
               padding: 2,
               overflow: 'scroll'
             },
@@ -283,7 +292,7 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
               <Divider sx={{ my: 1, mb: 0 }} />
               <DropdownSectionContainer>
                 <SectionTitle> 
-                  Benchmarks
+                  STIG Benchmarks
                 </SectionTitle>
                 <SelectionDropdownList
                   targetProperty="benchmarkId"
@@ -334,6 +343,41 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
               </DropdownSectionContainer>
             </>
           )}   
+          {source === "report9" && (
+            <> {/*allows both elements to be grouped together under conditional rendering */}
+              <Divider sx={{ my: 1, mb: 0 }} />
+              <DropdownSectionContainer>
+                <SectionTitle> 
+                  Code
+                </SectionTitle>
+                <SelectionDropdownList
+                  targetProperty="code"
+                  valueOptions={codeOptions}
+                  selectedOptions={tempFilter.code}
+                  onChange={handleTempFilterChange}
+                  selectAllOptionsFlag={true}
+                  multiSelect 
+                  source='filterDrawer'
+                />
+              </DropdownSectionContainer>
+
+              <Divider sx={{ my: 1, mb: 0 }} />
+              <DropdownSectionContainer>
+                <SectionTitle> 
+                  STIG Benchmarks
+                </SectionTitle>
+                <SelectionDropdownList
+                  targetProperty="benchmark"
+                  valueOptions={benchmarkOptions}
+                  selectedOptions={tempFilter.benchmark}
+                  onChange={handleTempFilterChange}
+                  selectAllOptionsFlag={true}
+                  multiSelect 
+                  source='filterDrawer'
+                />
+              </DropdownSectionContainer>
+            </>
+          )}
 
           {/*department */}
           {source === "report15" && (
@@ -397,28 +441,6 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
 
 
   return <>{renderSideBar()}</>;
-
-
- // // display an array of items
-  
-  // const ArrayPrinter = (items) => {
-  //   return (
-  //     <div>
-  //       {items.map((item, index) => (
-  //         <p key={index}> {item} </p>
-  //       ))}
-  //     </div>  
-  //   )
-  // };
-
-  // return (
-  //   <div> 
-  //     <p>emass {ArrayPrinter(emassOptions)} </p> <br />
-  //     <p>code: {ArrayPrinter(codeOptions)} </p> <br />
-  //     <p>benchmarks: {ArrayPrinter(benchmarkIdOptions)}</p>
-    
-  //   </div>
-  // );
 
 
 };

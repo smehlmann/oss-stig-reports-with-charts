@@ -64,7 +64,7 @@ const DashboardSelectedReport5 = ({ data, title }) => {
 
             {/* data grid */}
             <Grid lg={8} sm={8} xl={6} xs={12} >
-              <TableGridCardComponent>
+              <TableGridCardComponent title = 'Averages by Code'>
                 <AveragesGroupedByColumn 
                   groupingColumn = 'code'
                   data={filteredData} 

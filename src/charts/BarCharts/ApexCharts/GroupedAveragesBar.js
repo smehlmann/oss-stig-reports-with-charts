@@ -126,8 +126,6 @@ const GroupedAveragesBar = ({
       xAxisHeader={xAxisTitle}
       yAxisHeader={yAxisTitle}
       onClick={handleBarClick}
-      formatLabelToPercent={percentageFormatterObject}
-
     />
   );
 }

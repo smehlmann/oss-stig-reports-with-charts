@@ -9,6 +9,7 @@ import ValueCountMap from "../../components/ValueCountMap.js";
 import { getGridNumericOperators } from '@mui/x-data-grid';
 import DropdownInputValue from './DropdownInputValue';
 import GetFilteredData from "../../components/Filtering/GetFilteredData.js";
+import DataGridTest from "./DataGridTest";
 
 const renderProgressBarCell = (params) => {
   return (
@@ -217,7 +218,14 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns, source=[
   ];
 
   return (
-    <DataGridBuilder 
+    // <DataGridBuilder 
+    //   data={averages} 
+    //   columns={tableColumns}
+    //   onRowClick={handleRowClick}
+    //   onFilterModelChange={setFilterModel}
+    // />
+
+    <DataGridTest 
       data={averages} 
       columns={tableColumns}
       onRowClick={handleRowClick}

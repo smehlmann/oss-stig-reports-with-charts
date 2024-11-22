@@ -2,8 +2,7 @@ import React, { useMemo } from "react";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import { useFilter } from "../../../FilterContext.js";
 import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
-// import HorizontalBarChartBuilder from "./HorizontalBarChartBuilder.js";
-import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
+// import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
 import ValueCountMap from "../../../components/ValueCountMap.js";
 
 //calculates the total of vlaues in the specified numeric field for each unique category in targetColumn
@@ -36,8 +35,27 @@ const TwoPropsCountByValues = ({ categoryField, metricField, isHorizontal, xAxis
     [filteredData, categoryField, metricField, source]
   );
 
-  const barLabels = useMemo(() => Object.keys(sumMap), [sumMap]);
-  const barValues = useMemo(() => Object.values(sumMap), [sumMap]);
+  
+  //construct barLabels and barValues based on categoryField
+  const {barLabels, barValues} = useMemo(() => {
+    const statusOrder = ['saved', 'submitted', 'accepted'];
+
+    if (categoryField === 'status') {
+      //reorder barLabels based on statusOrder
+      const barLabels = statusOrder.filter((key) => Object.keys(sumMap).includes(key));
+      //align with reordering
+      const barValues = barLabels.map((label) => sumMap[label]); 
+      
+      return {barLabels, barValues};
+    } else {
+      const barLabels = Object.keys(sumMap);
+      const barValues = Object.values(sumMap);
+
+      return {barLabels, barValues};
+    }
+
+  }, [categoryField, sumMap]);
+
 
   //updates the filter criteria based on user's click
   const handleBarClick = (event, chartContext, config) => {
@@ -56,7 +74,6 @@ const TwoPropsCountByValues = ({ categoryField, metricField, isHorizontal, xAxis
     }
   };
 
-  const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
 
   //function to render the appropriate chart based on orientation
   const renderChart = () => {

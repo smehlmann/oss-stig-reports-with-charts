@@ -15,6 +15,8 @@ import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDr
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn.js";
 import GroupedOrStackedBar from "../../charts/BarCharts/ApexCharts/GroupedOrStackedBar";
 
+import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart.js";
+import ApexBarAvgChart from "../../charts/BarCharts/ApexCharts/ApexBarAvgChart.js";
 
 /* Displays report option 8. Historical Data */
 
@@ -45,7 +47,6 @@ const DashboardSelectedReport14 = ({ data, title}) => {
 
     return result;
   }, [filter, data, isWebOrDBIncluded]);
-
 
 
   //check if filteredData is not array or empty
@@ -121,6 +122,8 @@ const DashboardSelectedReport14 = ({ data, title}) => {
     );
   }
 
+  
+
   //group all data entries by their date
   const dataGroupedByDate = filteredData.reduce((accumulator, currentItem) => {
     //get groupingColumn value in our currentItem
@@ -163,7 +166,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
           </Grid>
 
           <Grid lg={6} md={6} sm={12} xl={6} xs={12}>
-            <TableGridCardComponent>
+            <TableGridCardComponent title="Averages by Code ">
               <AveragesGroupedByColumn 
                 groupingColumn = 'code'
                 data={dataFromLastPullDate} 
@@ -173,10 +176,24 @@ const DashboardSelectedReport14 = ({ data, title}) => {
             </TableGridCardComponent>
           </Grid>     
           
+          {/* <Grid lg={6} md={6} sm={6} xl={6} xs={12}>
+            <ChartCardComponent title = "Assets by Packages and Code">
+              <ApexCountByValueBarChart
+                  targetColumn="shortName"
+                  isHorizontal={false}
+                  dataLabelsArePercentages={false}
+                  xAxisTitle="Package Name"
+                  yAxisTitle= "Number of Assets"
+                  data={dataFromLastPullDate}
+                />
+            </ChartCardComponent>
+          </Grid>  */}
+          
           <Grid lg={6} md={6} sm={6} xl={6} xs={12}>
-            <ChartCardComponent title = "Assets by Packages">
+            <ChartCardComponent title = "Assets by Packages and Code">
               <GroupedOrStackedBar
                 groupByColumn="shortName"
+                showLabelsOnBars={true}
                 breakdownColumn="code"
                 isHorizontal={false}
                 isStackedBarChart={true}
@@ -208,7 +225,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
                 firstLevelChildRowHeaders= {['Asset', 'System Admin', 'Primary Owner', 'Assessed %', 'Submitted %', 'Accepted %']}
                 secondLevelChildRows = {['benchmarks']}
                 secondLevelChildRowHeaders = {['benchmarks']}
-                data={filteredData}
+                data={dataFromLastPullDate}
               />
             </ExpandableTableCardComponent>
           </Grid> 

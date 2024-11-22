@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Card, CardHeader, CardContent, styled  } from '@mui/material';
-
+import { Card, CardHeader, CardContent, styled} from '@mui/material';
+import CollapsibleCard from './CollapsibleCard';
 //card that contains a horizontal bar chart. 
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -18,12 +18,15 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
-  paddingBottom: '0',
+  paddingBottom: theme.spacing(1),
+  backgroundColor: theme.palette.secondary.light,
+  alignItems: 'center', //vertically center
   '& .MuiCardHeader-title': {
-    textAlign: 'center',
-    fontSize: '1.5rem',
+    textAlign: 'left',
+    fontSize: theme.typography.h4.fontSize,
+    fontWeight: 'bold',
     fontFamily: 'Segoe UI',
-    fontWeight: '900',
+    lineHeight: 1.2,
   },
   '& .MuiCardHeader-content': {
     paddingBottom: '0px', //remove padding from the content element if needed
@@ -49,13 +52,15 @@ const CustomCardContent = styled(CardContent)(({ theme }) => ({
 }));
 
 const HorizontalBarChartCard = ({ title, children }) => {
+  
   return (
-    <StyledCard>
-      <CustomCardHeader title={title} />
-      <CustomCardContent>
-        {children}
-      </CustomCardContent>
-    </StyledCard>
+    <CollapsibleCard
+      title={title}
+      HeaderComponent={CustomCardHeader}
+      ContentComponent = {CustomCardContent}
+    >
+      {children}
+   </CollapsibleCard>
   );
 };
 

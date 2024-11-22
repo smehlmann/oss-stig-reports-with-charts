@@ -37,54 +37,32 @@ const StatisticsCardGroup = ({data = [], source='' }) => {
   useEffect(() => {
     //compute averages for each entry 
     const calculatedAverages = safeData.map((item, index) => {
+
       //destructure the relevant properties from current item
-      const { checks, assessed, submitted, accepted, rejected } = item;
-
-      //if there are no checks or checks=0, set average to 0 to avoid division by zero
-      //basically (checks[i]*assessed[i])/checks[i] for each item 
+      const { checks, assessed} = item;
       const avgAssessed = checks ? (checks * (assessed || 0)) / checks : 0; 
-      const avgSubmitted = checks ? (checks * (submitted || 0)) / checks : 0;
-      const avgAccepted = checks ? (checks * (accepted || 0)) / checks : 0;
-      const avgRejected = checks ? (checks * (rejected || 0)) / checks : 0;
-
-      //return an object containing the calculated averages and unique ID for each entry
       return {
         id: `ent-${index}`, //ensure entry has unique ID
         avgAssessed,
-        avgSubmitted,
-        avgAccepted,
-        avgRejected,
         checks, // keep checks for later aggregation
       };
     }); // creates an array of objects wherein each object contains an id, avgs and checks
-
     //aggregate the totals across all calculated averages 
     const aggregatedTotals = calculatedAverages.reduce((acc, currentItem) => {
-      //get the total number of checks 
       acc.totalChecks += currentItem.checks;
-
       //gets the sum of all the prior calculated averages
       acc.avgAssessedSum += currentItem.avgAssessed * currentItem.checks; 
-      acc.avgSubmittedSum += currentItem.avgSubmitted * currentItem.checks;
-      acc.avgAcceptedSum += currentItem.avgAccepted * currentItem.checks;
-      acc.avgRejectedSum += currentItem.avgRejected * currentItem.checks;
       return acc;
     }, {
       //set initial values to all 0
       totalChecks: 0,
       avgAssessedSum: 0,
-      avgSubmittedSum: 0,
-      avgAcceptedSum: 0,
-      avgRejectedSum: 0,
     });
 
     //finalize the averages by dividing summed products by total checks
     const finalAverages = {
-      id: 'overall', // Single ID for the overall averages
+      id: 'overall', // single ID for the overall averages
       avgAssessed: aggregatedTotals.totalChecks ? aggregatedTotals.avgAssessedSum / aggregatedTotals.totalChecks : 0,
-      avgSubmitted: aggregatedTotals.totalChecks ? aggregatedTotals.avgSubmittedSum / aggregatedTotals.totalChecks : 0,
-      avgAccepted: aggregatedTotals.totalChecks ? aggregatedTotals.avgAcceptedSum / aggregatedTotals.totalChecks : 0,
-      avgRejected: aggregatedTotals.totalChecks ? aggregatedTotals.avgRejectedSum / aggregatedTotals.totalChecks : 0,
     };
 
     // Set the final result to the state
@@ -130,7 +108,7 @@ const StatisticsCardGroup = ({data = [], source='' }) => {
               measurement="Total"
             />
           </Grid>
-
+        
           <Grid item {...getGridPropsWithDelinquentCard()}>
             <StatisticsCardComponent 
               metricValue={

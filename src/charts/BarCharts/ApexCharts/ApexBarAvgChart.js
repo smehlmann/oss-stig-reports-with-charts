@@ -4,17 +4,17 @@ import PropertyAvgMap from "../../../components/PropertyAvgMap.js";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
 import { useFilter } from "../../../FilterContext.js";
 // import numeral from "numeral";
-import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
-import GetFilteredData from "../../../components/GetFilteredData.js";
+import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
 
 //"data" is an array of objects. 
 
-const ApexBarAvgChart = ({ targetColumns, isHorizontal, xAxisTitle, yAxisTitle, disableFilterUpdate, data}) => {
+const ApexBarAvgChart = ({ targetColumns, isHorizontal, dataLabelsArePercentages, xAxisTitle, yAxisTitle, disableFilterUpdate, data}) => {
   
   //useFilter contains 'filter' state and when it's updated
   const { filter } = useFilter();
   //gets the data when filter is applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
+  console.log('filteredData: ', filteredData);
   
   //keeps track of averages for each column (NO LONGER USED. NEEDS UPDATING)
   const averageMap = useMemo(() => PropertyAvgMap(filteredData, targetColumns), [filteredData, targetColumns]);
@@ -24,9 +24,6 @@ const ApexBarAvgChart = ({ targetColumns, isHorizontal, xAxisTitle, yAxisTitle, 
   //set to average
   const barValues = useMemo(() => Object.values(averageMap), [averageMap]);
 
-  //utility function gets the formatter object and stores in useMemo
-  //object holds the formatter function that will be applied to labels 
-  const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
 
   const handleBarClick = (event, chartContext, config) => {
     if (disableFilterUpdate) {
@@ -39,11 +36,11 @@ const ApexBarAvgChart = ({ targetColumns, isHorizontal, xAxisTitle, yAxisTitle, 
     <ApexBarChartBuilder
       dataLabels={barLabels}
       dataValues={barValues}
+      dataLabelsArePercentages={dataLabelsArePercentages}
       isHorizontal = {isHorizontal}
       xAxisHeader = {xAxisTitle}
       yAxisHeader = {yAxisTitle}
       onClick={handleBarClick}
-      formatLabelToPercentage = {percentageFormatterObject}
     />
   );
 };

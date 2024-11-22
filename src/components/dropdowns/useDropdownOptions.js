@@ -1,4 +1,6 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+import { format } from 'date-fns';
+
 
 /* 
 Custom hook gets the unique options based on specified property. These options will be displayed in the dropdown list that hte user will select. 
@@ -10,7 +12,28 @@ The hook maps over each item in 'data' and extracts the value at specified key (
 
 const useDropdownOptions = (data, specifiedProperty) => {
     return useMemo(() => {
-        return [...new Set(data.map((item) => item[specifiedProperty]).filter((value) => value != null))]
+        if (!Array.isArray(data)) return [];
+
+        //handle dates properly
+        if(specifiedProperty === 'datePulled') {
+            const uniqueValuesMap = new Map();
+            data.forEach((item) => {
+                const value = item[specifiedProperty];
+                if (value != null) {
+                    const key = value instanceof Date ? value.valueOf() : value;
+                    if (!uniqueValuesMap.has(key)) {
+                        uniqueValuesMap.set(key, {
+                            raw: value,
+                            display: value instanceof Date ? format(value, 'yyyy-MM-dd') : value,
+                        });
+                    }
+                }
+            });
+            return [...uniqueValuesMap.values()];
+        } else {
+            return [...new Set(data.map((item) => item[specifiedProperty]).filter((value) => value != null))]
+        }
+
     }, [data, specifiedProperty]);
 };
 
