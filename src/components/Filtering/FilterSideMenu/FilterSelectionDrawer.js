@@ -286,7 +286,7 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
             />
           </DropdownSectionContainer>
           
-          {/*benchmark */}
+          {/*report 8 */}
           {source === "report8" && (
             <> {/*allows both elements to be grouped together under conditional rendering */}
               <Divider sx={{ my: 1, mb: 0 }} />
@@ -400,6 +400,28 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
             </>
           )}
 
+          {/* report5 */}
+          {(source==="report5")
+            && (
+            <> 
+              <Divider sx={{ my: 1, mb: 0 }} />
+              <DropdownSectionContainer>
+                <SectionTitle> 
+                  Code
+                </SectionTitle>
+                <SelectionDropdownList
+                  targetProperty="code"
+                  valueOptions={codeOptions}
+                  selectedOptions={tempFilter.code}
+                  onChange={handleTempFilterChange}
+                  selectAllOptionsFlag={true}
+                  multiSelect 
+                  source='filterDrawer'
+                />
+              </DropdownSectionContainer>
+            </>
+          )} 
+
           {/*emass numbers */}    
           {(source==="report5" || source==="report7" || source==="report14")
             && (
@@ -420,7 +442,8 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
                 />
               </DropdownSectionContainer>
             </>
-          )}    
+          )} 
+             
 
           <Divider sx={{ my: 1, mb: 2 }} />
   

@@ -28,7 +28,8 @@ const GroupedOrStackedBarBuilder = ({
     axisLabelsStyles,
     tooltipXFormatter,
     tooltipYFormatter, 
-    tooltipYTitleFormatter
+    tooltipYTitleFormatter,
+
   } = useBarChartStyles(dataLabelsArePercentages, tooltipLabelPrefix, true);
 
   const barColors = useMemo(() => {
@@ -100,8 +101,6 @@ const GroupedOrStackedBarBuilder = ({
       plotOptions: {
         bar: {
           borderRadius: 6,
-          // borderRadiusWhenStacked: "all",
-          // borderRadiusApplication: "around",
           horizontal: isHorizontal,
           barHeight: '85%',
 
@@ -120,7 +119,23 @@ const GroupedOrStackedBarBuilder = ({
       },
       dataLabels: {
         enabled: showLabelsOnBars,
-        formatter: (value) => dataLabelPercentageFormatter(value),
+        formatter: function (val, { seriesIndex, dataPointIndex, w }) {
+          //if stacked bar chart
+          if (isStackedBarChart) {
+            const totals = w.globals.stackedSeriesTotals; 
+            // display the total on the last segment of the stack
+            if (seriesIndex === w.globals.series.length - 1) {
+              return dataLabelPercentageFormatter(totals[dataPointIndex]);
+            }
+            return ""; // hide labels if stacked
+          }
+        
+          return dataLabelPercentageFormatter(val);
+        },
+         
+       
+      
+        // offsetY: isStackedBarChart ? -8 : 0,
         style: dataLabelsOnBarText,
         background: dataLabelsOnBarBackground,
         dropShadow: dataLabelsOnBarDropShadow,

@@ -15,8 +15,6 @@ import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDr
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn.js";
 import GroupedOrStackedBar from "../../charts/BarCharts/ApexCharts/GroupedOrStackedBar";
 
-import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart.js";
-import ApexBarAvgChart from "../../charts/BarCharts/ApexCharts/ApexBarAvgChart.js";
 
 /* Displays report option 8. Historical Data */
 
@@ -175,19 +173,6 @@ const DashboardSelectedReport14 = ({ data, title}) => {
               />
             </TableGridCardComponent>
           </Grid>     
-          
-          {/* <Grid lg={6} md={6} sm={6} xl={6} xs={12}>
-            <ChartCardComponent title = "Assets by Packages and Code">
-              <ApexCountByValueBarChart
-                  targetColumn="shortName"
-                  isHorizontal={false}
-                  dataLabelsArePercentages={false}
-                  xAxisTitle="Package Name"
-                  yAxisTitle= "Number of Assets"
-                  data={dataFromLastPullDate}
-                />
-            </ChartCardComponent>
-          </Grid>  */}
           
           <Grid lg={6} md={6} sm={6} xl={6} xs={12}>
             <ChartCardComponent title = "Assets by Packages and Code">

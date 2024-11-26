@@ -50,6 +50,7 @@ export const useBarChartStyles = (dataLabelsOnBarArePercentages, tooltipLabelPre
     opacity: 0.7,
   }), []);
 
+
   const getColorForLabel = useCallback(
     (label) => {
       switch (label) {
@@ -105,6 +106,7 @@ export const useBarChartStyles = (dataLabelsOnBarArePercentages, tooltipLabelPre
   return  {
     axisTitleStyle, dataLabelPercentageFormatter, dataLabelsOnBarText , 
     dataLabelsOnBarBackground, dataLabelsOnBarDropShadow, getColorForLabel,
-    axisLabelsStyles, tooltipXFormatter, tooltipYFormatter, tooltipYTitleFormatter
+    axisLabelsStyles, tooltipXFormatter, tooltipYFormatter, 
+    tooltipYTitleFormatter
   };
 };
