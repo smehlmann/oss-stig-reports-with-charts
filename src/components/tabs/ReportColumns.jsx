@@ -107,6 +107,7 @@ export default function ReportColumns({ index, item, selectedReport }) {
           <td>{item.asset}</td>
           <td>{item.primOwner}</td>
           <td>{item.sysAdmin}</td>
+          <td>{item.rmfAction}</td>
           <td>{item.benchmark}</td>
           <td>{item.groupId}</td>
           <td>{item.latestRev}</td>
