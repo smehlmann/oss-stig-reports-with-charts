@@ -3,7 +3,7 @@ import { useMemo, useCallback } from "react";
 import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
 import { useTheme } from "../../../theme.js"
 import { format } from 'date-fns';
-
+import '../../../Charts.css';
 
 export const useLineChartStyles = (dataLabelsArePercentages, tooltipLabelPrefix, isStackedOrGroupedChart) => {
   const theme = useTheme();
@@ -89,9 +89,9 @@ export const useLineChartStyles = (dataLabelsArePercentages, tooltipLabelPrefix,
     const dateValue = typeof value === 'number' ? new Date(value) : value;
     if (dateValue instanceof Date && !isNaN(dateValue)) {
       const formattedVal = format(dateValue, 'dd MMM yyyy');
-      return `<span style="font-weight: 900; font-size: 14px; color: black;">${formattedVal}</span>`;
+      return `<div class="custom-span">${formattedVal}</div>`
     }
-    return `<p style="font-weight: 900; font-size: 14px; color: black;">${value}</p>`;
+    return `<div class="custom-span">${value}</div>`;
   }, []);
 
   // format y value in tooltip

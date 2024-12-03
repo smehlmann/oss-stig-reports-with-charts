@@ -176,7 +176,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
             </TableGridCardComponent>
           </Grid>     
 
-          {/* <Grid lg={6} md={6} sm={12} xl={6} xs={12}>
+          <Grid lg={6} md={6} sm={12} xl={6} xs={12}>
             <ChartCardComponent title = "Assets by Package">
                 <ApexCountByValueBarChart
                   targetColumn="shortName"
@@ -186,7 +186,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
                   data={dataFromLastPullDate}
                 />
               </ChartCardComponent>
-          </Grid>    */}
+          </Grid>   
 
           
           <Grid lg={6} md={6} sm={6} xl={6} xs={12}>

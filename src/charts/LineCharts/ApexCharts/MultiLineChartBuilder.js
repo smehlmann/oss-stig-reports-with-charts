@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useState, useCallback } from "react";
 import ReactApexChart from "react-apexcharts";
 import { useTheme, palette} from "../../../theme.js"
 import {useLineChartStyles} from "./useLineChartStyles.js"
-
+import '../../../Charts.css';
 // const MultiLineChartBuilder =({ xValues, yValues, xAxisHeader, yAxisHeader, formatLabelToPercentage }) => {
 
   const MultiLineChartBuilder =({ xValues, yValues, xAxisHeader, yAxisHeader }) => {
@@ -53,8 +53,8 @@ const theme = useTheme();
       gradient: {
         shadeIntensity: 1,
         inverseColors: false,
-        opacityFrom: 0.8,
-        opacityTo: 0.9,
+        opacityFrom: 0.5,
+        opacityTo: 0.8,
         stops: [0, 90, 100]
       },
     },
@@ -87,7 +87,7 @@ const theme = useTheme();
       enabled: true,
       shared: true,
       x: {
-        formatter: tooltipXFormatter,
+        formatter: (val) => tooltipXFormatter(val),
       },
       y: {
         formatter: tooltipYFormatter,
@@ -95,6 +95,7 @@ const theme = useTheme();
           formatter: (val) => tooltipYTitleFormatter(val),
         }
       },
+
     },
     plotOptions: {
       line: {

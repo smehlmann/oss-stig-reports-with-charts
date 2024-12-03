@@ -1,91 +1,37 @@
 .Charts {
     text-align: center;
   }
+
+  .custom-span {
+    font-weight: 900;
+    font-size: 13px;
+    color: black;
+    display: content;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+  }
+
+  .apexcharts-xaxistooltip {
+    background-color: #ffffff; /* Example background */
+    border: 1px solid #cccccc; /* Example border */
+    border-radius: 5px; /* Rounded corners */
+    /* padding: 9px 5px; */
+    padding-left: 5px;
+    padding-right: 5px;
+    max-width: 90px;
+  }
   
-  button {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    padding: 8px 16px;
-    margin-right: 10px;
-    position: relative;
-    display: inline-block;
-    overflow: visible;
-    
+  /* .apexcharts-xaxistooltip .apexcharts-xaxistooltip-text {
+    font-family: Segoe UI, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    color: #333333; 
+    text-align: center; 
   }
+   */
 
-  .apexButton {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    padding: 8px 16px;
-    margin-right: 10px;
-    position: relative;
-    display: inline-block;
-    overflow: visible;
-    background-color: #6900AB;
-    color: #fff;
-    
-  }
 
-  .apexcharts-canvas {
-    width: 100% !important;
-    height: 100% !important;
-  }
-  .apexcharts-inner.apexcharts-graphical {
-    width: 100% !important;
-    height: 100% !important;
-    position: absolute;
-  }
-
-  .apexcharts-inner {
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  .apexcharts-graphical {
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  .apexcharts-title-text {
-    font-size: 25px !important;
-    font-family: 'Segoe UI', sans-serif !important;
-    font-weight: bold !important;
-    color: #333 !important;
-  }
-
-  .apexcharts-data-label {
-    font-size: 12px !important;
-    font-family: 'Segoe UI', sans-serif !important;
-    font-weight: normal !important;
-    color: #666 !important;
-  }
-
-  .apexcharts-xaxis-label {
-    font-size: 12px !important;
-    font-family: 'Segoe UI', sans-serif !important;
-    color: #000 !important;
-  }
-  .apexcharts-yaxis-label {
-    font-size: 12px !important;
-    font-family: 'Segoe UI', sans-serif !important;
-    color: #000 !important;
-  }
-
-    .apexcharts-toolbar {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    position: relative !important;
-    top: 0 !important;
-    right: 0 !important;
-    opacity: 0.4 !important;
-  }  
-
-  
-
-  
 
   .table-container {
     flex: 1;
@@ -95,43 +41,6 @@
     border-radius: 10px;
   
   }
-  
-  /* Header for the main table (not for header in collapsible row) */
-  .table-container .main-header {
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-align: left;
-    
-  }
-  
-  /* Style for the subsection headers */
-  .table-container .subsection-header {
-    background-color: #A8A8F0;
-    /* border: 1px solid #ddd; */
-    width: 34%;
-  }
-  
-  /* Table cells */
-  .table-container td {
-    padding: 8px;
-    text-align: left;
-    /* border: 1px solid #ddd; */
-    /* word-wrap: break-word; */
-    overflow: auto;
-    white-space: normal; 
-    max-width: 33%;
-    word-break: break-all; /* Force long words to break and wrap */
-  }
-  
-  /*Row changes color when hovered over */
-  .table-container tbody tr:hover {
-    background-color: #f8f3f3;
-  }
-  
-  .table-container tbody .child-row:hover {
-    background-color: #e6e4e4;
-  }
-  
   
   .chart-container {
     /* max-width: 800px;  */
@@ -153,21 +62,7 @@
     /* background-color: #323447; */
     
   }
-  /* .chart-container .apex-chart{
-    width: 80% !important; 
-    height: auto !important; 
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #323447;
-    
-  } */
-  
-  .doughnut-chart-container canvas {
-    width: 30%; /* Ensure the chart canvas takes full width within the container */
-    height: auto !important;
-    padding: 3%;
-    background-color: #323447;
-  }
+
 
 
 
