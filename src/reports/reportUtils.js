@@ -452,7 +452,7 @@ function getMetadataByAsset(labelMap, labels) {
         case "CCB_SA_ACTIONS":
           collectionMetadata.ccbSAActions = labels[iLabel].name;
           break;
-        case "RMF Action":
+        case "RMF ACTION":
           collectionMetadata.rmfAction = labels[iLabel].name;
           break;
         case "ISSO":
@@ -501,7 +501,7 @@ function getAssetMetadata(labelMap, labels) {
         case "CCB_SA_ACTIONS":
           collectionMetadata.ccbSAActions = labels[iLabel].name;
           break;
-        case "RMF Action":
+        case "RMF ACTION":
           collectionMetadata.rmfAction = labels[iLabel].name;
           break;
         case "ISSO":
