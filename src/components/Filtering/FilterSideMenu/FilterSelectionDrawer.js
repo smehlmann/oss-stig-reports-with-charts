@@ -53,7 +53,7 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
     setIsDrawerOpen(false);
   };
 
-  //clears all items from filter and all chips from dropdown lists
+  //clears all items from filters and all chips from dropdown lists
   const handleClearAll = () => {
     setClearSelectionsTrigger(!clearDropdownSelectionsTrigger);
     setTempFilter({ 
@@ -76,7 +76,6 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
     setTempFilter((prev) => ({ ...prev, [key]: newValue })); 
   };
 
-
   //when the apply button is clicked, apply the temp filters to the global filter
   const handleApplyFilters = () => {
     //add filters ONLY if they have non-empty values in dropdowns
@@ -85,10 +84,8 @@ const FilterSelectionDrawer = ({ data = [], source='' }) => {
       if (tempFilter[key] &&  tempFilter[key].length > 0) {
         if( key === 'datePulled') {
           const dateValue = tempFilter[key].map(item => item.raw); //extract value from raw property
-          console.log('date to be filtered by: ', typeof dateValue);
           updateFilter({ [key]: dateValue}); 
         } else {
-          console.log('non-date: ', tempFilter[key]);
           updateFilter({ [key]: tempFilter[key] });
         }
       } else {

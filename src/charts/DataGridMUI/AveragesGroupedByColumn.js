@@ -9,7 +9,6 @@ import ValueCountMap from "../../components/ValueCountMap.js";
 import { getGridNumericOperators } from '@mui/x-data-grid';
 import DropdownInputValue from './DropdownInputValue';
 import GetFilteredData from "../../components/Filtering/GetFilteredData.js";
-import DataGridTest from "./DataGridTest";
 
 const renderProgressBarCell = (params) => {
   return (
@@ -51,7 +50,8 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns, source=[
   // gets the data when filter has been applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
 
-
+  useEffect(() => {
+  }, [filter]);
 
   useEffect(() => {
     if (Array.isArray(filteredData) && filteredData) {
@@ -124,6 +124,7 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns, source=[
           }
         })
 
+        // console.log('dataGrid averages: ', averages);
         //add groupingValue and averages to acc
         acc.push({
           id: groupingValue,
@@ -135,10 +136,11 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns, source=[
           ...(source==='report5' ? { delinquentCount } : {}),
           ...averages,
         });
-        
+      
         return acc; //final accumulator = groupedAverages
       }, []);
 
+      // console.log('dataGrid groupedAverages: ', groupedAverages);
       setAverages(groupedAverages);
     }
   }, [filteredData, groupingColumn, source, columnsToCalculateAvg, targetColumns]);
@@ -218,19 +220,14 @@ function AveragesGroupedByColumn({ groupingColumn, data, targetColumns, source=[
   ];
 
   return (
-    // <DataGridBuilder 
-    //   data={averages} 
-    //   columns={tableColumns}
-    //   onRowClick={handleRowClick}
-    //   onFilterModelChange={setFilterModel}
-    // />
-
-    <DataGridTest 
+    <DataGridBuilder 
       data={averages} 
       columns={tableColumns}
       onRowClick={handleRowClick}
       onFilterModelChange={setFilterModel}
     />
+
+
   );
 }
 export default AveragesGroupedByColumn;

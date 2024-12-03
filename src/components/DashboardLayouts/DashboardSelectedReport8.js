@@ -67,7 +67,6 @@ const DashboardSelectedReport5 = ({ data, title }) => {
                 <GroupedAveragesBar
                   groupByColumn='benchmarkId'
                   breakdownColumns={['assessed', 'submitted']}
-                  showLabelsOnBars={true}
                   dataLabelsArePercentages = {true}
                   isHorizontal={true}
                   isStackedBarChart={false}

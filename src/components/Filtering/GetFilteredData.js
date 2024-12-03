@@ -15,6 +15,7 @@ if (filter && filter !== null && Object.keys(filter).length > 0) {
   const filteredData = data.filter(item => 
     Object.keys(filter).every(key => {
       const filterValue = filter[key]; // Value associated with current filter's key (property)
+      const itemValue = item[key]; //item value for comparison based on current key
 
       //special handling for date filtering
       if (key === 'datePulled' && Array.isArray(filterValue)) {
@@ -29,8 +30,8 @@ if (filter && filter !== null && Object.keys(filter).length > 0) {
       if (typeof filterValue === 'object' && filterValue !== null && !Array.isArray(filterValue)) {
         const operator = filterValue.operator;
         const valueToFilterBy = filterValue.value;
-        const itemValue = item[key]; //item value for comparison based on current key
 
+        
         // Handle different operators
         switch (operator) {
           case '=':
@@ -50,12 +51,14 @@ if (filter && filter !== null && Object.keys(filter).length > 0) {
           case 'is not empty':
             return itemValue !== null && itemValue !== '';
           default:
-            return true; // If the operator is not recognized, include the item
+            return true; // if the operator is not recognized, include the item
         }
 
-      } else if (Array.isArray(filterValue)) {
+      } 
+      
+      
+      if (Array.isArray(filterValue)) {
         //when filterValue is an array (e.g., from a dropdown with multiple selections)
-        const itemValue = item[key]; // Get item value for the current key
         
         //if item's value exists as an array (multi-select scenario)
         if (Array.isArray(itemValue)) {
@@ -65,11 +68,9 @@ if (filter && filter !== null && Object.keys(filter).length > 0) {
           //check if itemValue is in filterValue
           return filterValue.includes(itemValue);
         }
-      } else {
-        //compare itemValue directly with filterValue (single-value filter)
-        const itemValue = item[key];
-        return itemValue === filterValue;
-      }
+      } 
+      //compare itemValue directly with filterValue (single-value filter)
+      return itemValue === filterValue;
       
     })
   );

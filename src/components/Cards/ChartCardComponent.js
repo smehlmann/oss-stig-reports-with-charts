@@ -26,7 +26,8 @@ const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
     textAlign: 'left',
     fontSize: theme.typography.h4.fontSize,
     fontWeight: 'bold',
-    fontFamily: 'Segoe UI',
+    fontFamily: 'Segoe UI, sans-serif',
+    // fontFamily: 'Roboto, sans-serif',
     lineHeight: 1.2, //ensures proper alignment of text
   },
   '& .MuiCardHeader-content': {

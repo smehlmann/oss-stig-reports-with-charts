@@ -1,13 +1,13 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState, useEffect} from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
 import { useBarChartStyles } from './useBarChartStyles.js';
+import { useFilter } from "../../../FilterContext.js";
 
 const GroupedOrStackedBarBuilder = ({
   series,
   dataLabels,
   dataLabelsArePercentages,
-  showLabelsOnBars,
   isHorizontal,
   isStackedBarChart,
   xAxisHeader,
@@ -29,8 +29,20 @@ const GroupedOrStackedBarBuilder = ({
     tooltipXFormatter,
     tooltipYFormatter, 
     tooltipYTitleFormatter,
+    legendBarChart,
 
   } = useBarChartStyles(dataLabelsArePercentages, tooltipLabelPrefix, true);
+
+  const {filter} = useFilter(); 
+
+  const [showDataLabels, setShowDataLabels] = useState(false);
+
+  
+  //update setShowDataLabels
+  useEffect(() => {
+    setShowDataLabels(Object.keys(filter).length > 0);
+  }, [filter]); //only re-run when the `filter` object changes
+
 
   const barColors = useMemo(() => {
     const defaultColors = ['#3194af', '#52E3E1','#A0E426', '#FDF148', '#FFAB00', '#F77976', '#F050AE', '#D883FF', '#9336FD'];
@@ -58,7 +70,8 @@ const GroupedOrStackedBarBuilder = ({
         },
       },
       xaxis: {
-        categories: dataLabels,
+        // categories: dataLabels,
+        categories: dataLabels.length > 0 ? dataLabels : ['No Data'],
         title: { text: xAxisHeader, style: axisTitleStyle },
         labels: {
           formatter: dataLabelPercentageFormatter,
@@ -96,7 +109,10 @@ const GroupedOrStackedBarBuilder = ({
           title: {
             formatter: tooltipYTitleFormatter,
           }
-        }
+        },
+        items:{
+          display: 'flex',
+        },
       },
       plotOptions: {
         bar: {
@@ -118,25 +134,22 @@ const GroupedOrStackedBarBuilder = ({
         left: 400,
       },
       dataLabels: {
-        enabled: showLabelsOnBars,
-        formatter: function (val, { seriesIndex, dataPointIndex, w }) {
-          //if stacked bar chart
+        enabled: isStackedBarChart ? showDataLabels : true,
+        formatter: (val, { seriesIndex, dataPointIndex, w }) => {
           if (isStackedBarChart) {
-            const totals = w.globals.stackedSeriesTotals; 
-            // display the total on the last segment of the stack
-            if (seriesIndex === w.globals.series.length - 1) {
-              return dataLabelPercentageFormatter(totals[dataPointIndex]);
+            const totals = w.globals.stackedSeriesTotals;
+            if (seriesIndex === w.globals.series.length - 1&& totals[dataPointIndex] !== undefined) {
+              return dataLabelPercentageFormatter(totals[dataPointIndex]); // show total above the bar
             }
-            return ""; // hide labels if stacked
+            return ''; //hide for other segments
           }
-        
-          return dataLabelPercentageFormatter(val);
+          // non-stacked charts, show the value for the segment
+          return dataLabelPercentageFormatter(val || 0);
         },
-         
-       
-      
-        // offsetY: isStackedBarChart ? -8 : 0,
-        style: dataLabelsOnBarText,
+        position: isStackedBarChart ? 'top' : 'center',
+        offsetY: 0,
+        offsetX: 0,
+        style: {...dataLabelsOnBarText},
         background: dataLabelsOnBarBackground,
         dropShadow: dataLabelsOnBarDropShadow,
       },
@@ -149,22 +162,44 @@ const GroupedOrStackedBarBuilder = ({
       colors: barColors,
       legend: {
         show: true,
-        position: 'top',
-        horizontalAlign: 'center',
-        offsetY: 15,
+        ...legendBarChart,
+        // show: true,
+        // horizontalAlign: 'center',
+        // position: 'top',
+        // offsetY: 15,
         // markers:{
         //   fillColors: barColors,
         // }
       },
       
     }),
-    [dataLabels, isHorizontal, xAxisHeader, showLabelsOnBars, yAxisHeader, onClick, axisTitleStyle, isStackedBarChart, barColors, dataLabelPercentageFormatter]
+    [dataLabels, isHorizontal, xAxisHeader, yAxisHeader, onClick, axisTitleStyle, isStackedBarChart, barColors, dataLabelPercentageFormatter]
   );
 
 
+  if (!series.length || !dataLabels.length) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: 'Segoe UI, sans-serif',
+          fontSize: '16px',
+          color: '#666',
+          height: '100%',
+          width: '100%',
+        }}
+      >
+        <p>No data available</p>
+      </div>
+    );
+  }
+  
+
   const chartHeight = isStackedBarChart 
-    ? Math.max(400, dataLabels.length * 26) //rowHeight = 26px
-    : Math.max(400, dataLabels.length * 50) //rowHeight= 50px 
+    ? Math.max(400, (dataLabels.length || 1 )* 26) //rowHeight = 26px
+    : Math.max(400, (dataLabels.length || 1) * 50) //rowHeight= 50px 
   
   //each row is 50px in height
 

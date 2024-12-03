@@ -44,13 +44,25 @@
       if(source === 'dataGrid') {
         //apply operator to all keys in new filter
         Object.keys(newFilter).forEach(key => {
-          updatedFilters[key] = {
+          console.log('key in filterContext: ', key);
+          // updatedFilters[key] = {
+          //   value: newFilter[key],
+          //   operator: operator
+          const newFilterValue = {
             value: newFilter[key],
-            operator: operator
+            operator,
           };
-        })
-        // console.log('Updating with:', key, ':', value, ' operator: ', operator );
-        // console.log('Updating filter with:', updatedFilters);
+
+          // check if the column already has a filter
+          if (updatedFilters[key]) {
+            // replace the existing filter for the same column
+            updatedFilters[key] = newFilterValue;
+          } 
+          else {
+            // Add the new filter
+            updatedFilters[key] = newFilterValue;
+          }
+        });
         return updatedFilters;
       }
       //executes logic only if working with expandable table
@@ -79,7 +91,9 @@
           //if existingValue is an array
           if (Array.isArray(value)) {
             //merge arrays if both existing and new values are arrays
-            updatedFilters[key] = [...new Set([...existingValue, ...value])];
+            updatedFilters[key] = Array.isArray(value)
+              ? [...new Set([...existingValue, ...value])]
+              : [value];
           } else {
             //replace existing array with a new single value
             updatedFilters[key] = [value];

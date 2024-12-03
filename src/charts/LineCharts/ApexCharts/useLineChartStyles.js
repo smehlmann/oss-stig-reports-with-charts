@@ -2,8 +2,10 @@
 import { useMemo, useCallback } from "react";
 import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
 import { useTheme } from "../../../theme.js"
+import { format } from 'date-fns';
 
-export const useBarChartStyles = (dataLabelsOnBarArePercentages, tooltipLabelPrefix, isStackedOrGroupedChart) => {
+
+export const useLineChartStyles = (dataLabelsArePercentages, tooltipLabelPrefix, isStackedOrGroupedChart) => {
   const theme = useTheme();
 
   //axes titles
@@ -18,14 +20,14 @@ export const useBarChartStyles = (dataLabelsOnBarArePercentages, tooltipLabelPre
   
   //determines whether to format the value if it should be a percentage
   const dataLabelPercentageFormatter  = useMemo(() => (value) => {
-    if (dataLabelsOnBarArePercentages) {
+    if (dataLabelsArePercentages) {
       //format the value using the percentage formatter
       return getPercentageFormatterObject().formatter(value);
     } 
     //dataValues are not percentages, return raw value
     return value;
 
-  }, [dataLabelsOnBarArePercentages]);
+  }, [dataLabelsArePercentages]);
 
 
   //dataLabelsOnBar styling
@@ -77,16 +79,21 @@ export const useBarChartStyles = (dataLabelsOnBarArePercentages, tooltipLabelPre
   
 
   const axisLabelsStyles = useMemo(() => ({
-    fontSize: '14px',
+    fontSize: '13px',
     fontFamily: 'Segoe UI, Arial, sans-serif',
     fontWeight: 400,
   }), []);
 
   //format header in tooltip
-   const tooltipXFormatter = useMemo(() => (val, opts) => {
-    const formattedVal = opts.w.globals.initialConfig.xaxis.categories[opts.dataPointIndex] || val;
-    return `<span style="font-weight: 900; font-size: 16px; color: black;">${formattedVal}</span>`;
+   const tooltipXFormatter = useMemo(() => (value) => {
+    const dateValue = typeof value === 'number' ? new Date(value) : value;
+    if (dateValue instanceof Date && !isNaN(dateValue)) {
+      const formattedVal = format(dateValue, 'dd MMM yyyy');
+      return `<span style="font-weight: 900; font-size: 14px; color: black;">${formattedVal}</span>`;
+    }
+    return `<p style="font-weight: 900; font-size: 14px; color: black;">${value}</p>`;
   }, []);
+
   // format y value in tooltip
   const tooltipYFormatter = useMemo(() => (value) => {
     //perform percentage formatter if needed
@@ -96,18 +103,14 @@ export const useBarChartStyles = (dataLabelsOnBarArePercentages, tooltipLabelPre
 
   //format title for label prefix in tooltip
   const tooltipYTitleFormatter = useMemo(() => (seriesName) => {
-    if (isStackedOrGroupedChart) {
       return `
-      <span style="font-family: Merriweather, serif;  color: #333333; font-weight: 900; font-size: 15px;">${tooltipLabelPrefix}</span>
-      <span style="font-weight: 700; color: #060606; font-size: 15px;">${seriesName}  </span>
-    `;
+        <span style="font-weight: 700; font-size: 14px;">${seriesName}  </span>
+      `;
 
- 
-    } 
-  }, [tooltipLabelPrefix, isStackedOrGroupedChart]); // recalculate when tooltipLabelPrefix changes
+  }, [tooltipLabelPrefix]); // recalculate when tooltipLabelPrefix changes
 
-  const legendBarChart = useMemo(() => ({
-    fontSize: '13px',
+  const legend = useMemo(() => ({
+    fontSize: '14px',
     fontWeight: 500,
     fontFamily: 'Segoe UI, Arial, sans-serif',
     horizontalAlign: 'center',
@@ -120,6 +123,6 @@ export const useBarChartStyles = (dataLabelsOnBarArePercentages, tooltipLabelPre
     axisTitleStyle, dataLabelPercentageFormatter, dataLabelsOnBarText , 
     dataLabelsOnBarBackground, dataLabelsOnBarDropShadow, getColorForLabel,
     axisLabelsStyles, tooltipXFormatter, tooltipYFormatter, 
-    tooltipYTitleFormatter, legendBarChart
+    tooltipYTitleFormatter, legend
   };
 };

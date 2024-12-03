@@ -8,7 +8,7 @@ import GroupedOrStackedBarBuilder from "./GroupedOrStackedBarBuilder.js";
 // import ValueCountMap from "../../../components/ValueCountMap.js";
 
 
-const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, showLabelsOnBars, isHorizontal, isStackedBarChart, xAxisTitle, yAxisTitle, data }) => {
+const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, isHorizontal, isStackedBarChart, xAxisTitle, yAxisTitle, data }) => {
   
   const { filter, updateFilter, removeFilterKey } = useFilter();
 
@@ -117,7 +117,6 @@ const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, showLabelsOnBars,
     <GroupedOrStackedBarBuilder
       dataLabels={barLabels}
       series={updatedSeries}
-      showLabelsOnBars={showLabelsOnBars}
       isHorizontal={isHorizontal}
       isStackedBarChart={isStackedBarChart}
       xAxisHeader={xAxisTitle}

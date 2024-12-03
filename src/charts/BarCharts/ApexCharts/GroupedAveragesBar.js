@@ -11,7 +11,6 @@ const GroupedAveragesBar = ({
   breakdownColumns, 
   dataLabelsArePercentages,
   isHorizontal, 
-  showLabelsOnBars, 
   isStackedBarChart, 
   xAxisTitle, 
   yAxisTitle, 
@@ -84,7 +83,6 @@ const GroupedAveragesBar = ({
 
   }, [filteredData, groupByColumn, breakdownColumns]);
 
-
   const dataLabels = averagesPerBenchmark.map(entry => entry.groupingColumn);
 
   const seriesData = [
@@ -119,7 +117,6 @@ const GroupedAveragesBar = ({
     <GroupedOrStackedBarBuilder
       dataLabels={dataLabels}
       series={seriesData}
-      showLabelsOnBars={showLabelsOnBars}
       dataLabelsArePercentages={dataLabelsArePercentages}
       isHorizontal={isHorizontal}
       isStackedBarChart={isStackedBarChart}

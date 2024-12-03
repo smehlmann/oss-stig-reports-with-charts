@@ -176,11 +176,17 @@ const SelectionDropdownList = ({source='', targetProperty, selectedOptions, valu
               }}
             />
           )}
-          isOptionEqualToValue={(option, value) =>
-            typeof option === 'object' && typeof value === 'object'
-              ? option.raw === value.raw
-              : option === value
-          }
+          // isOptionEqualToValue={(option, value) =>
+          //   typeof option === 'object' && typeof value === 'object'
+          //     ? option.raw === value.raw
+          //     : option === value
+          // }
+          isOptionEqualToValue={(option, value) => {
+            if (typeof option === 'object' && option !== null && typeof value === 'object' && value !== null) {
+              return option.raw === value.raw;
+            }
+            return option === value;
+          }}
           noOptionsText="No options"
         />
       );

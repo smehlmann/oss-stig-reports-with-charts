@@ -3,6 +3,7 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 // import { styled } from '@mui/material/styles';
 import useSortableData from "../hooks/useSortableData";
+import Paper from '@mui/material/Paper';
 
 import {
   StyledTableContainer,
@@ -23,10 +24,10 @@ const FlexibleTableRenderer = ({ rows, columns, renderChildRow, childRowCount, f
   const sortedChildRows = sortChildRows(rows);
 
   return (
-    <StyledTableContainer>
+    <StyledTableContainer >
       <StyledTable aria-label="collapsible table">
         <StyledTableHead>
-          <TableRow sx={{ "& th": { border: 'none'} }}>
+          <TableRow sx={{ width: '100%'}}>
             {columns.map((header, index) => (
               <React.Fragment key={header.id}>
                 {index === 0 && (

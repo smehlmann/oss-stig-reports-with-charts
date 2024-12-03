@@ -39,17 +39,3 @@ const ExpandableTableCardComponent = ({ title, children }) => {
 export default ExpandableTableCardComponent;
 
 
-// const ExpandableTableCardComponent = ({ title, children }) => {
-//   return (
-
-//     <StyledCard>
-//       {/* <CardHeader title={title} /> */}
-//       {/* <CustomCardContent> */}
-//         {children}
-//       {/* </CustomCardContent> */}
-//     </StyledCard>
-//   );
-// };
-
-// export default ExpandableTableCardComponent;
-

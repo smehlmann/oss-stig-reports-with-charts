@@ -75,17 +75,22 @@ export const SearchTextField = styled(TextField)(({ theme }) => ({
 //standard table components
 export const StyledTableContainer = styled(Paper)(({ theme }) => ({
   width: "100%",
-  flex: '1',
+  height: "100%",
   maxWidth: "100%",
+  maxHeight: "100%",
+  padding: 0,
+  display: 'flex',
   // border: "1px solid #e0e0e0",
   margin: "0 auto",
   overflowX: "inherit",
   borderRadius: '8px',
+  flexDirection: 'column'
 }));
 
 export const StyledTable = styled(Table)(({ theme }) => ({
   flex: '1',
   border: 'none',
+  padding: 0,
   margin: 0,
   overflowX: "inherit",
 }));
@@ -95,18 +100,19 @@ export const StyledTableHead = styled(TableHead)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.light,
   display: 'flex',
   height: "55px",
-  // margineft: '0',
+  margin: 0, 
   paddingLeft: 10,
   alignItems: 'center',
   border: 'none',
   width: '100%',
 }));
 
+
 //actual cells in the header row (text)
 export const StyledHeaderCell = styled(TableCell)(({ theme }) => ({
   fontSize: theme.typography.h4.fontSize,
   fontWeight: 'bold',
-  border: 'none'
+  border: 'none',
 }));
 
 

@@ -1,44 +1,29 @@
 import React, { useMemo, useEffect, useState, useCallback } from "react";
 import ReactApexChart from "react-apexcharts";
 import { useTheme, palette} from "../../../theme.js"
+import {useLineChartStyles} from "./useLineChartStyles.js"
 
+// const MultiLineChartBuilder =({ xValues, yValues, xAxisHeader, yAxisHeader, formatLabelToPercentage }) => {
 
-const MultiLineChartBuilder =({ xValues, yValues, xAxisHeader, yAxisHeader, formatLabelToPercentage }) => {
-  // console.log('xValues (dates): ', xValues);
-  // xValues.forEach(item => {
-  //   console.log("type: ", item instanceof Date);
-  // })
-  
+  const MultiLineChartBuilder =({ xValues, yValues, xAxisHeader, yAxisHeader }) => {
 const theme = useTheme();
-const axisTitleStyle = useMemo(() => ({
-    fontSize: '14px',
-    fontFamily: 'Segoe UI',
-    fontWeight: '500',
-    margin: '0',
-    textAlign: 'center',
-  }), []);
+  //styles from custom hook
+  const {
+    axisTitleStyle, 
+    dataLabelPercentageFormatter,  
+    dataLabelsOnBarText, 
+    dataLabelsOnBarBackground, 
+    dataLabelsOnBarDropShadow,
+    getColorForLabel,
+    axisLabelsStyles,
+    tooltipXFormatter,
+    tooltipYFormatter, 
+    tooltipYTitleFormatter,
+    legend,
 
+  } = useLineChartStyles(true, ''); 
 
-  //set color of lines
-  //useCallback means function only recreated when theme changes
-  const getColorForLabel = useCallback(
-    (label) => {
-      switch (label) {
-        case "Avg Assessed":
-          return theme.palette.assessed;
-        case "Avg Submitted":
-          return theme.palette.submitted;
-        case "Avg Accepted":
-          return theme.palette.accepted;
-        case "Avg Rejected":
-          return theme.palette.rejected;
-        default:
-          return theme.palette.primary.main;
-      }
-    },
-    [theme.palette],
-  );
-
+  
   const lineColors = useMemo(() => yValues.map(label => getColorForLabel(label.name)), [yValues, getColorForLabel]);
 
   const [options, setOptions] = useState({
@@ -68,8 +53,8 @@ const axisTitleStyle = useMemo(() => ({
       gradient: {
         shadeIntensity: 1,
         inverseColors: false,
-        opacityFrom: 0.5,
-        opacityTo: 0,
+        opacityFrom: 0.8,
+        opacityTo: 0.9,
         stops: [0, 90, 100]
       },
     },
@@ -83,6 +68,9 @@ const axisTitleStyle = useMemo(() => ({
         style: axisTitleStyle,
       },
       tickAmount: yValues.length > 5 ? undefined : yValues.length, // set tickAmount based on data length
+      labels: {
+        style: axisLabelsStyles,
+      }
     },
     colors: palette,
     yaxis: {
@@ -91,12 +79,21 @@ const axisTitleStyle = useMemo(() => ({
         style: axisTitleStyle,
       },
       labels: {
-        formatter: function (value) {
-          if (formatLabelToPercentage) {
-            return formatLabelToPercentage.formatter(value);
-          }
-          return value;
-        },
+        formatter: (value) => dataLabelPercentageFormatter(value),
+        style: axisLabelsStyles,
+      },
+    },
+    tooltip: {
+      enabled: true,
+      shared: true,
+      x: {
+        formatter: tooltipXFormatter,
+      },
+      y: {
+        formatter: tooltipYFormatter,
+        title: {
+          formatter: (val) => tooltipYTitleFormatter(val),
+        }
       },
     },
     plotOptions: {
@@ -109,7 +106,7 @@ const axisTitleStyle = useMemo(() => ({
 
     legend: {
       show: true,
-      position: 'bottom',
+      ...legend,
     },
     
   });
