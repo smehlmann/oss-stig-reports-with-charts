@@ -10,7 +10,6 @@ import TwoPropsCountByValues from "../../charts/BarCharts/ApexCharts/TwoPropsCou
 import GetFilteredData from "../Filtering/GetFilteredData.js";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DashboardRoot } from "./DashboardRoot.js";
-// import FilterBar from "../Filtering/FilterBar.js";
 import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDrawer.js";
 
 /*
