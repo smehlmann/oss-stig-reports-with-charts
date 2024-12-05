@@ -10,6 +10,7 @@ import * as checklistOver365Days from "./checklistOver365Days.js";
 import * as unidentifiedPackages from "./unidentifiedPackages.js";
 import * as pinnedReport from "./pinnedReport.js";
 import * as saReportByPrinter from "./saReportByPrinters.js";
+import * as assetsByRmfSampleReport from "./assetsByRmfSampleReport.js";
 import * as reportGetters from "./reportGetters.js";
 import * as reportUtils from "./reportUtils.js";
 
@@ -143,6 +144,14 @@ async function GenerateReport(
         rows = await saReportByPrinter.runSAReportByAssetPrintersOnly(
           auth,
           emassNums,
+          emassMap
+        );
+        break;
+      case "16":
+        // run 7. Pinned Report
+        console.log("Run 10. assetsByRmfSampleReport");
+        rows = await assetsByRmfSampleReport.runAssetsByRmfSampleReport(
+          auth,
           emassMap
         );
         break;

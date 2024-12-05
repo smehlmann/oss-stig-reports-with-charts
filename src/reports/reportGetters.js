@@ -118,17 +118,26 @@ async function getStigsByAsset(auth, assetId) {
   }
 }
 
-async function getAssets(auth, collectionId, benchmarkId) {
-  //console.log('getAssets')
-  var myUrl =
+async function getAssets(auth, collectionId, benchmarkId, labelName) {
+
+  var myUrl = '';
+  if(labelName){
+    //assets?collectionId=1&labelName=rmf&name-match=exact&benchmarkId=1123
+    myUrl = apiBase + 
+    '/assets?collectionId=' + collectionId +
+    '&labelName=' + labelName + '&name-match=exact&benchmarkId=' + benchmarkId;
+  }
+  else{
+    myUrl =
     apiBase +
     "/collections/" +
     collectionId +
     "/stigs/" +
     benchmarkId +
     "/assets";
+  }
 
-  var assets = getMetricsData(auth, myUrl);
+  var assets = await getMetricsData(auth, myUrl);
   return assets;
 }
 
