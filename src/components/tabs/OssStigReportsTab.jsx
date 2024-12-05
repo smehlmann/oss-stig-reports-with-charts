@@ -48,6 +48,7 @@ const OssStigReportsTab = () => {
   const [open8, setOpen8] = useState(false);
   const [open9, setOpen9] = useState(false);
   const [open10, setOpen10] = useState(false);
+  const [open11, setOpen11] = useState(false);
   const [option, setOption] = useState("");
 
   var auth = getAuth();
@@ -82,7 +83,11 @@ const OssStigReportsTab = () => {
   // this function will be called when a radio button is checked
   const onRadioChange = (e) => {
     setReport(e.target.value);
-    if (e.target.value !== "12" && e.target.value !== "14"  && e.target.value !== "15") {
+    if (
+      e.target.value !== "12" &&
+      e.target.value !== "14" &&
+      e.target.value !== "15"
+    ) {
       setShowEmassNums(true);
     }
     if (e.target.value === "9") {
@@ -135,6 +140,7 @@ const OssStigReportsTab = () => {
     setOpen8(false);
     setOpen9(false);
     setOpen10(false);
+    setOpen11(false);
     switch (option) {
       case "report1":
         setOpen1(true);
@@ -162,6 +168,9 @@ const OssStigReportsTab = () => {
         break;
       case "report10":
         setOpen10(true);
+        break;
+      case "report11":
+        setOpen11(true);
         break;
       default:
     }
@@ -199,6 +208,9 @@ const OssStigReportsTab = () => {
         break;
       case "report10":
         setOpen10(false);
+        break;
+      case "report11":
+        setOpen11(false);
         break;
       default:
     }
@@ -721,8 +733,53 @@ const OssStigReportsTab = () => {
                 </Dialog>
               </label>
               <br />
+              <label>
+                <input
+                  type="radio"
+                  value="16"
+                  checked={report === "16"}
+                  onChange={onRadioChange}
+                  disabled={isButtonDisabled}
+                />
+                <span>10. RMF SAP Sample Report</span>
+                <IconButton
+                  option="report11"
+                  onClick={handleInfoClick}
+                  size="small"
+                  style={{ marginLeft: 4 }}
+                >
+                  <Info fontSize="small" />
+                </IconButton>
+                <Dialog
+                  open={open11}
+                  onClose={handleInfoClose}
+                  fullWidth
+                  maxWidth="md"
+                  PaperProps={{
+                    sx: {
+                      position: "absolute",
+                      top: 0,
+                      margin: 5,
+                    },
+                  }}
+                >
+                  <DialogContent>
+                    <Alert
+                      onClose={handleInfoClose}
+                      severity="info"
+                      sx={{ width: "100%" }}
+                    >
+                      <DialogMessages.Report11DialogMessage />
+                    </Alert>
+                    <Button onClick={handleInfoClose} color="primary">
+                      Close
+                    </Button>
+                  </DialogContent>
+                </Dialog>
+              </label>
               <br />
-              {showEmassNum && report !== '14' && report !== '15' &&(
+              <br />
+              {showEmassNum && report !== "14" && report !== "15" && (
                 <div id="emassDiv">
                   <label htmlFor="emassNumsText">
                     Required for reports 4, 5, 6. Optional for all others.

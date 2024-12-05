@@ -88,6 +88,7 @@ export default function ReportColumns({ index, item, selectedReport }) {
           <td>{item.asset}</td>
           <td>{item.primOwner}</td>
           <td>{item.sysAdmin}</td>
+          <td>{item.rmfAction}</td>
           <td>{item.benchmarkId}</td>
           <td>{item.latestRev}</td>
           <td>{item.prevRev}</td>
@@ -236,6 +237,16 @@ export default function ReportColumns({ index, item, selectedReport }) {
           <td>{item.cat1}</td>
           <td>{item.cklWebOrDatabase}</td>
           <td>{item.delinquent}</td>
+        </tr>
+      );
+    case "16":
+      return (
+        <tr key={index}>
+          <td>{item.emass}</td>
+          <td>{item.collection}</td>
+          <td>{item.benchmark}</td>
+          <td>{item.stigVersion}</td>
+          <td>{item.assetNames}</td>
         </tr>
       );
     default:

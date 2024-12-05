@@ -68,6 +68,13 @@ const Report10DialogMessage = () => {
   )
 }
 
+const Report11DialogMessage = () => {
+
+  return (
+  <p>Display structured to assist in the creation of the RMF SAP Assessment Methods Tab based on the sample set.</p>
+  )
+}
+
 export {
     Report1DialogMessage,
     Report2DialogMessage,
@@ -78,6 +85,7 @@ export {
     Report7DialogMessage,
     Report8DialogMessage,
     Report9DialogMessage,
-    Report10DialogMessage
+    Report10DialogMessage,
+    Report11DialogMessage
 };
 
