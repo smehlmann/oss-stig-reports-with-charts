@@ -15,7 +15,8 @@ import FilterSelectionDrawer from "../Filtering/FilterSideMenu/FilterSelectionDr
 import AveragesGroupedByColumn from "../../charts/DataGridMUI/AveragesGroupedByColumn.js";
 import GroupedOrStackedBar from "../../charts/BarCharts/ApexCharts/GroupedOrStackedBar";
 
-import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart.js"
+// import ApexCountByValueBarChart from "../../charts/BarCharts/ApexCharts/ApexCountByValueBarChart.js";
+// import ApexBarAvgChart from "../../charts/BarCharts/ApexCharts/ApexBarAvgChart.js"
 
 /* Displays report option 8. Historical Data */
 
@@ -153,7 +154,6 @@ const DashboardSelectedReport14 = ({ data, title}) => {
             px: { lg: 4, xl: 15}, //padding-left and padding-right for lg and xl screens
           }}
         >
-
           <Grid lg={12} sm={12} xl={12} xs={12}>
             <Box display="flex" justifyContent="space-between" alignItems='center'>
               <Typography variant='h1'> {title} </Typography>
@@ -165,6 +165,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
             <StatisticsCardGroup data={dataFromLastPullDate} source='report14' />
           </Grid>
 
+
           <Grid lg={6} md={6} sm={12} xl={6} xs={12}>
             <TableGridCardComponent title="Averages by Code ">
               <AveragesGroupedByColumn 
@@ -174,7 +175,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
                 source='report14'
               />
             </TableGridCardComponent>
-          </Grid>     
+          </Grid>       
 
           {/* <Grid lg={6} md={6} sm={12} xl={6} xs={12}>
             <ChartCardComponent title = "Assets by Package">
@@ -189,7 +190,7 @@ const DashboardSelectedReport14 = ({ data, title}) => {
           </Grid>    */}
 
           
-          <Grid lg={6} md={6} sm={6} xl={6} xs={12}>
+          <Grid lg={6} md={6} sm={12} xl={6} xs={12}>
             <ChartCardComponent title = "Assets by Packages and Code">
               <GroupedOrStackedBar
                 groupByColumn="shortName"

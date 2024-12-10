@@ -1,5 +1,6 @@
-// import React, { useState, useMemo, useCallback, useEffect} from "react";
-import React, { useState, useMemo, useCallback} from "react";
+//DashboardTab.js
+import React, { useState, useMemo, useCallback, useEffect} from "react";
+// import React, { useState, useMemo, useCallback} from "react";
 
 // import useLocalStorageListener from "../useLocalStorageListener";
 import DashboardSelectedReport5 from "../DashboardLayouts/DashboardSelectedReport5";
@@ -147,9 +148,9 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
   //keeps track of the selectedReport state
   const [setSelectedReport] = useState(null);
 
-  // useEffect(() => {
-  //   console.log('Formatted Data:', formattedData);
-  // }, [formattedData]);
+  useEffect(() => {
+    console.log('Formatted Data:', formattedData);
+  }, [formattedData]);
 
   const handleClick = useCallback((reportNum) => {
     setSelectedReport(reportNum);

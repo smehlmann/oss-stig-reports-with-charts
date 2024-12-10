@@ -113,6 +113,7 @@ export const StyledHeaderCell = styled(TableCell)(({ theme }) => ({
   fontSize: theme.typography.h4.fontSize,
   fontWeight: 'bold',
   border: 'none',
+  lineHeight: 1.2,
 }));
 
 

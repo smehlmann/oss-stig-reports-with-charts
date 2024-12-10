@@ -1,21 +1,21 @@
 
 import React from 'react';
-import { Card, CardHeader, CardContent, styled } from '@mui/material';
+import { CardHeader, CardContent, styled } from '@mui/material';
 // import CollapseButtonWrapper from './CollapseButtonWrapper'
 import CollapsibleCard from "./CollapsibleCard";
 
-const StyledCard = styled(Card)(({ theme }) => ({
-  // height: '100%', 
-  height: '475px',
-  display: 'flex',
-  flexDirection: 'column',
-  boxShadow: theme.shadows[3],
-  borderRadius: 10,
-  // overflow: 'clip',
-  overflow: 'clip',
-  padding: '0',
+// const StyledCard = styled(Card)(({ theme }) => ({
+//   // height: '100%', 
+//   height: '475px',
+//   display: 'flex',
+//   flexDirection: 'column',
+//   boxShadow: theme.shadows[3],
+//   borderRadius: 10,
+//   // overflow: 'clip',
+//   overflow: 'clip',
+//   padding: '0',
 
-}));
+// }));
 
 const CustomCardHeader = styled(CardHeader)(({ theme }) => ({
   paddingBottom: theme.spacing(1),

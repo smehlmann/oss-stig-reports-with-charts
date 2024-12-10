@@ -37,14 +37,13 @@
       let updatedFilters = { ...prevFilters}; //copy of previous filter
 
       // console.log(`Current filters: ${JSON.stringify(prevFilters)}`);
-      // console.log(`New filter: ${key}: ${value}`);
+      // console.log(`New filter: [${Object.keys(newFilter)[0]}: ${newFilter[Object.keys(newFilter)[0]]}]`);
       // console.log('Previous filters:', prevFilters);
       // console.log('updatedFilters at the start: ', updatedFilters);
 
       if(source === 'dataGrid') {
         //apply operator to all keys in new filter
         Object.keys(newFilter).forEach(key => {
-          console.log('key in filterContext: ', key);
           // updatedFilters[key] = {
           //   value: newFilter[key],
           //   operator: operator
@@ -65,17 +64,15 @@
         });
         return updatedFilters;
       }
+      
       //executes logic only if working with expandable table
-      if (source === 'expandableTable') {
+      if (source === 'expandableTable' || source=== 'stackedOrGroupedBarChart') {
         //updates filters directly by merging new filter with previous filters
         const updatedFilters = { ...prevFilters, ...newFilter };
         return updatedFilters;
       }
 
-       //determines the filtering logic for updating filter state when filter value is single value or array
-  
-      //retrieves current value of filter for a given key from prevFilters
-      // const existingValue = prevFilters;      
+       //determines the filtering logic for updating filter state when filter value is single value or array      
     
       //iterate over all keys in new filter
       Object.keys(newFilter).forEach(key => {
@@ -92,7 +89,7 @@
           if (Array.isArray(value)) {
             //merge arrays if both existing and new values are arrays
             updatedFilters[key] = Array.isArray(value)
-              ? [...new Set([...existingValue, ...value])]
+              ? [...new Set([...existingValue, ...value])] //merging
               : [value];
           } else {
             //replace existing array with a new single value
@@ -118,6 +115,30 @@
       });
     };
 
+    //replace value (an array) for a given key in filter
+    function replaceValueFromFilterKeyArray(newFilter) {
+      setFilters(prevFilters => {
+        // ensure previous filters is treated as an object
+        if (typeof prevFilters !== 'object' || prevFilters === null) {
+          return { ...newFilter }; // initialize with new filter if prevFilters is not valid
+        } 
+
+        let updatedFilters = { ...prevFilters}; //copy of previous filter
+        
+        //iterate over all keys in new filter
+        Object.keys(newFilter).forEach(key => {
+          //replace array in newFilter with arrayh in prevFilter
+          const newFilterArray = Array.isArray(newFilter[key])
+            ? newFilter[key]  //replace old value (old array in value with new one)
+            : [newFilter[key]]  //if single value replace as an array
+
+          //add key and value (the array) to the filter object
+          updatedFilters[key] = newFilterArray;
+        });
+        return updatedFilters;
+       });
+    };
+
     
     const clearFilter = () => {
       setFilters({});
@@ -141,6 +162,7 @@
         filter: filter || {},
         updateFilter, 
         removeFilterKey, 
+        replaceValueFromFilterKeyArray ,
         clearFilter, 
         isWebOrDBIncluded, 
         toggleWebOrDBFilter,

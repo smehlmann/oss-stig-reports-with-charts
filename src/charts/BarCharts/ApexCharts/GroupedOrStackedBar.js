@@ -15,45 +15,43 @@ const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, isHorizontal, isS
   //gets the data when filter is applied
   const filteredData = useMemo(() => GetFilteredData(data, filter, "report8"), [filter, data]);
 
-  //get unique values from breakdownColumn
-  const getUniqueValuesInColumn= (data, breakdownColumn) => {
-    return [...new Set(data.map(item => item[breakdownColumn]))]; //returns all unique values in groupByColumn
+  //get unique values from column
+  const getUniqueValuesInColumn= (data, selectedColumn) => {
+    return [...new Set(data.map(item => item[selectedColumn]))]; 
   }
 
-  // ValueCountMap -> count the number of times a value appears in the groupByColumn grouped by breakdownColumn
   const countMap = useMemo(() => {
-    const map = {}; //stores counts for each combination of groupByColumn and breakdownColumn 
-
-    //obtain unique values in groupByColumn and breakdownColumn
-    const valuesInGroupingColumn = getUniqueValuesInColumn(filteredData, groupByColumn);
     const valuesInBreakdownColumn = getUniqueValuesInColumn(filteredData,breakdownColumn )
 
-    //initialize map for each value in groupByCOlumn with all possible breakdownColumn counts set to 0
-    valuesInGroupingColumn.forEach(groupingValue => {
-      map[groupingValue] = {};
-      valuesInBreakdownColumn.forEach(targetValue => {
-        map[groupingValue][targetValue === '' ? 'null' : targetValue] = 0; //initialize empty string as null
-      })
-    })
+    //group the data based on values in groupByColumn
+    const aggregatedData = filteredData.reduce((accumulator, currentItem) => {
+      //current item's value for shortname
+      const groupingValue = currentItem[groupByColumn]; 
+      const seriesValue = currentItem[breakdownColumn]; //currentItem's code val
 
-    //populate countmap based on the filteredData
-    filteredData.forEach(item => {
-      const groupingColumn = item[groupByColumn];
-      let targetValue = item[breakdownColumn];
-
-      //if breakdownColumn is empty string, treat as 'null'
-      if (targetValue === '') {
-        targetValue = 'null';
+      //if groupingValue exists as key in accumulator
+      if (!accumulator[groupingValue]) {
+        //if not, add key to accumulator with empty array as value.
+        valuesInBreakdownColumn.forEach(breakdownVal => {
+          accumulator[groupingValue] = {};
+        })
       }
-
-      //increment count for current combo of groupingColumn and targetValue
-      if(map[groupingColumn] && map[groupingColumn][targetValue] !== undefined) {
-        map[groupingColumn][targetValue] +=1;
+      if(!accumulator[groupingValue][seriesValue]){
+        accumulator[groupingValue][seriesValue] = 0;
       }
-    })
-    return map;
-  }, [filteredData, groupByColumn, breakdownColumn]);
+      accumulator[groupingValue][seriesValue] += 1;
 
+      return accumulator; //returns {key1:[...], key2:[...], ...}
+    }, {});
+    return aggregatedData;
+
+  }, [filteredData, breakdownColumn, groupByColumn]);
+  
+  useEffect(() => {
+    // console.log('tempFilter: ', tempFilter);
+    // console.log('map: ', countMap);
+
+  }, [countMap, filter]); 
 
   const barLabels = Object.keys(countMap); //labels = array of values in groupByColumn
 
@@ -75,7 +73,7 @@ const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, isHorizontal, isS
       return {
           name: status,
           data: Object.keys(countMap).map(groupingId => {
-              return countMap[groupingId][status] || 0; // Get the count or 0 if undefined
+              return countMap[groupingId][status] || 0; // get the count or 0 if undefined
           }),
       };
   });
@@ -86,10 +84,11 @@ const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, isHorizontal, isS
   //updates the filter criteria based on user's clicking on one of the bars
   const handleBarClick = (event, chartContext, config) => {
 
-    const groupingColumns = config.w.globals.labels
+    const groupingColumns = config.w.globals.labels //values in groupByColumn (bars)
     const selectedGroupingColumn = groupingColumns ? groupingColumns[config.dataPointIndex] : null;
     const seriesName = config.seriesIndex !== undefined ? chartContext.w.config.series[config.seriesIndex].name : null
 
+    //if user selects segement in bar, create new filter
     if (selectedGroupingColumn && seriesName) {
       //create new filter object on selected groupByColumn and series
       const newFilter = {
@@ -97,19 +96,7 @@ const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, isHorizontal, isS
         [breakdownColumn]: seriesName === 'null' ? '': seriesName,
       }
 
-      //check for duplicate items in filter
-      const isFilterAlreadyApplied = 
-      filter[groupByColumn] === selectedGroupingColumn && 
-      filter[breakdownColumn] === seriesName;
-
-      //remove duplicate filters
-      if (isFilterAlreadyApplied) {
-        removeFilterKey(groupByColumn);
-        removeFilterKey(breakdownColumn);
-      } else {
-        //update filter to include both groupByColumn and breakdown values
-        updateFilter(newFilter);
-      }
+      updateFilter(newFilter, 'stackedOrGroupedBarChart');
     }
   };
 
@@ -128,3 +115,44 @@ const GroupedOrStackedBar = ({ groupByColumn, breakdownColumn, isHorizontal, isS
 };
 
 export default GroupedOrStackedBar;
+
+
+
+
+  // const countMap = useMemo(() => {
+  //   const valuesInBreakdownColumn = getUniqueValuesInColumn(filteredData,breakdownColumn )
+
+  //   //group the data based on values in groupByColumn
+  //   const aggregatedData = filteredData.reduce((accumulator, currentItem) => {
+  //     const groupingValue = currentItem[groupByColumn];
+  //     //if groupingValue exists as key in accumulator
+  //     if (!accumulator[groupingValue]) {
+  //       //if not, add key to accumulator with empty array as value.
+  //       accumulator[groupingValue] = []; 
+  //     }
+  //     accumulator[groupingValue].push(currentItem);
+  //     return accumulator; //returns {key1:[...], key2:[...], ...}
+  //   }, {});
+    
+  //   let countMap= Object.entries(aggregatedData).reduce((acc, [groupingValue, dataPerGroup ]) => {
+  //     const valueCount = {};  //stores the value per key in the dataPerGroup { ASI: {codeVal:valueCount}, ...}
+
+  //     //initializes each breakdown column's sum to 0
+  //     valuesInBreakdownColumn.forEach(column => {
+  //       valueCount[column] = 0;
+  //     })
+
+  //     //get the counts for each value in breakdown column
+  //     dataPerGroup.forEach(item => {
+  //       const breakdownVal = item[breakdownColumn] || 'null';
+  //       valueCount[breakdownVal] += 1;
+  //     });
+
+  //     acc[groupingValue] = {
+  //       ...valueCount
+  //     };
+  //     return acc; 
+  //   }, {});
+
+  //   return countMap;
+  // }, [filteredData, breakdownColumn, groupByColumn]);

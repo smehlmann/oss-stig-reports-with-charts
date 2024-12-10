@@ -202,7 +202,7 @@ const ApexBarChartBuilder = ({ dataLabels, dataValues, dataLabelsArePercentages,
         series={series} 
         type="bar" 
         height={chartHeight} 
-/>
+      />
     </div>
   );
 };

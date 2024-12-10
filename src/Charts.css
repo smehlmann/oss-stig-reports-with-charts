@@ -21,15 +21,18 @@
     padding-right: 5px;
     max-width: 90px;
   }
+
+  /* .apexcharts-canvas {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
   
-  /* .apexcharts-xaxistooltip .apexcharts-xaxistooltip-text {
-    font-family: Segoe UI, Arial, sans-serif;
-    font-size: 13px;
-    font-weight: bold;
-    color: #333333; 
-    text-align: center; 
+  .apexcharts-svg {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
   }
    */
+
 
 
 
@@ -53,15 +56,7 @@
     border-radius: 8px; 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
   }
-  
-  .chart-container canvas {
-    width: 80% !important; /*chart canvas takes full width within the container */
-    height: auto !important; /* adjust its height proportionally */
-    margin-left: auto;
-    margin-right: auto;
-    /* background-color: #323447; */
-    
-  }
+
 
 
 

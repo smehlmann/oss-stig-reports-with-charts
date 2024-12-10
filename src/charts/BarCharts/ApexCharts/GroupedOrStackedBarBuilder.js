@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import { useBarChartStyles } from './useBarChartStyles.js';
 import { useFilter } from "../../../FilterContext.js";
 
+
 const GroupedOrStackedBarBuilder = ({
   series,
   dataLabels,
@@ -17,6 +18,8 @@ const GroupedOrStackedBarBuilder = ({
 }) => {
   const theme = useTheme();
 
+
+  
   //styles from custom hook
   const {
     axisTitleStyle, 
@@ -60,13 +63,26 @@ const GroupedOrStackedBarBuilder = ({
   const options = useMemo(
     () => ({
       chart: {
+        id: "stacked-grouped-bar-chart",
         type: 'bar',
         width: '100%',
+        height: '100%',
         stacked: isStackedBarChart,
         events: {
           dataPointSelection: (event, chartContext, config) => {
             onClick(event, chartContext, config);
           },
+          mounted: function(chartContext) {
+            document
+              .querySelector('#stacked-grouped-bar-chart .apexcharts-canvas')
+              ?.style?.setProperty('margin-bottom', '0');
+          },
+        },
+        margin: {
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0, //remove chart-specific padding
         },
       },
       xaxis: {
@@ -120,10 +136,7 @@ const GroupedOrStackedBarBuilder = ({
           horizontal: isHorizontal,
           barHeight: '85%',
 
-          colors: {
-            backgroundBarOpacity: 1,
-            opacity: 1, 
-          },
+
           dataLabels: {
             position: 'center',
             
@@ -132,6 +145,9 @@ const GroupedOrStackedBarBuilder = ({
       },
       grid: {
         left: 400,
+        padding: {
+          bottom: 0,
+        }
       },
       dataLabels: {
         enabled: isStackedBarChart ? showDataLabels : true,
@@ -159,7 +175,7 @@ const GroupedOrStackedBarBuilder = ({
         colors: barColors,
       },
       
-      colors: barColors,
+      // colors: barColors,
       legend: {
         show: true,
         ...legendBarChart,
@@ -173,7 +189,8 @@ const GroupedOrStackedBarBuilder = ({
       },
       
     }),
-    [dataLabels, isHorizontal, xAxisHeader, yAxisHeader, onClick, axisTitleStyle, isStackedBarChart, barColors, dataLabelPercentageFormatter]
+    [dataLabels, isHorizontal, xAxisHeader, yAxisHeader, onClick,
+      axisTitleStyle, isStackedBarChart, barColors, dataLabelPercentageFormatter]
   );
 
 
@@ -196,18 +213,20 @@ const GroupedOrStackedBarBuilder = ({
     );
   }
   
-
   const chartHeight = isStackedBarChart 
     ? Math.max(400, (dataLabels.length || 1 )* 26) //rowHeight = 26px
     : Math.max(400, (dataLabels.length || 1) * 50) //rowHeight= 50px 
   
-  //each row is 50px in height
+  // const chartHeight = isStackedBarChart 
+  // ? Math.max(400, (dataLabels.length || 1 )* 26) //rowHeight = 26px
+  // : Math.max(400, (dataLabels.length || 1) * 40) //rowHeight= 40px 
 
   return (
-    <div className="apex-chart" style={{ height: '100%', width: '100%',  }}>
+    <div id="stacked-grouped-bar-chart" className="apex-chart" style={{ height: '100%', width: '100%',  }}>
       <ReactApexChart options={options} series={series} type="bar" height={chartHeight} />
     </div>
   );
 };
 
 export default GroupedOrStackedBarBuilder;
+

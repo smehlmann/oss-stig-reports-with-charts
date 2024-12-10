@@ -34,7 +34,7 @@ const DashboardSelectedReport15 = ({ data, title }) => {
     return result;
   }, [filter, data, isWebOrDBIncluded, ]);
 
-  console.log('filteredData: ', filteredData[0]);
+  // console.log('filteredData: ', filteredData[0]);
   
   return (
     <ThemeProvider theme={theme}>

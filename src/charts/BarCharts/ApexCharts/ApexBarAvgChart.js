@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect} from "react";
 
 import PropertyAvgMap from "../../../components/PropertyAvgMap.js";
 import ApexBarChartBuilder from "./ApexBarChartBuilder.js";
@@ -14,8 +14,30 @@ const ApexBarAvgChart = ({ targetColumns, isHorizontal, dataLabelsArePercentages
   const { filter } = useFilter();
   //gets the data when filter is applied
   const filteredData = useMemo(() => GetFilteredData(data, filter), [filter, data]);
-  console.log('filteredData: ', filteredData);
   
+
+  //keeps track of averages for each column (NO LONGER USED. NEEDS UPDATING)
+  useEffect(() => {
+    //calculate prodSums
+    const answer = filteredData.reduce((acc, currentItem) => {
+      const checksInItem = currentItem.checks;
+
+      // const productSums = {};
+
+      targetColumns.forEach(column => {
+        if (!acc[column]) {
+          acc[column] = 0;
+        }
+        acc[column] += currentItem[column] * checksInItem;
+      });
+      
+      console.log('acc: ', acc);
+      return acc;
+    });
+    
+
+  }, [filteredData, targetColumns]);
+
   //keeps track of averages for each column (NO LONGER USED. NEEDS UPDATING)
   const averageMap = useMemo(() => PropertyAvgMap(filteredData, targetColumns), [filteredData, targetColumns]);
 

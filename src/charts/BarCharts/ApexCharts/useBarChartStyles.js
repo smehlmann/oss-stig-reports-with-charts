@@ -57,7 +57,8 @@ export const useBarChartStyles = (dataLabelsOnBarArePercentages, tooltipLabelPre
         case 'Assessed':
         case 'Average Assessed':
         case 'Avg. Assessed':
-          return theme.palette.assessed;
+          // return theme.palette.assessed;
+          return '#bcc0d6';
         case 'Submitted':
         case 'Average Submitted':
         case 'Avg. Submitted':

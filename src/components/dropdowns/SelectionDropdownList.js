@@ -1,7 +1,7 @@
 import React, { useEffect} from 'react';
-import { Box, Autocomplete, TextField, Checkbox, ListItemText } from '@mui/material';
+import { Box, Autocomplete, TextField, Checkbox, ListItemText, Chip } from '@mui/material';
 import { styled, alpha } from "@mui/system";
-
+import { useTheme } from "../../theme.js"
 
 /*
 Creates a multi-select dropdown menu. 
@@ -63,20 +63,29 @@ const FilterDrawerAutoComplete = styled(Autocomplete)(({ theme }) => ({
     borderRadius: '10px',
     border: '2px solid #b2bbff',
     backgroundColor: '#ffffff',
+
     alignItems: 'center',
-    padding: '2px 8px',
-    boxShadow: 'none', // Initial state without shadow
-    transition: 'box-shadow 0.3s ease',
+    padding: '4px 0px',
+    boxShadow: 'none', // initial state without shadow
+    transition: 'box-shadow 0.3s ease, padding 0.3s ease',
     '&:hover': {
       borderColor: theme.palette.primary,
-      boxShadow: `0 4px 8px ${alpha(theme.palette.primary.main, 0.2)}`, // shadow on hover
+      boxShadow: `0 8px 9px ${alpha(theme.palette.primary.main, 0.3)}`, // shadow on hover
     },
     '&.Mui-focused': {
       borderColor: theme.palette.primary.main,
-      boxShadow: `0 4px 8px ${alpha(theme.palette.primary.main, 0.2)}`, // shadow on focus
+      backgroundColor: '#f2f2ff',
+      boxShadow: `0 8px 9x ${alpha(theme.palette.primary.main, 0.3)}`, // shadow on focus
     },
   },
   
+  '& .MuiOutlinedInput-root': {
+    padding: '0', 
+    alignItems: 'center',
+  },
+  '& .MuiAutocomplete-tag': {
+    margin: '2px 2px',
+  },
   '& .MuiOutlinedInput-notchedOutline': {
     border: 'none',
   },
@@ -97,13 +106,14 @@ const FilterDrawerAutoComplete = styled(Autocomplete)(({ theme }) => ({
   '& .MuiAutocomplete-option': {
     padding: '2px 8px', // Adjust padding to make the items closer
     minHeight: 'auto', // Can also reduce the height
-    // whiteSpace: 'normal', // Allow text to wrap onto the next line
-    // wordBreak: 'break-word', // Break words if necessary to prevent overflow
   },
 }));
 
 
 const SelectionDropdownList = ({source='', targetProperty, selectedOptions, valueOptions, onChange, selectAllOptionsFlag, limitNumOfTags}) => {
+
+  const theme = useTheme();
+
 
   //// add "Select All" option based on selectAllOptionsFlag
   const optionsWithSelectAll = 
@@ -115,9 +125,9 @@ const SelectionDropdownList = ({source='', targetProperty, selectedOptions, valu
   const handleOptionSelected = (event, newValue) => {
     // Check if "Select All" was selected
     if (newValue.some(option => option.raw === 'Select All')) {
-      onChange(valueOptions, targetProperty); // Select all values
+      onChange(valueOptions, targetProperty); //select all values
     } else {
-      onChange(newValue, targetProperty); // Pass selected options
+      onChange(newValue, targetProperty); //pass selected options
     }
   }
 
@@ -160,7 +170,6 @@ const SelectionDropdownList = ({source='', targetProperty, selectedOptions, valu
                   },
                 }}
               />
-              
             </li>
           )}
           renderInput={(params) => (
@@ -176,11 +185,20 @@ const SelectionDropdownList = ({source='', targetProperty, selectedOptions, valu
               }}
             />
           )}
-          // isOptionEqualToValue={(option, value) =>
-          //   typeof option === 'object' && typeof value === 'object'
-          //     ? option.raw === value.raw
-          //     : option === value
-          // }
+          renderTags={(value, getTagProps) =>
+            value.map((option, index) => (
+              <Chip
+                key={index}
+                label={option.display || option} // Customize label
+                {...getTagProps({ index })}
+                style={{
+                  backgroundColor: '#c9caff',
+                  color: 'black', 
+                  borderRadius: '20px',
+                }}
+              />
+            ))
+          }
           isOptionEqualToValue={(option, value) => {
             if (typeof option === 'object' && option !== null && typeof value === 'object' && value !== null) {
               return option.raw === value.raw;

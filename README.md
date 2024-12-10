@@ -60,6 +60,7 @@ npm start
 
 
 
+<!---
 ## Dashboard Components and Features 
 
 ### Dashboard Layouts
@@ -344,7 +345,6 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
 
 ### Expandable Table 
 
-<!-- multiLevelTable -->
 <details>
   <summary><strong> Multi-Level Table </strong></summary>
   The multi-level table starts with parent rows at the top level. Each parent row can be expanded to show one or more first-level child rows. Each first-level child row can also be expanded to reveal second-level child rows. This pattern can be extended to include additional levels as needed.
@@ -354,7 +354,6 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
   └── first-level-child
       ├── second-level-child
   ```
-  <!-- dataformatter -->
   - <details>
     <summary><strong> MultiLevelTableDataFormatter </strong></summary>
       <strong>Purpose:</strong> organizes the data and constructs a multi-level table with expandable child rows, implementing custom filtering, sorting, and search logic that updates dynamically as the user interacts with the table.
@@ -396,7 +395,7 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
       - The `MultiLevelTableRenderer component is passed.
     </details>
 
-<!-- nested2ndChild -->
+
   - <details>
       <summary><strong> SecondLevelChildRenderer </strong></summary>
       <strong>Purpose:</strong> Renders each first-level child row and allows further expansion to display the second-level-child rows with their own pagination
@@ -422,7 +421,6 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
 
 
 
-<!-- simple table -->
 <details>
   <summary><strong> Two-Level Table </strong></summary>
   The standard expandable table starts with parent rows at the top level. Each parent row can be expanded to show a child row to obtain a depth of 2.
@@ -431,7 +429,6 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
   parent
   └── child row
   ```
-<!-- dataformatter -->
   - <details>
     <summary><strong> TwoLevelTableDataFormatter </strong></summary>
     <strong>Purpose:</strong> organizes the data and constructs a table with expandable child rows, implementing custom filtering, sorting, and search logic that updates dynamically as the user interacts with the table.
@@ -466,7 +463,6 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
 
 </details>
 
-<!-- sorter -->
 <details>
 <summary><strong>Sorting</strong></summary>
  <code>useSortableData</code> is a custom hook that provides allows a user to sort the values in the columns within the expandable tables.
@@ -489,19 +485,16 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
       - if values in column is a date, then sort by date in ascending order
 </details>
 
-<!-- Rendering Logic -->
 
 <details>
   <summary><strong> Rendering Logic</strong></summary>
   This file contains the logic to style and render re-usable components within the expandable tables. 
 
-<!-- Styled Table components-->
  -  <details>
     <summary><strong> StyledTableComponents</strong></summary>
     <strong> Purpose:</strong> contains custom styling to control the appearance of various components like <code>TableRow</code>, <code>TableBody</code>, <code>TextField</code> and other components used in the expandable tables. 
     </details>
     
-<!-- flexibleTableRenderer-->
   - <details>
     <summary><strong> FlexibleTableRenderer </strong></summary>
     <strong>Purpose:</strong> renders the base structure of the table, including the expand/collapse functionality for each row level.
@@ -520,7 +513,7 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
       - Table Body: maps through `sortedChildRows`, rendering each row using the `ParentRowRenderer` component. 
     </details>
 
-<!-- parentRowRenderer-->
+
  -  <details>
     <summary><strong> ParentRowRenderer </strong></summary>
       <strong>Purpose:</strong> responsible for rendering each parent row in the table, managing its expanded (open) or collapsed state, and handling the display of child rows (mini-table) when expanded.
@@ -554,7 +547,6 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
 ### Filtering 
   The <code>filter</code> object is used to control the data displayed across various components like tables and charts based on specific criteria. In doing so, the user is able to refine and update the data presented based on the user's selection across all visualizations. 
 
-<!-- FilterContext -->
 <details>
   <summary><strong> FilterContext </strong></summary>
     <strong>Purpose:</strong> the <code>filter</code> is assible through a custom context (<code>FilterContext</code>) and a <code>FilterProvider</code> component that providees access to the filter-related state and functions for all child components. 
@@ -611,3 +603,4 @@ For *Report 8. Historical Data*, all of the visualizations except for the line c
         - If `filterValue` is neither an object nor an array, it assumes a single-value filter to compare `filterValue` directly with `itemValue`.
   - If matches are found, the updated `filteredData` is returned. Otherwise, it returns an empty array for `filteredData`.
 </details>
+--->

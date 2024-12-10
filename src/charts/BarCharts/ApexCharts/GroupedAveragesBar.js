@@ -3,7 +3,6 @@ import React, { useMemo, useEffect, useState } from "react";
 import { useFilter } from "../../../FilterContext.js";
 import GetFilteredData from "../../../components/Filtering/GetFilteredData.js";
 import GroupedOrStackedBarBuilder from "./GroupedOrStackedBarBuilder.js";
-import {getPercentageFormatterObject} from "../../../components/getPercentageFormatterObject.js";
 
 
 const GroupedAveragesBar = ({ 
@@ -27,49 +26,42 @@ const GroupedAveragesBar = ({
     const dataGroupedByBenchmarks = filteredData.reduce((accumulator, currentItem) => {
       //get groupingColumn value in our currentItem
       const currentGroupingValue = currentItem[groupByColumn];
+      const checksInItem = currentItem.checks;
+      
       //if currentGroupingValue doesn't exists as key in accumulator
       if (!accumulator[currentGroupingValue]) {
-        //if not, add key to accumulator with empty array as value.
-        accumulator[currentGroupingValue] = []; 
+        //set checksPerGroup and productSums will store product sums for each breakdown column
+        accumulator[currentGroupingValue] = {checksPerGroup: 0, productSums: {}}; 
       }
-      //add the currentItem to the array to associated key.
-      accumulator[currentGroupingValue].push(currentItem);
-      return accumulator; //returns {key1:[...], key2:[...], ...}
-    }, {});
+      //sum checks in data organized by groupByColumn values
+      accumulator[currentGroupingValue].checksPerGroup += checksInItem;
 
-    /*
-    reduce will calculate the sum of each breakdown column (from breakdownColumns) and the total checks per group
-    iterate over each key-value pair (or group) in dataGroupedByBenchmarks. [groupingValue, dataPerGroup] destructures the key-value pairs of dataGroupedByBenchmarks into {groupingValue: dataPerGroup}
-    */
-    let groupedAverages = Object.entries(dataGroupedByBenchmarks).reduce((acc, [groupingValue, dataPerGroup ]) => {
-      const productSums = {};  //will store cumulative product sums for each column in breakdownColumns
-      let totalChecksPerGroup=0;
-
-    //initializes each breakdown column's sum to 0
-    breakdownColumns.forEach(column => {
-      productSums[column] = 0;
-    })
-
-    //iterates over each item within a group to calculate totalChecksPerGroup and product sum for each breakdown column
-    dataPerGroup.forEach(item => {
-      const checksInItem = item.checks; 
-      totalChecksPerGroup += checksInItem; //accumulate checks in this group
-      
       //calculates cumulative product for each breakdown column within each group
       /* ie. current column is 'accepted'
         for each entry in my value array, calculate the checks[i] * assessed[i] and add it to productSums[assessed] array.  */
       breakdownColumns.forEach(column => {
-        productSums[column] += checksInItem * (item[column] || 0); 
+        //set initial value in productSums for each breakdown column to 0
+        if (!accumulator[currentGroupingValue].productSums[column]) {
+          accumulator[currentGroupingValue].productSums[column] = 0;
+        }
+        accumulator[currentGroupingValue].productSums[column] +=(checksInItem * (currentItem[column] || 0)); 
       });
-    });
+      return accumulator; //returns {key1:[...], key2:[...], ...}
+    }, {});
 
+    /*
+    [groupingValue, dataPerGroup] destructures the key-value pairs of dataGroupedByBenchmarks into {groupingValue: dataPerGroup}
+    */
+    let groupedAverages = Object.entries(dataGroupedByBenchmarks).reduce((acc, [groupingValue,  { checksPerGroup, productSums } ]) => {
     //calculate averages for each breakdownColumn
     const averages = {};
     //for each breakdown column, new key is created (ie. avgAssessed) and we calculate the avg of productSums['assessed']/totalChecksPerGroup for value
     breakdownColumns.forEach(column => {
-      averages[`avg${column.charAt(0).toUpperCase() + column.slice(1)}`] = productSums[column] / totalChecksPerGroup;
+      averages[`avg${column.charAt(0).toUpperCase() + column.slice(1)}`] = productSums[column] / checksPerGroup;
+
     }) //ie. averages={avgAssessed: (totalSums['assessed']/totalChecksPerGroup)}
 
+   
     //groupingValue and averages are added to the acc
     acc.push({
       groupingColumn: groupingValue, //groupingColumn holds value of groupingValue
@@ -99,6 +91,7 @@ const GroupedAveragesBar = ({
   const handleBarClick = (event, chartContext, config) => {
     const categoryLabels = config.w.globals.labels || config.w.globals.categories;
     const selectedValue = categoryLabels ? categoryLabels[config.dataPointIndex] : null;
+
     if (selectedValue) {
       // check if the selected value is already in the filter
       if (filter[groupByColumn] === selectedValue) {
@@ -111,7 +104,6 @@ const GroupedAveragesBar = ({
     }
   };
 
-  const percentageFormatterObject = useMemo(() => getPercentageFormatterObject(), []);
 
   return (
     <GroupedOrStackedBarBuilder

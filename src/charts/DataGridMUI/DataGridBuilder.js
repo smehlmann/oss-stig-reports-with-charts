@@ -35,13 +35,12 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   //Text in table cells
   "& .MuiDataGrid-cell": {
     borderBottom: "none",
-    whiteSpace: 'normal', // Allow text wrapping
+    whiteSpace: 'normal', //text-wrapping
     wordBreak: 'break-word',
-    fontSize: '14px',
-    
+    // fontSize: '14px',
   },
   "& .MuiDataGrid-row:last-of-type .MuiDataGrid-cell": {
-    borderBottom: "none", // Remove the bottom border on the last row
+    borderBottom: "none", 
   },
   "& .MuiDataGrid-footerContainer": {
     borderTop: "none",
@@ -66,11 +65,24 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     border: 'none',
     position: 'relative',
     lineHeight: 'normal',
-    height: 45,
-    padding: 0,
+    // height: 45,
+    // height: 'auto',
+    // padding: 0,
+    // whiteSpace: 'normal',
+    // wordBreak: 'break-word', //break long words
+    // textAlign: "center",
   },
+   //holds text inside the header
+   "& .MuiDataGrid-columnHeaderTitle": {
+    display: "block", 
+    whiteSpace: "normal", 
+    textAlign: "center", 
+    overflow: "visible",
+    lineHeight: 1.2,
+  },
+
   //holds text
-  "& .MuiDataGrid-columnHeaderTitleContainer" : {
+  "& .MuiDataGrid-columnHeaderTitleContainer": {
     // backgroundColor: '#900C3F',
     display: 'flex',
     flex: 1,
@@ -79,15 +91,29 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
     justifyContent: 'center',
     // overflow: 'visible',
     padding: 0,
+    lineHeight: 1.2,    
   }, 
-  //text in columnHeaderTitleContent
+  // //text in columnHeaderTitleContent
   "& .MuiDataGrid-columnHeaderTitleContainerContent": {
     display: 'flex',
     flex: 1,
     width: '100%',
     overflow: 'visible',
-    textOverflow: 'ellipsis',
-    textWrap: 'wrap',
+    wordWrap: 'break-word',
+    fontSize: '14px', 
+     //dynamically adjust font size based on screen width
+     [theme.breakpoints.down(1304)]: {
+      fontSize: "12px",
+    },
+    [theme.breakpoints.down(1211)]: {
+      fontSize: "10px",
+    },
+    [theme.breakpoints.down(theme.breakpoints.values.md)]: {
+      fontSize: "10px",
+    },
+    [theme.breakpoints.down(theme.breakpoints.values.sm)]: {
+      fontSize: "14px",
+    },
     // backgroundColor: '#ff5733',
   },
 
@@ -108,6 +134,10 @@ const StyledDataGrid = styled(DataGrid) (({theme}) => ({
   //   overflowX: 'visible',
   // }
 }));
+
+
+
+
 
 
 function DataGridBuilder({ data, columns, onRowClick}) {
