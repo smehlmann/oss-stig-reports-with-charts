@@ -85,8 +85,7 @@ const OssStigReportsTab = () => {
     setReport(e.target.value);
     if (
       e.target.value !== "12" &&
-      e.target.value !== "14" &&
-      e.target.value !== "15"
+      e.target.value !== "14"
     ) {
       setShowEmassNums(true);
     }
@@ -779,7 +778,7 @@ const OssStigReportsTab = () => {
               </label>
               <br />
               <br />
-              {showEmassNum && report !== "14" && report !== "15" && (
+              {showEmassNum && report !== "14" && (
                 <div id="emassDiv">
                   <label htmlFor="emassNumsText">
                     Required for reports 4, 5, 6. Optional for all others.
