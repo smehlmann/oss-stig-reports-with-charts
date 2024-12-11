@@ -212,7 +212,6 @@ export default function ReportColumns({ index, item, selectedReport }) {
       return (
         <tr key={index}>
           <td>{item.datePulled}</td>
-          <td>{item.department}</td>
           <td>{item.code}</td>
           <td>{item.shortName}</td>
           <td>{item.collectionName}</td>
