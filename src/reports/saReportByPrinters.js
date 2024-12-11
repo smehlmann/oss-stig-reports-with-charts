@@ -50,14 +50,14 @@ async function runSAReportByAssetPrintersOnly(auth, inEmassNums, emassMap) {
       var assetEmassMap;
 
       for (var i = 0; i < collections.length; i++) {
-        if(!collections[i].metadata.Printers || collections[i].metadata.Printers !== "true"){
+        /*if(!collections[i].metadata.Printers || collections[i].metadata.Printers !== "true"){
           continue;
-        }
+        }*/
         var collectionName = collections[i].name;
         var collectionEmass = collections[i].metadata.eMASS;
         console.log("runSAReportByAssetPrintersOnly collectionName: " + collectionName);
 
-        var assets = await reportGetters.getAssetsByCollection(
+        var assets = await reportGetters.getPrinterAssets(
           auth,
           collections[i].collectionId
         );
@@ -107,6 +107,9 @@ async function runSAReportByAssetPrintersOnly(auth, inEmassNums, emassMap) {
           var assetIdx = assets.data.findIndex(
             (t) => t.name === metrics.data[jMetrics].name
           );
+          if(assetIdx < 0){
+            continue;
+          }
           var assetName = assets.data[assetIdx].name;
           var assetEmass = assetEmassMap.get(assetName);
           if (assetEmass && assetEmass.includes(",")) {
@@ -295,6 +298,12 @@ function getRow(
   };
 
   return rowData;
+}
+
+function isPrinter(labels){
+
+  var hasPrinterLabel = false;
+
 }
 
 export { runSAReportByAssetPrintersOnly };
