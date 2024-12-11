@@ -13,7 +13,6 @@ async function runSAReportByAssetPrintersOnly(auth, inEmassNums, emassMap) {
     var rows = [];
     const headers = [
       { label: "Date Pulled", key: "datePulled" },
-      { label: "Department", key: "department" },
       { label: "Code", key: "code" },
       { label: "Short Name", key: "shortName" },
       { label: "Collection", key: "collectionName" },
@@ -270,7 +269,6 @@ function getRow(
 
   var rowData = {
     datePulled: todayStr,
-    department: collectionMetadata.department,
     code: code,
     shortName: shortName,
     collectionName: collectionName,
