@@ -254,6 +254,19 @@ async function getAssetsByCollection(auth, collectionId) {
   }
 }
 
+async function getPrinterAssets(auth, collectionId) {
+  try {
+    //console.log('getPrinterAssets');
+    var myUrl =
+      apiBase + "/assets?collectionId=" + collectionId + "&labelName=Printer&name-match=exact";
+    var assets = getMetricsData(auth, myUrl);
+    return assets;
+  } catch (e) {
+    console.log("Error in getAssetsByCollection");
+    console.log(e);
+  }
+}
+
 async function getAssetsByLabel(auth, collectionId, labelId) {
   //console.log('getAssetsByLabel');
   var myUrl =
@@ -1139,4 +1152,5 @@ export {
   getCollectionsMetrics,
   getCollectionMerticsByCollectionAndBenchmark,
   getAllStigs,
+  getPrinterAssets
 };
