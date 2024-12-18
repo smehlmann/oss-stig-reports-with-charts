@@ -70,7 +70,7 @@ const DashboardSelectedReport5 = ({ data, title }) => {
                   dataLabelsArePercentages = {true}
                   isHorizontal={true}
                   isStackedBarChart={false}
-                  xAxisTitle="Number of Assets"
+                  xAxisTitle="Percentage"
                   yAxisTitle= "STIG Benchmark"
                   data={filteredData}
                 />

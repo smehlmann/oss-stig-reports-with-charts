@@ -71,7 +71,7 @@ const DashboardSelectedReport9 = ({ title, data }) => {
                   metricField="groupId"
                   isHorizontal={false}
                   xAxisTitle="Status"
-                  yAxisTitle= "Group ID"
+                  yAxisTitle= "Number of Checks"
                   source='report9'
                   data={filteredData}
                 />

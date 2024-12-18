@@ -159,19 +159,47 @@ const DashboardTab = ({reportData, selectedReportNum}) => {
   // decide which grid layout to display based on report
   switch (selectedReportNum) {
     case '5':
-      return <DashboardSelectedReport5 data={formattedData} title=' Asset Metrics' handleClick={handleClick} />
+      return <DashboardSelectedReport5 
+        data={formattedData} 
+        title=' Asset Metrics' 
+        handleClick={handleClick} 
+      />
     case '7':
-      return <DashboardSelectedReport7 data={formattedData} title='RMF Package Asset Count' handleClick={handleClick} />
+      return <DashboardSelectedReport7 
+        data={formattedData} 
+        title='RMF Package Asset Count' 
+        handleClick={handleClick} 
+      />
     case '8':
-      return <DashboardSelectedReport8 data={formattedData} title='STIG Benchmark Version Deltas' handleClick={handleClick} />
+      return <DashboardSelectedReport8 
+        data={formattedData} 
+        title='STIG Benchmark Version Deltas' 
+        handleClick={handleClick} 
+      />
     case '9':
-      return <DashboardSelectedReport9 data={formattedData} title='Open Result Finding Metrics' handleClick={handleClick} />
+      return <DashboardSelectedReport9 
+        data={formattedData} 
+        title='Open Result Finding Metrics' 
+        handleClick={handleClick} 
+      />
     case '11':
-      return <DashboardSelectedReport11 data={formattedData} title='Checks Not Updated in x Days' handleClick={handleClick} />
+      return <DashboardSelectedReport11 
+        data={formattedData} 
+        title='Checks Not Updated in x Days' 
+        handleClick={handleClick} 
+      />
     case '14':
-      return <DashboardSelectedReport14 data={formattedData} title='Historical Data' handleClick={handleClick} />
+      return <DashboardSelectedReport14 
+        data={formattedData} 
+        title='Historical Data' 
+        handleClick={handleClick} 
+      />
     case '15':
-      return <DashboardSelectedReport15 data={formattedData} title='Unclass Core Printers Metrics' handleClick={handleClick}/>
+      return <DashboardSelectedReport15 
+        data={formattedData} 
+        title='Unclass Core Printers Metrics' 
+        handleClick={handleClick}
+      />
     default:
       return null
   }    
